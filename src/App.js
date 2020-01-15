@@ -16,10 +16,19 @@ class App extends Component {
     .catch(console.log)
   }
 
+  componentDidMount() {
+    document.getElementById('myVideo').play();
+  }
+
   render () {
     return (
-      <div class="container" style={{backgroundColor: "#2a2335"}}>
-        <Contacts contacts={this.state.leagues} />
+      <div>
+        <video loop muted autoplay oncanplay="this.play()" onloadedmetadata="this.muted=true" id="myVideo">
+          <source src="./background.mp4" type="video/mp4" />
+        </video>
+        <div class="container" style={{backgroundColor: "#2a2335"}}>
+          <Contacts contacts={this.state.leagues} />
+        </div>
       </div>
     );
   }

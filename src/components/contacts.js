@@ -46,7 +46,7 @@ class Contacts extends Component {
       <div style={{textAlign: "center", fontFamily: "SmashFont"}}>
         <div class="btn-group" role="group" style={{margin: 10}}>
           {this.props.contacts.map((contact, i) => (
-            <button onClick={()=>this.selectLeague(i)} type="button" class="btn btn-primary">{contact}</button>
+            <button onClick={()=>this.selectLeague(i)} type="button" class="btn btn-danger">{contact}</button>
           ))}
         </div>
         <ul class="list-group" style={{padding: "10px"}}>
