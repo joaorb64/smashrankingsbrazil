@@ -1,16 +1,14 @@
+body {
+  background-color: #2a2335;
+}
+
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+@font-face {
+  font-family: "SmashFont";
+  src: url('Gotham Black Regular.woff') format('woff');
 }
 
 .App-header {
@@ -28,11 +26,18 @@
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+@keyframes list-element {
+  0%   {opacity: 0; visibility: hidden;}
+  100% {opacity: 1; visibility: visible;}
+}
+
+.slide-fade {
+  opacity: 0;
+  animation-duration: 0.1s;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+  animation-direction: normal;
+  animation-play-state: running;
+  animation-name: list-element;
+  animation-fill-mode: forwards;
 }
