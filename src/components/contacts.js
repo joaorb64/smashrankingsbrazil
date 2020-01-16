@@ -177,7 +177,16 @@ class Contacts extends Component {
               padding: 0, display: "flex", alignSelf: "center", overflow: "hidden", animationDelay: (i/30.0)+"s"
             }}>
               <div style={{width: "45px", textAlign: "center", fontSize: "1.2rem"}}>{player.rank}</div>
+
               <div style={{flexGrow: 1}}>{player.name}</div>
+
+              <div style={{width: "128px", padding: "5px"}}>
+                <div style={{
+                  backgroundColor: "black", color: "white", height: "32px", lineHeight: "32px", fontSize: "1.2rem"
+                }}>{player.score} pts.</div>
+              </div>
+
+              
               {player.mains.length > 0 ?
                 <div style={{
                   backgroundImage: `url(./portraits-small/${this.getCharName(player.mains[0].name)}.png)`,
