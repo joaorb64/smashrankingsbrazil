@@ -83,6 +83,12 @@ class Contacts extends Component {
                     }}>
                       1
                     </div>
+
+                    <div style={{
+                      fontSize: "3rem", position: "absolute", right: "0px", bottom: "80px", backgroundColor: "black", color: "white", padding: "10px"
+                    }}>
+                      {this.state.players[0].score} pts.
+                    </div>
                 </li>
               </div>
 
@@ -114,6 +120,12 @@ class Contacts extends Component {
                       }}>
                         2
                       </div>
+
+                      <div style={{
+                        fontSize: "2rem", position: "absolute", right: "0px", bottom: "60px", backgroundColor: "black", color: "white", padding: "0px 10px"
+                      }}>
+                        {this.state.players[1].score} pts.
+                      </div>
                   </li>
                 </div>
                 <div class="">
@@ -127,8 +139,8 @@ class Contacts extends Component {
                         filter: "drop-shadow(10px 10px 0px #000000AF)"
                       }}>
                         <div style={{
-                          paddingLeft: "40px", paddingRight: "40px", paddingTop: "10px", display: "flex", backgroundColor: "#f0f0f0",
-                          height: "60px", position: "absolute", left: "-30px", right: "-30px", bottom: 0
+                          paddingLeft: "40px", paddingRight: "40px", paddingTop: "4px", display: "flex", backgroundColor: "#f0f0f0",
+                          height: "50px", position: "absolute", left: "-30px", right: "-30px", bottom: 0
                         }}>
                           <div style={{flexGrow: 1, fontSize: "2.0rem"}}>{this.state.players[2].name}</div>
                         </div>
@@ -142,6 +154,12 @@ class Contacts extends Component {
                         width: "80px", height: "80px", position: "absolute", top: 0, left: "-8px", fontSize: "4rem", lineHeight: "80px"
                       }}>
                         3
+                      </div>
+
+                      <div style={{
+                        fontSize: "1.6rem", position: "absolute", right: "0px", bottom: "50px", backgroundColor: "black", color: "white", padding: "0px 10px"
+                      }}>
+                        {this.state.players[2].score} pts.
                       </div>
                   </li>
                 </div>
