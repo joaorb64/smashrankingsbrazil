@@ -36,7 +36,8 @@ class App extends Component {
         <video loop muted autoplay oncanplay="this.play()" onloadedmetadata="this.muted=true" id="myVideo">
           <source src="./background.mp4" type="video/mp4" />
         </video>
-        <div class="container" style={{backgroundColor: "#2a2335"}}>
+
+        <div class="container" style={{backgroundColor: "#2a2335", marginBottom: "128px"}}>
           <Contacts contacts={this.state.leagues} />
         </div>
 

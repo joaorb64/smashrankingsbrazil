@@ -40,6 +40,11 @@ class Contacts extends Component {
     return name.toLowerCase().replace(/ /g, "_");
   }
 
+  getTwitterHandle(twitter){
+    let parts = twitter.split('/');
+    return parts[parts.length-1];
+  }
+
   render (){
     console.log(this.state.players);
     return(
@@ -64,9 +69,9 @@ class Contacts extends Component {
           {this.state.players.length > 3 ?
             <div class="row no-gutters">
               <div class="col-md-8" style={{paddingRight: "5px"}}>
-                <li key='123' class="list-group-item" style={{
+                <li key={this.state.selectedLeague+'_0'} class="slide-fade list-group-item" style={{
                     backgroundColor: "#f0f0f0", borderRadius: "10px", border: 0, marginBottom: "5px", width: "100%", height: "512px", lineHeight: "48px",
-                    padding: 0, display: "flex", alignSelf: "center", overflow: "hidden", backgroundColor: "#f7c407"
+                    padding: 0, display: "flex", alignSelf: "center", overflow: "hidden", backgroundColor: "#f7c407", animationDelay: (0/30.0)+"s"
                   }}>
                     <div style={{
                       backgroundImage: `url(./portraits-full/${this.getCharName(this.state.players[0].mains[0].name)}.png)`, display: "flex",
@@ -99,15 +104,25 @@ class Contacts extends Component {
                     }}>
                       {this.state.players[0].score} pts.
                     </div>
+
+                    {this.state.players[0].twitter ?
+                      <div style={{
+                        backgroundImage: `url(https://avatars.io/twitter/${this.getTwitterHandle(this.state.players[0].twitter)})`,
+                        width: "128px", height: "128px", backgroundSize: "cover", backgroundPosition: "center",
+                        borderRadius: "100%", position: "absolute", right: 10, top: 10, border: "5px #f0f0f0 solid"
+                      }}></div>
+                    :
+                      null
+                    }
                 </li>
                 <div class="d-md-block" style={{display: "none", width: 5}}></div>
               </div>
 
               <div class="col-md-4">
                 <div class="">
-                  <li key='123' class="list-group-item" style={{
+                  <li key={this.state.selectedLeague+'_1'} class="slide-fade list-group-item" style={{
                       backgroundColor: "#f0f0f0", borderRadius: "10px", border: 0, marginBottom: "5px", width: "100%", height: "302px", lineHeight: "48px",
-                      padding: 0, display: "flex", alignSelf: "center", overflow: "hidden", backgroundColor: "#b9b9b9"
+                      padding: 0, display: "flex", alignSelf: "center", overflow: "hidden", backgroundColor: "#b9b9b9", animationDelay: (1/30.0)+"s"
                     }}>
                       <div style={{
                         backgroundImage: `url(./portraits-full/${this.getCharName(this.state.players[1].mains[0].name)}.png)`, display: "flex",
@@ -140,12 +155,22 @@ class Contacts extends Component {
                       }}>
                         {this.state.players[1].score} pts.
                       </div>
+
+                      {this.state.players[1].twitter ?
+                        <div style={{
+                          backgroundImage: `url(https://avatars.io/twitter/${this.getTwitterHandle(this.state.players[1].twitter)})`,
+                          width: "96px", height: "96px", backgroundSize: "cover", backgroundPosition: "center",
+                          borderRadius: "100%", position: "absolute", right: 10, top: 10, border: "5px #f0f0f0 solid"
+                        }}></div>
+                      :
+                        null
+                      }
                   </li>
                 </div>
                 <div class="">
-                  <li key='123' class="list-group-item" style={{
+                  <li key={this.state.selectedLeague+'_2'} class="slide-fade list-group-item" style={{
                       backgroundColor: "#f0f0f0", borderRadius: "10px", border: 0, marginBottom: "5px", width: "100%", height: "205px", lineHeight: "48px",
-                      padding: 0, display: "flex", alignSelf: "center", overflow: "hidden", backgroundColor: "#c55d30"
+                      padding: 0, display: "flex", alignSelf: "center", overflow: "hidden", backgroundColor: "#c55d30", animationDelay: (2/30.0)+"s"
                     }}>
                       <div style={{
                         backgroundImage: `url(./portraits-full/${this.getCharName(this.state.players[2].mains[0].name)}.png)`, display: "flex",
@@ -178,6 +203,16 @@ class Contacts extends Component {
                       }}>
                         {this.state.players[2].score} pts.
                       </div>
+
+                      {this.state.players[2].twitter ?
+                        <div style={{
+                          backgroundImage: `url(https://avatars.io/twitter/${this.getTwitterHandle(this.state.players[2].twitter)})`,
+                          width: "84px", height: "84px", backgroundSize: "cover", backgroundPosition: "center",
+                          borderRadius: "100%", position: "absolute", right: 10, top: 10, border: "5px #f0f0f0 solid"
+                        }}></div>
+                      :
+                        null
+                      }
                   </li>
                 </div>
               </div>
@@ -191,11 +226,25 @@ class Contacts extends Component {
           {this.state.players.slice(3).map((player, i) => (
             <li key={this.state.selectedLeague+"_"+i} class="slide-fade list-group-item" style={{
               backgroundColor: "#f0f0f0", borderRadius: "10px", border: 0, marginBottom: "5px", width: "100%", height: "42px", lineHeight: "48px",
-              padding: 0, display: "flex", alignSelf: "center", overflow: "hidden", animationDelay: (i/30.0)+"s"
+              padding: 0, display: "flex", alignSelf: "center", overflow: "hidden", animationDelay: ((i+3)/30.0)+"s"
             }}>
               <div style={{width: "45px", textAlign: "center", fontSize: "1.2rem"}}>{player.rank}</div>
 
-              <div style={{flexGrow: 1, overflow: "hidden", textOverflow: "ellipsis"}}>{player.name}</div>
+              {player.twitter ?
+                <div style={{
+                  backgroundImage: `url(https://avatars.io/twitter/${this.getTwitterHandle(player.twitter)})`,
+                  width: "64px", height: "48px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
+                  backgroundPosition: "center", backgroundColor: "white",
+                }}></div>
+              :
+                <div style={{
+                  width: "64px", height: "48px", display: "inline-block"
+                }}></div>
+              }
+
+              <div style={{flexGrow: 1, overflow: "hidden", textOverflow: "ellipsis"}}>
+                {player.name}
+              </div>
 
               <div style={{width: "128px", padding: "5px"}}>
                 <div style={{
