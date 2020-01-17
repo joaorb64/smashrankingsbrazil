@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/smashrankingsbrazil/static/css/main.820e389a.chunk.css",
-    "main.js": "/smashrankingsbrazil/static/js/main.3fc2126c.chunk.js",
-    "main.js.map": "/smashrankingsbrazil/static/js/main.3fc2126c.chunk.js.map",
+    "main.js": "/smashrankingsbrazil/static/js/main.1722b444.chunk.js",
+    "main.js.map": "/smashrankingsbrazil/static/js/main.1722b444.chunk.js.map",
     "runtime-main.js": "/smashrankingsbrazil/static/js/runtime-main.0a4351a5.js",
     "runtime-main.js.map": "/smashrankingsbrazil/static/js/runtime-main.0a4351a5.js.map",
     "static/js/2.638df15b.chunk.js": "/smashrankingsbrazil/static/js/2.638df15b.chunk.js",
     "static/js/2.638df15b.chunk.js.map": "/smashrankingsbrazil/static/js/2.638df15b.chunk.js.map",
     "index.html": "/smashrankingsbrazil/index.html",
-    "precache-manifest.3f5a115a2998f3e9e01f509b61f45294.js": "/smashrankingsbrazil/precache-manifest.3f5a115a2998f3e9e01f509b61f45294.js",
+    "precache-manifest.48705506fbde4b0910f99eaf0076c32b.js": "/smashrankingsbrazil/precache-manifest.48705506fbde4b0910f99eaf0076c32b.js",
     "service-worker.js": "/smashrankingsbrazil/service-worker.js",
     "static/css/main.820e389a.chunk.css.map": "/smashrankingsbrazil/static/css/main.820e389a.chunk.css.map",
     "static/js/2.638df15b.chunk.js.LICENSE": "/smashrankingsbrazil/static/js/2.638df15b.chunk.js.LICENSE",
@@ -18,6 +18,6 @@
     "static/js/runtime-main.0a4351a5.js",
     "static/js/2.638df15b.chunk.js",
     "static/css/main.820e389a.chunk.css",
-    "static/js/main.3fc2126c.chunk.js"
+    "static/js/main.1722b444.chunk.js"
   ]
 }
