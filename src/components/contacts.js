@@ -13,7 +13,7 @@ class Contacts extends Component {
   }
 
   updateData() {
-    fetch('https://cdn.jsdelivr.net/gh/joaorb64/tournament_api/out/'+this.props.contacts[this.state.selectedLeague]+'.json')
+    fetch('https://cdn.jsdelivr.net/gh/joaorb64/tournament_api/out/'+this.props.contacts[this.state.selectedLeague].id+'.json')
     .then(res => res.json())
     .then((data) => {
       if(data){
@@ -44,9 +44,16 @@ class Contacts extends Component {
     console.log(this.state.players);
     return(
       <div style={{textAlign: "center", fontFamily: "SmashFont"}}>
-        <div class="btn-group" role="group" style={{margin: 10}}>
+        <div class="btn-group btn-group-justified col-12" role="group" style={{marginTop: 10, padding: "0 10px"}}>
           {this.props.contacts.map((contact, i) => (
-            <button onClick={()=>this.selectLeague(i)} type="button" class="btn btn-danger">{contact}</button>
+            <button onClick={()=>this.selectLeague(i)} type="button" class="btn btn-danger" style={{flexGrow: 1, flexBasis: 0, overflow: "hidden", textOverflow: "ellipsis"}}>
+              <div style={{
+                width: "32px", height: "32px", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
+                backgroundPosition: "center", verticalAlign: "inherit", backgroundColor: "white", borderRadius: "100%", marginRight: "5px",
+                backgroundImage: `url(https://cdn.jsdelivr.net/gh/joaorb64/tournament_api@master/icon/${contact.id}.png)`
+              }}></div>
+              {contact.name}
+            </button>
           ))}
         </div>
 
@@ -55,8 +62,8 @@ class Contacts extends Component {
 
         
           {this.state.players.length > 3 ?
-            <div class="row">
-              <div class="col-8" style={{paddingRight: "5px"}}>
+            <div class="row no-gutters">
+              <div class="col-md-8" style={{paddingRight: "5px"}}>
                 <li key='123' class="list-group-item" style={{
                     backgroundColor: "#f0f0f0", borderRadius: "10px", border: 0, marginBottom: "5px", width: "100%", height: "512px", lineHeight: "48px",
                     padding: 0, display: "flex", alignSelf: "center", overflow: "hidden", backgroundColor: "#f7c407"
@@ -70,7 +77,10 @@ class Contacts extends Component {
                         paddingLeft: "40px", paddingRight: "40px", paddingTop: "20px", display: "flex", backgroundColor: "#f0f0f0",
                         height: "80px", position: "absolute", left: "-30px", right: "-30px", bottom: 0,
                       }}>
-                        <div style={{flexGrow: 1, fontSize: "3.2rem"}}>{this.state.players[0].name}</div>
+                        <div style={{
+                          flexGrow: 1, fontSize: "3.2rem",
+                          textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap"
+                        }}>{this.state.players[0].name}</div>
                       </div>
                     </div>
 
@@ -90,9 +100,10 @@ class Contacts extends Component {
                       {this.state.players[0].score} pts.
                     </div>
                 </li>
+                <div class="d-md-block" style={{display: "none", width: 5}}></div>
               </div>
 
-              <div class="col-4" style={{paddingLeft: 0}}>
+              <div class="col-md-4">
                 <div class="">
                   <li key='123' class="list-group-item" style={{
                       backgroundColor: "#f0f0f0", borderRadius: "10px", border: 0, marginBottom: "5px", width: "100%", height: "302px", lineHeight: "48px",
@@ -107,7 +118,10 @@ class Contacts extends Component {
                           paddingLeft: "40px", paddingRight: "40px", paddingTop: "10px", display: "flex", backgroundColor: "#f0f0f0",
                           height: "60px", position: "absolute", left: "-30px", right: "-30px", bottom: 0
                         }}>
-                          <div style={{flexGrow: 1, fontSize: "2.0rem"}}>{this.state.players[1].name}</div>
+                          <div style={{
+                            flexGrow: 1, fontSize: "2.0rem",
+                            textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap"
+                          }}>{this.state.players[1].name}</div>
                         </div>
                       </div>
 
@@ -142,7 +156,10 @@ class Contacts extends Component {
                           paddingLeft: "40px", paddingRight: "40px", paddingTop: "4px", display: "flex", backgroundColor: "#f0f0f0",
                           height: "50px", position: "absolute", left: "-30px", right: "-30px", bottom: 0
                         }}>
-                          <div style={{flexGrow: 1, fontSize: "2.0rem"}}>{this.state.players[2].name}</div>
+                          <div style={{
+                            flexGrow: 1, fontSize: "2.0rem",
+                            textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap"
+                          }}>{this.state.players[2].name}</div>
                         </div>
                       </div>
 
@@ -178,7 +195,7 @@ class Contacts extends Component {
             }}>
               <div style={{width: "45px", textAlign: "center", fontSize: "1.2rem"}}>{player.rank}</div>
 
-              <div style={{flexGrow: 1}}>{player.name}</div>
+              <div style={{flexGrow: 1, overflow: "hidden", textOverflow: "ellipsis"}}>{player.name}</div>
 
               <div style={{width: "128px", padding: "5px"}}>
                 <div style={{

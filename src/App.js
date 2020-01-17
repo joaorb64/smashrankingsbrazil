@@ -11,7 +11,17 @@ class App extends Component {
     fetch('https://cdn.jsdelivr.net/gh/joaorb64/tournament_api/leagues.json')
     .then(res => res.json())
     .then((data) => {
-      this.setState({ leagues: data.leagues })
+      data.leagues.forEach(league => {
+        fetch('https://cdn.jsdelivr.net/gh/joaorb64/tournament_api@master/league_info/'+league+'.json')
+        .then(res => res.json())
+          .then((leagueInfo) => {
+            this.state.leagues.push({
+              id: league,
+              name: leagueInfo.name
+            });
+            this.setState(this.state)
+          })
+      })
     })
     .catch(console.log)
   }
@@ -29,6 +39,10 @@ class App extends Component {
         <div class="container" style={{backgroundColor: "#2a2335"}}>
           <Contacts contacts={this.state.leagues} />
         </div>
+
+        <nav class="navbar fixed-bottom" style={{color: "white", backgroundColor: "#be2018", fontFamily: "SmashFont", fontSize: "15px", textAlign: "right", display: "inline"}}>
+          By João Ribeiro Bezerra (joaorb64@gmail.com, @joao_shino)
+        </nav>
       </div>
     );
   }
