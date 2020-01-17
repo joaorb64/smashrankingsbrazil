@@ -1,23 +1,23 @@
 {
   "files": {
     "main.css": "/smashrankingsbrazil/static/css/main.820e389a.chunk.css",
-    "main.js": "/smashrankingsbrazil/static/js/main.1722b444.chunk.js",
-    "main.js.map": "/smashrankingsbrazil/static/js/main.1722b444.chunk.js.map",
+    "main.js": "/smashrankingsbrazil/static/js/main.50b73601.chunk.js",
+    "main.js.map": "/smashrankingsbrazil/static/js/main.50b73601.chunk.js.map",
     "runtime-main.js": "/smashrankingsbrazil/static/js/runtime-main.0a4351a5.js",
     "runtime-main.js.map": "/smashrankingsbrazil/static/js/runtime-main.0a4351a5.js.map",
-    "static/js/2.638df15b.chunk.js": "/smashrankingsbrazil/static/js/2.638df15b.chunk.js",
-    "static/js/2.638df15b.chunk.js.map": "/smashrankingsbrazil/static/js/2.638df15b.chunk.js.map",
+    "static/js/2.46df7dd8.chunk.js": "/smashrankingsbrazil/static/js/2.46df7dd8.chunk.js",
+    "static/js/2.46df7dd8.chunk.js.map": "/smashrankingsbrazil/static/js/2.46df7dd8.chunk.js.map",
     "index.html": "/smashrankingsbrazil/index.html",
-    "precache-manifest.48705506fbde4b0910f99eaf0076c32b.js": "/smashrankingsbrazil/precache-manifest.48705506fbde4b0910f99eaf0076c32b.js",
+    "precache-manifest.8708f278de46634fba7025d896afc4b3.js": "/smashrankingsbrazil/precache-manifest.8708f278de46634fba7025d896afc4b3.js",
     "service-worker.js": "/smashrankingsbrazil/service-worker.js",
     "static/css/main.820e389a.chunk.css.map": "/smashrankingsbrazil/static/css/main.820e389a.chunk.css.map",
-    "static/js/2.638df15b.chunk.js.LICENSE": "/smashrankingsbrazil/static/js/2.638df15b.chunk.js.LICENSE",
+    "static/js/2.46df7dd8.chunk.js.LICENSE": "/smashrankingsbrazil/static/js/2.46df7dd8.chunk.js.LICENSE",
     "static/media/App.css": "/smashrankingsbrazil/static/media/Gotham Black Regular.98d75753.woff"
   },
   "entrypoints": [
     "static/js/runtime-main.0a4351a5.js",
-    "static/js/2.638df15b.chunk.js",
+    "static/js/2.46df7dd8.chunk.js",
     "static/css/main.820e389a.chunk.css",
-    "static/js/main.1722b444.chunk.js"
+    "static/js/main.50b73601.chunk.js"
   ]
 }
