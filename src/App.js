@@ -8,10 +8,10 @@ class App extends Component {
   }
 
   componentWillMount() {
-    fetch('https://cdn.jsdelivr.net/gh/joaorb64/tournament_api/leagues.json')
+    fetch('https://cdn.jsdelivr.net/gh/joaorb64/tournament_api@master/leagues.json')
     .then(res => res.json())
     .then((data) => {
-      data.leagues.forEach(league => {
+      Object.keys(data).forEach((league) => {
         fetch('https://cdn.jsdelivr.net/gh/joaorb64/tournament_api@master/league_info/'+league+'.json')
         .then(res => res.json())
           .then((leagueInfo) => {
