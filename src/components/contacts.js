@@ -81,7 +81,7 @@ class Contacts extends Component {
         
           {this.state.players.length > 3 ?
             <div class="row no-gutters">
-              <div class="col-md-8" style={{paddingRight: "5px"}}>
+              <div class="col-md-8 firstplayer-col" style={{paddingRight: "5px"}}>
                 <li key={this.state.selectedLeague+'_0'} class="slide-fade list-group-item" style={{
                     backgroundColor: "#f0f0f0", borderRadius: "10px", border: 0, marginBottom: "5px", width: "100%", height: "512px", lineHeight: "48px",
                     padding: 0, display: "flex", alignSelf: "center", overflow: "hidden", backgroundColor: "#f7c407", animationDelay: (0/30.0)+"s"
@@ -331,14 +331,14 @@ class Contacts extends Component {
                 }}></div>
               }
 
-              <div style={{
-                width: "64px", display: "flex", justifyContent: "center", alignItems: "center"
+              <div class="state-flag-container" style={{
+                width: "64px", display: "flex", justifyContent: "center", alignItems: "center", padding: "8px"
               }}>
                 {player.state ?
-                  <div style={{
+                  <div class="state-flag" style={{
                     backgroundImage: `url(https://cdn.jsdelivr.net/gh/joaorb64/tournament_api@master/state_icon/${player.state}.png)`,
-                    width: "48px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
-                    backgroundPosition: "center", backgroundColor: "white"
+                    width: "100%", height: "100%", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center"
                   }}></div>
                 :
                   null
@@ -346,18 +346,25 @@ class Contacts extends Component {
               </div>
 
               <div style={{display: "flex", flexGrow: 1, overflow: "hidden", textOverflow: "ellipsis", justifyContent: "center"}}>
-                <div style={{overflow: "hidden", textOverflow: "ellipsis"}}>
+                <div class="player-name" style={{overflow: "hidden", textOverflow: "ellipsis",
+                  whiteSpace: "nowrap"
+                }}>
                   {player.name}
                 </div>
-                <div style={{overflow: "hidden", textOverflow: "ellipsis", color: "darkgray", paddingLeft: 5, fontSize: "0.8rem"}}>
+                <div class="player-name-small" style={{
+                  overflow: "hidden", textOverflow: "ellipsis", color: "darkgray", paddingLeft: 5, fontSize: "0.8rem",
+                  whiteSpace: "nowrap"
+                }}>
                   {player.full_name}
                 </div>
               </div>
 
-              <div style={{width: "128px", padding: "5px"}}>
-                <div style={{
-                  backgroundColor: "black", color: "white", height: "32px", lineHeight: "32px", fontSize: "1.2rem"
-                }}>{player.score} pts.</div>
+              <div class="player-score" style={{width: "128px", padding: "5px", display: "flex", flexDirection: "column", justifyContent: "center"}}>
+                <div style={{backgroundColor: "black", flexGrow: 1, display: "flex"}}>
+                  <div style={{
+                    backgroundColor: "black", color: "white", fontSize: "1.2rem", lineHeight: "1.2rem", flexGrow: 1, alignSelf: "center", width: "100%"
+                  }}>{player.score} pts.</div>
+                </div>
               </div>
 
               <div style={{display: "flex", width: "128px"}}>

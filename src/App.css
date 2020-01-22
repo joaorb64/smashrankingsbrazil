@@ -49,3 +49,41 @@ body {
   animation-name: list-element;
   animation-fill-mode: forwards;
 }
+
+@media (max-width: 768px) {
+  .firstplayer-col {
+    padding-right: 0px !important
+  }
+
+  .firstplayer-col li {
+    height: 350px !important;
+  }
+
+  .state-flag-container {
+    width: 42px !important;
+    padding: 2px !important;
+  }
+
+  .player-score {
+    width: 42px !important;
+    padding: 2px !important;
+  }
+
+  .player-score div {
+    font-size: 0.8rem !important;
+  }
+
+  .player-name {
+    font-size: 0.8rem !important;
+    align-self: center !important;
+    white-space: normal !important;
+    line-height: 0.8rem !important;
+  }
+
+  .player-name-small {
+    font-size: 0.5rem !important;
+    align-self: center !important;
+    white-space: normal !important;
+    line-height: 0.5rem !important;
+  }
+}
