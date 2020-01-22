@@ -13,7 +13,7 @@ class Contacts extends Component {
   }
 
   updateData() {
-    fetch('https://cdn.jsdelivr.net/gh/joaorb64/tournament_api@master/out/'+this.props.contacts[this.state.selectedLeague].id+'.json')
+    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/out/'+this.props.contacts[this.state.selectedLeague].id+'.json')
     .then(res => res.json())
     .then((data) => {
       if(data){
@@ -21,7 +21,7 @@ class Contacts extends Component {
 
         Object.keys(data).forEach(function(player){
           if(data[player].avatar){
-            data[player].avatar = `https://cdn.jsdelivr.net/gh/joaorb64/tournament_api@master/${data[player].avatar}`;
+            data[player].avatar = `https://raw.githubusercontent.com/joaorb64/tournament_api/master/${data[player].avatar}`;
           } else if (data[player].twitter) {
             data[player].avatar = `https://avatars.io/twitter/${this.getTwitterHandle(data[player].twitter)}`;
           }
@@ -69,7 +69,7 @@ class Contacts extends Component {
               <div style={{
                 width: "32px", height: "32px", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
                 backgroundPosition: "center", verticalAlign: "inherit", backgroundColor: "white", borderRadius: "100%", marginRight: "5px",
-                backgroundImage: `url(https://cdn.jsdelivr.net/gh/joaorb64/tournament_api@master/league_icon/${contact.id}.png)`
+                backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/master/league_icon/${contact.id}.png)`
               }}></div>
               {contact.name}
             </button>
@@ -337,7 +337,7 @@ class Contacts extends Component {
               }}>
                 {player.state ?
                   <div class="state-flag" style={{
-                    backgroundImage: `url(https://cdn.jsdelivr.net/gh/joaorb64/tournament_api@master/state_icon/${player.state}.png)`,
+                    backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/master/state_icon/${player.state}.png)`,
                     width: "100%", height: "100%", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
                     backgroundPosition: "center"
                   }}></div>

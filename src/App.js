@@ -8,11 +8,11 @@ class App extends Component {
   }
 
   componentWillMount() {
-    fetch('https://cdn.jsdelivr.net/gh/joaorb64/tournament_api@master/leagues.json')
+    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/leagues.json')
     .then(res => res.json())
     .then((data) => {
       Object.keys(data).forEach((league) => {
-        fetch('https://cdn.jsdelivr.net/gh/joaorb64/tournament_api@master/league_info/'+league+'.json')
+        fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/league_info/'+league+'.json')
         .then(res => res.json())
           .then((leagueInfo) => {
             this.state.leagues.push({
