@@ -90,4 +90,12 @@ body {
   .player-main {
     width: 82px !important;
   }
+
+  .player-ranking {
+    width: 32px !important;
+  }
+
+  .player-avatar {
+    width: 54px !important;
+  }
 }

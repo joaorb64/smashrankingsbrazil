@@ -21,7 +21,6 @@ class Contacts extends Component {
 
         Object.keys(data).forEach(function(player){
           if(data[player].avatar){
-            console.log(data[player].avatar)
             data[player].avatar = `https://cdn.jsdelivr.net/gh/joaorb64/tournament_api@master/${data[player].avatar}`;
           } else if (data[player].twitter) {
             data[player].avatar = `https://avatars.io/twitter/${this.getTwitterHandle(data[player].twitter)}`;
@@ -314,16 +313,16 @@ class Contacts extends Component {
               backgroundColor: "#f0f0f0", borderRadius: "10px", border: 0, marginBottom: "5px", width: "100%", height: "42px", lineHeight: "48px",
               padding: 0, display: "flex", alignSelf: "center", overflow: "hidden", animationDelay: ((i+3)/30.0)+"s"
             }}>
-              <div style={{width: "45px", textAlign: "center", fontSize: "1.2rem"}}>{player.rank}</div>
+              <div class="player-ranking" style={{width: "45px", textAlign: "center", fontSize: "1.2rem"}}>{player.rank}</div>
 
               {player.avatar ?
-                <div style={{
+                <div class="player-avatar" style={{
                   backgroundImage: `url(${player.avatar})`,
                   width: "64px", height: "48px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
                   backgroundPosition: "center", backgroundColor: "white",
                 }}></div>
               :
-                <div style={{
+                <div class="player-avatar" style={{
                   width: "64px", height: "48px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
                   backgroundPosition: "center",
                 }}></div>
@@ -345,7 +344,7 @@ class Contacts extends Component {
 
               <div style={{display: "flex", flexGrow: 1, overflow: "hidden", textOverflow: "ellipsis", justifyContent: "center"}}>
                 <div class="player-name" style={{overflow: "hidden", textOverflow: "ellipsis",
-                  whiteSpace: "nowrap"
+                  whiteSpace: "nowrap", flexShrink: 0
                 }}>
                   {player.name}
                 </div>
@@ -357,7 +356,7 @@ class Contacts extends Component {
                 </div>
               </div>
 
-              <div class="player-score" style={{width: "128px", padding: "5px", display: "flex", flexDirection: "column", justifyContent: "center"}}>
+              <div class="player-score" style={{width: "128px", padding: "5px", display: "flex", flexDirection: "column", justifyContent: "center", flexShrink: 0}}>
                 <div style={{backgroundColor: "black", flexGrow: 1, display: "flex"}}>
                   <div style={{
                     backgroundColor: "black", color: "white", fontSize: "1.2rem", lineHeight: "1.2rem", flexGrow: 1, alignSelf: "center", width: "100%"
