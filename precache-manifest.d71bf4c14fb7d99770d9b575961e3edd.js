@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "a0fce4422407382675752347dc1a4bec",
+    "revision": "89e42f333e7ef942bb5581d1b4518c2e",
     "url": "/smashrankingsbrazil/index.html"
   },
   {
-    "revision": "5e59667c819da86eeba0",
+    "revision": "156184fd58c3a1cb57ff",
     "url": "/smashrankingsbrazil/static/css/main.d5431b97.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/smashrankingsbrazil/static/js/2.46df7dd8.chunk.js.LICENSE"
   },
   {
-    "revision": "5e59667c819da86eeba0",
-    "url": "/smashrankingsbrazil/static/js/main.ebe4490a.chunk.js"
+    "revision": "156184fd58c3a1cb57ff",
+    "url": "/smashrankingsbrazil/static/js/main.a7f84761.chunk.js"
   },
   {
     "revision": "1899b3e8c66be422c54c",
