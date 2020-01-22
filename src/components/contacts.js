@@ -26,6 +26,10 @@ class Contacts extends Component {
             data[player].avatar = `https://avatars.io/twitter/${this.getTwitterHandle(data[player].twitter)}`;
           }
 
+          if(data[player].mains.length == 0){
+            data[player].mains.push({name: "Random", icon: ""});
+          }
+
           players.push(data[player]);
         }, this);
 
