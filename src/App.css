@@ -86,4 +86,8 @@ body {
     white-space: normal !important;
     line-height: 0.5rem !important;
   }
+
+  .player-main {
+    width: 82px !important;
+  }
 }

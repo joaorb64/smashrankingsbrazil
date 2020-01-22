@@ -367,20 +367,27 @@ class Contacts extends Component {
                 </div>
               </div>
 
-              <div style={{display: "flex", width: "128px"}}>
+              <div class="player-main" style={{display: "flex", width: "128px"}}>
                 {player.mains.length > 0 ?
-                  player.mains.slice(0, 3).map((main)=>(
-                    <div style={{
-                      backgroundImage: `url(./portraits-small/${this.getCharName(main.name)}.png)`,
-                      width: "128px", backgroundPosition: "center", backgroundSize: "cover", backgroundColor: "#ababab"
-                    }}></div>
-                  ))
+                  <div style={{
+                    backgroundImage: `url(./portraits-small/${this.getCharName(player.mains[0].name)}.png)`,
+                    width: "128px", backgroundPosition: "center", backgroundSize: "cover", backgroundColor: "#ababab"
+                  }}></div>
                   :
                   <div style={{
                     backgroundImage: `url(./portraits-small/${"random"}.png)`,
                     width: "128px", backgroundPosition: "center", backgroundSize: "cover", backgroundColor: "#ababab"
                   }}></div>
                 }
+                <div style={{position: "absolute", display: "flex", right: 0, bottom: 0}}>
+                  {player.mains.slice(1).map((main)=>(
+                    <div style={{
+                      backgroundImage: `url(http://braacket.com/${this.getCharName(main.icon)})`,
+                      width: "24px", height: "24px", backgroundPosition: "center", backgroundSize: "cover",
+                      flexGrow: 0, display: "inline-block"
+                    }}></div>
+                  ))}
+                </div>
               </div>
             </li>
           ))}

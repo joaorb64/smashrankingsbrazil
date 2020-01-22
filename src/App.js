@@ -41,7 +41,10 @@ class App extends Component {
           <Contacts contacts={this.state.leagues} />
         </div>
 
-        <nav class="navbar fixed-bottom" style={{color: "white", backgroundColor: "#be2018", fontFamily: "SmashFont", fontSize: "15px", textAlign: "right", display: "inline"}}>
+        <nav class="navbar fixed-bottom" style={{
+          color: "white", backgroundColor: "#be2018",
+          fontFamily: "SmashFont", fontSize: "15px", textAlign: "right", display: "inline"
+        }}>
           By João Ribeiro Bezerra (joaorb64@gmail.com, @joao_shino)
         </nav>
       </div>
