@@ -20,11 +20,9 @@ class Contacts extends Component {
         let players = [];
 
         Object.keys(data).forEach(function(player){
-          let obj = new Image();
-          obj.src = `https://cdn.jsdelivr.net/gh/joaorb64/tournament_api@master/player_data/${this.normalizePlayerName(data[player].name)}/avatar.png`;
-
-          if (obj.complete) {
-            data[player].avatar = obj.src;
+          if(data[player].avatar){
+            console.log(data[player].avatar)
+            data[player].avatar = `https://cdn.jsdelivr.net/gh/joaorb64/tournament_api@master/${data[player].avatar}`;
           } else if (data[player].twitter) {
             data[player].avatar = `https://avatars.io/twitter/${this.getTwitterHandle(data[player].twitter)}`;
           }
