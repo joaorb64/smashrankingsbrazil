@@ -125,7 +125,7 @@ class Contacts extends Component {
                         display: "flex", flexGrow: 1, flexWrap: "wrap", alignSelf: "flex-end", padding: "10px", filter: "drop-shadow(2px 2px 0px black)"
                       }}>
                         {this.state.players[0].mains.length > 0 ?
-                          this.state.players[0].mains.map((main)=>(
+                          this.state.players[0].mains.slice(1).map((main)=>(
                             <div style={{
                               backgroundImage: `url(http://braacket.com/${this.getCharName(main.icon)})`,
                               width: "32px", height: "32px", backgroundPosition: "center", backgroundSize: "cover",
@@ -201,7 +201,7 @@ class Contacts extends Component {
                           display: "flex", flexGrow: 1, flexWrap: "wrap", alignSelf: "flex-end", padding: "10px", filter: "drop-shadow(2px 2px 0px black)"
                         }}>
                           {this.state.players[1].mains.length > 0 ?
-                            this.state.players[1].mains.map((main)=>(
+                            this.state.players[1].mains.slice(1).map((main)=>(
                               <div style={{
                                 backgroundImage: `url(http://braacket.com/${this.getCharName(main.icon)})`,
                                 width: "32px", height: "32px", backgroundPosition: "center", backgroundSize: "cover",
@@ -274,7 +274,7 @@ class Contacts extends Component {
                           display: "flex", flexGrow: 1, flexWrap: "wrap", alignSelf: "flex-end", padding: "10px", filter: "drop-shadow(2px 2px 0px black)"
                         }}>
                           {this.state.players[2].mains.length > 0 ?
-                            this.state.players[2].mains.map((main)=>(
+                            this.state.players[2].mains.slice(1).map((main)=>(
                               <div style={{
                                 backgroundImage: `url(http://braacket.com/${this.getCharName(main.icon)})`,
                                 width: "32px", height: "32px", backgroundPosition: "center", backgroundSize: "cover",
