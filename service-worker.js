@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/smashrankingsbrazil/precache-manifest.88ca1fef8786f045da7358938f3a45f5.js"
+  "/smashrankingsbrazil/precache-manifest.741cec167c5c79c580f4de19bbe771dc.js"
 );
 
 self.addEventListener('message', (event) => {
