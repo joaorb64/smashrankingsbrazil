@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "89e42f333e7ef942bb5581d1b4518c2e",
+    "revision": "9e6a13584013a1699c876b60813b5ba7",
     "url": "/smashrankingsbrazil/index.html"
   },
   {
