@@ -26,12 +26,28 @@ class Contacts extends Component {
             data[player].avatar = `https://avatars.io/twitter/${this.getTwitterHandle(data[player].twitter)}`;
           }
 
+          if(!data[player].mains){
+            data[player].mains = [];
+          }
+
           if(data[player].mains.length == 0){
             data[player].mains.push({name: "Random", icon: ""});
           }
 
           players.push(data[player]);
         }, this);
+
+        function compare(a, b) {
+          if(parseInt(a.score) > parseInt(b.score)){
+            return -1;
+          }
+          if(parseInt(a.score) < parseInt(b.score)){
+            return 1;
+          }
+          return 0;
+        }
+        
+        players.sort(compare);
 
         this.setState({ players: players })
       }
@@ -317,7 +333,7 @@ class Contacts extends Component {
               backgroundColor: "#f0f0f0", borderRadius: "10px", border: 0, marginBottom: "5px", width: "100%", height: "42px", lineHeight: "48px",
               padding: 0, display: "flex", alignSelf: "center", overflow: "hidden", animationDelay: ((i+3)/30.0)+"s"
             }}>
-              <div class="player-ranking" style={{width: "45px", textAlign: "center", fontSize: "1.2rem"}}>{player.rank}</div>
+              <div class="player-ranking" style={{width: "45px", textAlign: "center", fontSize: "1.2rem"}}>{i+4}</div>
 
               {player.avatar ?
                 <div class="player-avatar" style={{
