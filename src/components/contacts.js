@@ -73,7 +73,7 @@ class Contacts extends Component {
   }
 
   normalizePlayerName(name){
-    return name.toLowerCase().normalize("NFKD").replace('[ ]+', '_').replace('[^0-9a-zA-Z_-]', '')
+    return name.normalize("NFKD").replace('[ ]+', '_').replace('[^0-9a-zA-Z_-]', '')
   }
 
   render (){
