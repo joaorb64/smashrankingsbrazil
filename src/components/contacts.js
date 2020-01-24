@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import styles from './contacts.module.css'
 
 class Contacts extends Component {
   state = {
@@ -76,26 +77,41 @@ class Contacts extends Component {
   }
 
   render (){
-    console.log(this.state.players);
     return(
       <div style={{textAlign: "center", fontFamily: "SmashFont"}}>
-        <div class="btn-group btn-group-justified col-12" role="group" style={{marginTop: 10, padding: "0 10px"}}>
-          {this.props.contacts.map((contact, i) => (
-            <button onClick={()=>this.selectLeague(i)} type="button" class="btn btn-danger" style={{flexGrow: 1, flexBasis: 0, overflow: "hidden", textOverflow: "ellipsis"}}>
-              <div style={{
-                width: "32px", height: "32px", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
-                backgroundPosition: "center", verticalAlign: "inherit", backgroundColor: "white", borderRadius: "100%", marginRight: "5px",
-                backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/master/league_icon/${contact.id}.png)`
-              }}></div>
-              {contact.name}
-            </button>
-          ))}
-        </div>
-
+          <div class="col-12" style={{marginTop: 10, padding: "0 10px"}}>
+            <div class={"dropdown"}>
+              <button class={styles.teste + " btn btn-secondary col-12 dropdown-toggle"} type="button" id="dropdownMenuButton"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {this.props.contacts.length > 0 ?
+                  <div class={styles.title}>
+                    <div style={{
+                      width: "32px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
+                      backgroundPosition: "center", verticalAlign: "inherit", backgroundColor: "white", borderRadius: "100%", marginRight: "10px",
+                      backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/master/league_icon/${this.props.contacts[this.state.selectedLeague].id}.png)`
+                    }}></div>
+                    {this.props.contacts[this.state.selectedLeague].name}
+                  </div>
+                  :
+                  "Loading..."
+                }
+              </button>
+              <div class={styles['teste-menu'] + " dropdown-menu col-12"} aria-labelledby="dropdownMenuButton">
+                {this.props.contacts.map((contact, i) => (
+                  <a class={"dropdown-item " + styles.teste} href="#" onClick={()=>this.selectLeague(i)}>
+                    <div style={{
+                      width: "32px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
+                      backgroundPosition: "center", verticalAlign: "inherit", backgroundColor: "white", borderRadius: "100%", marginRight: "10px",
+                      backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/master/league_icon/${contact.id}.png)`
+                    }}></div>
+                    {contact.name}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
 
         <ul class="list-group" style={{padding: "10px"}}>
-
-        
           {this.state.players.length > 3 ?
             <div class="row no-gutters">
               <div class="col-md-8 firstplayer-col" style={{paddingRight: "5px"}}>
@@ -364,7 +380,7 @@ class Contacts extends Component {
 
               <div style={{display: "flex", flexGrow: 1, overflow: "hidden", textOverflow: "ellipsis", justifyContent: "center"}}>
                 <div class="player-name" style={{overflow: "hidden", textOverflow: "ellipsis",
-                  whiteSpace: "nowrap", flexShrink: 0
+                  whiteSpace: "nowrap", overflowWrap: "break-word"
                 }}>
                   {player.name}
                 </div>
@@ -388,23 +404,24 @@ class Contacts extends Component {
                 {player.mains.length > 0 ?
                   <div style={{
                     backgroundImage: `url(./portraits-small/${this.getCharName(player.mains[0].name)}.png)`,
-                    width: "128px", backgroundPosition: "center", backgroundSize: "cover", backgroundColor: "#ababab"
-                  }}></div>
+                    width: "128px", backgroundPosition: "center", backgroundSize: "cover", backgroundColor: "#ababab", overflow: "hidden"
+                  }}>
+                    <div style={{overflow: "hidden", display: "flex", height: "100%", alignItems: "flex-end", justifyContent: "flex-end"}}>
+                      {player.mains.slice(1).map((main)=>(
+                        <div style={{
+                          backgroundImage: `url(http://braacket.com/${this.getCharName(main.icon)})`,
+                          width: "24px", height: "24px", backgroundPosition: "center", backgroundSize: "cover",
+                          flexGrow: 0, display: "flex", flexShrink: 1
+                        }}></div>
+                      ))}
+                    </div>
+                  </div>
                   :
                   <div style={{
                     backgroundImage: `url(./portraits-small/${"random"}.png)`,
                     width: "128px", backgroundPosition: "center", backgroundSize: "cover", backgroundColor: "#ababab"
                   }}></div>
                 }
-                <div style={{position: "absolute", display: "flex", right: 0, bottom: 0}}>
-                  {player.mains.slice(1).map((main)=>(
-                    <div style={{
-                      backgroundImage: `url(http://braacket.com/${this.getCharName(main.icon)})`,
-                      width: "24px", height: "24px", backgroundPosition: "center", backgroundSize: "cover",
-                      flexGrow: 0, display: "inline-block"
-                    }}></div>
-                  ))}
-                </div>
               </div>
             </li>
           ))}

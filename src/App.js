@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Contacts from './components/contacts';
+import TopBar from './components/topbar';
 
 class App extends Component {
   state = {
@@ -36,6 +37,8 @@ class App extends Component {
         <video loop muted autoplay oncanplay="this.play()" onloadedmetadata="this.muted=true" id="myVideo">
           <source src="./background.mp4" type="video/mp4" />
         </video>
+
+        <TopBar leagues={this.state.leagues} />
 
         <div class="container" style={{backgroundColor: "#2a2335", marginBottom: "128px"}}>
           <Contacts contacts={this.state.leagues} />

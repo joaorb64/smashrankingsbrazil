@@ -1,0 +1,31 @@
+.teste {
+  color: white;
+  background-color: #be2018 !important;
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: none;
+  border: none;
+}
+
+.teste-menu {
+  background-color: #be2018;
+}
+
+.title {
+  color: white;
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.teste:after {
+  position: absolute;
+}
+
+.teste:active, .teste:hover, .teste:focus {
+  background-color: #97312b !important;
+  color: white;
+  border-color: #752c29 !important;
+  box-shadow: none !important;
+}
