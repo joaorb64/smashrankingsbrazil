@@ -79,7 +79,7 @@ class Contacts extends Component {
   render (){
     return(
       <div style={{textAlign: "center", fontFamily: "SmashFont"}}>
-          <div class="col-12" style={{marginTop: 10, padding: "0 10px"}}>
+          <div class="col-12" style={{padding: "0 10px"}}>
             <div class={"dropdown"}>
               <button class={styles.teste + " btn btn-secondary col-12 dropdown-toggle"} type="button" id="dropdownMenuButton"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

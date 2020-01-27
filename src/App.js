@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './App.css';
 import Contacts from './components/contacts';
 import TopBar from './components/topbar';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import About from './components/about';
 
 class App extends Component {
   state = {
@@ -38,11 +40,23 @@ class App extends Component {
           <source src="./background.mp4" type="video/mp4" />
         </video>
 
-        <TopBar leagues={this.state.leagues} />
+        <Router>
+          <TopBar />
 
-        <div class="container" style={{backgroundColor: "#2a2335", marginBottom: "128px"}}>
-          <Contacts contacts={this.state.leagues} />
-        </div>
+          <div class="container" style={{
+            marginBottom: "128px", paddingTop: "10px"
+          }}>
+
+            <Switch>
+              <Route path="/" exact render={
+                (props) => <Contacts contacts={this.state.leagues}></Contacts>
+              } />
+              <Route path="/about" exact render={(props) => <About />} />
+              <Redirect to="/" />
+            </Switch>
+
+          </div>
+        </Router>
 
         <nav class="navbar fixed-bottom" style={{
           color: "white", backgroundColor: "#be2018",
