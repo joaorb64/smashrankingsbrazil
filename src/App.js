@@ -22,7 +22,8 @@ class App extends Component {
               id: league,
               name: leagueInfo.name
             });
-            this.setState(this.state)
+          }).then(()=>{
+            this.setState(this.state);
           })
       })
     })
@@ -40,7 +41,7 @@ class App extends Component {
           <source src="./background.mp4" type="video/mp4" />
         </video>
 
-        <Router>
+        <Router basename={process.env.PUBLIC_URL}>
           <TopBar />
 
           <div class="container" style={{
@@ -48,11 +49,11 @@ class App extends Component {
           }}>
 
             <Switch>
-              <Route path="/" exact render={
+              <Route path="/home" exact render={
                 (props) => <Contacts contacts={this.state.leagues}></Contacts>
               } />
               <Route path="/about" exact render={(props) => <About />} />
-              <Redirect to="/" />
+              <Redirect to="/home" />
             </Switch>
 
           </div>

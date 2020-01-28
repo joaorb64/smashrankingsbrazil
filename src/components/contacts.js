@@ -13,6 +13,12 @@ class Contacts extends Component {
     }
   }
 
+  componentDidMount() {
+    if(this.props.contacts.length > 0){
+      this.updateData();
+    }
+  }
+
   updateData() {
     fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/out/'+this.props.contacts[this.state.selectedLeague].id+'.json')
     .then(res => res.json())
