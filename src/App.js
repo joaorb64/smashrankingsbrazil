@@ -49,11 +49,11 @@ class App extends Component {
           }}>
 
             <Switch>
-              <Route path="/home" exact render={
+              <Route path="/home/" exact render={
                 (props) => <Contacts contacts={this.state.leagues}></Contacts>
               } />
-              <Route path="/about" exact render={(props) => <About />} />
-              <Redirect to="/home" />
+              <Route path="/about/" exact render={(props) => <About />} />
+              <Redirect to="/home/" />
             </Switch>
 
           </div>

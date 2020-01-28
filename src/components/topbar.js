@@ -13,7 +13,7 @@ class TopBar extends Component {
       <nav class="navbar navbar-expand-md navbar-dark" style={{
         color: "white", backgroundColor: "#be2018", fontFamily: "SmashFont"
       }}>
-        <Link class="navbar-brand" style={{color: "white"}} to="/home">
+        <Link class="navbar-brand" style={{color: "white"}} to="/home/">
           Power Rankings Brasil
         </Link>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false">
@@ -21,10 +21,10 @@ class TopBar extends Component {
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
-            <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/home">
+            <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/home/">
               <div class="nav-link">Home</div>
             </NavLink>
-            <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/about">
+            <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/about/">
               <div class="nav-link">Sobre</div>
             </NavLink>
           </ul>
