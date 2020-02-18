@@ -4,7 +4,10 @@ import styles from './contacts.module.css'
 class Contacts extends Component {
   state = {
     selectedLeague: 0,
-    players: []
+    players: [],
+    top3Colors: ["#D6AF36", "#D7D7D7", "#A77044"],
+    top3Colors2: ["#AF9500", "#B4B4B4", "#6A3805"],
+    top3Colors3: ["#C9B037", "#A7A7AD", "#824A02"]
   }
 
   componentDidUpdate(nextProps) {
@@ -118,52 +121,62 @@ class Contacts extends Component {
           </div>
 
         <ul class="list-group" style={{padding: "10px"}}>
-          {this.state.players.length > 3 ?
-            <div class="row no-gutters">
-              <div class="col-md-8 firstplayer-col" style={{paddingRight: "5px"}}>
-                <li key={this.state.selectedLeague+'_0'} class="slide-fade list-group-item" style={{
-                    backgroundColor: "#f0f0f0", borderRadius: "10px", border: 0, marginBottom: "5px", width: "100%", height: "512px", lineHeight: "48px",
-                    padding: 0, display: "flex", alignSelf: "center", overflow: "hidden", backgroundColor: "#f7c407", animationDelay: (0/30.0)+"s"
+          <div class="row no-gutters" style={{margin: "0 -4px"}}>
+            {this.state.players.slice(0,3).map((player, i) => (
+              <div class={"col-md-4 " + styles.listItemParent} style={{padding: "0px 4px"}}>
+                <li key={this.state.selectedLeague+'_'+i} class="slide-fade list-group-item" style={{
+                    backgroundColor: this.state.top3Colors[i], borderRadius: "10px", border: 0, marginBottom: "5px", width: "100%", height: "302px", lineHeight: "48px",
+                    padding: 0, display: "flex", alignSelf: "center", overflow: "hidden", animationDelay: (1/30.0)+"s"
                   }}>
                     <div style={{
-                      backgroundImage: `url(./portraits-full/${this.getCharName(this.state.players[0].mains[0].name)}.png)`, display: "flex",
-                      width: "100%", backgroundPosition: "center", backgroundSize: "cover", 
+                      backgroundColor: this.state.top3Colors2[i], position: "absolute",
+                      top: 0, bottom: 0, left: 0, right: 0,
+                      clipPath: "polygon(0 0, 0% 100%, 100% 100%)"
+                    }}></div>
+                    <div style={{
+                      backgroundColor: this.state.top3Colors3[i], position: "absolute",
+                      top: 0, bottom: 0, left: 0, right: 0,
+                      clipPath: "polygon(0 60%, 0% 100%, 100% 100%)"
+                    }}></div>
+                    <div style={{
+                      backgroundImage: `url(${process.env.PUBLIC_URL}/portraits-full/${this.getCharName(player.mains[0].name)}.png)`, display: "flex",
+                      width: "100%", backgroundPosition: "center", backgroundSize: "cover",
                       filter: "drop-shadow(10px 10px 0px #000000AF)"
                     }}>
-                      <div style={{
+                      <div class={styles.listItemChild} style={{
                         backgroundColor: "#f0f0f0", alignItems: "center", display: "flex", flexDirection: "column",
-                        height: "80px", position: "absolute", left: "0px", right: "0px", bottom: 0, justifyContent: "center"
+                        height: "60px", position: "absolute", left: "0px", right: "0px", bottom: 0, justifyContent: "center"
                       }}>
                         <div style={{
-                          flexGrow: 0, fontSize: "3.2rem", lineHeight: "3.2rem", width: "100%",
+                          flexGrow: 0, fontSize: "2rem", lineHeight: "2rem", width: "100%",
                           textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap"
-                        }}>{this.state.players[0].name}</div>
+                        }}>{player.name}</div>
                         <div style={{
-                          flexGrow: 0, fontSize: "1.2rem", lineHeight: "1.2rem", width: "100%", color: "darkgray",
+                          flexGrow: 0, fontSize: "1rem", lineHeight: "1rem", width: "100%", color: "darkgray",
                           textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap"
-                        }}>{this.state.players[0].full_name}</div>
+                        }}>{player.full_name}</div>
                       </div>
                     </div>
 
                     <div style={{
-                      width: "300px", height: "300px", position: "absolute", backgroundColor: "#f0f0f0", top: -150, left: -150, transform: "rotate(-45deg)"
+                      width: "200px", height: "200px", position: "absolute", backgroundColor: "#f0f0f0", top: -100, left: -100, transform: "rotate(-45deg)"
                     }}>
                     </div>
                     <div style={{
-                      width: "150px", height: "150px", position: "absolute", top: 0, left: "-20px", fontSize: "8rem", lineHeight: "150px"
+                      width: "100px", height: "100px", position: "absolute", top: 0, left: "-10px", fontSize: "5rem", lineHeight: "100px"
                     }}>
-                      1
+                      {i+1}
                     </div>
 
                     <div style={{
-                      position: "absolute", left: "0px", right: "0px", bottom: "80px",
-                      color: "white", display: "flex", whiteSpace: "nowrap"
+                      position: "absolute", left: "0px", right: "0px", bottom: "60px",
+                      color: "white", display: "flex", whiteSpace: "nowrap", lineHeight: "32px"
                     }}>
                       <div style={{
                         display: "flex", flexGrow: 1, flexWrap: "wrap", alignSelf: "flex-end", padding: "10px", filter: "drop-shadow(2px 2px 0px black)"
                       }}>
-                        {this.state.players[0].mains.length > 0 ?
-                          this.state.players[0].mains.slice(1).map((main)=>(
+                        {player.mains.length > 0 ?
+                          player.mains.slice(1).map((main)=>(
                             <div style={{
                               backgroundImage: `url(http://braacket.com/${this.getCharName(main.icon)})`,
                               width: "32px", height: "32px", backgroundPosition: "center", backgroundSize: "cover",
@@ -175,185 +188,31 @@ class Contacts extends Component {
                         }
                       </div>
                       <div style={{
-                        fontSize: "3rem", backgroundColor: "black", color: "white", textAlign: "right",
+                        fontSize: "2rem", backgroundColor: "black", color: "white", textAlign: "right",
                         alignSelf: "flex-end", padding: "10px"
                       }}>
-                        {this.state.players[0].score} pts.
+                        {player.score} pts.
                       </div>
                     </div>
 
-                    {this.state.players[0].avatar ?
+                    {player.avatar ?
                       <div style={{
-                        backgroundImage: `url(${this.state.players[0].avatar})`,
-                        width: "128px", height: "128px", backgroundSize: "cover", backgroundPosition: "center",
+                        backgroundImage: `url(${player.avatar})`,
+                        width: "96px", height: "96px", backgroundSize: "cover", backgroundPosition: "center",
                         borderRadius: "100%", position: "absolute", right: 10, top: 10, border: "5px #f0f0f0 solid"
                       }}></div>
                     :
                       null
                     }
                 </li>
-                <div class="d-md-block" style={{display: "none", width: 5}}></div>
               </div>
-
-              <div class="col-md-4">
-                <div class="">
-                  <li key={this.state.selectedLeague+'_1'} class="slide-fade list-group-item" style={{
-                      backgroundColor: "#f0f0f0", borderRadius: "10px", border: 0, marginBottom: "5px", width: "100%", height: "302px", lineHeight: "48px",
-                      padding: 0, display: "flex", alignSelf: "center", overflow: "hidden", backgroundColor: "#b9b9b9", animationDelay: (1/30.0)+"s"
-                    }}>
-                      <div style={{
-                        backgroundImage: `url(./portraits-full/${this.getCharName(this.state.players[1].mains[0].name)}.png)`, display: "flex",
-                        width: "100%", backgroundPosition: "center", backgroundSize: "cover",
-                        filter: "drop-shadow(10px 10px 0px #000000AF)"
-                      }}>
-                        <div style={{
-                          backgroundColor: "#f0f0f0", alignItems: "center", display: "flex", flexDirection: "column",
-                          height: "60px", position: "absolute", left: "0px", right: "0px", bottom: 0, justifyContent: "center"
-                        }}>
-                          <div style={{
-                            flexGrow: 0, fontSize: "2rem", lineHeight: "2rem", width: "100%",
-                            textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap"
-                          }}>{this.state.players[1].name}</div>
-                          <div style={{
-                            flexGrow: 0, fontSize: "1rem", lineHeight: "1rem", width: "100%", color: "darkgray",
-                            textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap"
-                          }}>{this.state.players[1].full_name}</div>
-                        </div>
-                      </div>
-
-                      <div style={{
-                        width: "200px", height: "200px", position: "absolute", backgroundColor: "#f0f0f0", top: -100, left: -100, transform: "rotate(-45deg)"
-                      }}>
-                      </div>
-                      <div style={{
-                        width: "100px", height: "100px", position: "absolute", top: 0, left: "-10px", fontSize: "5rem", lineHeight: "100px"
-                      }}>
-                        2
-                      </div>
-
-                      <div style={{
-                        position: "absolute", left: "0px", right: "0px", bottom: "60px",
-                        color: "white", display: "flex", whiteSpace: "nowrap", lineHeight: "32px"
-                      }}>
-                        <div style={{
-                          display: "flex", flexGrow: 1, flexWrap: "wrap", alignSelf: "flex-end", padding: "10px", filter: "drop-shadow(2px 2px 0px black)"
-                        }}>
-                          {this.state.players[1].mains.length > 0 ?
-                            this.state.players[1].mains.slice(1).map((main)=>(
-                              <div style={{
-                                backgroundImage: `url(http://braacket.com/${this.getCharName(main.icon)})`,
-                                width: "32px", height: "32px", backgroundPosition: "center", backgroundSize: "cover",
-                                flexGrow: 0, display: "inline-block"
-                              }}></div>
-                            ))
-                            :
-                            null
-                          }
-                        </div>
-                        <div style={{
-                          fontSize: "2rem", backgroundColor: "black", color: "white", textAlign: "right",
-                          alignSelf: "flex-end", padding: "10px"
-                        }}>
-                          {this.state.players[1].score} pts.
-                        </div>
-                      </div>
-
-                      {this.state.players[1].avatar ?
-                        <div style={{
-                          backgroundImage: `url(${this.state.players[1].avatar})`,
-                          width: "96px", height: "96px", backgroundSize: "cover", backgroundPosition: "center",
-                          borderRadius: "100%", position: "absolute", right: 10, top: 10, border: "5px #f0f0f0 solid"
-                        }}></div>
-                      :
-                        null
-                      }
-                  </li>
-                </div>
-                <div class="">
-                  <li key={this.state.selectedLeague+'_2'} class="slide-fade list-group-item" style={{
-                      backgroundColor: "#f0f0f0", borderRadius: "10px", border: 0, marginBottom: "5px", width: "100%", height: "205px", lineHeight: "48px",
-                      padding: 0, display: "flex", alignSelf: "center", overflow: "hidden", backgroundColor: "#c55d30", animationDelay: (2/30.0)+"s"
-                    }}>
-                      <div style={{
-                        backgroundImage: `url(./portraits-full/${this.getCharName(this.state.players[2].mains[0].name)}.png)`, display: "flex",
-                        width: "100%", backgroundPosition: "center", backgroundSize: "cover",
-                        filter: "drop-shadow(10px 10px 0px #000000AF)"
-                      }}>
-                        <div style={{
-                          backgroundColor: "#f0f0f0", alignItems: "center", display: "flex", flexDirection: "column",
-                          height: "50px", position: "absolute", left: "0px", right: "0px", bottom: 0, justifyContent: "center"
-                        }}>
-                          <div style={{
-                            flexGrow: 0, fontSize: "2rem", lineHeight: "2rem", width: "100%",
-                            textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap"
-                          }}>{this.state.players[2].name}</div>
-                          <div style={{
-                            flexGrow: 0, fontSize: "1rem", lineHeight: "1rem", width: "100%", color: "darkgray",
-                            textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap"
-                          }}>{this.state.players[2].full_name}</div>
-                        </div>
-                      </div>
-
-                      <div style={{
-                        width: "160px", height: "160px", position: "absolute", backgroundColor: "#f0f0f0", top: -80, left: -80, transform: "rotate(-45deg)"
-                      }}>
-                      </div>
-                      <div style={{
-                        width: "80px", height: "80px", position: "absolute", top: 0, left: "-8px", fontSize: "4rem", lineHeight: "80px"
-                      }}>
-                        3
-                      </div>
-
-                      <div style={{
-                        position: "absolute", left: "0px", right: "0px", bottom: "50px",
-                        color: "white", display: "flex", whiteSpace: "nowrap", lineHeight: "24px"
-                      }}>
-                        <div style={{
-                          display: "flex", flexGrow: 1, flexWrap: "wrap", alignSelf: "flex-end", padding: "10px", filter: "drop-shadow(2px 2px 0px black)"
-                        }}>
-                          {this.state.players[2].mains.length > 0 ?
-                            this.state.players[2].mains.slice(1).map((main)=>(
-                              <div style={{
-                                backgroundImage: `url(http://braacket.com/${this.getCharName(main.icon)})`,
-                                width: "32px", height: "32px", backgroundPosition: "center", backgroundSize: "cover",
-                                flexGrow: 0, display: "inline-block"
-                              }}></div>
-                            ))
-                            :
-                            null
-                          }
-                        </div>
-                        <div style={{
-                          fontSize: "1.6rem", backgroundColor: "black", color: "white", textAlign: "right",
-                          alignSelf: "flex-end", padding: "10px"
-                        }}>
-                          {this.state.players[2].score} pts.
-                        </div>
-                      </div>
-
-                      {this.state.players[2].avatar ?
-                        <div style={{
-                          backgroundImage: `url(${this.state.players[2].avatar})`,
-                          width: "84px", height: "84px", backgroundSize: "cover", backgroundPosition: "center",
-                          borderRadius: "100%", position: "absolute", right: 10, top: 10, border: "5px #f0f0f0 solid"
-                        }}></div>
-                      :
-                        null
-                      }
-                  </li>
-                </div>
-              </div>
-
-            </div>
-            :
-            null
-          }
+            ))}
+          </div>
 
 
           {this.state.players.slice(3).map((player, i) => (
-            <li key={this.state.selectedLeague+"_"+i} class="slide-fade list-group-item" style={{
-              backgroundColor: "#f0f0f0", borderRadius: "10px", border: 0, marginBottom: "5px", width: "100%", height: "42px", lineHeight: "48px",
-              padding: 0, display: "flex", alignSelf: "center", overflow: "hidden", animationDelay: ((i+3)/30.0)+"s"
+            <li key={this.state.selectedLeague+"_"+i} class={"slide-fade " + styles.listItem + " list-group-item"} style={{
+              animationDelay: ((i+3)/30.0)+"s"
             }}>
               <div class="player-ranking" style={{width: "45px", textAlign: "center", fontSize: "1.2rem"}}>{i+4}</div>
 
@@ -409,7 +268,7 @@ class Contacts extends Component {
               <div class="player-main" style={{display: "flex", width: "128px"}}>
                 {player.mains.length > 0 ?
                   <div style={{
-                    backgroundImage: `url(./portraits-small/${this.getCharName(player.mains[0].name)}.png)`,
+                    backgroundImage: `url(${process.env.PUBLIC_URL}/portraits-small/${this.getCharName(player.mains[0].name)}.png)`,
                     width: "128px", backgroundPosition: "center", backgroundSize: "cover", backgroundColor: "#ababab", overflow: "hidden"
                   }}>
                     <div style={{overflow: "hidden", display: "flex", height: "100%", alignItems: "flex-end", justifyContent: "flex-end"}}>
@@ -424,7 +283,7 @@ class Contacts extends Component {
                   </div>
                   :
                   <div style={{
-                    backgroundImage: `url(./portraits-small/${"random"}.png)`,
+                    backgroundImage: `url(${process.env.PUBLIC_URL}/portraits-small/${"random"}.png)`,
                     width: "128px", backgroundPosition: "center", backgroundSize: "cover", backgroundColor: "#ababab"
                   }}></div>
                 }
