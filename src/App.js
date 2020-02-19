@@ -4,6 +4,7 @@ import Contacts from './components/contacts';
 import TopBar from './components/topbar';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import About from './components/about';
+import PlayerModal from './components/playermodal';
 
 class App extends Component {
   state = {
@@ -65,6 +66,8 @@ class App extends Component {
         }}>
           By João Ribeiro Bezerra (joaorb64@gmail.com, @joao_shino)
         </nav>
+
+        <PlayerModal />
       </div>
     );
   }

@@ -50,6 +50,10 @@ body {
   animation-fill-mode: forwards;
 }
 
+.player-name-container {
+  flex-direction: column;
+}
+
 @media (max-width: 768px) {
   .firstplayer-col {
     padding-right: 0px !important
@@ -60,7 +64,7 @@ body {
   }
 
   .state-flag-container {
-    width: 42px !important;
+    width: 32px !important;
     padding: 2px !important;
   }
 
@@ -76,8 +80,7 @@ body {
   .player-name {
     font-size: 0.8rem !important;
     align-self: center !important;
-    white-space: normal !important;
-    line-height: 0.8rem !important;
+    line-height: 1.0rem !important;
   }
 
   .player-name-small {
@@ -88,7 +91,12 @@ body {
   }
 
   .player-main {
-    width: 82px !important;
+    width: 64px !important;
+  }
+
+  .player-main-mini {
+    width: 16px !important;
+    height: 16px !important;
   }
 
   .player-ranking {

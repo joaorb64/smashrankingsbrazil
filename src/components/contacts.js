@@ -44,6 +44,12 @@ class Contacts extends Component {
             data[player].mains.push({name: "Random", icon: ""});
           }
 
+          if(!data[player]["score"]){
+            if((data[player]["rank"])){
+              data[player]["score"] = data[player]["rank"][this.props.contacts[this.state.selectedLeague].id]["score"];
+            }
+          }
+
           players.push(data[player]);
         }, this);
 
@@ -82,7 +88,14 @@ class Contacts extends Component {
   }
 
   normalizePlayerName(name){
-    return name.normalize("NFKD").replace('[ ]+', '_').replace('[^0-9a-zA-Z_-]', '')
+    return name.normalize("NFKD").replace(/ /g, '_').replace('[^0-9a-zA-Z_-]', '').replace("|", "")
+  }
+
+  openPlayerModal(player){
+    if(window.playerModal){
+      window.playerModal.player = this.normalizePlayerName(player.name);
+      window.playerModal.fetchPlayer();
+    }
   }
 
   render (){
@@ -123,10 +136,13 @@ class Contacts extends Component {
         <ul class="list-group" style={{padding: "10px"}}>
           <div class="row no-gutters" style={{margin: "0 -4px"}}>
             {this.state.players.slice(0,3).map((player, i) => (
-              <div class={"col-md-4 " + styles.listItemParent} style={{padding: "0px 4px"}}>
+              <div class={"col-md-4 " + styles.listItemParent}
+              style={{padding: "0px 4px", cursor: "pointer"}}
+              data-toggle="modal" data-target="#playerModal"
+              onClick={()=>this.openPlayerModal(player)}>
                 <li key={this.state.selectedLeague+'_'+i} class="slide-fade list-group-item" style={{
                     backgroundColor: this.state.top3Colors[i], borderRadius: "10px", border: 0, marginBottom: "5px", width: "100%", height: "302px", lineHeight: "48px",
-                    padding: 0, display: "flex", alignSelf: "center", overflow: "hidden", animationDelay: (1/30.0)+"s"
+                    padding: 0, display: "flex", alignSelf: "center", overflow: "hidden", animationDelay: (i/30.0)+"s"
                   }}>
                     <div style={{
                       backgroundColor: this.state.top3Colors2[i], position: "absolute",
@@ -211,9 +227,12 @@ class Contacts extends Component {
 
 
           {this.state.players.slice(3).map((player, i) => (
-            <li key={this.state.selectedLeague+"_"+i} class={"slide-fade " + styles.listItem + " list-group-item"} style={{
-              animationDelay: ((i+3)/30.0)+"s"
-            }}>
+            <li key={this.state.selectedLeague+"_"+i}
+            class={"slide-fade " + styles.listItem + " list-group-item"}
+            style={{animationDelay: ((i+3)/30.0)+"s", cursor: "pointer"}}
+            data-toggle="modal" data-target="#playerModal"
+            onClick={()=>this.openPlayerModal(player)}
+            >
               <div class="player-ranking" style={{width: "45px", textAlign: "center", fontSize: "1.2rem"}}>{i+4}</div>
 
               {player.avatar ?
@@ -243,15 +262,15 @@ class Contacts extends Component {
                 }
               </div>
 
-              <div style={{display: "flex", flexGrow: 1, overflow: "hidden", textOverflow: "ellipsis", justifyContent: "center"}}>
+              <div class="player-name-container" style={{display: "flex", flexGrow: 1, overflow: "hidden", textOverflow: "ellipsis", justifyContent: "center"}}>
                 <div class="player-name" style={{overflow: "hidden", textOverflow: "ellipsis",
-                  whiteSpace: "nowrap", overflowWrap: "break-word"
+                  overflowWrap: "break-word", lineHeight: "1.6rem"
                 }}>
                   {player.name}
                 </div>
                 <div class="player-name-small" style={{
-                  overflow: "hidden", textOverflow: "ellipsis", color: "darkgray", paddingLeft: 5, fontSize: "0.8rem",
-                  whiteSpace: "nowrap"
+                  overflow: "hidden", textOverflow: "ellipsis", color: "darkgray", fontSize: "0.8rem",
+                  whiteSpace: "nowrap", lineHeight: "0.8rem"
                 }}>
                   {player.full_name}
                 </div>
@@ -273,7 +292,7 @@ class Contacts extends Component {
                   }}>
                     <div style={{overflow: "hidden", display: "flex", height: "100%", alignItems: "flex-end", justifyContent: "flex-end"}}>
                       {player.mains.slice(1).map((main)=>(
-                        <div style={{
+                        <div class="player-main-mini" style={{
                           backgroundImage: `url(http://braacket.com/${this.getCharName(main.icon)})`,
                           width: "24px", height: "24px", backgroundPosition: "center", backgroundSize: "cover",
                           flexGrow: 0, display: "flex", flexShrink: 1
