@@ -44,26 +44,18 @@ class Contacts extends Component {
             data[player].mains.push({name: "Random", icon: ""});
           }
 
-          if(!data[player]["score"]){
-            if((data[player]["rank"])){
-              data[player]["score"] = data[player]["rank"][this.props.contacts[this.state.selectedLeague].id]["score"];
+          if((data[player]["rank"])){
+            data[player]["score"] = data[player]["rank"][this.props.contacts[this.state.selectedLeague].id]["score"];
+            data[player]["ranking"] = data[player]["rank"][this.props.contacts[this.state.selectedLeague].id]["rank"];
+            if(data[player]["ranking"]){
+              players.push(data[player]);
             }
           }
-
-          players.push(data[player]);
         }, this);
-
-        function compare(a, b) {
-          if(parseInt(a.score) > parseInt(b.score)){
-            return -1;
-          }
-          if(parseInt(a.score) < parseInt(b.score)){
-            return 1;
-          }
-          return 0;
-        }
         
-        players.sort(compare);
+        players.sort(function(a, b){
+          return Number(a["ranking"]) - Number(b["ranking"]);
+        });
 
         this.setState({ players: players })
       }
@@ -88,7 +80,7 @@ class Contacts extends Component {
   }
 
   normalizePlayerName(name){
-    return name.normalize("NFKD").replace(/ /g, '_').replace('[^0-9a-zA-Z_-]', '').replace("|", "")
+    return name.normalize("NFKD").replace(/ /g, '_').replace(RegExp('[^0-9a-zA-Z_-]'), '').replace("|", "")
   }
 
   openPlayerModal(player){
@@ -181,7 +173,7 @@ class Contacts extends Component {
                     <div style={{
                       width: "100px", height: "100px", position: "absolute", top: 0, left: "-10px", fontSize: "5rem", lineHeight: "100px"
                     }}>
-                      {i+1}
+                      {player.ranking}
                     </div>
 
                     <div style={{
@@ -233,7 +225,7 @@ class Contacts extends Component {
             data-toggle="modal" data-target="#playerModal"
             onClick={()=>this.openPlayerModal(player)}
             >
-              <div class="player-ranking" style={{width: "45px", textAlign: "center", fontSize: "1.2rem"}}>{i+4}</div>
+              <div class="player-ranking" style={{width: "45px", textAlign: "center", fontSize: "1.2rem"}}>{player.ranking}</div>
 
               {player.avatar ?
                 <div class="player-avatar" style={{
