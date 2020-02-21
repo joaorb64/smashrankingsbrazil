@@ -171,9 +171,12 @@ class Contacts extends Component {
                     }}>
                     </div>
                     <div style={{
-                      width: "100px", height: "100px", position: "absolute", top: 0, left: "-10px", fontSize: "5rem", lineHeight: "100px"
+                      width: "100px", height: "100px", position: "absolute", top: 0
                     }}>
-                      {player.ranking}
+                      <div style={{
+                        width: 100, height: 100, backgroundImage: `url(${process.env.PUBLIC_URL}/icons/rank${i+1}.png)`,
+                        backgroundSize: "cover", position: "absolute", left: -10, top: -10
+                      }}></div>
                     </div>
 
                     <div style={{

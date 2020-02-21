@@ -39,7 +39,7 @@ class App extends Component {
     return (
       <div>
         <video loop muted autoplay oncanplay="this.play()" onloadedmetadata="this.muted=true" id="myVideo">
-          <source src="./background.mp4" type="video/mp4" />
+          <source src="/background.mp4" type="video/mp4" />
         </video>
 
         <Router basename={process.env.PUBLIC_URL}>
