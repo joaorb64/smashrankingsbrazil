@@ -132,8 +132,8 @@ class Contacts extends Component {
               style={{padding: "0px 4px", cursor: "pointer"}}
               data-toggle="modal" data-target="#playerModal"
               onClick={()=>this.openPlayerModal(player)}>
-                <li key={this.state.selectedLeague+'_'+i} class="slide-fade list-group-item" style={{
-                    backgroundColor: this.state.top3Colors[i], borderRadius: "10px", border: 0, marginBottom: "5px", width: "100%", height: "302px", lineHeight: "48px",
+                <li key={this.state.selectedLeague+'_'+i} class={styles.top3container + " slide-fade list-group-item"} style={{
+                    backgroundColor: this.state.top3Colors[i], borderRadius: "10px", border: 0, marginBottom: "5px", width: "100%", lineHeight: "48px",
                     padding: 0, display: "flex", alignSelf: "center", overflow: "hidden", animationDelay: (i/30.0)+"s"
                   }}>
                     <div style={{
@@ -204,11 +204,22 @@ class Contacts extends Component {
                     </div>
 
                     {player.avatar ?
-                      <div style={{
-                        backgroundImage: `url(${player.avatar})`,
-                        width: "96px", height: "96px", backgroundSize: "cover", backgroundPosition: "center",
-                        borderRadius: "100%", position: "absolute", right: 10, top: 10, border: "5px #f0f0f0 solid"
-                      }}></div>
+                      <a href={player.twitter}>
+                        <div style={{
+                          backgroundImage: `url(${player.avatar})`,
+                          width: "96px", height: "96px", backgroundSize: "cover", backgroundPosition: "center",
+                          borderRadius: "100%", position: "absolute", right: 10, top: 10, border: "5px #f0f0f0 solid"
+                        }}>
+                          {player.twitter ? 
+                            <div style={{width: "100%", height: "100%", display: "flex", alignItems: "flex-end", justifyContent: "flex-end", margin: "5px"}}>
+                              <div style={{
+                                backgroundImage: "url(/icons/twitter.svg)", width: 32, height: 32, bottom: 0, right: 0
+                              }}></div>
+                            </div>
+                            :
+                            null}
+                        </div>
+                      </a>
                     :
                       null
                     }
@@ -228,11 +239,22 @@ class Contacts extends Component {
               <div class="player-ranking" style={{width: "45px", textAlign: "center", fontSize: "1.2rem"}}>{player.ranking}</div>
 
               {player.avatar ?
-                <div class="player-avatar" style={{
-                  backgroundImage: `url(${player.avatar})`,
-                  width: "64px", height: "48px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
-                  backgroundPosition: "center", backgroundColor: "white",
-                }}></div>
+                <a href={player.twitter}>
+                  <div class="player-avatar" style={{
+                    backgroundImage: `url(${player.avatar})`,
+                    width: "64px", height: "100%", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center", backgroundColor: "white",
+                  }}>
+                    {player.twitter ? 
+                      <div style={{width: "100%", height: "100%", display: "flex", alignItems: "flex-end", justifyContent: "flex-end"}}>
+                        <div style={{
+                          backgroundImage: "url(/icons/twitter.svg)", width: 16, height: 16, bottom: 0, right: 0, margin: "2px"
+                        }}></div>
+                      </div>
+                      :
+                      null}
+                  </div>
+                </a>
               :
                 <div class="player-avatar" style={{
                   width: "64px", height: "48px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
@@ -248,7 +270,7 @@ class Contacts extends Component {
                     backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/master/state_icon/${player.state}.png)`,
                     width: "100%", height: "100%", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
                     backgroundPosition: "center"
-                  }}></div>
+                  }}>{player.state}</div>
                 :
                   null
                 }

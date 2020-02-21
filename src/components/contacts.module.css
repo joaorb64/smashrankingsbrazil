@@ -51,3 +51,13 @@
 .listItemParent:hover .listItemChild {
   background-color: #ffb700 !important;
 }
+
+.top3container {
+  height: 300px;
+}
+
+@media (max-width: 768px) {
+  .top3container {
+    height: 230px;
+  }
+}

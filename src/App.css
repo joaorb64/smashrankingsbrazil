@@ -54,6 +54,12 @@ body {
   flex-direction: column;
 }
 
+.state-flag {
+  font-size: 10px;
+  margin-top: -10px;
+  padding-top: 10px;
+}
+
 @media (max-width: 768px) {
   .firstplayer-col {
     padding-right: 0px !important
@@ -105,5 +111,10 @@ body {
 
   .player-avatar {
     width: 54px !important;
+  }
+
+  .state-flag {
+    margin-top: -12px;
+    padding-top: 12px;
   }
 }
