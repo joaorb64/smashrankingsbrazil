@@ -61,13 +61,13 @@ class About extends Component {
           Metodologia do ranking
         </h2>
         <p>
-          Campeonatos utilizados para cálculo do ranking nacional (tier):
+          Campeonatos utilizados para cálculo do ranking nacional:
         </p>
         <table class="table table-striped table-sm">
           <thead>
             <tr>
               <th scope="col">Nome</th>
-              <th scope="col">Rank</th>
+              <th scope="col">Tier</th>
             </tr>
           </thead>
           <tbody>
