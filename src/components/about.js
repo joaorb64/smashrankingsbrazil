@@ -24,6 +24,10 @@ class About extends Component {
         }
       });
 
+      this.state.tournaments = Object.values(this.state.tournaments).sort((a, b) => (a.name > b.name) ? 1 : -1);
+
+      console.log(this.state.tournaments);
+
       this.setState(this.state);
     })
     .catch(console.log)
@@ -59,16 +63,27 @@ class About extends Component {
         <p>
           Campeonatos utilizados para cálculo do ranking nacional (tier):
         </p>
-        <ul>
-          {
-            this.state.tournaments != null ?
-              this.state.tournaments.map((tournament)=>(
-                <li>{tournament.name + " ("+tournament.rank+")"}</li>
-              ))
-              :
-              null
-          }
-        </ul>
+        <table class="table table-striped table-sm">
+          <thead>
+            <tr>
+              <th scope="col">Nome</th>
+              <th scope="col">Rank</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              this.state.tournaments != null ?
+                this.state.tournaments.map((tournament)=>(
+                  <tr>
+                    <td>{tournament.name}</td>
+                    <td>{tournament.rank}</td>
+                  </tr>
+                ))
+                :
+                null
+            }
+          </tbody>
+        </table>
       </div>
     )
   }
