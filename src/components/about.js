@@ -2,7 +2,14 @@ import React, { Component } from 'react'
 
 class About extends Component {
   state = {
-    tournaments: null
+    tournaments: null,
+    tournamentColor: {
+      "S": "red",
+      "A": "orange",
+      "B": "brown",
+      "C": "darkbrown",
+      "D": "gray",
+    }
   }
 
   componentDidUpdate(nextProps) {
@@ -67,6 +74,7 @@ class About extends Component {
           <thead>
             <tr>
               <th scope="col">Nome</th>
+              <th scope="col">Jogadores</th>
               <th scope="col">Tier</th>
             </tr>
           </thead>
@@ -76,7 +84,8 @@ class About extends Component {
                 this.state.tournaments.map((tournament)=>(
                   <tr>
                     <td>{tournament.name}</td>
-                    <td>{tournament.rank}</td>
+                    <td>{tournament.player_number}</td>
+                    <td style={{color: this.state.tournamentColor[tournament.rank]}}><b>{tournament.rank}</b></td>
                   </tr>
                 ))
                 :
