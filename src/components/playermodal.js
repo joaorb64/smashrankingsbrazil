@@ -43,7 +43,10 @@ class PlayerModal extends Component {
                   <div>
                     {this.state.playerData.name}
                     {Object.values(this.state.playerData.rank).map((rank, i)=>(
-                      <div>{Object.keys(this.state.playerData.rank)[i]} - [{rank.rank}] - {rank.score} pts</div>
+                      this.props.leagues ?
+                        <div>{this.props.leagues.find(element => element.id == Object.keys(this.state.playerData.rank)[i]).name} - [{rank.rank}] - {rank.score} pts</div>
+                      :
+                        <div>{Object.keys(this.state.playerData.rank)[i]} - [{rank.rank}] - {rank.score} pts</div>
                     ))}
                   </div>
                 :

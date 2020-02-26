@@ -67,7 +67,7 @@ class App extends Component {
           By João Ribeiro Bezerra (joaorb64@gmail.com, @joao_shino)
         </nav>
 
-        <PlayerModal />
+        <PlayerModal leagues={this.state.leagues} />
       </div>
     );
   }
