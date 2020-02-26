@@ -5,6 +5,7 @@ import TopBar from './components/topbar';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import About from './components/about';
 import PlayerModal from './components/playermodal';
+import Mapa from './components/map';
 
 class App extends Component {
   state = {
@@ -15,17 +16,22 @@ class App extends Component {
     fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/leagues.json')
     .then(res => res.json())
     .then((data) => {
+      let promises = [];
+
       Object.keys(data).forEach((league) => {
-        fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/league_info/'+league+'.json')
+        promises.push(fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/league_info/'+league+'.json')
         .then(res => res.json())
           .then((leagueInfo) => {
             this.state.leagues.push({
               id: league,
-              name: leagueInfo.name
+              name: leagueInfo.name,
+              state: data[league].state
             });
-          }).then(()=>{
-            this.setState(this.state);
-          })
+          }))
+      })
+
+      Promise.all(promises).then(()=>{
+        this.setState(this.state);
       })
     })
     .catch(console.log)
@@ -53,6 +59,7 @@ class App extends Component {
               <Route path="/home/" exact render={
                 (props) => <Contacts contacts={this.state.leagues}></Contacts>
               } />
+              <Route path="/map/" exact render={(props) => <Mapa leagues={this.state.leagues} />} />
               <Route path="/about/" exact render={(props) => <About />} />
               <Redirect to="/home/" />
             </Switch>
