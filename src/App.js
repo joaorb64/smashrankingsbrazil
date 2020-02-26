@@ -22,16 +22,19 @@ class App extends Component {
         promises.push(fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/league_info/'+league+'.json')
         .then(res => res.json())
           .then((leagueInfo) => {
-            this.state.leagues.push({
+            data[league]["info"] = {
               id: league,
               name: leagueInfo.name,
               state: data[league].state,
               city: data[league].city
-            });
+            };
           }))
       })
 
       Promise.all(promises).then(()=>{
+        Object.keys(data).forEach((league) => {
+          this.state.leagues.push(data[league]["info"]);
+        })
         this.setState(this.state);
       })
     })

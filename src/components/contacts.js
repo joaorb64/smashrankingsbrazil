@@ -80,7 +80,7 @@ class Contacts extends Component {
   }
 
   normalizePlayerName(name){
-    return name.normalize("NFKD").replace(/ /g, '_').replace(RegExp('[^0-9a-zA-Z_-]'), '').replace("|", "")
+    return name.normalize("NFKD").replace(/ /g, '_').replace(/@/g, "_At_").replace(RegExp('[^0-9a-zA-Z_-]'), '').replace("|", "")
   }
 
   openPlayerModal(player){
