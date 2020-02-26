@@ -3,6 +3,8 @@ import React, { Component } from 'react'
 import L from '../../node_modules/leaflet/dist/leaflet'
 import LeafletAjax from '../../node_modules/leaflet-ajax/dist/leaflet.ajax'
 
+import styles from './map.module.css'
+
 class Mapa extends Component {
   state = {
     leagues: {}
@@ -64,23 +66,20 @@ class Mapa extends Component {
           this.setState(this.state);
 
           // add marker
-          Object.keys(this.estados._layers).forEach(layer => {
-            if(this.props.leagues[element].state == this.estados._layers[layer].feature.properties.sigla){
-              if(this.props.leagues[element].players){
-                let charIcon = L.icon({
-                  iconUrl: "http://braacket.com/"+this.props.leagues[element].players[0].mains[0].icon,
-              
-                  iconSize:     [48, 48], // size of the icon
-                  //iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-                });
+          let found = this.municipios.find(cidade => cidade.nome == this.props.leagues[element].city);
 
-                console.log(this.estados._layers[layer]._bounds.getCenter())
-    
-                let marker = L.marker(this.estados._layers[layer]._bounds.getCenter(), {icon: charIcon}).addTo(this.mymap);
-                this.markers.push(marker);
-              }
-            };
-          });
+          if(found){
+            if(this.props.leagues[element].players){
+              let charIcon = L.icon({
+                iconUrl: "http://braacket.com/"+this.props.leagues[element].players[0].mains[0].icon,
+                iconSize: [32, 32],
+                className: styles.mapCharIcon
+              });
+  
+              let marker = L.marker([found.latitude, found.longitude], {icon: charIcon}).addTo(this.mymap);
+              this.markers.push(marker);
+            }
+          };
 
           //console.log(this.state)
         }
@@ -115,13 +114,18 @@ class Mapa extends Component {
     this.mymap = L.map('mapid', mapOptions);
     baseMap.addTo(this.mymap);
 
-    this.estados = new L.GeoJSON.AJAX("/geojson/brazil-states.geojson");
+    fetch('/geojson/municipios.json')
+    .then(res => res.json()).then((data) => {
+      this.municipios = data;
 
-    this.estados.on('data:loaded', () => {
-      this.estados.addTo(this.mymap);
-      this.mymap.fitBounds(this.estados.getBounds());
-      this.updateData();
-    });
+      this.estados = new L.GeoJSON.AJAX("/geojson/brazil-states.geojson");
+
+      this.estados.on('data:loaded', () => {
+        this.estados.addTo(this.mymap);
+        this.mymap.fitBounds(this.estados.getBounds());
+        this.updateData();
+      });
+    })
   }
 
   render (){

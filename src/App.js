@@ -25,7 +25,8 @@ class App extends Component {
             this.state.leagues.push({
               id: league,
               name: leagueInfo.name,
-              state: data[league].state
+              state: data[league].state,
+              city: data[league].city
             });
           }))
       })
