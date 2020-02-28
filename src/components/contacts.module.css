@@ -56,8 +56,19 @@
   height: 300px;
 }
 
+.playerRanking {
+  font-size: 1.2rem;
+  width: 45px;
+  text-align: center;
+}
+
 @media (max-width: 768px) {
   .top3container {
     height: 230px;
+  }
+
+  .playerRanking {
+    font-size: 1rem;
+    width: 38px;
   }
 }

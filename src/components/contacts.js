@@ -80,7 +80,7 @@ class Contacts extends Component {
   }
 
   normalizePlayerName(name){
-    return name.normalize("NFKD").replace(/ /g, '_').replace(/@/g, "_At_").replace(RegExp('[^0-9a-zA-Z_-]'), '').replace("|", "")
+    return name.normalize("NFKD").replace(/ /g, '_').replace(/@/g, "_At_").replace(/~/g, "_Tilde_").replace(RegExp('[^0-9a-zA-Z_-]'), '').replace("|", "")
   }
 
   openPlayerModal(player){
@@ -252,7 +252,7 @@ class Contacts extends Component {
             data-toggle="modal" data-target="#playerModal"
             onClick={()=>this.openPlayerModal(player)}
             >
-              <div class="player-ranking" style={{width: "45px", textAlign: "center", fontSize: "1.2rem"}}>{player.ranking}</div>
+              <div class={styles.playerRanking}>{player.ranking}</div>
 
               {player.avatar ?
                 <a href={player.twitter}>
