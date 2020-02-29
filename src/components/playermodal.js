@@ -41,13 +41,67 @@ class PlayerModal extends Component {
             <div class="modal-body">
               {this.state.playerData ?
                   <div>
-                    {this.state.playerData.name}
-                    {Object.values(this.state.playerData.rank).map((rank, i)=>(
-                      this.props.leagues ?
-                        <div>{this.props.leagues.find(element => element.id == Object.keys(this.state.playerData.rank)[i]).name} - [{rank.rank}] - {rank.score} pts</div>
+                    <h2>{this.state.playerData.name}</h2>
+
+                    <row>
+                      <h5>Ligas:</h5>
+                      <table class="table table-striped table-sm">
+                        <thead>
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Liga</th>
+                            <th scope="col">Colocação</th>
+                            <th scope="col">Pontuação</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            {Object.values(this.state.playerData.rank).map((rank, i)=>(
+                              <tr>
+                                <th scope="row">{i+1}</th>
+                                {this.props.leagues ?
+                                  <td>{this.props.leagues.find(element => element.id == Object.keys(this.state.playerData.rank)[i]).name}</td>
+                                :
+                                  <td>{Object.keys(this.state.playerData.rank)[i]}</td>
+                                }
+                                <td>{rank.rank}</td>
+                                <td>{rank.score}</td>
+                              </tr>
+                            ))}
+                        </tbody>
+                      </table>
+                    </row>
+
+                    {this.state.playerData.tournaments ?
+                      <row>
+                        <h5>Torneios contabilizados:</h5>
+                        <table class="table table-striped table-sm">
+                          <thead>
+                            <tr>
+                              <th scope="col">#</th>
+                              <th scope="col">Nome</th>
+                              <th scope="col">Tier</th>
+                              <th scope="col">Colocação</th>
+                              <th scope="col">Pontuação</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {
+                              this.state.playerData.tournaments.sort((a, b) => Number(b.name) - Number(a.name)).sort((a, b) => Number(b.points) - Number(a.points)).map((tournament, i)=>(
+                                <tr>
+                                  <th scope="row">{i+1}</th>
+                                  <td>{tournament.name}</td>
+                                  <td>{tournament.rank}</td>
+                                  <td>{tournament.placing}</td>
+                                  <td>{tournament.points}</td>
+                                </tr>
+                              ))
+                            }
+                          </tbody>
+                        </table>
+                      </row>
                       :
-                        <div>{Object.keys(this.state.playerData.rank)[i]} - [{rank.rank}] - {rank.score} pts</div>
-                    ))}
+                      null
+                    }
                   </div>
                 :
                 null

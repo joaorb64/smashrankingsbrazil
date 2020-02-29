@@ -27,6 +27,9 @@ class TopBar extends Component {
             <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/map/">
               <div class="nav-link">Mapa</div>
             </NavLink>
+            <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/statistics/">
+              <div class="nav-link">Estatísticas</div>
+            </NavLink>
             <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/about/">
               <div class="nav-link">Sobre</div>
             </NavLink>

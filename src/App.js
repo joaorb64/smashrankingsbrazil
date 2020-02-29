@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import About from './components/about';
 import PlayerModal from './components/playermodal';
 import Mapa from './components/map';
+import Statistics from './components/statistics';
 
 class App extends Component {
   state = {
@@ -64,6 +65,7 @@ class App extends Component {
                 (props) => <Contacts contacts={this.state.leagues}></Contacts>
               } />
               <Route path="/map/" exact render={(props) => <Mapa leagues={this.state.leagues} />} />
+              <Route path="/statistics/" exact render={(props) => <Statistics leagues={this.state.leagues} />} />
               <Route path="/about/" exact render={(props) => <About />} />
               <Redirect to="/home/" />
             </Switch>
