@@ -60,6 +60,15 @@ body {
   padding-top: 10px;
 }
 
+.bottom-bar {
+  color: white;
+  background-color: #be2018;
+  font-family: SmashFont;
+  font-size: 15px;
+  text-align: right;
+  display: inline;
+}
+
 @media (max-width: 768px) {
   .firstplayer-col {
     padding-right: 0px !important
@@ -116,5 +125,9 @@ body {
   .state-flag {
     margin-top: -12px;
     padding-top: 12px;
+  }
+
+  .bottom-bar {
+    font-size: 10px;
   }
 }
