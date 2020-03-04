@@ -162,37 +162,50 @@ class Statistics extends Component {
       }}>
         {this.state.statistics ?
           <div>
-            <h5>Jogadores com nome condizente com braacket da cena local</h5>
-            <canvas style={{width: "100%", height: 200}} ref={this.pieRef} />
-            
-            <h5>Uso de personagens</h5>
-            <div style={{width: "100%", overflowX: "scroll"}}>
-              <div style={{width: 2000, height:300}}>
-                <canvas style={{width: 2000, height: 300}} ref={this.chartRef} id="myChart" />
+            <div class="row mb-3 mt-3">
+              <div class="col">
+                <h5>Jogadores do ranking brasileiro com nome encontrado em ligas locais</h5>
+                <p>(Usado para a importação de informações como mains, twitter)</p>
+                <canvas style={{width: "100%", height: 200}} ref={this.pieRef} />
               </div>
             </div>
 
-            <h5>Jogador melhor colocado com cada personagem</h5>
-            <table class="table table-striped table-sm">
-              <thead>
-                <tr>
-                  <th scope="col">Personagem</th>
-                  <th scope="col">Jogador</th>
-                  <th scope="col">Colocação</th>
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  Object.entries(this.state.statistics.best_player_character).sort((a, b) => {return a[1].rank.prbth.rank - b[1].rank.prbth.rank}).map((line)=>(
+            <div class="row mb-3 mt-3">
+              <div class="col">
+                <h5>Uso de personagens</h5>
+                <div style={{width: "100%", overflowX: "scroll", backgroundColor: "#e4e4e4"}}>
+                  <div style={{width: 2000, height:300}}>
+                    <canvas style={{width: 2000, height: 300}} ref={this.chartRef} id="myChart" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-3 mt-3">
+              <div class="col">
+                <h5>Jogador melhor colocado com cada personagem</h5>
+                <table class="table table-striped table-sm">
+                  <thead>
                     <tr>
-                      <td><img src={`https://braacket.com/${line[1].mains[0].icon}`} style={{width: 32, height: 32}} /> {line[0]}</td>
-                      <td>{line[1].name}</td>
-                      <td>{line[1].rank.prbth.rank}</td>
+                      <th scope="col">Personagem</th>
+                      <th scope="col">Jogador</th>
+                      <th scope="col">Colocação</th>
                     </tr>
-                  ))
-                }
-              </tbody>
-            </table>
+                  </thead>
+                  <tbody>
+                    {
+                      Object.entries(this.state.statistics.best_player_character).sort((a, b) => {return a[1].rank.prbth.rank - b[1].rank.prbth.rank}).map((line)=>(
+                        <tr>
+                          <td><img src={`https://braacket.com/${line[1].mains[0].icon}`} style={{width: 32, height: 32}} /> {line[0]}</td>
+                          <td>{line[1].name}</td>
+                          <td>{line[1].rank.prbth.rank}</td>
+                        </tr>
+                      ))
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         :
           <div>Loading...</div>
