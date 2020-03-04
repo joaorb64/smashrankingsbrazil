@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styles from './contacts.module.css'
+import { Link, useParams, useLocation } from 'react-router-dom';
 
 class Contacts extends Component {
   state = {
@@ -12,6 +13,17 @@ class Contacts extends Component {
 
   componentDidUpdate(nextProps) {
     if(nextProps !== this.props) {
+      if(this.props.match){
+        let selectedId = this.props.match.match.params["id"];
+    
+        console.log(selectedId)
+    
+        if(selectedId){
+          let selectedLeague = this.props.contacts.findIndex((a)=>{return a.id == selectedId});
+          this.selectLeague(selectedLeague);
+        }
+      }
+
       this.updateData();
     }
   }
@@ -112,14 +124,14 @@ class Contacts extends Component {
               </button>
               <div class={styles['teste-menu'] + " dropdown-menu col-12"} aria-labelledby="dropdownMenuButton">
                 {this.props.contacts.map((contact, i) => (
-                  <a class={"dropdown-item " + styles.teste} href="/:handle" onClick={()=>this.selectLeague(i)}>
+                  <Link class={"dropdown-item " + styles.teste} to={`/home/${contact.id}`} onClick={()=>this.selectLeague(i)}>
                     <div style={{
                       width: "32px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
                       backgroundPosition: "center", verticalAlign: "inherit", backgroundColor: "white", borderRadius: "100%", marginRight: "10px",
                       backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/master/league_icon/${contact.id}.png)`
                     }}></div>
                     {contact.name}
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>

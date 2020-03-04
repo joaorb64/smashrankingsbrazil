@@ -61,8 +61,8 @@ class App extends Component {
           }}>
 
             <Switch>
-              <Route path="/home/" exact render={
-                (props) => <Contacts contacts={this.state.leagues}></Contacts>
+              <Route path="/home/:id" exact render={
+                (props) => <Contacts contacts={this.state.leagues} match={props}></Contacts>
               } />
               <Route path="/map/" exact render={(props) => <Mapa leagues={this.state.leagues} />} />
               <Route path="/statistics/" exact render={(props) => <Statistics leagues={this.state.leagues} />} />
