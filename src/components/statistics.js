@@ -14,11 +14,13 @@ class Statistics extends Component {
   }
 
   chartRef = React.createRef();
+  pieRef = React.createRef();
 
   componentWillMount() {
     fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/out/statistics.json')
     .then(res => res.json())
     .then((data) => {
+      // char usage
       let chars = []
 
       Object.keys(data["char_usage"]).forEach(char => {
@@ -52,7 +54,31 @@ class Statistics extends Component {
     if(this.chartRef == null) return;
     if(this.chartRef.current == null) return;
     if(this.state.statistics == null) return;
+    if(this.myChartRef != null) return;
 
+    // Linked players chart
+    var myPieChart = new Chart(this.pieRef.current.getContext("2d"), {
+      type: 'pie',
+      data: {
+        datasets: [{
+          data:[
+            this.state.statistics.linkage.total - this.state.statistics.linkage.unlinked.length,
+            this.state.statistics.linkage.unlinked.length
+          ],
+          "backgroundColor": [
+            "rgba(255, 183, 0, 1)",
+            "rgba(0, 0, 0, 0.6)"
+          ]
+        }],
+        labels: [
+          "Encontrados em pelo menos uma liga",
+          "Não existentes em nenhuma das ligas"
+        ]
+      },
+      options: Chart.defaults.pie
+    });
+
+    // Character Usage Chart
     this.myChartRef = this.chartRef.current.getContext("2d");
 
     if(this.myChartRef){
@@ -90,7 +116,6 @@ class Statistics extends Component {
         var chartInstance = t.chart;
         var dataset = chartInstance.config.data.datasets[0].data;
         var meta = chartInstance.controller.getDatasetMeta(0);
-        var y0 = chartInstance.scales.y0.top+chartInstance.scales.y0.height;
         t.chart.ctx.imageSmoothingQuality = "high"
         t.chart.ctx.textAlign = "center";
         meta.data.forEach(function(bar, index) {
@@ -99,7 +124,6 @@ class Statistics extends Component {
           if(img != null && img.complete && img.naturalHeight !== 0){
             t.chart.ctx.drawImage(img,bar._model.x-12,bar._view.y-12,24,24);
             t.chart.ctx.fillText(dataset[bar._index], bar._model.x,bar._view.y-12)
-            t.chart.ctx.stroke();
           }
         });
       }
@@ -112,7 +136,7 @@ class Statistics extends Component {
         border: 0,
         "options": {
           legend: { display: false },
-          layout: {padding: 32},
+          layout: {padding: "32"},
           "scales": {
             "yAxes": [{
               id: "y0",
@@ -135,14 +159,36 @@ class Statistics extends Component {
         {this.state.statistics ?
           <div>
             <h5>Jogadores com nome condizente com braacket da cena local</h5>
-            {this.state.statistics.linkage.total - this.state.statistics.linkage.unlinked.length}/{this.state.statistics.linkage.total}
+            <canvas style={{width: "100%", height: 200}} ref={this.pieRef} />
             
             <h5>Uso de personagens</h5>
-            <div class="col-12" style={{overflowX: "scroll"}}>
+            <div style={{width: "100%", overflowX: "scroll"}}>
               <div style={{width: 2000, height:300}}>
                 <canvas style={{width: 2000, height: 300}} ref={this.chartRef} id="myChart" />
               </div>
             </div>
+
+            <h5>Jogador melhor colocado com cada personagem</h5>
+            <table class="table table-striped table-sm">
+              <thead>
+                <tr>
+                  <th scope="col">Personagem</th>
+                  <th scope="col">Jogador</th>
+                  <th scope="col">Colocação</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  Object.entries(this.state.statistics.best_player_character).sort((a, b) => {return a[1].rank.prbth.rank - b[1].rank.prbth.rank}).map((line)=>(
+                    <tr>
+                      <td><img src={`https://braacket.com/${line[1].mains[0].icon}`} style={{width: 32, height: 32}} /> {line[0]}</td>
+                      <td>{line[1].name}</td>
+                      <td>{line[1].rank.prbth.rank}</td>
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </table>
           </div>
         :
           <div>Loading...</div>

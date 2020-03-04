@@ -112,7 +112,7 @@ class Contacts extends Component {
               </button>
               <div class={styles['teste-menu'] + " dropdown-menu col-12"} aria-labelledby="dropdownMenuButton">
                 {this.props.contacts.map((contact, i) => (
-                  <a class={"dropdown-item " + styles.teste} href="#" onClick={()=>this.selectLeague(i)}>
+                  <a class={"dropdown-item " + styles.teste} href="/:handle" onClick={()=>this.selectLeague(i)}>
                     <div style={{
                       width: "32px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
                       backgroundPosition: "center", verticalAlign: "inherit", backgroundColor: "white", borderRadius: "100%", marginRight: "10px",
