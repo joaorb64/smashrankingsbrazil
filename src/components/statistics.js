@@ -26,7 +26,8 @@ class Statistics extends Component {
       Object.keys(data["char_usage"]).forEach(char => {
         let obj = {
           name: char,
-          usage: data["char_usage"][char]
+          usage: data["char_usage"][char]["usage"],
+          icon: data["char_usage"][char]["icon"]
         }
         chars.push(obj);
       });
@@ -39,10 +40,12 @@ class Statistics extends Component {
 
       data["usage_labels"] = []
       data["usage_values"] = []
+      data["usage_icon"] = []
 
       data["char_usage"].forEach((chara) => {
         data["usage_labels"].push(chara.name);
         data["usage_values"].push(chara.usage);
+        data["usage_icon"].push(chara.icon);
       })
 
       this.setState({statistics: data});
@@ -89,15 +92,16 @@ class Statistics extends Component {
           "fill": false,
           "backgroundColor": "rgba(255, 183, 0, 1)",
           "borderWidth": 0
-        }]
+        }],
+        "icons": this.state.statistics["usage_icon"]
       };
       
       for (var i in chartData.labels) {
-        var lab = chartData.labels[i];
+        let lab = chartData.labels[i];
+        let icon = chartData.icons[i];
         var $img = $("<img/>").attr("id", lab).attr(
           "src",
-          "https://www.braacket.com/assets/images/game/ssbu/characters/"+
-            lab.toLowerCase().replace(/"."/g, "").replace(/ & /, "-")+".png"
+          "https://www.braacket.com/"+icon
         );
         $("#pics").append($img);
       }
