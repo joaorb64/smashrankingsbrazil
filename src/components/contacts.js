@@ -14,13 +14,12 @@ class Contacts extends Component {
   componentDidUpdate(nextProps) {
     if(nextProps !== this.props) {
       if(this.props.match){
-        let selectedId = this.props.match.match.params["id"];
-    
-        console.log(selectedId)
-    
+        let selectedId = this.props.match.match.params["id"];    
         if(selectedId){
           let selectedLeague = this.props.contacts.findIndex((a)=>{return a.id == selectedId});
-          this.selectLeague(selectedLeague);
+          if(selectedLeague != -1){
+            this.selectLeague(selectedLeague);
+          }
         }
       }
 
