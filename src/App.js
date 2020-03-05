@@ -73,11 +73,8 @@ class App extends Component {
           </div>
         </Router>
 
-        <nav class="navbar fixed-bottom" style={{
-          color: "white", backgroundColor: "#be2018",
-          fontFamily: "SmashFont", fontSize: "15px", textAlign: "right", display: "inline"
-        }}>
-          By João Ribeiro Bezerra (joaorb64@gmail.com, @joao_shino)
+        <nav class="navbar bottom-bar fixed-bottom">
+          By João Ribeiro Bezerra (joaorb64@gmail.com, <a style={{color: "white"}} href="https://twitter.com/joao_shino">@joao_shino</a>)
         </nav>
 
         <PlayerModal leagues={this.state.leagues} />

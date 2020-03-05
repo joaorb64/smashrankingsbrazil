@@ -50,7 +50,9 @@ class About extends Component {
           Sobre
         </h2>
         <p>
-          (Em construção)
+          Esse site é uma tentativa de agregar todos os resultados de cenas locais de Super Smash Bros Ultimate de todo o Brasil em um só lugar, e de usar esses dados para calcular um ranking nacional.
+          Os dados utilizados são extraídos do Braacket e o ranking nacional é recalculado de 12 em 12h.
+          A interface deste site é baseada fortemente no modo <i>Tourney</i> do próprio jogo.
         </p>
         <h2>
           Meus dados no ranking estão vazios!
@@ -68,6 +70,11 @@ class About extends Component {
           Metodologia do ranking
         </h2>
         <p>
+          O cálculo do ranking é realizado seguindo a seguinte lógica:
+          <ul>
+            <li>Para cada torneio da lista em que o jogador participou, calcular a quantidade de pontos obtidos neste torneio (utilizando a tabela de Tiers)</li>
+            <li>A pontuação final do jogador é a soma das 10 maiores pontuações obtidas</li>
+          </ul>
           Campeonatos utilizados para cálculo do ranking nacional:
         </p>
         <table class="table table-striped table-sm">
@@ -93,6 +100,12 @@ class About extends Component {
             }
           </tbody>
         </table>
+        <p>
+          Tabela de pontuação dos torneios:
+        </p>
+        <div style={{textAlign: "center"}}>
+          <img src="/images/ranking-tiers.jpg" />
+        </div>
       </div>
     )
   }

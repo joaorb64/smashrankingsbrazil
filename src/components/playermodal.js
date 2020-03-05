@@ -87,12 +87,16 @@ class PlayerModal extends Component {
                           <tbody>
                             {
                               this.state.playerData.tournaments.sort((a, b) => Number(b.name) - Number(a.name)).sort((a, b) => Number(b.points) - Number(a.points)).map((tournament, i)=>(
-                                <tr>
+                                <tr class={i<10? "" : "text-muted"}>
                                   <th scope="row">{i+1}</th>
                                   <td>{tournament.name}</td>
                                   <td>{tournament.rank}</td>
                                   <td>{tournament.placing}</td>
-                                  <td>{tournament.points}</td>
+                                  {i<10?
+                                    <td><b>{tournament.points}</b></td>
+                                    :
+                                    <td>{tournament.points}</td>
+                                  }
                                 </tr>
                               ))
                             }
