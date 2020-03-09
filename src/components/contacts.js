@@ -28,6 +28,16 @@ class Contacts extends Component {
   }
 
   componentDidMount() {
+    if(this.props.match){
+      let selectedId = this.props.match.match.params["id"];    
+      if(selectedId){
+        let selectedLeague = this.props.contacts.findIndex((a)=>{return a.id == selectedId});
+        if(selectedLeague != -1){
+          this.selectLeague(selectedLeague);
+        }
+      }
+    }
+
     if(this.props.contacts.length > 0){
       this.updateData();
     }
