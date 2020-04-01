@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import styles from './contacts.module.css'
 import { Link, useParams, useLocation } from 'react-router-dom';
+import PlayerModalGranblue from './playermodalgranblue';
 
-class Contacts extends Component {
+class Granblue extends Component {
   state = {
     selectedLeague: 0,
     players: [],
@@ -13,42 +14,22 @@ class Contacts extends Component {
 
   componentDidUpdate(nextProps) {
     if(nextProps !== this.props) {
-      if(this.props.match){
-        let selectedId = this.props.match.match.params["id"];    
-        if(selectedId){
-          let selectedLeague = this.props.contacts.findIndex((a)=>{return a.id == selectedId});
-          if(selectedLeague != -1){
-            this.selectLeague(selectedLeague);
-          }
-        }
-      }
-
       this.updateData();
     }
   }
 
   componentDidMount() {
-    if(this.props.match){
-      let selectedId = this.props.match.match.params["id"];    
-      if(selectedId){
-        let selectedLeague = this.props.contacts.findIndex((a)=>{return a.id == selectedId});
-        if(selectedLeague != -1){
-          this.selectLeague(selectedLeague);
-        }
-      }
-    }
-
-    if(this.props.contacts.length > 0){
-      this.updateData();
-    }
+    this.updateData();
   }
 
   updateData() {
-    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/out/'+this.props.contacts[this.state.selectedLeague].id+'.json')
+    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/granblue/out/ranking.json')
     .then(res => res.json())
     .then((data) => {
       if(data){
         let players = [];
+
+        console.log(data);
 
         Object.keys(data).forEach(function(player){
           if(data[player].avatar){
@@ -62,12 +43,12 @@ class Contacts extends Component {
           }
 
           if(data[player].mains.length == 0){
-            data[player].mains.push({name: "Random", icon: ""});
+            data[player].mains.push("Random");
           }
 
           if((data[player]["rank"])){
-            data[player]["score"] = data[player]["rank"][this.props.contacts[this.state.selectedLeague].id]["score"];
-            data[player]["ranking"] = data[player]["rank"][this.props.contacts[this.state.selectedLeague].id]["rank"];
+            data[player]["score"] = data[player]["rank"]["score"];
+            data[player]["ranking"] = data[player]["rank"]["rank"];
             if(data[player]["ranking"]){
               players.push(data[player]);
             }
@@ -79,16 +60,11 @@ class Contacts extends Component {
         });
 
         this.setState({ players: players })
+
+        console.log(this.state.players);
       }
     })
     .catch(console.log)
-  }
-
-  selectLeague(i){
-    if(i != this.state.selectedLeague){
-      this.state.selectedLeague = i;
-      this.updateData();
-    }
   }
 
   getCharName(name){
@@ -105,53 +81,21 @@ class Contacts extends Component {
   }
 
   openPlayerModal(player){
-    if(window.playerModal){
-      window.playerModal.player = this.normalizePlayerName(player.name);
-      window.playerModal.fetchPlayer();
+    if(window.playerModalGranblue){
+      window.playerModalGranblue.player = this.normalizePlayerName(player.name);
+      window.playerModalGranblue.fetchPlayer();
     }
   }
 
   render (){
     return(
       <div style={{textAlign: "center", fontFamily: "SmashFont"}}>
-          <div class="col-12" style={{padding: "0 10px"}}>
-            <div class={"dropdown"}>
-              <button class={styles.teste + " btn btn-secondary col-12 dropdown-toggle"} type="button" id="dropdownMenuButton"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                {this.props.contacts.length > 0 ?
-                  <div class={styles.title}>
-                    <div style={{
-                      width: "32px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
-                      backgroundPosition: "center", verticalAlign: "inherit", backgroundColor: "white", borderRadius: "100%", marginRight: "10px",
-                      backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/master/league_icon/${this.props.contacts[this.state.selectedLeague].id}.png)`
-                    }}></div>
-                    {this.props.contacts[this.state.selectedLeague].name}
-                  </div>
-                  :
-                  "Loading..."
-                }
-              </button>
-              <div class={styles['teste-menu'] + " dropdown-menu col-12"} aria-labelledby="dropdownMenuButton">
-                {this.props.contacts.map((contact, i) => (
-                  <Link class={"dropdown-item " + styles.teste} to={`/home/smash/${contact.id}`} onClick={()=>this.selectLeague(i)}>
-                    <div style={{
-                      width: "32px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
-                      backgroundPosition: "center", verticalAlign: "inherit", backgroundColor: "white", borderRadius: "100%", marginRight: "10px",
-                      backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/master/league_icon/${contact.id}.png)`
-                    }}></div>
-                    {contact.name}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
-
         <ul class="list-group" style={{padding: "10px"}}>
           <div class="row no-gutters" style={{margin: "0 -4px"}}>
             {this.state.players.slice(0,3).map((player, i) => (
               <div class={"col-md-4 " + styles.listItemParent}
               style={{padding: "0px 4px", cursor: "pointer"}}
-              data-toggle="modal" data-target="#playerModal"
+              data-toggle="modal" data-target="#playerModalGranblue"
               onClick={()=>this.openPlayerModal(player)}>
                 <li key={this.state.selectedLeague+'_'+i} class={styles.top3container + " slide-fade list-group-item"} style={{
                     backgroundColor: this.state.top3Colors[i], borderRadius: "10px", border: 0, marginBottom: "5px", width: "100%", lineHeight: "48px",
@@ -168,8 +112,8 @@ class Contacts extends Component {
                       clipPath: "polygon(0 60%, 0% 100%, 100% 100%)"
                     }}></div>
                     <div style={{
-                      backgroundImage: `url(${process.env.PUBLIC_URL}/portraits-full/${this.getCharName(player.mains[0].name)}.png)`, display: "flex",
-                      width: "100%", backgroundPosition: "center", backgroundSize: "cover",
+                      backgroundImage: `url(${process.env.PUBLIC_URL}/portraits-full/granblue/${this.getCharName(player.mains[0])}.png)`, display: "flex",
+                      width: "100%", backgroundPosition: "center 0", backgroundSize: "cover",
                       filter: "drop-shadow(10px 10px 0px #000000AF)"
                     }}>
                       <div class={styles.listItemChild} style={{
@@ -210,7 +154,7 @@ class Contacts extends Component {
                         {player.mains.length > 0 ?
                           player.mains.slice(1).map((main)=>(
                             <div style={{
-                              backgroundImage: `url(http://braacket.com/${this.getCharName(main.icon)})`,
+                              backgroundImage: `url(http://braacket.com/${this.getCharName(main)})`,
                               width: "32px", height: "32px", backgroundPosition: "center", backgroundSize: "cover",
                               flexGrow: 0, display: "inline-block"
                             }}></div>
@@ -270,7 +214,7 @@ class Contacts extends Component {
             <li key={this.state.selectedLeague+"_"+i}
             class={"slide-fade " + styles.listItem + " list-group-item"}
             style={{animationDelay: ((i+3)/50.0)+"s", cursor: "pointer"}}
-            data-toggle="modal" data-target="#playerModal"
+            data-toggle="modal" data-target="#playerModalGranblue"
             onClick={()=>this.openPlayerModal(player)}
             >
               <div class={styles.playerRanking}>{player.ranking}</div>
@@ -338,13 +282,13 @@ class Contacts extends Component {
               <div class="player-main" style={{display: "flex", width: "128px"}}>
                 {player.mains.length > 0 ?
                   <div style={{
-                    backgroundImage: `url(${process.env.PUBLIC_URL}/portraits-small/${this.getCharName(player.mains[0].name)}.png)`,
+                    backgroundImage: `url(${process.env.PUBLIC_URL}/portraits-small/granblue/${this.getCharName(player.mains[0])}.png)`,
                     width: "128px", backgroundPosition: "center", backgroundSize: "cover", backgroundColor: "#ababab", overflow: "hidden"
                   }}>
                     <div style={{overflow: "hidden", display: "flex", height: "100%", alignItems: "flex-end", justifyContent: "flex-end"}}>
                       {player.mains.slice(1).map((main)=>(
                         <div class="player-main-mini" style={{
-                          backgroundImage: `url(http://braacket.com/${this.getCharName(main.icon)})`,
+                          backgroundImage: `url(http://braacket.com/${this.getCharName(main)})`,
                           width: "24px", height: "24px", backgroundPosition: "center", backgroundSize: "cover",
                           flexGrow: 0, display: "flex", flexShrink: 1
                         }}></div>
@@ -361,9 +305,11 @@ class Contacts extends Component {
             </li>
           ))}
         </ul>
+
+        <PlayerModalGranblue />
       </div>
     )
   }
 };
 
-export default Contacts
+export default Granblue

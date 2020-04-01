@@ -82,7 +82,7 @@ class Mapa extends Component {
               window.routerHistory = this.props.history;
   
               let marker = L.marker([found.latitude, found.longitude], {icon: charIcon}).addTo(this.mymap);
-              marker.bindPopup('<a onClick="window.routerHistory.push(\'/home/'+this.props.leagues[element].id+'\');">'+this.props.leagues[element].name+'</a>');
+              marker.bindPopup('<a onClick="window.routerHistory.push(\'/home/smash/'+this.props.leagues[element].id+'\');">'+this.props.leagues[element].name+'</a>');
               this.markers.push(marker);
             }
           };
