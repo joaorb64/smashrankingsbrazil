@@ -68,7 +68,13 @@ class Mapa extends Component {
           this.setState(this.state);
 
           // add marker
-          let found = this.municipios.find(cidade => cidade.nome == this.props.leagues[element].city);
+          let found = null;
+
+          if(this.props.leagues[element].codigo_uf){
+            found = this.municipios.find(cidade => cidade.nome == this.props.leagues[element].city && cidade.codigo_uf == this.props.leagues[element].codigo_uf);
+          } else {
+            found = this.municipios.find(cidade => cidade.nome == this.props.leagues[element].city);
+          }
 
           if(found){
             if(this.props.leagues[element].players){

@@ -28,7 +28,8 @@ class App extends Component {
               id: league,
               name: leagueInfo.name,
               state: data[league].state,
-              city: data[league].city
+              city: data[league].city,
+              codigo_uf: data[league].codigo_uf
             };
           }))
       })
