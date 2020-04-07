@@ -315,7 +315,7 @@ class Contacts extends Component {
 
               <div class="player-name-container" style={{display: "flex", flexGrow: 1, overflow: "hidden", textOverflow: "ellipsis", justifyContent: "center"}}>
                 <div class="player-name" style={{overflow: "hidden", textOverflow: "ellipsis",
-                  overflowWrap: "break-word", lineHeight: "1.6rem"
+                  overflowWrap: "break-word", lineHeight: "1.6rem", fontSize: "1.2rem"
                 }}>
                   {player.name}
                 </div>

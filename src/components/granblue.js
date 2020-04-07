@@ -77,12 +77,17 @@ class Granblue extends Component {
   }
 
   normalizePlayerName(name){
-    return name.normalize("NFKD").replace(/ /g, '_').replace(/@/g, "_At_").replace(/~/g, "_Tilde_").replace(RegExp('[^0-9a-zA-Z_-]'), '').replace("|", "")
+    return name.replace(/á/g, "a").replace(/Á/g, "A")
+      .normalize("NFKD")
+      .replace(/ /g, '_').replace(/@/g, "_At_")
+      .replace(/~/g, "_Tilde_").replace(RegExp('[^0-9a-zA-Z_-]'), '')
+      .replace("|", "")
   }
 
   openPlayerModal(player){
     if(window.playerModalGranblue){
       window.playerModalGranblue.player = this.normalizePlayerName(player.name);
+      console.log(window.playerModalGranblue.player)
       window.playerModalGranblue.fetchPlayer();
     }
   }
@@ -259,7 +264,7 @@ class Granblue extends Component {
 
               <div class="player-name-container" style={{display: "flex", flexGrow: 1, overflow: "hidden", textOverflow: "ellipsis", justifyContent: "center"}}>
                 <div class="player-name" style={{overflow: "hidden", textOverflow: "ellipsis",
-                  overflowWrap: "break-word", lineHeight: "1.6rem"
+                  overflowWrap: "break-word", lineHeight: "1.6rem", fontSize: "1.2rem"
                 }}>
                   {player.name}
                 </div>
@@ -288,9 +293,10 @@ class Granblue extends Component {
                     <div style={{overflow: "hidden", display: "flex", height: "100%", alignItems: "flex-end", justifyContent: "flex-end"}}>
                       {player.mains.slice(1).map((main)=>(
                         <div class="player-main-mini" style={{
-                          backgroundImage: `url(http://braacket.com/${this.getCharName(main)})`,
+                          backgroundImage: `url(${process.env.PUBLIC_URL}/portraits-small/granblue/${this.getCharName(main)}.png)`,
                           width: "24px", height: "24px", backgroundPosition: "center", backgroundSize: "cover",
-                          flexGrow: 0, display: "flex", flexShrink: 1
+                          flexGrow: 0, display: "flex", flexShrink: 1, borderRadius: "100%",
+                          border: "1px solid black"
                         }}></div>
                       ))}
                     </div>
