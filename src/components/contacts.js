@@ -361,20 +361,26 @@ class Contacts extends Component {
                 </div>
               </li>
             ))}
+            <div style={{textAlign: "right", fontFamily: "SmashFont", color: "white"}}>
+              <div class="col-12" style={{padding: "0 0px"}}>
+                Dados atualizados em: {this.state.updateTime}
+              </div>
+            </div>
           </ul>
           :
-          <div class={"col-12"} style={{paddingTop: 10}}>
-            <div class={styles.listItem} style={{padding: "0 10px"}}>
-              Não foi encontrado ranking para esta liga no Braacket. Para solução de problemas, entre em contato com os TOs da sua região.
+            this.state.updateTime ?
+              <div class={"col-12"} style={{paddingTop: 10}}>
+                <div class={styles.listItem} style={{padding: "10px 10px", lineHeight: "24px", height: "auto"}}>
+                  Não foi encontrado ranking para esta liga no Braacket. Para solução de problemas, entre em contato com os TOs da sua região.
+                </div>
+              </div>
+            :
+            <div class={"col-12"} style={{paddingTop: 10}}>
+              <div class={styles.listItem} style={{padding: "10px 10px", lineHeight: "24px", height: "auto"}}>
+                Loading...
+              </div>
             </div>
-          </div>
         }
-
-        <div style={{textAlign: "right", fontFamily: "SmashFont", color: "white"}}>
-          <div class="col-12" style={{padding: "0 10px"}}>
-            Dados atualizados em: {this.state.updateTime}
-          </div>
-        </div>
       </div>
     )
   }

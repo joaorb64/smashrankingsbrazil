@@ -33,26 +33,26 @@ class Mapa extends Component {
         if(data){
           let players = [];
 
-          Object.keys(data).forEach(function(player){
-            if(data[player].avatar){
-              data[player].avatar = `https://raw.githubusercontent.com/joaorb64/tournament_api/master/${data[player].avatar}`;
-            } else if (data[player].twitter) {
-              data[player].avatar = `https://avatars.io/twitter/${this.getTwitterHandle(data[player].twitter)}`;
+          Object.keys(data["ranking"]).forEach(function(player){
+            if(data["ranking"][player].avatar){
+              data["ranking"][player].avatar = `https://raw.githubusercontent.com/joaorb64/tournament_api/master/${data["ranking"][player].avatar}`;
+            } else if (data["ranking"][player].twitter) {
+              data["ranking"][player].avatar = `https://avatars.io/twitter/${this.getTwitterHandle(data["ranking"][player].twitter)}`;
             }
 
-            if(!data[player].mains){
-              data[player].mains = [];
+            if(!data["ranking"][player].mains){
+              data["ranking"][player].mains = [];
             }
 
-            if(data[player].mains.length == 0){
-              data[player].mains.push({name: "Random", icon: ""});
+            if(data["ranking"][player].mains.length == 0){
+              data["ranking"][player].mains.push({name: "Random", icon: "assets/images/game/ssbu/characters/random.png"});
             }
 
-            if((data[player]["rank"])){
-              data[player]["score"] = data[player]["rank"][this.props.leagues[element].id]["score"];
-              data[player]["ranking"] = data[player]["rank"][this.props.leagues[element].id]["rank"];
-              if(data[player]["ranking"]){
-                players.push(data[player]);
+            if((data["ranking"][player]["rank"])){
+              data["ranking"][player]["score"] = data["ranking"][player]["rank"][this.props.leagues[element].id]["score"];
+              data["ranking"][player]["ranking"] = data["ranking"][player]["rank"][this.props.leagues[element].id]["rank"];
+              if(data["ranking"][player]["ranking"]){
+                players.push(data["ranking"][player]);
               }
             }
           }, this);
@@ -78,8 +78,14 @@ class Mapa extends Component {
 
           if(found){
             if(this.props.leagues[element].players){
+              let iconUrl = "http://braacket.com/assets/images/game/ssbu/characters/random.png"
+
+              if(this.props.leagues[element].players.length > 0){
+                iconUrl = "http://braacket.com/"+this.props.leagues[element].players[0].mains[0].icon
+              }
+
               let charIcon = L.icon({
-                iconUrl: "http://braacket.com/"+this.props.leagues[element].players[0].mains[0].icon,
+                iconUrl: iconUrl,
                 iconSize: [32, 32],
                 popupAnchor: [0, -8],
                 className: styles.mapCharIcon

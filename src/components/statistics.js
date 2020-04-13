@@ -75,6 +75,10 @@ class Statistics extends Component {
           Number(data["players_per_region"][i][1]).toFixed(1))
       }
 
+      data["score_per_region"].sort(function(a, b) {
+        return b[2] - a[2];
+      });
+
       this.setState({statistics: data});
     })
     .catch(console.log)
@@ -91,6 +95,8 @@ class Statistics extends Component {
     // Players per league chart
     var myPieChart = new Chart(this.pieRef.current.getContext("2d"), {
       type: 'pie',
+      responsive: true,
+      maintainAspectRatio: false,
       data: {
         datasets: [{
           data: this.state.statistics.players_per_region.map((a)=>{return a[1]}),
@@ -106,6 +112,7 @@ class Statistics extends Component {
 
     if(this.myChartRef){
       var chartData = {
+        maintainAspectRatio: false,
         "labels": this.state.statistics["usage_labels"],
         "datasets": [{
           "data": this.state.statistics["usage_values"],
@@ -123,6 +130,9 @@ class Statistics extends Component {
           "src",
           "https://www.braacket.com/"+icon
         );
+        $img.onload = function(){
+          this.draw();
+        }
         $("#pics").append($img);
       }
 
@@ -145,10 +155,10 @@ class Statistics extends Component {
         meta.data.forEach(function(bar, index) {
           var lab = bar._model.label;
           var img = document.getElementById(lab);
-          if(img != null && img.complete && img.naturalHeight !== 0){
+          if(img != null && img.naturalHeight !== 0){
             t.chart.ctx.drawImage(img,bar._model.x-12,bar._view.y-12,24,24);
-            t.chart.ctx.fillText(dataset[bar._index].toFixed(1), bar._model.x,bar._view.y-12)
           }
+          t.chart.ctx.fillText(dataset[bar._index].toFixed(1), bar._model.x,bar._view.y-12)
         });
       }
       
@@ -209,10 +219,10 @@ class Statistics extends Component {
         meta.data.forEach(function(bar, index) {
           var lab = bar._model.label;
           var img = document.getElementById(lab);
-          if(img != null && img.complete && img.naturalHeight !== 0){
+          if(img != null && img.naturalHeight !== 0){
             t.chart.ctx.drawImage(img,bar._model.x-12,bar._view.y-12,24,24);
-            t.chart.ctx.fillText(dataset[bar._index], bar._model.x,bar._view.y-12)
           }
+          t.chart.ctx.fillText(dataset[bar._index], bar._model.x,bar._view.y-12)
         });
       }
       
@@ -250,7 +260,7 @@ class Statistics extends Component {
               <div class="col">
                 <h5>Número de jogadores por liga</h5>
                 <p>(No ranking Brasileiro)</p>
-                <canvas style={{width: "100%", height: 200}} ref={this.pieRef} />
+                <canvas style={{width: "100%", height: "200px"}} ref={this.pieRef} />
               </div>
             </div>
 
