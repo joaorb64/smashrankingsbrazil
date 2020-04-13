@@ -74,11 +74,12 @@ class App extends Component {
             </Switch>
 
             <Route path="/" render={({location}) => {
-              if (typeof window.ga === 'function') {
-                window.ga('set', 'page', location.pathname + location.search);
-                window.ga('send', 'pageview');
+              if ("ga" in window) {
+                let tracker = window.ga.getAll()[0];
+                if (tracker)
+                  tracker.send('pageview', location.pathname);
               }
-              return null;
+              return "";
             }} />
 
           </div>
