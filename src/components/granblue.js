@@ -29,28 +29,26 @@ class Granblue extends Component {
       if(data){
         let players = [];
 
-        console.log(data);
-
-        Object.keys(data).forEach(function(player){
-          if(data[player].avatar){
-            data[player].avatar = `https://raw.githubusercontent.com/joaorb64/tournament_api/master/${data[player].avatar}`;
-          } else if (data[player].twitter) {
-            data[player].avatar = `https://avatars.io/twitter/${this.getTwitterHandle(data[player].twitter)}`;
+        Object.keys(data["ranking"].ranking).forEach(function(player){
+          if(data["ranking"][player].avatar){
+            data["ranking"][player].avatar = `https://raw.githubusercontent.com/joaorb64/tournament_api/master/${data["ranking"][player].avatar}`;
+          } else if (data["ranking"][player].twitter) {
+            data["ranking"][player].avatar = `https://avatars.io/twitter/${this.getTwitterHandle(data["ranking"][player].twitter)}`;
           }
 
-          if(!data[player].mains){
-            data[player].mains = [];
+          if(!data["ranking"][player].mains){
+            data["ranking"][player].mains = [];
           }
 
-          if(data[player].mains.length == 0){
-            data[player].mains.push("Random");
+          if(data["ranking"][player].mains.length == 0){
+            data["ranking"][player].mains.push("Random");
           }
 
-          if((data[player]["rank"])){
-            data[player]["score"] = data[player]["rank"]["score"];
-            data[player]["ranking"] = data[player]["rank"]["rank"];
-            if(data[player]["ranking"]){
-              players.push(data[player]);
+          if((data["ranking"][player]["rank"])){
+            data["ranking"][player]["score"] = data["ranking"][player]["rank"]["score"];
+            data["ranking"][player]["ranking"] = data["ranking"][player]["rank"]["rank"];
+            if(data["ranking"][player]["ranking"]){
+              players.push(data["ranking"][player]);
             }
           }
         }, this);
