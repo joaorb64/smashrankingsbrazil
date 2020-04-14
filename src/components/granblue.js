@@ -29,7 +29,7 @@ class Granblue extends Component {
       if(data){
         let players = [];
 
-        Object.keys(data["ranking"].ranking).forEach(function(player){
+        Object.keys(data["ranking"]).forEach(function(player){
           if(data["ranking"][player].avatar){
             data["ranking"][player].avatar = `https://raw.githubusercontent.com/joaorb64/tournament_api/master/${data["ranking"][player].avatar}`;
           } else if (data["ranking"][player].twitter) {

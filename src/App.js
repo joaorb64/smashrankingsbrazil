@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Contacts from './components/contacts';
 import TopBar from './components/topbar';
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect, HashRouter } from 'react-router-dom';
 import About from './components/about';
 import PlayerModal from './components/playermodal';
 import Mapa from './components/map';
@@ -55,7 +55,7 @@ class App extends Component {
           <source src="/background.mp4" type="video/mp4" />
         </video>
 
-        <Router basename={process.env.PUBLIC_URL}>
+        <HashRouter basename={process.env.PUBLIC_URL}>
           <TopBar />
 
           <div class="container" style={{
@@ -75,15 +75,17 @@ class App extends Component {
 
             <Route path="/" render={({location}) => {
               if ("ga" in window) {
-                let tracker = window.ga.getAll()[0];
-                if (tracker)
-                  tracker.send('pageview', location.pathname);
+                if ("getAll" in window.ga) {
+                  let tracker = window.ga.getAll()[0];
+                  if (tracker)
+                    tracker.send('pageview', location.pathname);
+                }
               }
               return "";
             }} />
 
           </div>
-        </Router>
+        </HashRouter>
 
         <nav class="navbar bottom-bar fixed-bottom">
           By João Ribeiro Bezerra (joaorb64@gmail.com, <a style={{color: "white"}} href="https://twitter.com/joao_shino">@joao_shino</a>)
