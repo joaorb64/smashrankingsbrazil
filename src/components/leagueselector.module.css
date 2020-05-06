@@ -1,0 +1,76 @@
+.teste {
+  color: white;
+  background-color: #be2018 !important;
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: none;
+  border: none;
+  border-bottom: 1px solid #801e19;
+}
+
+.teste-menu {
+  background-color: #be2018;
+}
+
+.title {
+  color: white;
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.teste:after {
+  position: absolute;
+}
+
+.teste:active, .teste:hover, .teste:focus {
+  background-color: #97312b !important;
+  color: white;
+  border-color: #752c29 !important;
+  box-shadow: none !important;
+}
+
+.listItem {
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  border: 0;
+  margin-bottom: 5px;
+  width: 100%;
+  height: 42px;
+  line-height: 48px;
+  padding: 0;
+  display: flex;
+  align-self: center;
+  overflow: hidden;
+}
+
+.listItem:hover {
+  background-color: #ffb700;
+}
+
+.listItemParent:hover .listItemChild {
+  background-color: #ffb700 !important;
+}
+
+.top3container {
+  height: 300px;
+}
+
+.playerRanking {
+  font-size: 1.2rem;
+  width: 45px;
+  text-align: center;
+  line-height: 42px;
+}
+
+@media (max-width: 768px) {
+  .top3container {
+    height: 230px;
+  }
+
+  .playerRanking {
+    font-size: 1rem;
+    width: 38px;
+  }
+}

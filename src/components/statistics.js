@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 
-import $ from '../../node_modules/jquery/dist/jquery';
-
 import L from '../../node_modules/leaflet/dist/leaflet'
 import LeafletAjax from '../../node_modules/leaflet-ajax/dist/leaflet.ajax'
 
@@ -126,14 +124,14 @@ class Statistics extends Component {
       for (var i in chartData.labels) {
         let lab = chartData.labels[i];
         let icon = chartData.icons[i];
-        var $img = $("<img/>").attr("id", lab).attr(
+        var $img = window.jQuery("<img/>").attr("id", lab).attr(
           "src",
           "https://www.braacket.com/"+icon
         );
         $img.onload = function(){
           this.draw();
         }
-        $("#pics").append($img);
+        window.jQuery("#pics").append($img);
       }
 
       var originalBarController = Chart.controllers.bar;
@@ -201,11 +199,11 @@ class Statistics extends Component {
       for (var i in chartData.labels) {
         let lab = chartData.labels[i];
         let icon = chartData.icons[i];
-        var $img = $("<img/>").attr("id", lab).attr(
+        var $img = window.jQuery("<img/>").attr("id", lab).attr(
           "src",
           "https://raw.githubusercontent.com/joaorb64/tournament_api/master/league_icon/"+icon+".png"
         );
-        $("#pics").append($img);
+        window.jQuery("#pics").append($img);
       }
       
       function drawFlags(t) {

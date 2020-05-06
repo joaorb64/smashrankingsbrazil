@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styles from './contacts.module.css'
 import { Link, useParams, useLocation } from 'react-router-dom';
+import LeagueSelector from './leagueselector';
 
 class Contacts extends Component {
   state = {
@@ -114,55 +115,11 @@ class Contacts extends Component {
   render (){
     return(
       <div style={{textAlign: "center", fontFamily: "SmashFont"}}>
-          <div class="col-12" style={{padding: "0 10px"}}>
-            <div class={"dropdown"}>
-              <button class={styles.teste + " btn btn-secondary col-12 dropdown-toggle"} type="button" id="dropdownMenuButton"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                {this.props.contacts.length > 0 ?
-                  <div class={styles.title} style={{display: "flex", lineHeight: "32px"}}>
-                    <div style={{
-                      width: "32px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
-                      backgroundPosition: "center", verticalAlign: "inherit", backgroundColor: "white", borderRadius: "100%", marginRight: "10px",
-                      backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/master/league_icon/${this.props.contacts[this.state.selectedLeague].id}.png)`,
-                      display: "flex", flexShrink: 0
-                    }}></div>
-                    <div style={{
-                      flexShrink: 1, flexGrow: 1, textOverflow: "ellipsis", overflow: "hidden"
-                    }}>{this.props.contacts[this.state.selectedLeague].name}</div>
-                    <div style={{
-                      width: "32px", height: "32px", display: "inline-block",
-                      backgroundPosition: "center", verticalAlign: "inherit",
-                      display: "flex", flexShrink: 0
-                    }}>{this.props.contacts[this.state.selectedLeague].state}</div>
-                  </div>
-                  :
-                  "Loading..."
-                }
-              </button>
-              <div class={styles['teste-menu'] + " dropdown-menu col-12"} aria-labelledby="dropdownMenuButton">
-                {this.props.contacts.map((contact, i) => (
-                  <Link class={"dropdown-item " + styles.teste} to={`/home/smash/${contact.id}`} href={`/home/smash/${contact.id}`} onClick={()=>this.selectLeague(i)} style={{
-                    display: "flex", lineHeight: "32px"
-                  }}>
-                    <div style={{
-                      width: "32px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
-                      backgroundPosition: "center", verticalAlign: "inherit", backgroundColor: "white", borderRadius: "100%", marginRight: "10px",
-                      backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/master/league_icon/${contact.id}.png)`,
-                      display: "flex", flexShrink: 0
-                    }}></div>
-                    <div style={{
-                      flexShrink: 1, flexGrow: 1, textOverflow: "ellipsis", overflow: "hidden"
-                    }}>{contact.name}</div>
-                    <div style={{
-                      width: "32px", height: "32px", display: "inline-block",
-                      backgroundPosition: "center", verticalAlign: "inherit",
-                      display: "flex", flexShrink: 0
-                    }}>{contact.state}</div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
+        <LeagueSelector
+          leagues={this.props.contacts}
+          selectLeague={this.selectLeague.bind(this)}
+          selectedLeague={this.state.selectedLeague}
+        />
 
         {this.state.players && this.state.players.length > 0 ?
           <ul class="list-group" style={{padding: "10px"}}>
