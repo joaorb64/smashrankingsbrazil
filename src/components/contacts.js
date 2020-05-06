@@ -119,13 +119,21 @@ class Contacts extends Component {
               <button class={styles.teste + " btn btn-secondary col-12 dropdown-toggle"} type="button" id="dropdownMenuButton"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {this.props.contacts.length > 0 ?
-                  <div class={styles.title}>
+                  <div class={styles.title} style={{display: "flex", lineHeight: "32px"}}>
                     <div style={{
                       width: "32px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
                       backgroundPosition: "center", verticalAlign: "inherit", backgroundColor: "white", borderRadius: "100%", marginRight: "10px",
-                      backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/master/league_icon/${this.props.contacts[this.state.selectedLeague].id}.png)`
+                      backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/master/league_icon/${this.props.contacts[this.state.selectedLeague].id}.png)`,
+                      display: "flex", flexShrink: 0
                     }}></div>
-                    {this.props.contacts[this.state.selectedLeague].name}
+                    <div style={{
+                      flexShrink: 1, flexGrow: 1, textOverflow: "ellipsis", overflow: "hidden"
+                    }}>{this.props.contacts[this.state.selectedLeague].name}</div>
+                    <div style={{
+                      width: "32px", height: "32px", display: "inline-block",
+                      backgroundPosition: "center", verticalAlign: "inherit",
+                      display: "flex", flexShrink: 0
+                    }}>{this.props.contacts[this.state.selectedLeague].state}</div>
                   </div>
                   :
                   "Loading..."
@@ -133,13 +141,23 @@ class Contacts extends Component {
               </button>
               <div class={styles['teste-menu'] + " dropdown-menu col-12"} aria-labelledby="dropdownMenuButton">
                 {this.props.contacts.map((contact, i) => (
-                  <Link class={"dropdown-item " + styles.teste} to={`/home/smash/${contact.id}`} onClick={()=>this.selectLeague(i)}>
+                  <Link class={"dropdown-item " + styles.teste} to={`/home/smash/${contact.id}`} href={`/home/smash/${contact.id}`} onClick={()=>this.selectLeague(i)} style={{
+                    display: "flex", lineHeight: "32px"
+                  }}>
                     <div style={{
                       width: "32px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
                       backgroundPosition: "center", verticalAlign: "inherit", backgroundColor: "white", borderRadius: "100%", marginRight: "10px",
-                      backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/master/league_icon/${contact.id}.png)`
+                      backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/master/league_icon/${contact.id}.png)`,
+                      display: "flex", flexShrink: 0
                     }}></div>
-                    {contact.name}
+                    <div style={{
+                      flexShrink: 1, flexGrow: 1, textOverflow: "ellipsis", overflow: "hidden"
+                    }}>{contact.name}</div>
+                    <div style={{
+                      width: "32px", height: "32px", display: "inline-block",
+                      backgroundPosition: "center", verticalAlign: "inherit",
+                      display: "flex", flexShrink: 0
+                    }}>{contact.state}</div>
                   </Link>
                 ))}
               </div>
@@ -178,7 +196,7 @@ class Contacts extends Component {
                           height: "60px", position: "absolute", left: "0px", right: "0px", bottom: 0, justifyContent: "center"
                         }}>
                           <div style={{
-                            flexGrow: 0, fontSize: "2rem", lineHeight: "2rem", width: "100%",
+                            flexGrow: 0, fontSize: "1.6rem", lineHeight: "2rem", width: "100%",
                             textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap"
                           }}>{player.name}</div>
                           <div style={{
@@ -246,7 +264,8 @@ class Contacts extends Component {
                           <div style={{
                             backgroundImage: `url(${player.avatar})`,
                             width: "96px", height: "96px", backgroundSize: "cover", backgroundPosition: "center",
-                            borderRadius: "100%", position: "absolute", right: 10, top: 10, border: "5px #f0f0f0 solid"
+                            borderRadius: "100%", position: "absolute", right: 10, top: 10, border: "5px #f0f0f0 solid",
+                            backgroundColor: "gray"
                           }}>
                             {player.twitter ? 
                               <div style={{width: "100%", height: "100%", display: "flex", alignItems: "flex-end", justifyContent: "flex-end", margin: "5px"}}>

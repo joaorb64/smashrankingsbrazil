@@ -21,16 +21,16 @@ class TopBar extends Component {
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
-            <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/home/smash/prbth">
+            <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/home/smash/prbth" href="/home/smash/prbth">
               <div class="nav-link">Home</div>
             </NavLink>
-            <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/map/">
+            <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/map/" href="/map/">
               <div class="nav-link">Mapa</div>
             </NavLink>
-            <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/statistics/">
+            <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/statistics/" href="/statistics/">
               <div class="nav-link">Estatísticas</div>
             </NavLink>
-            <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/about/">
+            <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/about/" href="/about/">
               <div class="nav-link">Sobre</div>
             </NavLink>
           </ul>
