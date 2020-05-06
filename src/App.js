@@ -74,6 +74,8 @@ class App extends Component {
               <Redirect to="/home/smash/" />
             </Switch>
 
+            <PlayerModal leagues={this.state.leagues} />
+
             <Route path="/" render={({location}) => {
               if ("ga" in window) {
                 if ("getAll" in window.ga) {
@@ -91,8 +93,6 @@ class App extends Component {
         <nav class="navbar bottom-bar fixed-bottom">
           By João Ribeiro Bezerra (joaorb64@gmail.com, <a style={{color: "white"}} href="https://twitter.com/joao_shino">@joao_shino</a>)
         </nav>
-
-        <PlayerModal leagues={this.state.leagues} />
       </div>
     );
   }

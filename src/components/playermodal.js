@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom';
 
 class PlayerModal extends Component {
   state = {
@@ -27,6 +28,10 @@ class PlayerModal extends Component {
     });
   }
 
+  closeModal(){
+    window.jQuery("#playerModal").modal("toggle");
+  }
+
   render (){
     return(
       <div class="modal fade" id="playerModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -41,14 +46,38 @@ class PlayerModal extends Component {
             <div class="modal-body">
               {this.state.playerData ?
                   <div>
-                    <h2>{this.state.playerData.name}</h2>
+                    <div>
+                      <h3>{this.state.playerData.name}</h3>
+                    </div>
+
+                    {
+                      this.state.playerData.twitter ?
+                        <a href={this.state.playerData.twitter}>
+                          <div style={{
+                            backgroundImage: `url(${this.state.playerData.avatar})`,
+                            width: "96px", height: "96px", backgroundSize: "cover", backgroundPosition: "center",
+                            borderRadius: "100%", border: "5px #f0f0f0 solid",
+                            backgroundColor: "gray"
+                          }}>
+                            {this.state.playerData.twitter ? 
+                              <div style={{width: "100%", height: "100%", display: "flex", alignItems: "flex-end", justifyContent: "flex-end", margin: "5px"}}>
+                                <div style={{
+                                  backgroundImage: "url(/icons/twitter.svg)", width: 32, height: 32, bottom: 0, right: 0
+                                }}></div>
+                              </div>
+                              :
+                              null}
+                          </div>
+                        </a>
+                    :
+                      null
+                    }
 
                     <row>
                       <h5>Ligas:</h5>
                       <table class="table table-striped table-sm">
                         <thead>
                           <tr>
-                            <th scope="col">#</th>
                             <th scope="col">Liga</th>
                             <th scope="col">Colocação</th>
                             <th scope="col">Pontuação</th>
@@ -57,9 +86,12 @@ class PlayerModal extends Component {
                         <tbody>
                             {Object.values(this.state.playerData.rank).map((rank, i)=>(
                               <tr>
-                                <th scope="row">{i+1}</th>
                                 {this.props.leagues ?
-                                  <td>{this.props.leagues.find(element => element.id == Object.keys(this.state.playerData.rank)[i]).name}</td>
+                                  <td><Link 
+                                    to={`/home/smash/${this.props.leagues.find(element => element.id == Object.keys(this.state.playerData.rank)[i]).id}`}
+                                    onClick={()=>this.closeModal()}>
+                                      {this.props.leagues.find(element => element.id == Object.keys(this.state.playerData.rank)[i]).name}
+                                  </Link></td>
                                 :
                                   <td>{Object.keys(this.state.playerData.rank)[i]}</td>
                                 }

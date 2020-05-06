@@ -90,7 +90,7 @@ class About extends Component {
               this.state.tournaments != null ?
                 this.state.tournaments.map((tournament)=>(
                   <tr>
-                    <td>{tournament.name}</td>
+                    <td><a target="_blank" href={`https://braacket.com/tournament/${tournament.id}`}>{tournament.name}</a></td>
                     <td>{tournament.player_number}</td>
                     <td style={{color: this.state.tournamentColor[tournament.rank]}}><b>{tournament.rank}</b></td>
                   </tr>
