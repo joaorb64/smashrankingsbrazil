@@ -57,7 +57,7 @@ class App extends Component {
         </video>
 
         <HashRouter basename={process.env.PUBLIC_URL}>
-          <TopBar />
+          <Route path="/" render={(props) => <TopBar match={props} />} />
 
           <div class="container" style={{
             marginBottom: "128px", paddingTop: "10px"

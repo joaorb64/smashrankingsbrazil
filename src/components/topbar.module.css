@@ -1,0 +1,20 @@
+.mapCharIcon {
+  filter: drop-shadow(1px 1px 0px black);
+}
+
+.menu-dropdown-background {
+  background-color: #be2018;
+  color: white;
+}
+
+.menu-dropdown {
+  background-color: #be2018;
+  color: white;
+}
+
+.menu-dropdown:active, .menu-dropdown:hover, .menu-dropdown:focus {
+  background-color: #97312b !important;
+  color: white;
+  border-color: #752c29 !important;
+  box-shadow: none !important;
+}
