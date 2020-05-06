@@ -18,7 +18,7 @@ class LeagueSelector extends Component {
     window.jQuery("#leagueSelectModal").modal("toggle");
   }
 
-  render (){
+  render(){
     return(
       <div>
         <div class="col-12" style={{padding: "0 10px"}}>
@@ -35,6 +35,24 @@ class LeagueSelector extends Component {
                 <div style={{
                   flexShrink: 1, flexGrow: 1, textOverflow: "ellipsis", overflow: "hidden"
                 }}>{this.props.leagues[this.props.selectedLeague].name}</div>
+                {
+                  this.props.leagues[this.props.selectedLeague].wifi ? 
+                    <div style={{
+                      width: "24px", height: "24px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
+                      backgroundPosition: "center", verticalAlign: "inherit", borderRadius: "100%",
+                      backgroundColor: "white", marginTop: "2px", marginRight: "4px",
+                      display: "flex", flexShrink: 0
+                    }}>
+                      <div style={{
+                        width: "16px", height: "16px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
+                        backgroundPosition: "center", verticalAlign: "inherit",
+                        backgroundImage: `url(${process.env.PUBLIC_URL}/icons/wifi.svg)`,
+                        position: "relative", top: "4px", left: "4px"
+                      }}></div>
+                    </div>
+                  :
+                    null
+                }
                 <div style={{
                   width: "32px", height: "32px", display: "inline-block",
                   backgroundPosition: "center", verticalAlign: "inherit",
@@ -69,8 +87,27 @@ class LeagueSelector extends Component {
                       display: "flex", flexShrink: 0
                     }}></div>
                     <div style={{
-                      flexShrink: 1, flexGrow: 1, textOverflow: "ellipsis", overflow: "hidden"
+                      flexShrink: 1, flexGrow: 1, textOverflow: "ellipsis", overflow: "hidden",
+                      textAlign: "left"
                     }}>{contact.name}</div>
+                    {
+                      contact.wifi ? 
+                        <div style={{
+                          width: "24px", height: "24px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
+                          backgroundPosition: "center", verticalAlign: "inherit", borderRadius: "100%",
+                          backgroundColor: "white", marginTop: "2px", marginRight: "4px",
+                          display: "flex", flexShrink: 0
+                        }}>
+                          <div style={{
+                            width: "16px", height: "16px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
+                            backgroundPosition: "center", verticalAlign: "inherit",
+                            backgroundImage: `url(${process.env.PUBLIC_URL}/icons/wifi.svg)`,
+                            position: "relative", top: "4px", left: "4px"
+                          }}></div>
+                        </div>
+                      :
+                        null
+                    }
                     <div style={{
                       width: "32px", height: "32px", display: "inline-block",
                       backgroundPosition: "center", verticalAlign: "inherit",

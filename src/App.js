@@ -29,7 +29,8 @@ class App extends Component {
               name: leagueInfo.name,
               state: data[league].state,
               city: data[league].city,
-              codigo_uf: data[league].codigo_uf
+              codigo_uf: data[league].codigo_uf,
+              wifi: data[league].wifi
             };
           }))
       })
