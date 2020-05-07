@@ -8,6 +8,7 @@ import PlayerModal from './components/playermodal';
 import Mapa from './components/map';
 import Statistics from './components/statistics';
 import Granblue from './components/granblue';
+import Players from './components/players';
 
 class App extends Component {
   state = {
@@ -67,6 +68,7 @@ class App extends Component {
               <Route path="/home/smash/:id?" exact render={
                 (props) => <Contacts contacts={this.state.leagues} match={props}></Contacts>
               } />
+              <Route path="/players/" exact render={(props) => <Players leagues={this.state.leagues} />} />
               <Route path="/home/granblue/" exact render={(props) => <Granblue />} />
               <Route path="/map/" exact render={(props) => <Mapa leagues={this.state.leagues} />} />
               <Route path="/statistics/" exact render={(props) => <Statistics leagues={this.state.leagues} />} />

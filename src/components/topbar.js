@@ -71,6 +71,9 @@ class TopBar extends Component {
             <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/home/smash/prbth" href="/home/smash/prbth">
               <div class="nav-link">Home</div>
             </NavLink>
+            <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/players" href="/players">
+              <div class="nav-link">Jogadores</div>
+            </NavLink>
             <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/map/" href="/map/">
               <div class="nav-link">Mapa</div>
             </NavLink>
