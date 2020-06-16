@@ -33,7 +33,7 @@ class Granblue extends Component {
           if(data["ranking"][player].avatar){
             data["ranking"][player].avatar = `https://raw.githubusercontent.com/joaorb64/tournament_api/master/${data["ranking"][player].avatar}`;
           } else if (data["ranking"][player].twitter) {
-            data["ranking"][player].avatar = `https://avatars.io/twitter/${this.getTwitterHandle(data["ranking"][player].twitter)}`;
+            data["ranking"][player].avatar = `https://twivatar.glitch.me/${this.getTwitterHandle(data["ranking"][player].twitter)}`;
           }
 
           if(!data["ranking"][player].mains){
