@@ -32,6 +32,11 @@ class PlayerModalGranblue extends Component {
     });
   }
 
+  getTwitterHandle(twitter){
+    let parts = twitter.split('/');
+    return parts[parts.length-1];
+  }
+
   render (){
     return(
       <div class="modal fade" id="playerModalGranblue" tabindex="-1" role="dialog" aria-hidden="true" style={{

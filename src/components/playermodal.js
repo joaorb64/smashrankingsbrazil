@@ -34,6 +34,11 @@ class PlayerModal extends Component {
     });
   }
 
+  getTwitterHandle(twitter){
+    let parts = twitter.split('/');
+    return parts[parts.length-1];
+  }
+
   closeModal(){
     window.jQuery("#playerModal").modal("toggle");
   }

@@ -32,10 +32,10 @@ class Players extends Component {
             Object.entries(data["ranking"]).forEach((player)=>{
               this.state.players[player[1].name] = player[1];
 
-              if(data["ranking"][player].avatar){
-                data["ranking"][player].avatar = `https://raw.githubusercontent.com/joaorb64/tournament_api/master/${data["ranking"][player].avatar}`;
-              } else if (data["ranking"][player].twitter) {
-                data["ranking"][player].avatar = `https://twivatar.glitch.me/${this.getTwitterHandle(data["ranking"][player].twitter)}`;
+              if(data.avatar){
+                data.avatar = `https://raw.githubusercontent.com/joaorb64/tournament_api/master/${data.avatar}`;
+              } else if (data.twitter) {
+                data.avatar = `https://twivatar.glitch.me/${this.getTwitterHandle(data.twitter)}`;
               }
             })
 
