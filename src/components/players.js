@@ -30,13 +30,13 @@ class Players extends Component {
 
           if(Object.keys(data).includes("ranking")){
             Object.entries(data["ranking"]).forEach((player)=>{
-              this.state.players[player[1].name] = player[1];
-
-              if(data.avatar){
-                data.avatar = `https://raw.githubusercontent.com/joaorb64/tournament_api/master/${data.avatar}`;
-              } else if (data.twitter) {
-                data.avatar = `https://twivatar.glitch.me/${this.getTwitterHandle(data.twitter)}`;
+              if(player[1].avatar){
+                player[1].avatar = `https://raw.githubusercontent.com/joaorb64/tournament_api/master/${player[1].avatar}`;
+              } else if (player[1].twitter) {
+                player[1].avatar = `https://twivatar.glitch.me/${this.getTwitterHandle(player[1].twitter)}`;
               }
+
+              this.state.players[player[1].name] = player[1];
             })
 
             this.state.filtered = this.state.players;
