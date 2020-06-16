@@ -24,6 +24,12 @@ class PlayerModal extends Component {
     fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/player_data/'+this.player+'/data.json')
     .then(res => res.json())
     .then((data) => {
+      if(data.avatar){
+        data.avatar = `https://raw.githubusercontent.com/joaorb64/tournament_api/master/${data.avatar}`;
+      } else if (data.twitter) {
+        data.avatar = `https://twivatar.glitch.me/${this.getTwitterHandle(data.twitter)}`;
+      }
+
       this.setState({playerData: data});
     });
   }
