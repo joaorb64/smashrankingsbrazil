@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styles from './contacts.module.css'
-import Fuse from '../../node_modules/fuse.js/dist/fuse'
+
+const fuzzysort = require('fuzzysort')
 
 class Players extends Component {
   state = {
@@ -34,6 +35,14 @@ class Players extends Component {
                 player[1].avatar = `https://raw.githubusercontent.com/joaorb64/tournament_api/master/${player[1].avatar}`;
               } else if (player[1].twitter) {
                 player[1].avatar = `https://twivatar.glitch.me/${this.getTwitterHandle(player[1].twitter)}`;
+              }
+
+              if(player[1].mains){
+                let mainnames = ""
+                player[1].mains.forEach((main)=>{
+                  mainnames += main.name + " "
+                })
+                player[1].mainnames = mainnames;
               }
 
               this.state.players[player[1].name] = player[1];
@@ -72,39 +81,30 @@ class Players extends Component {
   search(e){
     this.state.search = e;
 
-    const options = {
-      keys: [
-        {
-          name: 'name',
-          weight: 0.4
-        },
-        {
-          name: 'full_name',
-          weight: 0.3
-        },
-        {
-          name: 'mains.name',
-          weight: 0.2
-        },
-        {
-          name: 'state',
-          weight: 0.1
-        }
-      ],
-      threshold: 0.4,
-      location: 50
-    }
-    
-    // Create a new instance of Fuse
-    const fuse = new Fuse(Object.values(this.state.players), options)
-
     if(this.state.search.length == 0){
       this.state.filtered = this.state.players;
     } else {
-      let result = fuse.search(e);
-      this.state.filtered = {}
+      let result = fuzzysort.go(this.state.search, Object.values(this.state.players), {
+        keys: [
+          'name',
+          'full_name',
+          'state',
+          'mainnames'
+        ],
+        threshold: -10000,
+        limit: 20,
+        scoreFn(a){
+          return Math.max(
+            a[0]?a[0].score:-1000,
+            a[1]?a[1].score-10:-1000,
+            a[2]?a[2].score-100:-1000,
+            a[3]?a[3].score-100:-1000,
+          )}
+      })
+      this.state.filtered = []
       Object.values(result).forEach((val)=>{
-        this.state.filtered[val["item"]["uuid"]] = val["item"];
+        if (val["obj"] != null)
+          this.state.filtered.push(val["obj"]);
       })
     }
 
