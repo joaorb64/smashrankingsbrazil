@@ -81,7 +81,7 @@ class Mapa extends Component {
               let iconUrl = "http://braacket.com/assets/images/game/ssbu/characters/random.png"
 
               if(this.props.leagues[element].players.length > 0){
-                iconUrl = "http://braacket.com/"+this.props.leagues[element].players[0].mains[0].icon
+                iconUrl = process.env.PUBLIC_URL+"/portraits-mini/"+this.getCharName(this.props.leagues[element].players[0].mains[0])+".png"
               }
 
               let charIcon = L.icon({
@@ -107,6 +107,10 @@ class Mapa extends Component {
   getTwitterHandle(twitter){
     let parts = twitter.split('/');
     return parts[parts.length-1];
+  }
+
+  getCharName(name){
+    return name.toLowerCase().replace(/ /g, "");
   }
 
   componentDidMount() {

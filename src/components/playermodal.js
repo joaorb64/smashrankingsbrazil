@@ -19,9 +19,9 @@ class PlayerModal extends Component {
   fetchPlayer(){
     if(this.player == null) return;
 
-    this.setState({playerData: null})
+    this.setState({playerData: this.player})
 
-    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/player_data/'+this.player+'/data.json')
+    /*fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/player_data/'+this.player+'/data.json')
     .then(res => res.json())
     .then((data) => {
       if(data.avatar){
@@ -31,7 +31,7 @@ class PlayerModal extends Component {
       }
 
       this.setState({playerData: data});
-    });
+    });*/
   }
 
   getTwitterHandle(twitter){
@@ -58,9 +58,8 @@ class PlayerModal extends Component {
               {this.state.playerData ?
                   <div>
                     <div>
-                      <h3>{this.state.playerData.name}</h3>
+                      <h3><b style={{color: "#bb0000"}}>{this.state.playerData.org}</b> {this.state.playerData.name}</h3>
                     </div>
-
                     {
                       this.state.playerData.twitter ?
                         <a href={this.state.playerData.twitter}>
@@ -86,32 +85,41 @@ class PlayerModal extends Component {
 
                     <row>
                       <h5>Ligas:</h5>
-                      <table class="table table-striped table-sm">
-                        <thead>
-                          <tr>
-                            <th scope="col">Liga</th>
-                            <th scope="col">Colocação</th>
-                            <th scope="col">Pontuação</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                            {Object.values(this.state.playerData.rank).map((rank, i)=>(
-                              <tr>
-                                {this.props.leagues ?
-                                  <td><Link 
-                                    to={`/home/smash/${this.props.leagues.find(element => element.id == Object.keys(this.state.playerData.rank)[i]).id}`}
-                                    onClick={()=>this.closeModal()}>
-                                      {this.props.leagues.find(element => element.id == Object.keys(this.state.playerData.rank)[i]).name}
-                                  </Link></td>
-                                :
-                                  <td>{Object.keys(this.state.playerData.rank)[i]}</td>
-                                }
-                                <td>{rank.rank}</td>
-                                <td>{rank.score}</td>
-                              </tr>
-                            ))}
-                        </tbody>
-                      </table>
+                      {this.state.playerData.rank ?
+                        <table class="table table-striped table-sm">
+                          <thead>
+                            <tr>
+                              <th scope="col">Liga</th>
+                              <th scope="col">Colocação</th>
+                              <th scope="col">Pontuação</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                              {Object.values(this.state.playerData.rank).map((rank, i)=>(
+                                <tr>
+                                  {this.props.leagues ?
+                                    <td>
+                                      <Link 
+                                        to={`/home/smash/${this.props.leagues.find(element => element.id == Object.keys(this.state.playerData.rank)[i]).id}`}
+                                        onClick={()=>this.closeModal()}>
+                                          {this.props.leagues.find(element => element.id == Object.keys(this.state.playerData.rank)[i]).name}
+                                      </Link>
+                                      <a href={`http://braacket.com/league/${this.state.playerData.braacket_links.find(x => x.startsWith(Object.keys(this.state.playerData.rank)[i])).replace(":", "/player/")}`}>
+                                        [→]
+                                      </a>
+                                    </td>
+                                  :
+                                    <td>{Object.keys(this.state.playerData.rank)[i]}</td>
+                                  }
+                                  <td>{rank.rank}</td>
+                                  <td>{rank.score}</td>
+                                </tr>
+                              ))}
+                          </tbody>
+                        </table>
+                        :
+                        <div>Este jogador não foi encontrado em nenhuma liga.</div>
+                      }
                     </row>
 
                     {this.state.playerData.tournaments ?

@@ -12,7 +12,8 @@ import Players from './components/players';
 
 class App extends Component {
   state = {
-    leagues: []
+    leagues: [],
+    allplayers: null
   }
 
   componentWillMount() {
@@ -44,6 +45,14 @@ class App extends Component {
       })
     })
     .catch(console.log)
+
+    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/allplayers.json')
+    .then(res => res.json())
+    .then((data) => {
+      this.state.allplayers = data;
+      this.setState(this.state);
+    })
+    .catch(console.log)
   }
 
   componentDidMount() {
@@ -66,9 +75,9 @@ class App extends Component {
 
             <Switch>
               <Route path="/home/smash/:id?" exact render={
-                (props) => <Contacts contacts={this.state.leagues} match={props}></Contacts>
+                (props) => <Contacts contacts={this.state.leagues} allplayers={this.state.allplayers} match={props}></Contacts>
               } />
-              <Route path="/players/" exact render={(props) => <Players leagues={this.state.leagues} />} />
+              <Route path="/players/" exact render={(props) => <Players leagues={this.state.leagues} allplayers={this.state.allplayers} />} />
               <Route path="/home/granblue/" exact render={(props) => <Granblue />} />
               <Route path="/map/" exact render={(props) => <Mapa leagues={this.state.leagues} />} />
               <Route path="/statistics/" exact render={(props) => <Statistics leagues={this.state.leagues} />} />
@@ -76,7 +85,7 @@ class App extends Component {
               <Redirect to="/home/smash/" />
             </Switch>
 
-            <PlayerModal leagues={this.state.leagues} />
+            <PlayerModal leagues={this.state.leagues} allplayers={this.state.allplayers} />
 
             <Route path="/" render={({location}) => {
               if ("ga" in window) {

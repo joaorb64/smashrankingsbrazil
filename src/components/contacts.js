@@ -24,7 +24,9 @@ class Contacts extends Component {
         }
       }
 
-      this.updateData();
+      if(this.props.contacts.length > 0){
+        this.updateData();
+      }
     }
   }
 
@@ -45,39 +47,41 @@ class Contacts extends Component {
   }
 
   updateData() {
+    if(!this.props) return
+    if(!this.props.contacts) return
+    if(!this.props.allplayers) return
+
     fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/out/'+this.props.contacts[this.state.selectedLeague].id+'.json')
     .then(res => res.json())
     .then((data) => {
       if(data){
-        let players = [];
+        let players = []
 
-        Object.keys(data.ranking).forEach(function(player){
-          if(data["ranking"][player].avatar){
-            data["ranking"][player].avatar = `https://raw.githubusercontent.com/joaorb64/tournament_api/master/${data["ranking"][player].avatar}`;
-          } else if (data["ranking"][player].twitter) {
-            data["ranking"][player].avatar = `https://twivatar.glitch.me/${this.getTwitterHandle(data["ranking"][player].twitter)}`;
+        Object.keys(data["ranking"]).forEach(function(id){
+          let league = this.props.contacts[this.state.selectedLeague].id;
+
+          let p = this.props.allplayers["players"][this.props.allplayers["mapping"][league+":"+id]]
+
+          if(p.twitter) {
+            p.avatar = `https://twivatar.glitch.me/${this.getTwitterHandle(p.twitter)}`;
           }
 
-          if(!data["ranking"][player].mains){
-            data["ranking"][player].mains = [];
+          if(p.mains.length == 0 || p.mains[0] == ""){
+            p.mains = ["Random"]
           }
 
-          if(data["ranking"][player].mains.length == 0){
-            data["ranking"][player].mains.push({name: "Random", icon: ""});
-          }
+          p.ranking = p["rank"][league]["rank"]
+          p.score = p["rank"][league]["score"]
 
-          if((data["ranking"][player]["rank"])){
-            data["ranking"][player]["score"] = data["ranking"][player]["rank"][this.props.contacts[this.state.selectedLeague].id]["score"];
-            data["ranking"][player]["ranking"] = data["ranking"][player]["rank"][this.props.contacts[this.state.selectedLeague].id]["rank"];
-            if(data["ranking"][player]["ranking"]){
-              players.push(data["ranking"][player]);
-            }
-          }
-        }, this);
+          players.push(p);
+        }, this)
         
         players.sort(function(a, b){
-          return Number(a["ranking"]) - Number(b["ranking"]);
-        });
+          let league = this.props.contacts[this.state.selectedLeague].id;
+          return Number(a["rank"][league]["rank"]) - Number(b["rank"][league]["rank"]);
+        }.bind(this));
+
+        console.log(players)
 
         this.setState({ players: players, updateTime: data["update_time"] })
       }
@@ -93,7 +97,7 @@ class Contacts extends Component {
   }
 
   getCharName(name){
-    return name.toLowerCase().replace(/ /g, "_");
+    return name.toLowerCase().replace(/ /g, "");
   }
 
   getTwitterHandle(twitter){
@@ -107,7 +111,7 @@ class Contacts extends Component {
 
   openPlayerModal(player){
     if(window.playerModal){
-      window.playerModal.player = this.normalizePlayerName(player.name);
+      window.playerModal.player = player;
       window.playerModal.fetchPlayer();
     }
   }
@@ -144,7 +148,7 @@ class Contacts extends Component {
                         clipPath: "polygon(0 60%, 0% 100%, 100% 100%)"
                       }}></div>
                       <div style={{
-                        backgroundImage: `url(${process.env.PUBLIC_URL}/portraits-full/${this.getCharName(player.mains[0].name)}.png)`, display: "flex",
+                        backgroundImage: `url(${process.env.PUBLIC_URL}/portraits-full/${this.getCharName(player.mains[0])}.png)`, display: "flex",
                         width: "100%", backgroundPosition: "center", backgroundSize: "cover",
                         filter: "drop-shadow(10px 10px 0px #000000AF)"
                       }}>
@@ -155,7 +159,7 @@ class Contacts extends Component {
                           <div style={{
                             flexGrow: 0, fontSize: "1.6rem", lineHeight: "2rem", width: "100%",
                             textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap"
-                          }}>{player.name}</div>
+                          }}><b style={{color: "#bb0000"}}>{player.org} </b>{player.name}</div>
                           <div style={{
                             flexGrow: 0, fontSize: "1rem", lineHeight: "1rem", width: "100%", color: "darkgray",
                             textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap"
@@ -186,7 +190,7 @@ class Contacts extends Component {
                           {player.mains.length > 0 ?
                             player.mains.slice(1).map((main)=>(
                               <div style={{
-                                backgroundImage: `url(http://braacket.com/${this.getCharName(main.icon)})`,
+                                backgroundImage: `url(${process.env.PUBLIC_URL}/portraits-mini/${this.getCharName(main)}.png)`,
                                 width: "32px", height: "32px", backgroundPosition: "center", backgroundSize: "cover",
                                 flexGrow: 0, display: "inline-block"
                               }}></div>
@@ -294,6 +298,7 @@ class Contacts extends Component {
                   <div class="player-name" style={{overflow: "hidden", textOverflow: "ellipsis",
                     overflowWrap: "break-word", lineHeight: "1.6rem", fontSize: "1.2rem"
                   }}>
+                    <b style={{color: "#bb0000"}}>{player.org} </b>
                     {player.name}
                   </div>
                   <div class="player-name-small" style={{
@@ -315,13 +320,13 @@ class Contacts extends Component {
                 <div class="player-main" style={{display: "flex", width: "128px"}}>
                   {player.mains.length > 0 ?
                     <div style={{
-                      backgroundImage: `url(${process.env.PUBLIC_URL}/portraits-small/${this.getCharName(player.mains[0].name)}.png)`,
+                      backgroundImage: `url(${process.env.PUBLIC_URL}/portraits-small/${this.getCharName(player.mains[0])}.png)`,
                       width: "128px", backgroundPosition: "center", backgroundSize: "cover", backgroundColor: "#ababab", overflow: "hidden"
                     }}>
                       <div style={{overflow: "hidden", display: "flex", height: "100%", alignItems: "flex-end", justifyContent: "flex-end"}}>
                         {player.mains.slice(1).map((main)=>(
                           <div class="player-main-mini" style={{
-                            backgroundImage: `url(http://braacket.com/${this.getCharName(main.icon)})`,
+                            backgroundImage: `url(${process.env.PUBLIC_URL}/portraits-mini/${this.getCharName(main)}.png)`,
                             width: "24px", height: "24px", backgroundPosition: "center", backgroundSize: "cover",
                             flexGrow: 0, display: "flex", flexShrink: 1
                           }}></div>

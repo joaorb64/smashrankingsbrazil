@@ -26,6 +26,10 @@ class Statistics extends Component {
   chartRef2 = React.createRef();
   pieRef = React.createRef();
 
+  getCharName(name){
+    return name.toLowerCase().replace(/ /g, "");
+  }
+
   componentWillMount() {
     fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/out/statistics.json')
     .then(res => res.json())
@@ -37,7 +41,7 @@ class Statistics extends Component {
         let obj = {
           name: char,
           usage: data["char_usage"][char]["usage"],
-          icon: data["char_usage"][char]["icon"]
+          icon: data["char_usage"][char]["name"]
         }
         chars.push(obj);
       });
@@ -126,7 +130,7 @@ class Statistics extends Component {
         let icon = chartData.icons[i];
         var $img = window.jQuery("<img/>").attr("id", lab).attr(
           "src",
-          "https://www.braacket.com/"+icon
+          process.env.PUBLIC_URL+"/portraits-mini/"+this.getCharName(icon)+".png"
         );
         $img.onload = function(){
           this.draw();
@@ -156,7 +160,7 @@ class Statistics extends Component {
           if(img != null && img.naturalHeight !== 0){
             t.chart.ctx.drawImage(img,bar._model.x-12,bar._view.y-12,24,24);
           }
-          t.chart.ctx.fillText(dataset[bar._index].toFixed(1), bar._model.x,bar._view.y-12)
+          t.chart.ctx.fillText(dataset[bar._index].toFixed(0), bar._model.x,bar._view.y-12)
         });
       }
       
@@ -180,6 +184,8 @@ class Statistics extends Component {
         }
       });
     }
+
+    console.log(myBar)
 
     // Points per league chart
     this.myChartRef2 = this.chartRef2.current.getContext("2d");
@@ -205,8 +211,15 @@ class Statistics extends Component {
         );
         window.jQuery("#pics").append($img);
       }
+
+      Chart.controllers.bar = originalBarController.extend({
+        draw: function() {
+          originalBarController.prototype.draw.call(this, arguments);
+          drawFlags1(this);
+        }
+      });
       
-      function drawFlags(t) {
+      function drawFlags1(t) {
         if(!t) return;
         if(!t.chart.ctx) return;
         var chartInstance = t.chart;
@@ -220,7 +233,7 @@ class Statistics extends Component {
           if(img != null && img.naturalHeight !== 0){
             t.chart.ctx.drawImage(img,bar._model.x-12,bar._view.y-12,24,24);
           }
-          t.chart.ctx.fillText(dataset[bar._index], bar._model.x,bar._view.y-12)
+          t.chart.ctx.fillText(dataset[bar._index].toFixed(1), bar._model.x,bar._view.y-12)
         });
       }
       
@@ -299,7 +312,8 @@ class Statistics extends Component {
                     {
                       Object.entries(this.state.statistics.best_player_character).sort((a, b) => {return a[1].rank.prbth.rank - b[1].rank.prbth.rank}).map((line)=>(
                         <tr>
-                          <td><img src={`https://braacket.com/${line[1].mains[0].icon}`} style={{width: 32, height: 32}} /> {line[0]}</td>
+                          <td><img src={process.env.PUBLIC_URL+"/portraits-mini/"+this.getCharName(line[1].mains[0])+".png"}
+                            style={{width: 32, height: 32}} /> {line[0]}</td>
                           <td>{line[1].name}</td>
                           <td>{line[1].rank.prbth.rank}</td>
                         </tr>

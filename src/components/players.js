@@ -21,45 +21,29 @@ class Players extends Component {
   }
   
   fetchPlayers() {
-    if(this.props.leagues){
-      this.state.players = {};
+    if(this.props.allplayers){
+      let players = [];
 
-      this.props.leagues.forEach((league)=>{
-        fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/out/'+league.id+'.json')
-        .then(res => res.json())
-        .then((data) => {
+      this.props.allplayers["players"].forEach(function(p){
+        if(p.twitter) {
+          p.avatar = `https://twivatar.glitch.me/${this.getTwitterHandle(p.twitter)}`;
+        }
 
-          if(Object.keys(data).includes("ranking")){
-            Object.entries(data["ranking"]).forEach((player)=>{
-              if(player[1].avatar){
-                player[1].avatar = `https://raw.githubusercontent.com/joaorb64/tournament_api/master/${player[1].avatar}`;
-              } else if (player[1].twitter) {
-                player[1].avatar = `https://twivatar.glitch.me/${this.getTwitterHandle(player[1].twitter)}`;
-              }
+        if(p.mains.length == 0 || p.mains[0] == ""){
+          p.mains = ["Random"]
+        }
 
-              if(player[1].mains){
-                let mainnames = ""
-                player[1].mains.forEach((main)=>{
-                  mainnames += main.name + " "
-                })
-                player[1].mainnames = mainnames;
-              }
+        p.mainnames = p.mains.join(" ");
 
-              this.state.players[player[1].name] = player[1];
-            })
+        players.push(p);
+      }, this)
 
-            this.state.filtered = this.state.players;
-
-            this.setState(this.state);
-          }
-        })
-        .catch(console.log)
-      })
+      this.setState({players: players, filtered: players})
     }
   }
 
   getCharName(name){
-    return name.toLowerCase().replace(/ /g, "_");
+    return name.toLowerCase().replace(/ /g, "");
   }
 
   getTwitterHandle(twitter){
@@ -73,7 +57,7 @@ class Players extends Component {
 
   openPlayerModal(player){
     if(window.playerModal){
-      window.playerModal.player = this.normalizePlayerName(player.name);
+      window.playerModal.player = player;
       window.playerModal.fetchPlayer();
     }
   }
@@ -88,6 +72,7 @@ class Players extends Component {
         keys: [
           'name',
           'full_name',
+          'org',
           'state',
           'mainnames'
         ],
@@ -99,6 +84,7 @@ class Players extends Component {
             a[1]?a[1].score-10:-1000,
             a[2]?a[2].score-100:-1000,
             a[3]?a[3].score-100:-1000,
+            a[4]?a[4].score-100:-1000,
           )}
       })
       this.state.filtered = []
@@ -169,6 +155,7 @@ class Players extends Component {
               <div class="player-name" style={{overflow: "hidden", textOverflow: "ellipsis",
                 overflowWrap: "break-word", lineHeight: "1.6rem", fontSize: "1.2rem"
               }}>
+                <b style={{color: "#bb0000"}}>{player.org} </b>
                 {player.name}
               </div>
               <div class="player-name-small" style={{
@@ -182,13 +169,13 @@ class Players extends Component {
             <div class="player-main" style={{display: "flex", width: "128px"}}>
               {player.mains.length > 0 ?
                 <div style={{
-                  backgroundImage: `url(${process.env.PUBLIC_URL}/portraits-small/${this.getCharName(player.mains[0].name)}.png)`,
+                  backgroundImage: `url(${process.env.PUBLIC_URL}/portraits-small/${this.getCharName(player.mains[0])}.png)`,
                   width: "128px", backgroundPosition: "center", backgroundSize: "cover", backgroundColor: "#ababab", overflow: "hidden"
                 }}>
                   <div style={{overflow: "hidden", display: "flex", height: "100%", alignItems: "flex-end", justifyContent: "flex-end"}}>
                     {player.mains.slice(1).map((main)=>(
                       <div class="player-main-mini" style={{
-                        backgroundImage: `url(http://braacket.com/${this.getCharName(main.icon)})`,
+                        backgroundImage: `url(${process.env.PUBLIC_URL}/portraits-mini/${this.getCharName(main)}.png)`,
                         width: "24px", height: "24px", backgroundPosition: "center", backgroundSize: "cover",
                         flexGrow: 0, display: "flex", flexShrink: 1
                       }}></div>
