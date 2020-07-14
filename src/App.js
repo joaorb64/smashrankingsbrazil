@@ -32,7 +32,9 @@ class App extends Component {
               state: data[league].state,
               city: data[league].city,
               codigo_uf: data[league].codigo_uf,
-              wifi: data[league].wifi
+              wifi: data[league].wifi,
+              twitter: data[league].twitter,
+              twitch: data[league].twitch
             };
           }))
       })

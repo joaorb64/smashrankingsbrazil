@@ -105,7 +105,11 @@ class PlayerModal extends Component {
                                           {this.props.leagues.find(element => element.id == Object.keys(this.state.playerData.rank)[i]).name}
                                       </Link>
                                       <a href={`http://braacket.com/league/${this.state.playerData.braacket_links.find(x => x.startsWith(Object.keys(this.state.playerData.rank)[i])).replace(":", "/player/")}`}>
-                                        [→]
+                                        <div style={{
+                                          backgroundImage: `url(${process.env.PUBLIC_URL}/icons/external_link.svg)`,
+                                          width: 16, height: 16, display: "inline-block", backgroundSize: "contain",
+                                          marginLeft: 2, verticalAlign: "middle"
+                                        }}></div>
                                       </a>
                                     </td>
                                   :
