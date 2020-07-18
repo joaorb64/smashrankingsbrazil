@@ -1,12 +1,19 @@
 .teste {
   color: white;
-  background-color: #be2018 !important;
+  background-color: #be2018;
   vertical-align: middle;
   overflow: hidden;
   text-overflow: ellipsis;
   box-shadow: none;
   border: none;
   border-bottom: 1px solid #801e19;
+}
+
+.teste:active, .teste[aria-expanded="true"], .teste:hover, .teste:focus, .teste:active:focus, .teste.active:focus {
+  background-color: #97312b !important;
+  color: white;
+  border-color: #752c29 !important;
+  box-shadow: none !important;
 }
 
 .teste-menu {
@@ -22,13 +29,6 @@
 
 .teste:after {
   position: absolute;
-}
-
-.teste:active, .teste:hover, .teste:focus {
-  background-color: #97312b !important;
-  color: white;
-  border-color: #752c29 !important;
-  box-shadow: none !important;
 }
 
 .listItem {

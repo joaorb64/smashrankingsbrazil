@@ -96,28 +96,38 @@ class PlayerModal extends Component {
                           </thead>
                           <tbody>
                               {Object.values(this.state.playerData.rank).map((rank, i)=>(
-                                <tr>
-                                  {this.props.leagues ?
-                                    <td>
-                                      <Link 
-                                        to={`/home/smash/${this.props.leagues.find(element => element.id == Object.keys(this.state.playerData.rank)[i]).id}`}
-                                        onClick={()=>this.closeModal()}>
-                                          {this.props.leagues.find(element => element.id == Object.keys(this.state.playerData.rank)[i]).name}
-                                      </Link>
-                                      <a href={`http://braacket.com/league/${this.state.playerData.braacket_links.find(x => x.startsWith(Object.keys(this.state.playerData.rank)[i])).replace(":", "/player/")}`}>
-                                        <div style={{
-                                          backgroundImage: `url(${process.env.PUBLIC_URL}/icons/external_link.svg)`,
-                                          width: 16, height: 16, display: "inline-block", backgroundSize: "contain",
-                                          marginLeft: 2, verticalAlign: "middle"
-                                        }}></div>
-                                      </a>
+                                <>
+                                  <tr id={i} onClick={()=>{window.jQuery("#"+this.state.playerData.rank[i]+"_"+i).collapse("toggle");}}>
+                                    {this.props.leagues ?
+                                        <td>
+                                          <Link 
+                                            to={`/home/smash/${this.props.leagues.find(element => element.id == Object.keys(this.state.playerData.rank)[i]).id}`}
+                                            onClick={()=>this.closeModal()}>
+                                              {this.props.leagues.find(element => element.id == Object.keys(this.state.playerData.rank)[i]).name}
+                                          </Link>
+                                          <a href={`http://braacket.com/league/${this.state.playerData.braacket_links.find(x => x.startsWith(Object.keys(this.state.playerData.rank)[i])).replace(":", "/player/")}`}>
+                                            <div style={{
+                                              backgroundImage: `url(${process.env.PUBLIC_URL}/icons/external_link.svg)`,
+                                              width: 16, height: 16, display: "inline-block", backgroundSize: "contain",
+                                              marginLeft: 2, verticalAlign: "middle"
+                                            }}></div>
+                                          </a>
+                                        </td>
+                                    :
+                                      <td>{Object.keys(this.state.playerData.rank)[i]}</td>
+                                    }
+                                    <td>{rank.rank}</td>
+                                    <td>{rank.score}</td>
+                                  </tr>
+                                  <tr>
+                                    <td colspan="99" style={{padding: 0}}>
+                                      <div id={this.state.playerData.rank[i]+"_"+i} class="collapse" style={{backgroundColor: "#EDEDED"}}>
+                                        <iframe width='100%' height='600px' frameborder='0' allowfullscreen
+                                        src={`http://braacket.com/league/${this.state.playerData.braacket_links.find(x => x.startsWith(Object.keys(this.state.playerData.rank)[i])).replace(":", "/player/")}?&embed=1`}></iframe>
+                                      </div>
                                     </td>
-                                  :
-                                    <td>{Object.keys(this.state.playerData.rank)[i]}</td>
-                                  }
-                                  <td>{rank.rank}</td>
-                                  <td>{rank.score}</td>
-                                </tr>
+                                  </tr>
+                                </>
                               ))}
                           </tbody>
                         </table>

@@ -28,7 +28,7 @@ class LeagueSelector extends Component {
               <div class={styles.title} style={{display: "flex", lineHeight: "32px"}}>
                 <div style={{
                   width: "32px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
-                  backgroundPosition: "center", verticalAlign: "inherit", backgroundColor: "white", borderRadius: "100%", marginRight: "10px",
+                  backgroundPosition: "center", verticalAlign: "inherit", backgroundColor: "white", borderRadius: "6px", marginRight: "10px",
                   backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/master/league_icon/${this.props.leagues[this.props.selectedLeague].id}.png)`,
                   display: "flex", flexShrink: 0
                 }}></div>
@@ -82,7 +82,7 @@ class LeagueSelector extends Component {
                   }} key={"league_"+contact.name}>
                     <div style={{
                       width: "32px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
-                      backgroundPosition: "center", verticalAlign: "inherit", backgroundColor: "white", borderRadius: "100%", marginRight: "10px",
+                      backgroundPosition: "center", verticalAlign: "inherit", backgroundColor: "white", borderRadius: "6px", marginRight: "10px",
                       backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/master/league_icon/${contact.id}.png)`,
                       display: "flex", flexShrink: 0
                     }}></div>

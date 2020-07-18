@@ -34,7 +34,9 @@ class App extends Component {
               codigo_uf: data[league].codigo_uf,
               wifi: data[league].wifi,
               twitter: data[league].twitter,
-              twitch: data[league].twitch
+              twitch: data[league].twitch,
+              youtube: data[league].youtube,
+              facebook: data[league].facebook
             };
           }))
       })
@@ -76,7 +78,7 @@ class App extends Component {
           }}>
 
             <Switch>
-              <Route path="/home/smash/:id?" exact render={
+              <Route path="/home/smash/:id?/:tab?" exact render={
                 (props) => <Contacts contacts={this.state.leagues} allplayers={this.state.allplayers} match={props}></Contacts>
               } />
               <Route path="/players/" exact render={(props) => <Players leagues={this.state.leagues} allplayers={this.state.allplayers} />} />
