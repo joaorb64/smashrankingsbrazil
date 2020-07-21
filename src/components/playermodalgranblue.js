@@ -18,9 +18,17 @@ class PlayerModalGranblue extends Component {
   fetchPlayer(){
     if(this.player == null) return;
 
-    this.setState({playerData: null})
+    this.player.tournaments_pc = []
+    this.player.tournaments_ps4 = []
 
-    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/granblue/player_data/'+this.player+'/data.json')
+    this.player.tournaments.forEach(tournament => {
+      if(tournament.placing_pc) this.player.tournaments_pc.push(tournament)
+      if(tournament.placing_ps4) this.player.tournaments_ps4.push(tournament)
+    });
+
+    this.setState({playerData: this.player})
+
+    /*fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/granblue/player_data/'+this.player+'/data.json')
     .then(res => res.json())
     .then((data) => {
       if(data.avatar){
@@ -29,7 +37,7 @@ class PlayerModalGranblue extends Component {
         data.avatar = `https://twivatar.glitch.me/${this.getTwitterHandle(data.twitter)}`;
       }
       this.setState({playerData: data});
-    });
+    });*/
   }
 
   getTwitterHandle(twitter){
@@ -55,9 +63,9 @@ class PlayerModalGranblue extends Component {
                   <div>
                     <h2>{this.state.playerData.name}</h2>
 
-                    {this.state.playerData.tournaments ?
+                    {this.state.playerData.tournaments_ps4.length > 0 ?
                       <row>
-                        <h5>Torneios contabilizados:</h5>
+                        <h5>Torneios contabilizados (PS4):</h5>
                         <table class="table table-striped table-sm">
                           <thead>
                             <tr>
@@ -70,24 +78,70 @@ class PlayerModalGranblue extends Component {
                           </thead>
                           <tbody>
                             {
-                              this.state.playerData.tournaments.sort((a, b) => Number(b.name) - Number(a.name)).sort((a, b) => Number(b.points) - Number(a.points)).map((tournament, i)=>(
+                              this.state.playerData.tournaments_ps4.sort((a, b) => Number(b.name) - Number(a.name)).sort((a, b) => Number(b.points_ps4) - Number(a.points_ps4)).map((tournament, i)=>(
                                 <tr class={i<10? "" : "text-muted"}>
                                   <th scope="row">{i+1}</th>
                                   <td>{tournament.name}</td>
                                   <td>{tournament.tier}</td>
                                   <td>{
-                                    tournament.placing_pc || tournament.placing_ps4 ?
+                                    tournament.placing_ps4 ?
                                       <div>
-                                        <div>{tournament.placing_pc ? "PC: "+tournament.placing_pc : null}</div>
-                                        <div>{tournament.placing_ps4 ? "PS4: "+tournament.placing_ps4 : null}</div>
+                                        <div>{tournament.placing_ps4 ? tournament.placing_ps4 : 0}</div>
                                       </div>
                                     :
-                                      tournament.placing
+                                      tournament.placing_ps4
                                   }</td>
                                   {i<10?
-                                    <td><b>{tournament.points}</b></td>
+                                    <td><b>
+                                      <div>{tournament.points_ps4 ? tournament.points_ps4 : 0}</div>
+                                    </b></td>
                                     :
-                                    <td>{tournament.points}</td>
+                                    <td>{tournament.points_ps4}</td>
+                                  }
+                                </tr>
+                              ))
+                            }
+                          </tbody>
+                        </table>
+                      </row>
+                      :
+                      null
+                    }
+
+                    {this.state.playerData.tournaments_pc.length > 0 ?
+                      <row>
+                        <h5>Torneios contabilizados (PC):</h5>
+                        <table class="table table-striped table-sm">
+                          <thead>
+                            <tr>
+                              <th scope="col">#</th>
+                              <th scope="col">Nome</th>
+                              <th scope="col">Tier</th>
+                              <th scope="col">Colocação</th>
+                              <th scope="col">Pontuação</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {
+                              this.state.playerData.tournaments_pc.sort((a, b) => Number(b.name) - Number(a.name)).sort((a, b) => Number(b.points_pc) - Number(a.points_pc)).map((tournament, i)=>(
+                                <tr class={i<10? "" : "text-muted"}>
+                                  <th scope="row">{i+1}</th>
+                                  <td>{tournament.name}</td>
+                                  <td>{tournament.tier}</td>
+                                  <td>{
+                                    tournament.placing_pc ?
+                                      <div>
+                                        <div>{tournament.placing_pc ? tournament.placing_pc : 0}</div>
+                                      </div>
+                                    :
+                                      tournament.placing_pc
+                                  }</td>
+                                  {i<10?
+                                    <td><b>
+                                      <div>{tournament.points_pc ? tournament.points_pc : 0}</div>
+                                    </b></td>
+                                    :
+                                    <td>{tournament.points_pc}</td>
                                   }
                                 </tr>
                               ))

@@ -144,7 +144,7 @@ class Contacts extends Component {
         />
 
         <div className="teste btn-group btn-group-toggle col-12" style={{padding: "5px 8px 0px 10px", marginBottom: "-5px"}}>
-          <button className={styles_selector.teste+" btn col-4"} value="ranking" checked={this.state.selectedTab === "ranking"} onClick={(event)=>this.handleTabChange(event.target.value)}>
+          <button className={styles_selector.teste+" btn col-4"} value="ranking" aria-expanded={this.state.selectedTab === "ranking"} onClick={(event)=>this.handleTabChange(event.target.value)}>
             Ranking
           </button>
           <button className={styles_selector.teste+" btn col-4"} value="statistics" aria-expanded={this.state.selectedTab === "statistics"} onClick={(event)=>this.handleTabChange(event.target.value)}>

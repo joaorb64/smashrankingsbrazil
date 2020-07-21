@@ -6,7 +6,7 @@ import LeafletAjax from '../../node_modules/leaflet-ajax/dist/leaflet.ajax'
 import styles from './statistics.module.css'
 import Chart from '../../node_modules/chart.js/dist/Chart'
 
-class Statistics extends Component {
+class StatisticsGranblue extends Component {
   state = {
     statistics: null
   }
@@ -43,8 +43,8 @@ class Statistics extends Component {
       Object.keys(data["char_usage"]).forEach(char => {
         let obj = {
           name: char,
-          usage: data["char_usage"][char]["usage"],
-          icon: data["char_usage"][char]["name"]
+          usage: data["char_usage"][char],
+          icon: char
         }
         chars.push(obj);
       });
@@ -64,20 +64,6 @@ class Statistics extends Component {
         data["usage_values"].push(chara.usage);
         data["usage_icon"].push(chara.icon);
       })
-
-      if("players_per_league" in data){
-        data["players_per_league"] = Object.entries(data["players_per_league"])
-        data["players_per_league"].sort(function(a, b) {
-          return b[1] - a[1];
-        });
-      }
-
-      if("score_per_league" in data){
-        data["score_per_league"] = Object.entries(data["score_per_league"])
-        data["score_per_league"].sort(function(a, b) {
-          return b[1]["average"] - a[1]["average"];
-        });
-      }
 
       if("players_per_state" in data){
         data["players_per_state"] = Object.entries(data["players_per_state"])
@@ -202,10 +188,9 @@ class Statistics extends Component {
       
       for (var i in chartData.labels) {
         let lab = chartData.labels[i];
-        let icon = chartData.icons[i];
         var $img = window.jQuery("<img/>").attr("id", lab).attr(
           "src",
-          process.env.PUBLIC_URL+"/portraits-mini/"+this.getCharName(icon)+".png"
+          process.env.PUBLIC_URL+"/portraits-small/granblue/"+this.getCharName(lab)+".png"
         );
         $img.onload = function(){
           this.draw();
@@ -342,21 +327,6 @@ class Statistics extends Component {
       }}>
         {this.state.statistics ?
           <div>
-            {"score_per_league" in this.state.statistics ?
-              <div class="row mb-3 mt-3">
-                <div class="col">
-                  <h5>Média de pontos por liga</h5>
-                  <div style={{width: "100%", overflowX: "scroll", backgroundColor: "#e4e4e4"}}>
-                    <div style={{width: 600, height:300}}>
-                      <canvas style={{width: 600, height: 300}} ref={this.chartRef2} id="myChart2" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              :
-              null
-            }
-
             {"players_per_state" in this.state.statistics ?
               <div class="row mb-3 mt-3">
                 <div class="col">
@@ -376,43 +346,12 @@ class Statistics extends Component {
               <div class="col">
                 <h5>Uso de personagens</h5>
                 <div style={{width: "100%", overflowX: "scroll", backgroundColor: "#e4e4e4"}}>
-                  <div style={{width: 2000, height:300}}>
-                    <canvas style={{width: 2000, height: 300}} ref={this.chartRef} id="myChart" />
+                  <div style={{width: 800, height:300}}>
+                    <canvas style={{width: 800, height: 300}} ref={this.chartRef} id="myChart" />
                   </div>
                 </div>
               </div>
             </div>
-
-            {"best_player_character" in this.state.statistics && this.props.league ?
-              <div class="row mb-3 mt-3">
-                <div class="col">
-                  <h5>Jogador melhor colocado com cada personagem</h5>
-                  <table class="table table-striped table-sm">
-                    <thead>
-                      <tr>
-                        <th scope="col">Personagem</th>
-                        <th scope="col">Jogador</th>
-                        <th scope="col">Colocação</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {
-                        Object.entries(this.state.statistics.best_player_character).sort((a, b) => {return a[1].rank[this.props.league].rank - b[1].rank[this.props.league].rank}).map((line)=>(
-                          <tr>
-                            <td><img src={process.env.PUBLIC_URL+"/portraits-mini/"+this.getCharName(line[1].mains[0])+".png"}
-                              style={{width: 32, height: 32}} /> {line[0]}</td>
-                            <td>{line[1].name}</td>
-                            <td>{line[1].rank[this.props.league].rank}</td>
-                          </tr>
-                        ))
-                      }
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              :
-              null
-            }
           </div>
         :
           <div>Loading...</div>
@@ -423,4 +362,4 @@ class Statistics extends Component {
   }
 };
 
-export default Statistics
+export default StatisticsGranblue
