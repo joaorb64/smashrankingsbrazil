@@ -60,7 +60,10 @@ class Contacts extends Component {
     index = index || 0;
 
     if(!this.state.players) return
-    if(index >= this.state.players.length) return
+    if(index >= this.state.players.length){
+      this.setState(this.state);
+      return;
+    }
 
     if(!this.state.players[index].twitter){
       this.preloadImages(index+1);
@@ -68,16 +71,14 @@ class Contacts extends Component {
     }
 
     var img = new Image();
-    img.onload = ()=>{
+
+    setTimeout(()=>{
       this.state.players[index].avatar = img.src;
       this.preloadImages(index + 1);
-      this.setState(this.state);
-    }
-    img.onerror = ()=>{
-      this.state.players[index].avatar = img.src;
-      this.preloadImages(index + 1);
-      this.setState(this.state);
-    }
+      if(index % 8 == 0)
+        this.setState(this.state);
+    }, 5);
+
     img.src = `http://twitter-avatar.now.sh/${this.getTwitterHandle(this.state.players[index].twitter)}`;
   }
 

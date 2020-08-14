@@ -19,6 +19,32 @@ class Players extends Component {
   componentDidMount() {
     this.fetchPlayers();
   }
+
+  preloadImages(index) {
+    index = index || 0;
+
+    if(!this.state.players) return
+    if(index >= this.state.players.length){
+      this.setState(this.state);
+      return;
+    }
+
+    if(!this.state.players[index].twitter){
+      this.preloadImages(index+1);
+      return;
+    }
+
+    var img = new Image();
+
+    setTimeout(()=>{
+      this.state.players[index].avatar = img.src;
+      this.preloadImages(index + 1);
+      if(index % 8 == 0)
+        this.setState(this.state);
+    }, 5);
+
+    img.src = `http://twitter-avatar.now.sh/${this.getTwitterHandle(this.state.players[index].twitter)}`;
+  }
   
   fetchPlayers() {
     if(this.props.allplayers){
@@ -26,7 +52,7 @@ class Players extends Component {
 
       this.props.allplayers["players"].forEach(function(p){
         if(p.twitter) {
-          p.avatar = `http://twitter-avatar.now.sh/${this.getTwitterHandle(p.twitter)}`;
+          p.avatar = "";
         }
 
         if(p.mains.length == 0 || p.mains[0] == ""){
@@ -38,7 +64,9 @@ class Players extends Component {
         players.push(p);
       }, this)
 
+      this.state.players = players;
       this.setState({players: players, filtered: players})
+      this.preloadImages();
     }
   }
 
@@ -109,7 +137,7 @@ class Players extends Component {
         {Object.values(this.state.filtered).map((player, i) => (
           <li key={"_"+i}
           class={"slide-fade " + styles.listItem + " list-group-item"}
-          style={{animationDelay: ((i+3)/50.0)+"s", cursor: "pointer"}}
+          style={{cursor: "pointer"}}
           data-toggle="modal" data-target="#playerModal"
           onClick={()=>this.openPlayerModal(player)}
           >

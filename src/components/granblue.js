@@ -34,36 +34,14 @@ class Granblue extends Component {
     this.updateData();
   }
 
-  preloadImagesPc(index) {
-    index = index || 0;
-
-    if(!this.state.players_pc) return
-    if(index >= this.state.players_pc.length) return
-
-    if(!this.state.players_pc[index].twitter){
-      this.preloadImagesPc(index+1);
-      return;
-    }
-
-    var img = new Image();
-    img.onload = ()=>{
-      this.state.players_pc[index].avatar = img.src;
-      this.preloadImagesPc(index + 1);
-      this.setState(this.state);
-    }
-    img.onerror = ()=>{
-      this.state.players_pc[index].avatar = img.src;
-      this.preloadImagesPc(index + 1);
-      this.setState(this.state);
-    }
-    img.src = `https://twitter-avatar.now.sh/${this.getTwitterHandle(this.state.players_pc[index].twitter)}`;
-  }
-
   preloadImagesPs4(index) {
     index = index || 0;
 
     if(!this.state.players_ps4) return
-    if(index >= this.state.players_ps4.length) return
+    if(index >= this.state.players_ps4.length){
+      this.setState(this.state);
+      return;
+    }
 
     if(!this.state.players_ps4[index].twitter){
       this.preloadImagesPs4(index+1);
@@ -71,17 +49,41 @@ class Granblue extends Component {
     }
 
     var img = new Image();
-    img.onload = ()=>{
+
+    setTimeout(()=>{
       this.state.players_ps4[index].avatar = img.src;
       this.preloadImagesPs4(index + 1);
+      if(index % 8 == 0)
+        this.setState(this.state);
+    }, 5);
+
+    img.src = `http://twitter-avatar.now.sh/${this.getTwitterHandle(this.state.players_ps4[index].twitter)}`;
+  }
+
+  preloadImagesPc(index) {
+    index = index || 0;
+
+    if(!this.state.players_pc) return
+    if(index >= this.state.players_pc.length){
       this.setState(this.state);
+      return;
     }
-    img.onerror = ()=>{
-      this.state.players_ps4[index].avatar = img.src;
-      this.preloadImagesPs4(index + 1);
-      this.setState(this.state);
+
+    if(!this.state.players_pc[index].twitter){
+      this.preloadImagesPc(index+1);
+      return;
     }
-    img.src = `https://twitter-avatar.now.sh/${this.getTwitterHandle(this.state.players_ps4[index].twitter)}`;
+
+    var img = new Image();
+
+    setTimeout(()=>{
+      this.state.players_pc[index].avatar = img.src;
+      this.preloadImagesPc(index + 1);
+      if(index % 8 == 0)
+        this.setState(this.state);
+    }, 5);
+
+    img.src = `http://twitter-avatar.now.sh/${this.getTwitterHandle(this.state.players_pc[index].twitter)}`;
   }
 
   updateData() {
@@ -207,7 +209,7 @@ class Granblue extends Component {
                   onClick={()=>this.openPlayerModal(player)}>
                     <li key={this.state.selectedLeague+'_'+i} class={styles.top3container + " slide-fade list-group-item"} style={{
                         backgroundColor: this.state.top3Colors[i], borderRadius: "10px", border: 0, marginBottom: "5px", width: "100%", lineHeight: "48px",
-                        padding: 0, display: "flex", alignSelf: "center", overflow: "hidden", animationDelay: (i/50.0)+"s"
+                        padding: 0, display: "flex", alignSelf: "center", overflow: "hidden"
                       }}>
                         <div style={{
                           backgroundColor: this.state.top3Colors2[i], position: "absolute",
@@ -322,7 +324,7 @@ class Granblue extends Component {
               {players.slice(3).map((player, i) => (
                 <li key={this.state.selectedLeague+"_"+i}
                 class={"slide-fade " + styles.listItem + " list-group-item"}
-                style={{animationDelay: ((i+3)/50.0)+"s", cursor: "pointer"}}
+                style={{cursor: "pointer"}}
                 data-toggle="modal" data-target="#playerModalGranblue"
                 onClick={()=>this.openPlayerModal(player)}
                 >

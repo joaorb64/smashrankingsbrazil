@@ -99,7 +99,7 @@ class PlayerRanking extends Component {
                 onClick={()=>this.openPlayerModal(player)}>
                   <li key={this.state.selectedLeague+'_'+i} class={styles.top3container + " slide-fade list-group-item"} style={{
                       backgroundColor: this.state.top3Colors[i], borderRadius: "10px", border: 0, marginBottom: "5px", width: "100%", lineHeight: "48px",
-                      padding: 0, display: "flex", alignSelf: "center", overflow: "hidden", animationDelay: (i/50.0)+"s"
+                      padding: 0, display: "flex", alignSelf: "center", overflow: "hidden"
                     }}>
                       <div style={{
                         backgroundColor: this.state.top3Colors2[i], position: "absolute",
@@ -214,7 +214,7 @@ class PlayerRanking extends Component {
             {this.state.players.slice(3).map((player, i) => (
               <li key={this.state.selectedLeague+"_"+i}
               class={"slide-fade " + styles.listItem + " list-group-item"}
-              style={{animationDelay: ((i+3)/50.0)+"s", cursor: "pointer"}}
+              style={{cursor: "pointer"}}
               data-toggle="modal" data-target="#playerModal"
               onClick={()=>this.openPlayerModal(player)}
               >
