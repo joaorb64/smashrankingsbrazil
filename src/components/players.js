@@ -26,7 +26,7 @@ class Players extends Component {
 
       this.props.allplayers["players"].forEach(function(p){
         if(p.twitter) {
-          p.avatar = `https://twivatar.glitch.me/${this.getTwitterHandle(p.twitter)}`;
+          p.avatar = `http://twitter-avatar.now.sh/${this.getTwitterHandle(p.twitter)}`;
         }
 
         if(p.mains.length == 0 || p.mains[0] == ""){
