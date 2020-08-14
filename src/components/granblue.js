@@ -34,6 +34,56 @@ class Granblue extends Component {
     this.updateData();
   }
 
+  preloadImagesPc(index) {
+    index = index || 0;
+
+    if(!this.state.players_pc) return
+    if(index >= this.state.players_pc.length) return
+
+    if(!this.state.players_pc[index].twitter){
+      this.preloadImagesPc(index+1);
+      return;
+    }
+
+    var img = new Image();
+    img.onload = (()=>{
+      this.state.players_pc[index].avatar = img.src;
+      this.preloadImagesPc(index + 1);
+      this.setState(this.state);
+    }, this)
+    img.onerror = ()=>{
+      this.state.players_pc[index].avatar = img.src;
+      this.preloadImagesPc(index + 1);
+      this.setState(this.state);
+    }
+    img.src = `https://twivatar.glitch.me/${this.getTwitterHandle(this.state.players_pc[index].twitter)}`;
+  }
+
+  preloadImagesPs4(index) {
+    index = index || 0;
+
+    if(!this.state.players_ps4) return
+    if(index >= this.state.players_ps4.length) return
+
+    if(!this.state.players_ps4[index].twitter){
+      this.preloadImagesPs4(index+1);
+      return;
+    }
+
+    var img = new Image();
+    img.onload = (()=>{
+      this.state.players_ps4[index].avatar = img.src;
+      this.preloadImagesPs4(index + 1);
+      this.setState(this.state);
+    }, this)
+    img.onerror = ()=>{
+      this.state.players_ps4[index].avatar = img.src;
+      this.preloadImagesPs4(index + 1);
+      this.setState(this.state);
+    }
+    img.src = `https://twivatar.glitch.me/${this.getTwitterHandle(this.state.players_ps4[index].twitter)}`;
+  }
+
   updateData() {
     fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/granblue/out/ranking.json')
     .then(res => res.json())
@@ -51,7 +101,7 @@ class Granblue extends Component {
             let p = allplayers_data["players"][allplayers_data["mapping"][id]]
 
             if(p.twitter) {
-              p.avatar = `https://twivatar.glitch.me/${this.getTwitterHandle(p.twitter)}`;
+              p.avatar = "?";
             }
   
             if(p.mains.length == 0 || p.mains[0] == ""){
@@ -84,7 +134,12 @@ class Granblue extends Component {
             }
           });
 
+          this.state.players_pc = players_pc;
+          this.state.players_ps4 = players_ps4;
           this.setState({ players_pc: players_pc, players_ps4: players_ps4, statistics: data.statistics })
+
+          this.preloadImagesPc();
+          this.preloadImagesPs4();
         }
       })
       .catch(console.log)
@@ -242,7 +297,8 @@ class Granblue extends Component {
                             <div style={{
                               backgroundImage: `url(${player.avatar})`,
                               width: "96px", height: "96px", backgroundSize: "cover", backgroundPosition: "center",
-                              borderRadius: "100%", position: "absolute", right: 10, top: 10, border: "5px #f0f0f0 solid"
+                              borderRadius: "100%", position: "absolute", right: 10, top: 10, border: "5px #f0f0f0 solid",
+                              backgroundColor: "gray"
                             }}>
                               {player.twitter ? 
                                 <div style={{width: "100%", height: "100%", display: "flex", alignItems: "flex-end", justifyContent: "flex-end", margin: "5px"}}>

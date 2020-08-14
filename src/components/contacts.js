@@ -56,6 +56,31 @@ class Contacts extends Component {
     }
   }
 
+  preloadImages(index) {
+    index = index || 0;
+
+    if(!this.state.players) return
+    if(index >= this.state.players.length) return
+
+    if(!this.state.players[index].twitter){
+      this.preloadImages(index+1);
+      return;
+    }
+
+    var img = new Image();
+    img.onload = (()=>{
+      this.state.players[index].avatar = img.src;
+      this.preloadImages(index + 1);
+      this.setState(this.state);
+    }, this)
+    img.onerror = ()=>{
+      this.state.players[index].avatar = img.src;
+      this.preloadImages(index + 1);
+      this.setState(this.state);
+    }
+    img.src = `https://twivatar.glitch.me/${this.getTwitterHandle(this.state.players[index].twitter)}`;
+  }
+
   updateData() {
     if(!this.props) return
     if(!this.props.contacts) return
@@ -73,7 +98,7 @@ class Contacts extends Component {
           let p = this.props.allplayers["players"][this.props.allplayers["mapping"][league+":"+id]]
 
           if(p.twitter) {
-            p.avatar = `https://twivatar.glitch.me/${this.getTwitterHandle(p.twitter)}`;
+            p.avatar = "?";
           }
 
           if(p.mains.length == 0 || p.mains[0] == ""){
@@ -91,9 +116,11 @@ class Contacts extends Component {
           return Number(a["rank"][league]["rank"]) - Number(b["rank"][league]["rank"]);
         }.bind(this));
 
-        console.log(players)
+        this.state.players = players;
 
         this.setState({ players: players, updateTime: data["update_time"], statistics: data["statistics"] })
+
+        this.preloadImages();
       }
     })
     .catch(console.log)
