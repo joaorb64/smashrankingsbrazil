@@ -68,17 +68,17 @@ class Contacts extends Component {
     }
 
     var img = new Image();
-    img.onload = (()=>{
+    img.onload = ()=>{
       this.state.players[index].avatar = img.src;
       this.preloadImages(index + 1);
       this.setState(this.state);
-    }, this)
+    }
     img.onerror = ()=>{
       this.state.players[index].avatar = img.src;
       this.preloadImages(index + 1);
       this.setState(this.state);
     }
-    img.src = `https://twivatar.glitch.me/${this.getTwitterHandle(this.state.players[index].twitter)}`;
+    img.src = `http://twitter-avatar.now.sh/${this.getTwitterHandle(this.state.players[index].twitter)}`;
   }
 
   updateData() {

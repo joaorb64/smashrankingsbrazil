@@ -46,17 +46,17 @@ class Granblue extends Component {
     }
 
     var img = new Image();
-    img.onload = (()=>{
+    img.onload = ()=>{
       this.state.players_pc[index].avatar = img.src;
       this.preloadImagesPc(index + 1);
       this.setState(this.state);
-    }, this)
+    }
     img.onerror = ()=>{
       this.state.players_pc[index].avatar = img.src;
       this.preloadImagesPc(index + 1);
       this.setState(this.state);
     }
-    img.src = `https://twivatar.glitch.me/${this.getTwitterHandle(this.state.players_pc[index].twitter)}`;
+    img.src = `https://twitter-avatar.now.sh/${this.getTwitterHandle(this.state.players_pc[index].twitter)}`;
   }
 
   preloadImagesPs4(index) {
@@ -71,17 +71,17 @@ class Granblue extends Component {
     }
 
     var img = new Image();
-    img.onload = (()=>{
+    img.onload = ()=>{
       this.state.players_ps4[index].avatar = img.src;
       this.preloadImagesPs4(index + 1);
       this.setState(this.state);
-    }, this)
+    }
     img.onerror = ()=>{
       this.state.players_ps4[index].avatar = img.src;
       this.preloadImagesPs4(index + 1);
       this.setState(this.state);
     }
-    img.src = `https://twivatar.glitch.me/${this.getTwitterHandle(this.state.players_ps4[index].twitter)}`;
+    img.src = `https://twitter-avatar.now.sh/${this.getTwitterHandle(this.state.players_ps4[index].twitter)}`;
   }
 
   updateData() {
