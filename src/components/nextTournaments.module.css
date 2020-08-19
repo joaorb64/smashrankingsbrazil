@@ -1,0 +1,18 @@
+.tournamentContainer:active, .tournamentContainer:hover, .tournamentContainer:focus, a, a:hover, a:visited, a:link, a:active, a:focus {
+  text-decoration: none;
+}
+
+.tournamentContainerHighlight {
+  border: 5px solid #ffa50000;
+}
+
+.tournamentContainerHighlight:hover {
+  border: 5px solid #ffa500ff;
+  animation: border-pulsate 1s infinite;
+}
+
+@keyframes border-pulsate {
+  0%   { border-color: #ffa500ff }
+  50%  { border-color: #ffa50044 }
+  100% { border-color: #ffa500ff }
+}
