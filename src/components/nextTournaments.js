@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import moment from "../../node_modules/moment/moment"
+import React, { Component } from 'react';
+import moment from "../../node_modules/moment-timezone/moment-timezone";
 import styles from "./nextTournaments.module.css"
 
 class NextTournaments extends Component {
@@ -36,12 +36,13 @@ class NextTournaments extends Component {
                 <div class="col-md-6 col-lg-4" style={{padding: 2}}>
                   <a href={tournament.url}>
                     <div className={styles.tournamentContainerHighlight} style={{cursor: "pointer"}}>
-                      <div className={styles.tournamentContainer} style={{backgroundColor: "#df4d28", border: "4px solid black", cursor: "pointer"}}>
+                      <div className={styles.tournamentContainer} style={{backgroundColor: "#ff5e24", border: "4px solid black", cursor: "pointer"}}>
                         <div style={{backgroundImage: "url("+tournament.images[1].url+")", height: 140, margin: "4px",
                         backgroundSize: "cover", backgroundPosition: "center", backgroundColor: "black"}}></div>
 
                         <div style={{height: 60, display: "flex", flexDirection: "column", alignItems: "center", placeContent: "center",
-                        paddingLeft: "8px", paddingRight: "8px"}}>
+                        paddingLeft: "8px", paddingRight: "8px", background: "rgb(255,113,40)",
+                        background: "linear-gradient(180deg, rgba(255,113,40,1) 0%, rgba(221,87,37,1) 100%)"}}>
                           {tournament.tournament_multievent ?
                             <div style={{color: "white", textAlign: "center", fontSize: "14px",
                             whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden",
@@ -58,11 +59,11 @@ class NextTournaments extends Component {
                         </div>
 
                         <div style={{display: "flex", color: "black"}}>
-                          <div style={{backgroundColor: "#f0f0f0", padding: "4px", paddingLeft: "8px", flexGrow: 1}}>
-                            {tournament.isOnline ? "Online" : "Offline"}
+                          <div style={{backgroundColor: "#dedede", padding: "4px", paddingLeft: "8px", flexGrow: 1}}>
+                            {/*tournament.isOnline ? "Online" : "Offline"*/}
                           </div>
-                          <div style={{backgroundColor: "#f0f0f0", padding: "4px", paddingRight: "8px"}}>
-                            {moment(tournament.startAt * 1000).format("DD/MM/YY HH:mm")}
+                          <div style={{backgroundColor: "#dedede", padding: "4px", paddingRight: "8px"}}>
+                            {moment(tournament.startAt * 1000).tz("America/Sao_Paulo").format("DD/MM/YY HH:mm") + " (GMT-3)"}
                           </div>
                         </div>
                       </div>
