@@ -106,8 +106,24 @@ class App extends Component {
           </div>
         </HashRouter>
 
-        <nav class="navbar bottom-bar fixed-bottom">
-          By João Ribeiro Bezerra (joaorb64@gmail.com, <a style={{color: "white"}} href="https://twitter.com/joao_shino">@joao_shino</a>)
+        <nav class="navbar bottom-bar fixed-bottom" style={{display: "flex", flexFlow: "nowrap"}}>
+          <div style={{flexGrow: 0}}>
+            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+              <input type="hidden" name="cmd" value="_donations" />
+              <input type="hidden" name="business" value="ZV95C3G67WXBA" />
+              <input type="hidden" name="currency_code" value="BRL" />
+              <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+              <img alt="" border="0" src="https://www.paypal.com/en_BR/i/scr/pixel.gif" width="1" height="1" />
+            </form>
+          </div>
+          <div style={{flexGrow: 0}}>
+            <a href="https://picpay.me/joaorb64">
+              <img src="/images/donate_picpay.png" style={{height: 50}}></img>
+            </a>
+          </div>
+          <div style={{flexGrow: 1}}>
+            By João "Shino" (joaorb64@gmail.com, <a style={{color: "white"}} href="https://twitter.com/joao_shino">@joao_shino</a>) <br/>
+          </div>
         </nav>
       </div>
     );
