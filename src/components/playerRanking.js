@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import styles from './contacts.module.css'
 import { Link, useParams, useLocation } from 'react-router-dom';
 import LeagueSelector from './leagueselector';
+import moment from "../../node_modules/moment-timezone/moment-timezone";
 
 class PlayerRanking extends Component {
   state = {
@@ -132,7 +133,8 @@ class PlayerRanking extends Component {
                       </div>
 
                       <div style={{
-                        width: "200px", height: "200px", position: "absolute", backgroundColor: "#f0f0f0", top: -100, left: -100, transform: "rotate(-45deg)"
+                        width: "200px", height: "200px", position: "absolute", backgroundColor: "#f0f0f0", top: -100, left: -100,
+                        transform: "rotate(-45deg)"
                       }}>
                       </div>
                       <div style={{
@@ -140,7 +142,7 @@ class PlayerRanking extends Component {
                       }}>
                         <div style={{
                           width: 100, height: 100, backgroundImage: `url(${process.env.PUBLIC_URL}/icons/rank${i+1}.png)`,
-                          backgroundSize: "cover", position: "absolute", left: -10, top: -10
+                          backgroundSize: "cover", position: "absolute"
                         }}></div>
                       </div>
 
@@ -308,7 +310,7 @@ class PlayerRanking extends Component {
             ))}
             <div style={{textAlign: "right", fontFamily: "SmashFont", color: "white"}}>
               <div class="col-12" style={{padding: "0 0px"}}>
-                Dados atualizados em: {this.state.updateTime}
+                Dados atualizados em: {moment(this.state.updateTime).tz("America/Sao_Paulo").format("DD/MM/YY HH:mm") + " (GMT-3)"}
               </div>
             </div>
           </ul>

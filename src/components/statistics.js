@@ -305,7 +305,7 @@ class Statistics extends Component {
             var lab = bar._model.label;
             var img = document.getElementById(lab);
             if(img != null && img.naturalHeight !== 0){
-              t.chart.ctx.drawImage(img,bar._model.x-16,bar._view.y-12,32,24);
+              t.chart.ctx.drawImage(img,bar._model.x-12,bar._view.y-12,24,24);
             }
               t.chart.ctx.fillText(parseFloat(dataset[bar._index]).toFixed(0), bar._model.x,bar._view.y-12)
           });

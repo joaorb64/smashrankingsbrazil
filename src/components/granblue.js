@@ -250,7 +250,7 @@ class Granblue extends Component {
                         }}>
                           <div style={{
                             width: 100, height: 100, backgroundImage: `url(${process.env.PUBLIC_URL}/icons/rank${i+1}.png)`,
-                            backgroundSize: "cover", position: "absolute", left: -10, top: -10
+                            backgroundSize: "cover", position: "absolute"
                           }}></div>
                         </div>
 
