@@ -37,7 +37,7 @@ class NextTournaments extends Component {
                   <a href={tournament.url}>
                     <div className={styles.tournamentContainerHighlight} style={{cursor: "pointer"}}>
                       <div className={styles.tournamentContainer} style={{backgroundColor: "#ff5e24", border: "4px solid black", cursor: "pointer"}}>
-                        <div style={{backgroundImage: "url("+tournament.images[1].url+")", height: 140, margin: "4px",
+                        <div style={{backgroundImage: "url("+tournament.images[tournament.images.length-1].url+")", height: 140, margin: "4px",
                         backgroundSize: "cover", backgroundPosition: "center", backgroundColor: "black"}}></div>
 
                         <div style={{height: 60, display: "flex", flexDirection: "column", alignItems: "center", placeContent: "center",
