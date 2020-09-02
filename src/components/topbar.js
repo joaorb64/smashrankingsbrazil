@@ -80,6 +80,9 @@ class TopBar extends Component {
             <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/nexttournaments/" href="/nexttournaments/">
               <div class="nav-link">Próximos torneios</div>
             </NavLink>
+            <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/matcherino/" href="/matcherino/">
+              <div class="nav-link">Matcherino</div>
+            </NavLink>
             <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/about/" href="/about/">
               <div class="nav-link">Sobre</div>
             </NavLink>
