@@ -24,14 +24,27 @@ class Matcherino extends Component {
         })
 
         tournament.usedCoupons = used;
+
+        let coupon = tournament.description.match(/cupom:[\s][a-zA-Z|0-9]+/gi);
+
+        if(coupon != null){
+          coupon = coupon[0].substring(6).trim()
+        }
+
+        tournament.coupon = coupon;
       });
-      this.state.tournaments = data.body;
+      this.state.tournaments = data.body.filter((tournament) => {
+        if(tournament.status=="ready"){
+          return true;
+        }
+        return false;
+      });
       this.setState(this.state);
     })
     .catch(console.log)
   }
 
-  render (){
+  render(){
     return(
       <div class="slide-fade list-group-item" style={{
         backgroundColor: "#f0f0f000", borderRadius: "10px", border: 0, marginBottom: "5px", width: "100%",
@@ -49,12 +62,21 @@ class Matcherino extends Component {
                     <div className={styles.tournamentContainerHighlight} style={{cursor: "pointer"}}>
                       <div className={styles.tournamentContainer} style={{backgroundColor: "#ff5e24", border: "4px solid black", cursor: "pointer"}}>
                         <div style={{backgroundImage: "url("+tournament.meta.backgroundImg+")", height: 140, margin: "4px",
-                        backgroundSize: "cover", backgroundPosition: "center", backgroundColor: "black"}}></div>
+                        backgroundSize: "cover", backgroundPosition: "center", backgroundColor: "black"}}>
+                          { tournament.coupon ?
+                            <div style={{background: "linear-gradient(180deg, rgba(255,113,40,1) 0%, rgba(221,87,37,1) 100%)",
+                            color: "white", width: "fit-content", borderBottomRightRadius: "16px", padding: "5px 10px 5px 5px"}}>
+                              Cupom: {tournament.coupon}
+                            </div>
+                            :
+                            null
+                          }
+                        </div>
 
-                        <div style={{height: 60, display: "flex", flexDirection: "column", alignItems: "center", placeContent: "center",
+                        <div style={{height: 40, display: "flex", flexDirection: "column", alignItems: "center", placeContent: "center",
                         paddingLeft: "8px", paddingRight: "8px", background: "rgb(255,113,40)",
                         background: "linear-gradient(180deg, rgba(255,113,40,1) 0%, rgba(221,87,37,1) 100%)"}}>
-                          <div style={{color: "white", textAlign: "center", fontSize: "24px",
+                          <div style={{color: "white", textAlign: "center", fontSize: "20px",
                           whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden",
                           textShadow: "2px 2px 0px #00000070", width: "100%"}}>
                             {tournament.title}
@@ -63,8 +85,11 @@ class Matcherino extends Component {
 
                         <div style={{display: "flex", color: "black", backgroundColor: "#dedede"}}>
                           <div style={{backgroundColor: "#dedede", padding: "4px", paddingLeft: "8px", flex: "1 1 0"}}>
-                            Cupons usados: {tournament.usedCoupons}
+                            Cupons utilizados: {tournament.usedCoupons}
                           </div>
+                        </div>
+
+                        <div style={{display: "flex", color: "black", backgroundColor: "#dedede"}}>
                           <div style={{backgroundColor: "#dedede", padding: "4px", paddingRight: "8px", flex: "1 1 0", alignSelf: "center"}}>
                             <div class="progress position-relative" style={{backgroundColor: "black"}}>
                               <div className={"progress-bar" + (tournament.balance/100/50 >= 1 ? " bg-success" : "")} role="progressbar"
