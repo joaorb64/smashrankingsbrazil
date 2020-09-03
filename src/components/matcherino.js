@@ -14,6 +14,13 @@ class Matcherino extends Component {
     fetch('https://matcherino.com/__api/bounties/list?size=20&creatorId=490735&published=true&gameId=112')
     .then(res => res.json())
     .then((data) => {
+      data.body = data.body.filter((tournament) => {
+        if(tournament.status=="ready"){
+          return true;
+        }
+        return false;
+      });
+
       data.body.forEach(tournament => {
         let used = 0;
 
@@ -33,12 +40,7 @@ class Matcherino extends Component {
 
         tournament.coupon = coupon;
       });
-      this.state.tournaments = data.body.filter((tournament) => {
-        if(tournament.status=="ready"){
-          return true;
-        }
-        return false;
-      });
+      this.state.tournaments = data.body;
       this.setState(this.state);
     })
     .catch(console.log)
@@ -105,7 +107,7 @@ class Matcherino extends Component {
                 </div>
               ))
               :
-              null
+              <div class="loader"></div>
           }
         </div>
       </div>

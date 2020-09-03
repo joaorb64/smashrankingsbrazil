@@ -51,7 +51,7 @@ class NextTournaments extends Component {
                             </div>
                             :
                             null}
-                          <div style={{color: "white", textAlign: "center", fontSize: "24px",
+                          <div style={{color: "white", textAlign: "center", fontSize: "20px",
                           whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden",
                           textShadow: "2px 2px 0px #00000070", width: "100%"}}>
                             {tournament.tournament_multievent ? tournament.name : tournament.tournament}
@@ -59,11 +59,17 @@ class NextTournaments extends Component {
                         </div>
 
                         <div style={{display: "flex", color: "black"}}>
-                          <div style={{backgroundColor: "#dedede", padding: "4px", paddingLeft: "8px", flexGrow: 1}}>
+                          <div style={{backgroundColor: "#dedede", padding: "2px", paddingLeft: "8px", flexGrow: 1}}>
                             {/*tournament.isOnline ? "Online" : "Offline"*/}
                           </div>
-                          <div style={{backgroundColor: "#dedede", padding: "4px", paddingRight: "8px"}}>
-                            {moment(tournament.startAt * 1000).tz("America/Sao_Paulo").format("DD/MM/YY HH:mm") + " (GMT-3)"}
+                          <div style={{backgroundColor: "#dedede", padding: "2px", paddingRight: "8px"}}>
+                            Início: {moment(tournament.startAt * 1000).tz("America/Sao_Paulo").format("DD/MM/YY HH:mm") + " (GMT-3)"}
+                          </div>
+                        </div>
+
+                        <div style={{display: "flex", color: "black"}}>
+                          <div style={{backgroundColor: "#dedede", padding: "2px", paddingRight: "8px", flexGrow: 1, textAlign: "right"}}>
+                            Inscrições até: {moment(tournament.tournament_registrationClosesAt * 1000).tz("America/Sao_Paulo").format("DD/MM/YY HH:mm") + " (GMT-3)"}
                           </div>
                         </div>
                       </div>
