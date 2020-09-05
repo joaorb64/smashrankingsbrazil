@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
+import CHARACTERS from "../globals";
 
 class PlayerModal extends Component {
   state = {
@@ -43,6 +44,16 @@ class PlayerModal extends Component {
     window.jQuery("#playerModal").modal("toggle");
   }
 
+  getCharCodename(playerData, id){
+    let skin = 0;
+
+    if("skins" in Object.keys(playerData)){
+      skin = playerData["skins"][id];
+    }
+    
+    return CHARACTERS[playerData["mains"][id]]+"_0"+skin;
+  }
+
   render (){
     return(
       <div class="modal fade" id="playerModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -57,31 +68,38 @@ class PlayerModal extends Component {
             <div class="modal-body">
               {this.state.playerData ?
                   <div>
+                    <div style={{height: "128px", background: "black", display: "flex", alignItems: "center"}}>
+                      {
+                        this.state.playerData.twitter ?
+                          <a href={this.state.playerData.twitter}>
+                            <div style={{
+                              backgroundImage: `url(${this.state.playerData.avatar})`,
+                              width: "96px", height: "96px", backgroundSize: "cover", backgroundPosition: "center",
+                              borderRadius: "32px", border: "5px #f0f0f0 solid",
+                              backgroundColor: "gray", margin: "20px"
+                            }}>
+                              {this.state.playerData.twitter ? 
+                                <div style={{width: "100%", height: "100%", display: "flex", alignItems: "flex-end", justifyContent: "flex-end", margin: "5px"}}>
+                                  <div style={{
+                                    backgroundImage: "url(/icons/twitter.svg)", width: 32, height: 32, bottom: 0, right: 0
+                                  }}></div>
+                                </div>
+                                :
+                                null}
+                            </div>
+                          </a>
+                      :
+                        null
+                      }
+
+                      <div style={{
+                        backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_1_${this.getCharCodename(this.state.playerData, 0)}.png)`,
+                        width: "220px", backgroundPosition: "center 40%", backgroundSize: "cover", height: "100%"
+                      }}></div>
+                    </div>
                     <div>
                       <h3><b style={{color: "#bb0000"}}>{this.state.playerData.org}</b> {this.state.playerData.name}</h3>
                     </div>
-                    {
-                      this.state.playerData.twitter ?
-                        <a href={this.state.playerData.twitter}>
-                          <div style={{
-                            backgroundImage: `url(${this.state.playerData.avatar})`,
-                            width: "96px", height: "96px", backgroundSize: "cover", backgroundPosition: "center",
-                            borderRadius: "100%", border: "5px #f0f0f0 solid",
-                            backgroundColor: "gray"
-                          }}>
-                            {this.state.playerData.twitter ? 
-                              <div style={{width: "100%", height: "100%", display: "flex", alignItems: "flex-end", justifyContent: "flex-end", margin: "5px"}}>
-                                <div style={{
-                                  backgroundImage: "url(/icons/twitter.svg)", width: 32, height: 32, bottom: 0, right: 0
-                                }}></div>
-                              </div>
-                              :
-                              null}
-                          </div>
-                        </a>
-                    :
-                      null
-                    }
 
                     <row>
                       <h5>Ligas:</h5>
