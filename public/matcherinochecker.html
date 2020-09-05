@@ -1,0 +1,34 @@
+<head>
+    <script>
+        fetch('https://matcherino.com/__api/bounties/findById', {
+            method: "post",
+            body: "34902"
+        })
+        .then(res => res.json())
+        .then((data) => {
+            contributions = {}
+
+            data.body.transactions.forEach(transaction => {
+                if(!contributions.hasOwnProperty(transaction.userId)){
+                    contributions[transaction.userId] = {
+                        userName: transaction.userName,
+                        amount: transaction.amount,
+                        usedCoupon: transaction.action == "coupon:use" ? true : false
+                    }
+                } else {
+                    contributions[transaction.userId].amount += transaction.amount
+                    if(transaction.action == "coupon:use"){
+                        contributions[transaction.userId].usedCoupon = true;
+                    }
+                }
+            })
+
+            console.log(contributions)
+        })
+        .catch(console.log)
+    </script>
+</head>
+
+<body>
+    ID matcherino: <input type="text" name="fname" value="34902"><br>
+</body>

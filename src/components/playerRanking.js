@@ -3,6 +3,7 @@ import styles from './contacts.module.css'
 import { Link, useParams, useLocation } from 'react-router-dom';
 import LeagueSelector from './leagueselector';
 import moment from "../../node_modules/moment-timezone/moment-timezone";
+import CHARACTERS from "../globals";
 
 class PlayerRanking extends Component {
   state = {
@@ -66,6 +67,17 @@ class PlayerRanking extends Component {
     }
   }
 
+  getCharCodename(name){
+    let skin = 0;
+
+    if(Number.isInteger(name[name.length-1])){
+      skin = Number.parseInt(name[name.length-1]);
+      name = name.substring(0, name.length-1);
+    }
+
+    return CHARACTERS[name]+"_0"+skin;
+  }
+
   getCharName(name){
     return name.toLowerCase().replace(/ /g, "");
   }
@@ -113,7 +125,7 @@ class PlayerRanking extends Component {
                         clipPath: "polygon(0 60%, 0% 100%, 100% 100%)"
                       }}></div>
                       <div style={{
-                        backgroundImage: `url(${process.env.PUBLIC_URL}/portraits-full/${this.getCharName(player.mains[0])}.png)`, display: "flex",
+                        backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_1_${this.getCharCodename(player.mains[0])}.png)`, display: "flex",
                         width: "100%", backgroundPosition: "center", backgroundSize: "cover",
                         filter: "drop-shadow(10px 10px 0px #000000AF)"
                       }}>
@@ -286,8 +298,8 @@ class PlayerRanking extends Component {
                 <div class="player-main" style={{display: "flex", width: "128px"}}>
                   {player.mains.length > 0 ?
                     <div style={{
-                      backgroundImage: `url(${process.env.PUBLIC_URL}/portraits-small/${this.getCharName(player.mains[0])}.png)`,
-                      width: "128px", backgroundPosition: "center", backgroundSize: "cover", backgroundColor: "#ababab", overflow: "hidden"
+                      backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_0_${this.getCharCodename(player.mains[0])}.png)`,
+                      width: "128px", backgroundPosition: "center 45%", backgroundSize: "cover", backgroundColor: "#ababab", overflow: "hidden"
                     }}>
                       <div style={{overflow: "hidden", display: "flex", height: "100%", alignItems: "flex-end", justifyContent: "flex-end"}}>
                         {player.mains.slice(1).map((main)=>(

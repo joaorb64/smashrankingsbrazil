@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styles from './contacts.module.css'
+import CHARACTERS from "../globals";
 
 const fuzzysort = require('fuzzysort')
 
@@ -68,6 +69,17 @@ class Players extends Component {
       this.setState({players: players, filtered: players})
       this.preloadImages();
     }
+  }
+
+  getCharCodename(name){
+    let skin = 0;
+
+    if(Number.isInteger(name[name.length-1])){
+      skin = Number.parseInt(name[name.length-1]);
+      name = name.substring(0, name.length-1);
+    }
+
+    return CHARACTERS[name]+"_0"+skin;
   }
 
   getCharName(name){
@@ -197,8 +209,8 @@ class Players extends Component {
             <div class="player-main" style={{display: "flex", width: "128px"}}>
               {player.mains.length > 0 ?
                 <div style={{
-                  backgroundImage: `url(${process.env.PUBLIC_URL}/portraits-small/${this.getCharName(player.mains[0])}.png)`,
-                  width: "128px", backgroundPosition: "center", backgroundSize: "cover", backgroundColor: "#ababab", overflow: "hidden"
+                  backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_0_${this.getCharCodename(player.mains[0])}.png)`,
+                  width: "128px", backgroundPosition: "center 45%", backgroundSize: "cover", backgroundColor: "#ababab", overflow: "hidden"
                 }}>
                   <div style={{overflow: "hidden", display: "flex", height: "100%", alignItems: "flex-end", justifyContent: "flex-end"}}>
                     {player.mains.slice(1).map((main)=>(
