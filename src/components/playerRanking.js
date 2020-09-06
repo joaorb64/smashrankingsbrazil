@@ -70,7 +70,7 @@ class PlayerRanking extends Component {
   getCharCodename(playerData, id){
     let skin = 0;
 
-    if("skins" in Object.keys(playerData)){
+    if(playerData.hasOwnProperty("skins")){
       skin = playerData["skins"][id];
     }
     

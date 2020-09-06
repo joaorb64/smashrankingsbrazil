@@ -1,0 +1,64 @@
+.avatar {
+    width: 96px;
+    height: 96px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 16px;
+    background-color: gray;
+    margin: 20px;
+    margin-right: 10px;
+}
+
+.characterMain {
+    width: 220px;
+    background-position: center 40%;
+    background-size: cover;
+    height: 160%;
+    margin-left: auto;
+    background-color: black;
+    z-index: 1
+}
+
+.playerTag {
+    margin-bottom: 0;
+}
+
+.fullName {
+    color: white;
+    font-size: 1.0rem;
+}
+
+@media (max-width: 991px) {
+    .avatar {
+        width: 64px;
+        height: 64px;
+        margin: 10px;
+        margin-right: 0;
+    }
+
+    .characterMain {
+        width: 100px;
+        height: 140%;
+    }
+
+    .playerTag {
+        font-size: 1rem;
+    }
+
+    .ttlogo {
+        width: 12px !important;
+        height: 12px !important;
+    }
+
+    .tttag {
+        font-size: 0.6rem !important;
+    }
+
+    .stateFlag {
+        width: 24px !important;
+    }
+
+    .fullName {
+        font-size: 0.8rem;
+    }
+}
