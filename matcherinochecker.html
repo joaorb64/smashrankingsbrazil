@@ -3,11 +3,12 @@
 </head>
 
 <body>
-    ID matcherino: <input autocomplete="on" type="text" id="matcherinoid" value=""><br><br>
-    <input type="file" id="file-selector" /> ou slug do torneio: <input autocomplete="on" type="text" id="slug"><br><br>
+    ID matcherino: <input type="text" id="matcherinoid" value=""><br><br>
+    <input type="file" id="file-selector" /><br><br>
     <button onclick="verify()">Verificar</button><br><br>
 
     <div id="result" style="white-space: break-spaces;"></div>
+
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="papaparse.js"></script>
@@ -43,94 +44,68 @@
                     }
                 })
 
-                if(fileContent == ""){
-                    // pegar o id do torneio
-                    fetch('https://api.smash.gg/tournament/'+document.getElementById('slug').value)
-                    .then(res => res.json())
-                    .then((data_tourney) => {
-                        var tournament_id = data_tourney["entities"]["tournament"]["id"];
+                let parsed = Papa.parse(fileContent)
+                parsed.data.shift();
 
-                        // pegar o csv
-                        fetch('https://smash.gg/api-proxy/tournament/'+tournament_id+'/export_attendees')
-                        .then(res => res.json())
-                        .then((data_tourney) => {
-                            console.log(data_tourney)
-                            fileContent = data_tourney;
-                            ParseAndVerify();
-                        }).catch((err) => {
-                            document.getElementById('result').textContent = err;
-                        })
-                    }).catch((err) => {
-                        document.getElementById('result').textContent = err;
+                let foundText = "";
+                let notFoundText = "";
+
+                parsed.data.forEach((line) => {
+                    let userNameInput = line[38].toLowerCase();
+                    userNameInput = userNameInput.replace("# ", "#")
+                    userNameInput = userNameInput.replace(" #", "#")
+                    userNameInput = userNameInput.replace(/\n/g, "")
+                    userNameInput = userNameInput.trim();
+
+                    let userTwitter = line[18].toLowerCase();
+
+                    let found = false;
+
+                    // via twitter or using displayname
+                    Object.keys(contributions).forEach(contribution => {
+                        // twitter
+                        if(contributions[contribution].authProvider == "twitter" &&
+                        contributions[contribution].socialMediaIdentifier == userTwitter){
+                            found = true;
+                        }
+
+                        // using displayname with id
+                        let idUsingDisplayname =
+                            contributions[contribution].displayName.toLowerCase()+"#"+
+                            contributions[contribution].userId;
+                        if(idUsingDisplayname == userNameInput){
+                            found = true;
+                        }
+
+                        // using only displayname
+                        if(userNameInput == contributions[contribution].displayName.toLowerCase()){
+                            found = true;
+                        }
+
+                        // using only username
+                        if(userNameInput == contributions[contribution].userName.toLowerCase()){
+                            found = true;
+                        }
                     })
-                } else {
-                    ParseAndVerify();
-                }
+
+                    // via username#userid
+                    if(contributions.hasOwnProperty(userNameInput)){
+                        found = true;
+                    }
+
+                    if(found == true){
+                        foundText += line[4]+'\n'
+                    } else {
+                        notFoundText += line[4]+'\n';
+                    }
+                })
+                
+                document.getElementById('result').textContent =
+                    "== OK ==\n\n"+foundText+"\n== NOT OK ==\n\n"+notFoundText;
             })
             .catch((err) => {
                 document.getElementById('result').textContent = err;
             })
-        }
-
-        function ParseAndVerify(){
-            let parsed = Papa.parse(fileContent)
-            parsed.data.shift();
-
-            let foundText = "";
-            let notFoundText = "";
-
-            parsed.data.forEach((line) => {
-                let userNameInput = line[38].toLowerCase();
-                userNameInput = userNameInput.replace("# ", "#")
-                userNameInput = userNameInput.replace(" #", "#")
-                userNameInput = userNameInput.replace(/\n/g, "")
-                userNameInput = userNameInput.trim();
-
-                let userTwitter = line[18].toLowerCase();
-
-                let found = false;
-
-                // via twitter or using displayname
-                Object.keys(contributions).forEach(contribution => {
-                    // twitter
-                    if(contributions[contribution].authProvider == "twitter" &&
-                    contributions[contribution].socialMediaIdentifier == userTwitter){
-                        found = true;
-                    }
-
-                    // using displayname with id
-                    let idUsingDisplayname =
-                        contributions[contribution].displayName.toLowerCase()+"#"+
-                        contributions[contribution].userId;
-                    if(idUsingDisplayname == userNameInput){
-                        found = true;
-                    }
-
-                    // using only displayname
-                    if(userNameInput == contributions[contribution].displayName.toLowerCase()){
-                        found = true;
-                    }
-
-                    // using only username
-                    if(userNameInput == contributions[contribution].userName.toLowerCase()){
-                        found = true;
-                    }
-                })
-
-                // via username#userid
-                if(contributions.hasOwnProperty(userNameInput)){
-                    found = true;
-                }
-
-                if(found == true){
-                    foundText += line[4]+'\n'
-                } else {
-                    notFoundText += line[4]+'\n';
-                }
-            })
-            
-            document.getElementById('result').textContent =
-                "== OK ==\n\n"+foundText+"\n== NOT OK ==\n\n"+notFoundText;
         }
 
         const fileSelector = document.getElementById('file-selector');
