@@ -94,7 +94,7 @@ class PlayerModal extends Component {
                               backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/master/state_icon/${this.state.playerData.state}.png)`,
                               width: "32px", height: "32px", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
                               backgroundPosition: "center", paddingTop: "22px", marginLeft: "10px", textAlign: "center", verticalAlign: "bottom"
-                            }}>{this.state.playerData.state}</div>
+                            }}></div>
                           :
                             null
                           }
@@ -122,58 +122,45 @@ class PlayerModal extends Component {
                       <div className={styles.characterMain} style={{backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_1_${this.getCharCodename(this.state.playerData, 0)}.png)`}}></div>
                     </div>
 
-                    <row>
-                      <h5>Ligas:</h5>
-                      {this.state.playerData.rank ?
-                        <table class="table table-striped table-sm">
-                          <thead>
-                            <tr>
-                              <th scope="col">Liga</th>
-                              <th scope="col">Colocação</th>
-                              <th scope="col">Pontuação</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                              {Object.values(this.state.playerData.rank).map((rank, i)=>(
-                                <>
-                                  <tr id={i} onClick={()=>{window.jQuery("#"+this.state.playerData.rank[i]+"_"+i).collapse("toggle");}}>
-                                    {this.props.leagues ?
-                                        <td>
-                                          <Link 
-                                            to={`/home/smash/${this.props.leagues.find(element => element.id == Object.keys(this.state.playerData.rank)[i]).id}`}
-                                            onClick={()=>this.closeModal()}>
-                                              {this.props.leagues.find(element => element.id == Object.keys(this.state.playerData.rank)[i]).name}
-                                          </Link>
-                                          <a href={`http://braacket.com/league/${this.state.playerData.braacket_links.find(x => x.startsWith(Object.keys(this.state.playerData.rank)[i])).replace(":", "/player/")}`}>
-                                            <div style={{
-                                              backgroundImage: `url(${process.env.PUBLIC_URL}/icons/external_link.svg)`,
-                                              width: 16, height: 16, display: "inline-block", backgroundSize: "contain",
-                                              marginLeft: 2, verticalAlign: "middle"
-                                            }}></div>
-                                          </a>
-                                        </td>
-                                    :
-                                      <td>{Object.keys(this.state.playerData.rank)[i]}</td>
-                                    }
-                                    <td>{rank.rank}</td>
-                                    <td>{rank.score}</td>
-                                  </tr>
-                                  <tr>
-                                    <td colspan="99" style={{padding: 0}}>
-                                      <div id={this.state.playerData.rank[i]+"_"+i} class="collapse" style={{backgroundColor: "#EDEDED"}}>
-                                        <iframe width='100%' height='600px' frameborder='0' allowfullscreen
-                                        src={`http://braacket.com/league/${this.state.playerData.braacket_links.find(x => x.startsWith(Object.keys(this.state.playerData.rank)[i])).replace(":", "/player/")}?&embed=1`}></iframe>
-                                      </div>
-                                    </td>
-                                  </tr>
-                                </>
-                              ))}
-                          </tbody>
-                        </table>
-                        :
-                        <div>Este jogador não foi encontrado em nenhuma liga.</div>
-                      }
-                    </row>
+                  
+                    {this.state.playerData.rank ?
+                      <div class="row" style={{padding: "10px", margin: 0, backgroundColor: "black"}}>
+                        {Object.values(this.state.playerData.rank).map((rank, i)=>(
+                          <div class="col-lg-4 col-md-6" style={{padding: "2px"}} id={i}>
+                            {this.props.leagues ?
+                              <Link 
+                                to={`/home/smash/${this.props.leagues.find(element => element.id == Object.keys(this.state.playerData.rank)[i]).id}`}
+                                onClick={()=>this.closeModal()}
+                                style={{display: "flex"}}>
+                                  <div style={{width: "42px", textAlign: "center", fontSize: "1.5rem",
+                                  backgroundColor: "lightgray", display: "flex", flexShrink: 0, color: "black"}}>
+                                    <div style={{alignSelf: "center", width: "100%"}}>
+                                      {rank.rank}
+                                    </div>
+                                  </div>
+                                  <div style={{
+                                    width: "48px", height: "48px", display: "inline-block", backgroundSize: "cover", backgroundPosition: "center",
+                                    flexShrink: 0,
+                                    backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/master/league_icon/${this.props.leagues.find(element => element.id == Object.keys(this.state.playerData.rank)[i]).id}.png)`}}></div>
+                                  <div style={{display: "flex", flexDirection: "column", overflow: "hidden", width: "100%", backgroundColor: "lightgray"}}>
+                                    <div style={{paddingLeft: "5px", textOverflow: "ellipsis", fontSize: "0.8rem", 
+                                    whiteSpace: "nowrap", overflow: "hidden", backgroundColor: "gray", color: "white"}}>
+                                      {this.props.leagues.find(element => element.id == Object.keys(this.state.playerData.rank)[i]).name}
+                                    </div>
+                                    <div style={{paddingLeft: "5px", color: "black", flexGrow: 1, fontSize: "1.2rem"}}>
+                                      {rank.score} pts.
+                                    </div>
+                                  </div>
+                              </Link>
+                            :
+                              <div>{Object.keys(this.state.playerData.rank)[i]}</div>
+                            }
+                          </div>
+                        ))}
+                      </div>
+                      :
+                      <div>Este jogador não foi encontrado em nenhuma liga.</div>
+                    }
 
                     {this.state.playerData.tournaments ?
                       <row>
