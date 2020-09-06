@@ -11,7 +11,7 @@
 
 .characterMain {
     width: 220px;
-    background-position: center 40%;
+    background-position: center -100%;
     background-size: cover;
     height: 160%;
     margin-left: auto;
