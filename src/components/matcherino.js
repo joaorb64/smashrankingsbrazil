@@ -11,7 +11,7 @@ class Matcherino extends Component {
   }
 
   componentDidMount() {
-    fetch('https://matcherino.com/__api/bounties/list?size=20&creatorId=490735&published=true&gameId=112')
+    fetch('https://matcherino.com/__api/bounties/list?size=50&creatorId=490735&published=true&gameId=112')
     .then(res => res.json())
     .then((data) => {
       data.body = data.body.filter((tournament) => {
@@ -87,7 +87,7 @@ class Matcherino extends Component {
 
                         <div style={{display: "flex", color: "black", backgroundColor: "#dedede"}}>
                           <div style={{backgroundColor: "#dedede", padding: "4px", paddingLeft: "8px", flex: "1 1 0"}}>
-                            Cupons utilizados: {tournament.usedCoupons}
+                            Cupons utilizados: {tournament.usedCoupons}/50
                           </div>
                         </div>
 

@@ -173,3 +173,45 @@ body {
     transform: rotate(360deg);
   }
 }
+
+.modal-header {
+  background-color: black;
+  border-bottom: 1px solid rgb(61, 84, 102);
+}
+
+.modal-backdrop {
+  background-color: rgba(110, 118, 125);
+}
+
+.close {
+  color: white;
+}
+
+.modal-backdrop.show {
+  opacity: 0.6;
+}
+
+.modal-body {
+  padding: 0;
+  background-color: black;
+  color: white;
+}
+
+.modal-footer {
+  border-top: 1px solid rgb(61, 84, 102);
+  background-color: black;
+}
+
+@media (max-width: 768px) {
+  .modal-dialog {
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .modal-content {
+    height: 100%;
+    border: 0;
+  }
+}

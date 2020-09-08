@@ -3,9 +3,8 @@
     height: 96px;
     background-size: cover;
     background-position: center;
-    border-radius: 16px;
     background-color: gray;
-    margin: 20px;
+    margin: 12px;
     margin-right: 10px;
 }
 
@@ -32,7 +31,7 @@
     .avatar {
         width: 64px;
         height: 64px;
-        margin: 10px;
+        margin: 12px;
         margin-right: 0;
     }
 

@@ -61,7 +61,7 @@ class PlayerModal extends Component {
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLongTitle">Player</h5>
+              <h5 class="modal-title" id="exampleModalLongTitle"></h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -69,7 +69,10 @@ class PlayerModal extends Component {
             <div class="modal-body">
               {this.state.playerData ?
                   <div>
-                    <div style={{height: "128px", background: "black", display: "flex", alignItems: "center", position: "relative", overflow: "hidden"}}>
+                    <div style={{
+                      height: "128px", background: "black", display: "flex", alignItems: "center", position: "relative",overflow: "hidden",
+                      borderBottom: "1px solid #3d5466"
+                    }}>
                       <div style={{backgroundImage: `url(${process.env.PUBLIC_URL}/images/bg_diagonal.webp)`, overflow: "hidden",
                       position: "absolute", width: "100%", height: "100%", backgroundSize: "6px 6px"}}></div>
 
@@ -119,36 +122,39 @@ class PlayerModal extends Component {
                         null}
                       </div>
 
-                      <div className={styles.characterMain} style={{backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_1_${this.getCharCodename(this.state.playerData, 0)}.png)`}}></div>
+                      <div className={styles.characterMain} style={{
+                        marginRight: "12px", borderBottom: "1px solid #3d5466",
+                        backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_1_${this.getCharCodename(this.state.playerData, 0)}.png)`
+                      }}></div>
                     </div>
 
                   
                     {this.state.playerData.rank ?
-                      <div class="row" style={{padding: "10px", margin: 0, backgroundColor: "black"}}>
-                        {Object.values(this.state.playerData.rank).map((rank, i)=>(
+                      <div class="row" style={{padding: "10px", margin: 0, backgroundColor: "black", borderBottom: "1px solid #3d5466"}}>
+                        {Object.entries(this.state.playerData.rank).sort((a, b)=>{return a[1].rank-b[1].rank}).map((rank, i)=>(
                           <div class="col-lg-4 col-md-6" style={{padding: "2px"}} id={i}>
                             {this.props.leagues ?
                               <Link 
-                                to={`/home/smash/${this.props.leagues.find(element => element.id == Object.keys(this.state.playerData.rank)[i]).id}`}
+                                to={`/home/smash/${rank[0]}`}
                                 onClick={()=>this.closeModal()}
                                 style={{display: "flex"}}>
                                   <div style={{width: "42px", textAlign: "center", fontSize: "1.5rem",
                                   backgroundColor: "lightgray", display: "flex", flexShrink: 0, color: "black"}}>
                                     <div style={{alignSelf: "center", width: "100%"}}>
-                                      {rank.rank}
+                                      {rank[1].rank}
                                     </div>
                                   </div>
                                   <div style={{
                                     width: "48px", height: "48px", display: "inline-block", backgroundSize: "cover", backgroundPosition: "center",
                                     flexShrink: 0,
-                                    backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/master/league_icon/${this.props.leagues.find(element => element.id == Object.keys(this.state.playerData.rank)[i]).id}.png)`}}></div>
+                                    backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/master/league_icon/${rank[0]}.png)`}}></div>
                                   <div style={{display: "flex", flexDirection: "column", overflow: "hidden", width: "100%", backgroundColor: "lightgray"}}>
                                     <div style={{paddingLeft: "5px", textOverflow: "ellipsis", fontSize: "0.8rem", 
                                     whiteSpace: "nowrap", overflow: "hidden", backgroundColor: "gray", color: "white"}}>
-                                      {this.props.leagues.find(element => element.id == Object.keys(this.state.playerData.rank)[i]).name}
+                                      {this.props.leagues.find(element => element.id == rank[0]).name}
                                     </div>
                                     <div style={{paddingLeft: "5px", color: "black", flexGrow: 1, fontSize: "1.2rem"}}>
-                                      {rank.score} pts.
+                                      {rank[1].score} pts.
                                     </div>
                                   </div>
                               </Link>
@@ -163,9 +169,9 @@ class PlayerModal extends Component {
                     }
 
                     {this.state.playerData.tournaments ?
-                      <row>
+                      <row style={{display: "block", padding: "12px"}}>
                         <h5>Torneios contabilizados:</h5>
-                        <table class="table table-striped table-sm">
+                        <table class="table table-striped table-sm" style={{color: "white"}}>
                           <thead>
                             <tr>
                               <th scope="col">#</th>
