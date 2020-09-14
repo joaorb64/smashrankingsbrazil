@@ -32,7 +32,7 @@ class NextTournaments extends Component {
         <div class="row">
           {
             this.state.tournaments != null ?
-              this.state.tournaments.map((tournament)=>(
+              this.state.tournaments.filter(t=>{return t.startAt > Date.now()/1000}).map((tournament)=>(
                 <div class="col-md-6 col-lg-4" style={{padding: 2}}>
                   <a href={tournament.url}>
                     <div className={styles.tournamentContainerHighlight} style={{cursor: "pointer"}}>
