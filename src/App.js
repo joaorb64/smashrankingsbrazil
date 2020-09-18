@@ -68,7 +68,12 @@ class App extends Component {
   render () {
     return (
       <div>
-        <video loop muted autoplay oncanplay="this.play()" onloadedmetadata="this.muted=true" id="myVideo">
+        <div style={{
+          backgroundImage: `url(${process.env.PUBLIC_URL}tournament_bg.png)`, backgroundPosition: "center", backgroundSize: "cover",
+          width: "100%", height: "100%", position: "fixed"
+        }}></div>
+
+        <video loop muted autoplay oncanplay="this.play()" onloadedmetadata="this.muted=true" class="videobg" id="myVideo">
           <source src="/background.mp4" type="video/mp4" />
         </video>
 
