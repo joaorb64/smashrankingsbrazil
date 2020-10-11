@@ -14,6 +14,8 @@ class Matcherino extends Component {
     fetch('https://matcherino.com/__api/bounties/list?size=50&creatorId=490735&published=true&gameId=112')
     .then(res => res.json())
     .then((data) => {
+      console.log(data);
+
       data.body = data.body.filter((tournament) => {
         if(tournament.status=="ready"){
           return true;
@@ -21,14 +23,18 @@ class Matcherino extends Component {
         return false;
       });
 
+      console.log(data.body)
+
       data.body.forEach(tournament => {
         let used = 0;
 
-        tournament.transactions.forEach(transaction => {
-          if(transaction.action == "coupon:use"){
-            used += 1;
-          }
-        })
+        if(tournament.transactions){
+          tournament.transactions.forEach(transaction => {
+            if(transaction.action == "coupon:use"){
+              used += 1;
+            }
+          })
+        }
 
         tournament.usedCoupons = used;
 
