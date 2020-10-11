@@ -1,6 +1,18 @@
 import React, { Component } from 'react';
 import moment from "../../node_modules/moment-timezone/moment-timezone";
 import styles from "./nextTournaments.module.css"
+import { faCalendar, faEdit, faUser } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+var WEEKDAYS = {
+  0: "DOM",
+  1: "SEG",
+  2: "TER",
+  3: "QUA",
+  4: "QUI",
+  5: "SEX",
+  6: "SÁB"
+}
 
 class NextTournaments extends Component {
   state = {
@@ -60,18 +72,21 @@ class NextTournaments extends Component {
                           </div>
                         </div>
 
-                        <div style={{display: "flex", color: "black"}}>
+                        <div style={{display: "flex", color: "black", fontSize: "0.8rem", flexDirection: "column"}}>
                           <div style={{backgroundColor: "#dedede", padding: "2px", paddingLeft: "8px", flexGrow: 1}}>
-                            {/*tournament.isOnline ? "Online" : "Offline"*/}
+                            {tournament.isOnline ? "Online" : "Offline"}
                           </div>
-                          <div style={{backgroundColor: "#dedede", padding: "2px", paddingRight: "8px"}}>
-                            Início: {moment(tournament.startAt * 1000).tz("America/Sao_Paulo").format("DD/MM/YY HH:mm") + " (GMT-3)"}
-                          </div>
-                        </div>
 
-                        <div style={{display: "flex", color: "black"}}>
-                          <div style={{backgroundColor: "#dedede", padding: "2px", paddingRight: "8px", flexGrow: 1, textAlign: "right"}}>
-                            Inscrições até: {moment(tournament.tournament_registrationClosesAt * 1000).tz("America/Sao_Paulo").format("DD/MM/YY HH:mm") + " (GMT-3)"}
+                          <div style={{backgroundColor: "#dedede", padding: "2px", paddingRight: "8px", paddingLeft: "8px", flexGrow: 1, textAlign: "left"}}>
+                          <FontAwesomeIcon icon={faCalendar}/> Início: {WEEKDAYS[moment(tournament.startAt * 1000).tz("America/Sao_Paulo").day()]+" "}{moment(tournament.startAt * 1000).tz("America/Sao_Paulo").format("DD/MM/YY HH:mm") + " (GMT-3)"}
+                          </div>
+                          
+                          <div style={{backgroundColor: "#dedede", padding: "2px", paddingRight: "8px", paddingLeft: "8px", flexGrow: 1, textAlign: "left"}}>
+                            <FontAwesomeIcon icon={faEdit}/> Inscrições até: {WEEKDAYS[moment(tournament.tournament_registrationClosesAt * 1000).tz("America/Sao_Paulo").day()]+" "}{moment(tournament.tournament_registrationClosesAt * 1000).tz("America/Sao_Paulo").format("DD/MM/YY HH:mm") + " (GMT-3)"}
+                          </div>
+
+                          <div style={{backgroundColor: "#dedede", padding: "2px", paddingRight: "8px", paddingLeft: "8px", flexGrow: 1, textAlign: "left"}}>
+                            <FontAwesomeIcon icon={faUser}/> Inscritos: {tournament.numEntrants}
                           </div>
                         </div>
                       </div>
