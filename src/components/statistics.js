@@ -89,19 +89,24 @@ class Statistics extends Component {
 
       console.log(data)
 
-      this.setState({statistics: data});
+      this.setState({statistics: data}, ()=>{
+        this.UpdateCharts();
+      })
+
     }
   }
 
   componentWillUnmount(){
-    this.state.statistics = null;
+    //this.state.statistics = null;
   }
 
-  componentDidUpdate() {
+  UpdateCharts() {
     //if(this.chartRef == null) return;
     //if(this.chartRef.current == null) return;
     if(this.state.statistics == null) return;
     //if(this.myChartRef != null) return;
+
+    console.log("a")
 
     if(this.originalBarController == null)
       this.originalBarController = Chart.controllers.bar;

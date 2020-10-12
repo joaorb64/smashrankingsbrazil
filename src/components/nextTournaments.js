@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import moment from "../../node_modules/moment-timezone/moment-timezone";
 import styles from "./nextTournaments.module.css"
-import { faCalendar, faEdit, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faCalendar, faEdit, faMapMarkerAlt, faUser, faWifi } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 var WEEKDAYS = {
@@ -45,7 +45,7 @@ class NextTournaments extends Component {
           {
             this.state.tournaments != null ?
               this.state.tournaments.filter(t=>{return t.startAt > Date.now()/1000}).map((tournament)=>(
-                <div class="col-md-6 col-lg-4" style={{padding: 2}}>
+                <div class="col-md-6 col-xl-4" style={{padding: 2}}>
                   <a href={tournament.url}>
                     <div className={styles.tournamentContainerHighlight} style={{cursor: "pointer"}}>
                       <div className={styles.tournamentContainer} style={{backgroundColor: "#ff5e24", border: "4px solid black", cursor: "pointer"}}>
@@ -74,11 +74,15 @@ class NextTournaments extends Component {
 
                         <div style={{display: "flex", color: "black", fontSize: "0.8rem", flexDirection: "column"}}>
                           <div style={{backgroundColor: "#dedede", padding: "2px", paddingLeft: "8px", flexGrow: 1}}>
-                            {tournament.isOnline ? "Online" : "Offline"}
+                            {tournament.isOnline ?
+                              <span><FontAwesomeIcon icon={faWifi}/> Online</span>
+                              :
+                              <span><FontAwesomeIcon icon={faMapMarkerAlt}/> {tournament.tournament_venueName + " - " + tournament.tournament_addrState}</span>
+                            }
                           </div>
 
                           <div style={{backgroundColor: "#dedede", padding: "2px", paddingRight: "8px", paddingLeft: "8px", flexGrow: 1, textAlign: "left"}}>
-                          <FontAwesomeIcon icon={faCalendar}/> Início: {WEEKDAYS[moment(tournament.startAt * 1000).tz("America/Sao_Paulo").day()]+" "}{moment(tournament.startAt * 1000).tz("America/Sao_Paulo").format("DD/MM/YY HH:mm") + " (GMT-3)"}
+                            <FontAwesomeIcon icon={faCalendar}/> Início: {WEEKDAYS[moment(tournament.startAt * 1000).tz("America/Sao_Paulo").day()]+" "}{moment(tournament.startAt * 1000).tz("America/Sao_Paulo").format("DD/MM/YY HH:mm") + " (GMT-3)"}
                           </div>
                           
                           <div style={{backgroundColor: "#dedede", padding: "2px", paddingRight: "8px", paddingLeft: "8px", flexGrow: 1, textAlign: "left"}}>
