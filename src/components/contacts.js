@@ -6,6 +6,7 @@ import styles_selector from './leagueselector.module.css'
 import PlayerRanking from './playerRanking';
 import Statistics from './statistics';
 import Information from './information';
+import TournamentList from './tournamentList';
 
 class Contacts extends Component {
   state = {
@@ -119,7 +120,12 @@ class Contacts extends Component {
 
         this.state.players = players;
 
-        this.setState({ players: players, updateTime: data["update_time"], statistics: data["statistics"] })
+        this.setState({
+          players: players,
+          updateTime: data["update_time"],
+          statistics: data["statistics"],
+          tournaments: data["tournaments"]
+        })
 
         this.preloadImages();
       }
@@ -172,13 +178,16 @@ class Contacts extends Component {
         />
 
         <div className="teste btn-group btn-group-toggle col-12" style={{padding: "5px 8px 0px 10px", marginBottom: "-5px"}}>
-          <button className={styles_selector.teste+" btn col-4"} value="ranking" aria-expanded={this.state.selectedTab === "ranking"} onClick={(event)=>this.handleTabChange(event.target.value)}>
+          <button className={styles_selector.teste+" btn col-3"} value="ranking" aria-expanded={this.state.selectedTab === "ranking"} onClick={(event)=>this.handleTabChange(event.target.value)}>
             Ranking
           </button>
-          <button className={styles_selector.teste+" btn col-4"} value="statistics" aria-expanded={this.state.selectedTab === "statistics"} onClick={(event)=>this.handleTabChange(event.target.value)}>
+          <button className={styles_selector.teste+" btn col-3"} value="tournaments" aria-expanded={this.state.selectedTab === "tournaments"} onClick={(event)=>this.handleTabChange(event.target.value)}>
+            Torneios
+          </button>
+          <button className={styles_selector.teste+" btn col-3"} value="statistics" aria-expanded={this.state.selectedTab === "statistics"} onClick={(event)=>this.handleTabChange(event.target.value)}>
             Estatísticas
           </button>
-          <button className={styles_selector.teste+" btn col-4"} value="info" aria-expanded={this.state.selectedTab === "info"} onClick={(event)=>this.handleTabChange(event.target.value)}>
+          <button className={styles_selector.teste+" btn col-3"} value="info" aria-expanded={this.state.selectedTab === "info"} onClick={(event)=>this.handleTabChange(event.target.value)}>
             Informações
           </button>
         </div>
@@ -187,16 +196,19 @@ class Contacts extends Component {
           this.state.selectedTab == "ranking" && this.state.players ?
             <PlayerRanking contacts={this.props.contacts} allplayers={this.state.players} ranking={this.state.players} updateTime={this.state.updateTime} />
             :
-            this.state.selectedTab == "statistics" ?
-              this.state.statistics ? 
-                <Statistics league={this.props.contacts[this.state.selectedLeague].id} statistics={this.state.statistics} />
-                :
-                null
+            this.state.selectedTab == "tournaments" ?
+              <TournamentList tournaments={this.state.tournaments} />
               :
-              this.state.selectedTab == "info" ?
-                <Information info={this.props.contacts[this.state.selectedLeague]} />
+              this.state.selectedTab == "statistics" ?
+                this.state.statistics ? 
+                  <Statistics league={this.props.contacts[this.state.selectedLeague].id} statistics={this.state.statistics} />
+                  :
+                  null
                 :
-                null
+                this.state.selectedTab == "info" ?
+                  <Information info={this.props.contacts[this.state.selectedLeague]} />
+                  :
+                  null
         }
       </div>
     )
