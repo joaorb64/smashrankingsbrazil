@@ -5,12 +5,15 @@ import CHARACTERS from "../globals";
 
 class PlayerModal extends Component {
   state = {
-    playerData: null
+    playerData: null,
+    alltournaments: {},
+    tournaments: {},
+    achievements: {}
   }
 
   componentDidUpdate(nextProps) {
     if(nextProps !== this.props) {
-      
+      this.setState({alltournaments: this.props.alltournaments});
     }
   }
 
@@ -21,19 +24,81 @@ class PlayerModal extends Component {
   fetchPlayer(){
     if(this.player == null) return;
 
-    this.setState({playerData: this.player})
+    let tournamentsWent = [];
+    let achievements = [];
 
-    /*fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/player_data/'+this.player+'/data.json')
-    .then(res => res.json())
-    .then((data) => {
-      if(data.avatar){
-        data.avatar = `https://raw.githubusercontent.com/joaorb64/tournament_api/master/${data.avatar}`;
-      } else if (data.twitter) {
-        data.avatar = `https://twivatar.glitch.me/${this.getTwitterHandle(data.twitter)}`;
+    let myIds = []
+
+    if(this.state.alltournaments != null){
+      console.log(this.state.alltournaments);
+
+      this.player.braacket_links.forEach(link => {
+        let linkLeague = link.split(":")[0];
+        let linkId = link.split(":")[1];
+
+        if(Object.keys(this.state.alltournaments).includes(linkLeague)){
+          Object.values(this.state.alltournaments[linkLeague]).forEach(tournament => {
+            if(Object.keys(tournament.ranking).includes(linkId)){
+              let tournamentEntry = {};
+              Object.assign(tournamentEntry, tournament);
+              tournamentEntry["ranking"] = tournament.ranking[linkId].rank;
+              tournamentsWent.push(tournamentEntry);
+            }
+          })
+        }
+      });
+    }
+
+    console.log("Tournaments: "+tournamentsWent.length);
+
+    // Achievements
+    if(tournamentsWent.length >= 50){
+      achievements.push({
+        "name": "Pro",
+        "description": "Participou de 50 torneios ou mais",
+        "icon": "competitor3.svg"
+      });
+    }
+    else if(tournamentsWent.length >= 25){
+      achievements.push({
+        "name": "Tryhard",
+        "description": "Participou de 25 torneios ou mais",
+        "icon": "competitor2.svg"
+      });
+    }
+    else if(tournamentsWent.length >= 10){
+      achievements.push({
+        "name": "Competidor",
+        "description": "Participou de 10 torneios ou mais",
+        "icon": "competitor1.svg"
+      });
+    }
+    else if(tournamentsWent.length >= 5){
+      achievements.push({
+        "name": "Iniciante",
+        "description": "Participou de 5 torneios ou mais",
+        "icon": "competitor0.svg"
+      });
+    }
+
+    tournamentsWent.some(tournament=>{
+      if(Number.parseInt(tournament.ranking) == 1){
+        achievements.push({
+          "name": "Campeão",
+          "description": "Ficou em 1º em um torneio",
+          "icon": "champion.svg"
+        });
+        return true;
       }
+    })
 
-      this.setState({playerData: data});
-    });*/
+    console.log(achievements);
+
+    this.state.playerData = this.player;
+    this.state.tournaments = tournamentsWent;
+    this.state.achievements = achievements;
+
+    this.setState(this.state);
   }
 
   getTwitterHandle(twitter){
@@ -128,6 +193,26 @@ class PlayerModal extends Component {
                       }}></div>
                     </div>
 
+                    {this.state.achievements && this.state.achievements.length > 0 ?
+                      <div class="row" style={{padding: "10px", margin: 0, backgroundColor: "black", borderBottom: "1px solid #3d5466"}}>
+                        {this.state.achievements.map((achievement, i)=>(
+                          <a key={this.state.playerData.name+i} style={{width: 72, height: 52, textAlign: "center", display: "flex",
+                          flexDirection: "column", alignItems: "center", placeContent: "center"}}
+                          data-toggle="tooltip" data-placement="top" title={achievement.description}>
+                            <div style={{
+                              width: 32, height: 32, backgroundSize: "cover", backgroundRepeat: "none",
+                              marginLeft: 6, marginRight: 6,
+                              backgroundImage: `url(${process.env.PUBLIC_URL}/icons/achievements/${achievement.icon})`
+                            }}>
+                              
+                            </div>
+                            <small style={{textAlign: "center"}}>{achievement.name}</small>
+                          </a>
+                        ))}
+                      </div>
+                      :
+                      null
+                    }
                   
                     {this.state.playerData.rank ?
                       <div class="row" style={{padding: "10px", margin: 0, backgroundColor: "black", borderBottom: "1px solid #3d5466"}}>

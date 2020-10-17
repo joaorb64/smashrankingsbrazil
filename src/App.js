@@ -15,7 +15,8 @@ import Matcherino from './components/matcherino';
 class App extends Component {
   state = {
     leagues: [],
-    allplayers: null
+    allplayers: null,
+    alltournaments: null
   }
 
   componentWillMount() {
@@ -59,6 +60,14 @@ class App extends Component {
       this.setState(this.state);
     })
     .catch(console.log)
+
+    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/alltournaments.json')
+    .then(res => res.json())
+    .then((data) => {
+      this.state.alltournaments = data;
+      this.setState(this.state);
+    })
+    .catch(console.log)
   }
 
   componentDidMount() {
@@ -86,9 +95,9 @@ class App extends Component {
 
             <Switch>
               <Route path="/home/smash/:id?/:tab?" exact render={
-                (props) => <Contacts contacts={this.state.leagues} allplayers={this.state.allplayers} match={props}></Contacts>
+                (props) => <Contacts contacts={this.state.leagues} allplayers={this.state.allplayers} alltournaments={this.state.alltournaments} match={props}></Contacts>
               } />
-              <Route path="/players/" exact render={(props) => <Players leagues={this.state.leagues} allplayers={this.state.allplayers} />} />
+              <Route path="/players/" exact render={(props) => <Players leagues={this.state.leagues} alltournaments={this.state.alltournaments} allplayers={this.state.allplayers} />} />
               <Route path="/home/granblue/" exact render={(props) => <Granblue />} />
               <Route path="/map/" exact render={(props) => <Mapa leagues={this.state.leagues} />} />
               <Route path="/matcherino/" exact render={(props) => <Matcherino />} />
@@ -97,7 +106,7 @@ class App extends Component {
               <Redirect to="/home/smash/" />
             </Switch>
 
-            <PlayerModal leagues={this.state.leagues} allplayers={this.state.allplayers} />
+            <PlayerModal leagues={this.state.leagues} allplayers={this.state.allplayers} alltournaments={this.state.alltournaments} />
 
             <Route path="/" render={({location}) => {
               if ("ga" in window) {
