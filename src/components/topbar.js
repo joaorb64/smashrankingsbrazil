@@ -60,7 +60,7 @@ class TopBar extends Component {
             ))}
           </div>
         </div>
-        <Link class="navbar-brand" style={{color: "white"}} to="/home/smash/prbth">
+        <Link class="navbar-brand" style={{color: "white"}} to="/home/smash/homeonline">
           Power Rankings Brasil
         </Link>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false">
@@ -68,7 +68,7 @@ class TopBar extends Component {
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
-            <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/home/smash/prbth" href="/home/smash/prbth">
+            <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/home/smash/homeonline" href="/home/smash/homeonline">
               <div class="nav-link">Home</div>
             </NavLink>
             <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/players" href="/players">

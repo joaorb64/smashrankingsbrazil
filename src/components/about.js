@@ -50,24 +50,42 @@ class About extends Component {
           Sobre
         </h2>
         <p>
-          Esse site é uma tentativa de agregar todos os resultados de cenas locais de Super Smash Bros Ultimate de todo o Brasil em um só lugar, e de usar esses dados para calcular um ranking nacional.
-          Os dados utilizados são extraídos do Braacket e o ranking nacional é recalculado de 12 em 12h.
-          A interface deste site é baseada fortemente no modo <i>Tourney</i> do próprio jogo.
+          Esse site agrega todos os resultados de cenas locais de Super Smash Bros Ultimate de todo o Brasil em um só lugar e usa esses dados para calcular um ranking nacional.
+          Os dados utilizados são extraídos do Braacket e o ranking nacional é recalculado a cada 3h.
+          A interface deste site é baseada fortemente no modo <i>Tourney</i> do Super Smash Bros. Ultimate.
         </p>
         <h2>
-          Meus dados no ranking estão vazios!
+          Idealizadores
         </h2>
         <p>
-          Primeiramente, entre em contato com o TO da sua região. Ele poderá adicionar seu twitter e seus mains ao braacket da sua liga local.
-        </p>
-        <p>
-          Para adição de nome completo e estado, peça para que o TO entre em contato com <a href="https://twitter.com/piuzera_">Piu</a>.
-        </p>
-        <p>
-          Para outros casos individuais, utilize o seguinte link para enviar mudanças: <a href="https://forms.gle/57aGTDPFvwzRNvB59">Forms</a>
+          <ul>
+            <li>
+              Shino (João Ribeiro) <a href="https://twitter.com/joao_shino">@joao_shino</a> - Criador e desenvolvedor do site, manutenção dos dados
+            </li>
+            <li>
+              frodO (Andrey Brouwenstyn) <a href="https://twitter.com/andreyfrodo">@andreyfrodo</a> - Divulgação nas redes sociais, manutenção dos dados
+            </li>
+            <li>
+              SKPeter (Samuel Petersen) <a href="https://twitter.com/skpeter_">@skpeter_</a> - Suporte técnico, manutenção dos dados
+            </li>
+          </ul>
         </p>
         <h2>
-          Metodologia do ranking
+          Meus dados no ranking estão vazios ou desatualizados!
+        </h2>
+        <p>
+          <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+            Formulário
+          </a>
+        </p>
+        <div class="collapse" id="collapseExample">
+          <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfwTV63ynY_kG9H3w-LUB8cAhz4QknJM2JMKWHWzGXA_7SRig/viewform?embedded=true" width="100%" height="1265" frameborder="0" marginheight="0" marginwidth="0">Carregando…</iframe>
+        </div>
+        <p>
+          Para outros casos individuais, entre em contato com um dos idealizadores listados acima.
+        </p>
+        <h2>
+          Metodologia do ranking brasileiro
         </h2>
         <p>
           O cálculo do ranking é realizado seguindo a seguinte lógica:

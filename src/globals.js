@@ -79,6 +79,8 @@ const CHARACTERS = {
     "Banjo-Kazooie": "buddy",
     "Terry": "dolly",
     "Byleth": "master",
+    "Min Min": "tantan",
+    "Steve": "pickel",
     "Random": "random"
 }
 export default CHARACTERS
