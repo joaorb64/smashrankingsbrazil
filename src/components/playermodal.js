@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
 import styles from './playermodal.module.css';
 import CHARACTERS from "../globals";
+import moment from "../../node_modules/moment-timezone/moment-timezone";
 
 class PlayerModal extends Component {
   state = {
@@ -85,7 +86,7 @@ class PlayerModal extends Component {
       if(Number.parseInt(tournament.ranking) == 1){
         achievements.push({
           "name": "Campeão",
-          "description": "Ficou em 1º em um torneio",
+          "description": "1º lugar em um torneio",
           "icon": "champion.svg"
         });
         return true;
@@ -253,9 +254,39 @@ class PlayerModal extends Component {
                       <div>Este jogador não foi encontrado em nenhuma liga.</div>
                     }
 
+                    {this.state.tournaments ?
+                      <row style={{display: "block", padding: "12px"}}>
+                        <h5>Torneios</h5>
+                        <table class="table table-striped table-sm" style={{color: "white"}}>
+                          <thead>
+                            <tr>
+                              <th scope="col">#</th>
+                              <th scope="col">Nome</th>
+                              <th scope="col">Data</th>
+                              <th scope="col">Colocação</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {
+                              this.state.tournaments.sort((a, b) => b.time - a.time).sort((a, b) => Number(b.points) - Number(a.points)).map((tournament, i)=>(
+                                <tr>
+                                  <th scope="row">{i+1}</th>
+                                  <td><a target="_blank" href={`https://braacket.com/tournament/${tournament.id}`}>{tournament.name}</a></td>
+                                  <td>{moment.unix(tournament.time).add(1, "day").format("DD/MM/YY")}</td>
+                                  <td>{tournament.ranking}</td>
+                                </tr>
+                              ))
+                            }
+                          </tbody>
+                        </table>
+                      </row>
+                      :
+                      null
+                    }
+
                     {this.state.playerData.tournaments ?
                       <row style={{display: "block", padding: "12px"}}>
-                        <h5>Torneios contabilizados:</h5>
+                        <h5>Ranking Brasileiro</h5>
                         <table class="table table-striped table-sm" style={{color: "white"}}>
                           <thead>
                             <tr>

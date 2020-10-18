@@ -321,7 +321,7 @@ class PlayerRanking extends Component {
             ))}
             <div style={{textAlign: "right", fontFamily: "SmashFont", color: "white"}}>
               <div class="col-12" style={{padding: "0 0px"}}>
-                Dados atualizados em: {moment(this.state.updateTime).tz("America/Sao_Paulo").format("DD/MM/YY HH:mm") + " (GMT-3)"}
+                Dados atualizados em: {moment(this.state.updateTime).subtract(3, "hours").format("DD/MM/YY HH:mm") + " (GMT-3)"}
               </div>
             </div>
           </ul>
