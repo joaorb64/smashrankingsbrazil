@@ -38,9 +38,15 @@ class NextTournaments extends Component {
         backgroundColor: "#f0f0f000", borderRadius: "10px", border: 0, marginBottom: "5px", width: "100%",
         padding: "30px", alignSelf: "center"
       }}>
-        <h2 style={{color: "white"}}>
-          Próximos torneios
-        </h2>
+        <div class="row" style={{marginLeft: -8, marginRight: -8}}>
+          <h2 style={{color: "white"}}>
+            Próximos torneios
+          </h2>
+          <a href="https://twitter.com/smash_bot_br" class="col-12" style={{backgroundColor: "white", minHeight: "64px", display: "flex", alignItems: "center"}}>
+            <img src="/images/bot.jpg" style={{height: 48, width: 48, borderRadius: 8}} />
+            <div style={{padding: 8, color: "black"}}>Siga o @smash_bot_br para ser notificado de próximos eventos e resultados de torneios em tempo real!</div>
+          </a>
+        </div>
         <div class="row">
           {
             this.state.tournaments != null ?
@@ -82,11 +88,11 @@ class NextTournaments extends Component {
                           </div>
 
                           <div style={{backgroundColor: "#dedede", padding: "2px", paddingRight: "8px", paddingLeft: "8px", flexGrow: 1, textAlign: "left"}}>
-                            <FontAwesomeIcon icon={faCalendar}/> Início: {WEEKDAYS[moment(tournament.startAt * 1000).tz("America/Sao_Paulo").day()]+" "}{moment(tournament.startAt * 1000).tz("America/Sao_Paulo").format("DD/MM/YY HH:mm") + " (GMT-3)"}
+                            <FontAwesomeIcon icon={faCalendar}/> Início: {WEEKDAYS[moment(tournament.startAt * 1000).day()]+" "}{moment(tournament.startAt * 1000).format("DD/MM/YY HH:mm") + " (GMT-3)"}
                           </div>
                           
                           <div style={{backgroundColor: "#dedede", padding: "2px", paddingRight: "8px", paddingLeft: "8px", flexGrow: 1, textAlign: "left"}}>
-                            <FontAwesomeIcon icon={faEdit}/> Inscrições até: {WEEKDAYS[moment(tournament.tournament_registrationClosesAt * 1000).tz("America/Sao_Paulo").day()]+" "}{moment(tournament.tournament_registrationClosesAt * 1000).tz("America/Sao_Paulo").format("DD/MM/YY HH:mm") + " (GMT-3)"}
+                            <FontAwesomeIcon icon={faEdit}/> Inscrições até: {WEEKDAYS[moment(tournament.tournament_registrationClosesAt * 1000).day()]+" "}{moment(tournament.tournament_registrationClosesAt * 1000).format("DD/MM/YY HH:mm") + " (GMT-3)"}
                           </div>
 
                           <div style={{backgroundColor: "#dedede", padding: "2px", paddingRight: "8px", paddingLeft: "8px", flexGrow: 1, textAlign: "left"}}>

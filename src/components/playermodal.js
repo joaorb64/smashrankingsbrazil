@@ -263,7 +263,7 @@ class PlayerModal extends Component {
                               <th scope="col">#</th>
                               <th scope="col">Nome</th>
                               <th scope="col">Data</th>
-                              <th scope="col">Colocação</th>
+                              <th scope="col" style={{textAlign: "center"}}>Colocação</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -273,7 +273,7 @@ class PlayerModal extends Component {
                                   <th scope="row">{i+1}</th>
                                   <td><a target="_blank" href={`https://braacket.com/tournament/${tournament.id}`}>{tournament.name}</a></td>
                                   <td>{moment.unix(tournament.time).add(1, "day").format("DD/MM/YY")}</td>
-                                  <td>{tournament.ranking}</td>
+                                  <td style={{textAlign: "center"}}>{tournament.ranking+"/"+tournament.player_number}</td>
                                 </tr>
                               ))
                             }

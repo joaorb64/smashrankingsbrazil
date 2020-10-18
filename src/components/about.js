@@ -68,6 +68,12 @@ class About extends Component {
             <li>
               SKPeter (Samuel Petersen) <a href="https://twitter.com/skpeter_">@skpeter_</a> - Suporte técnico, manutenção dos dados
             </li>
+            <li>
+              Samwa (Vitor Menezello) <a href="https://twitter.com/vitinmenezello">@vitinmenezello</a> - Manutenção dos dados
+            </li>
+            <li>
+              Piu (Gabriel Amoedo) <a href="https://twitter.com/piuzera_">@piuzera_</a> - Divulgação, ideias
+            </li>
           </ul>
         </p>
         <h2>
