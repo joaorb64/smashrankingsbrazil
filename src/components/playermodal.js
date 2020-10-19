@@ -145,7 +145,7 @@ class PlayerModal extends Component {
       }
     })
 
-    if(wifiTournamentsWent > 10){
+    if(wifiTournamentsWent >= 10){
       achievements.push({
         "name": "Wifi warrior",
         "description": "Participou de 10 ou mais torneios online",
