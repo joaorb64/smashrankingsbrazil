@@ -43,6 +43,7 @@ class PlayerModal extends Component {
               let tournamentEntry = {};
               Object.assign(tournamentEntry, tournament);
               tournamentEntry["ranking"] = tournament.ranking[linkId].rank;
+              tournamentEntry["league"] = linkLeague;
               tournamentsWent.push(tournamentEntry);
             }
           })
@@ -53,6 +54,8 @@ class PlayerModal extends Component {
     console.log("Tournaments: "+tournamentsWent.length);
 
     // Achievements
+
+    //No of tournaments went
     if(tournamentsWent.length >= 50){
       achievements.push({
         "name": "Pro",
@@ -82,16 +85,73 @@ class PlayerModal extends Component {
       });
     }
 
+    // Tournaments won
+    let tournamentsWon = 0;
+
     tournamentsWent.some(tournament=>{
       if(Number.parseInt(tournament.ranking) == 1){
-        achievements.push({
-          "name": "Campeão",
-          "description": "1º lugar em um torneio",
-          "icon": "champion.svg"
-        });
-        return true;
+        tournamentsWon += 1;
       }
     })
+
+    if(tournamentsWon > 0){
+      if(tournamentsWon < 5){
+        achievements.push({
+          "name": "Vencedor",
+          "description": "1º lugar em pelo menos um torneio",
+          "icon": "champion1.svg"
+        });
+      } else if(tournamentsWon < 10){
+        achievements.push({
+          "name": "Campeão",
+          "description": "1º lugar em 5 ou mais torneios",
+          "icon": "champion2.svg"
+        });
+      } else {
+        achievements.push({
+          "name": "Elite",
+          "description": "1º lugar em 10 ou mais torneios",
+          "icon": "champion3.svg"
+        });
+      }
+    }
+
+    // Traveler
+    let offlineNonBrStates = [];
+
+    Object.entries(this.player.rank).map((rank, i)=>{
+      let league = this.props.leagues.find(element => element.id == rank[0]);
+      console.log(league)
+      if(!league.wifi && league.state != "BR"){
+        offlineNonBrStates.push(league.state);
+      }
+    })
+
+    if(offlineNonBrStates.length > 1){
+      achievements.push({
+        "name": "Viajante",
+        "description": "Está em mais de 1 liga regional",
+        "icon": "traveler.svg"
+      });
+    }
+
+    // Wifiwarrior
+    let wifiTournamentsWent = 0;
+
+    tournamentsWent.some(tournament=>{
+      let league = this.props.leagues.find(element => element.id == tournament.league);
+      if(league.wifi){
+        wifiTournamentsWent += 1;
+      }
+    })
+
+    if(wifiTournamentsWent > 10){
+      achievements.push({
+        "name": "Wifi warrior",
+        "description": "Participou de 10 ou mais torneios online",
+        "icon": "wifiwarrior.svg"
+      });
+    }
 
     console.log(achievements);
 
@@ -119,6 +179,10 @@ class PlayerModal extends Component {
     }
     
     return CHARACTERS[playerData["mains"][id]]+"_0"+skin;
+  }
+
+  getCharName(name){
+    return name.toLowerCase().replace(/ /g, "");
   }
 
   render (){
@@ -191,17 +255,30 @@ class PlayerModal extends Component {
                       <div className={styles.characterMain} style={{
                         marginRight: "12px", borderBottom: "1px solid #3d5466",
                         backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_1_${this.getCharCodename(this.state.playerData, 0)}.png)`
-                      }}></div>
+                      }}>
+                      </div>
+                      <div style={{
+                        position: "absolute", right: "14px", zIndex: 9, bottom: "2px",
+                        filter: "drop-shadow(black 2px 2px 0px)", display: "flex"
+                      }}>
+                        {this.state.playerData.mains.slice(1).map((main)=>(
+                            <div class="" style={{
+                              backgroundImage: `url(${process.env.PUBLIC_URL}/portraits-mini/${this.getCharName(main)}.png)`,
+                              width: "24px", height: "24px", backgroundPosition: "center", backgroundSize: "cover",
+                              flexGrow: 0, display: "flex", flexShrink: 1
+                            }}></div>
+                          ))}
+                      </div>
                     </div>
 
                     {this.state.achievements && this.state.achievements.length > 0 ?
                       <div class="row" style={{padding: "10px", margin: 0, backgroundColor: "black", borderBottom: "1px solid #3d5466"}}>
                         {this.state.achievements.map((achievement, i)=>(
-                          <a key={this.state.playerData.name+i} style={{width: 72, height: 52, textAlign: "center", display: "flex",
+                          <a key={this.state.playerData.name+i} style={{width: 72, textAlign: "center", display: "flex",
                           flexDirection: "column", alignItems: "center", placeContent: "center"}}
                           data-toggle="tooltip" data-placement="top" title={achievement.description}>
                             <div style={{
-                              width: 32, height: 32, backgroundSize: "cover", backgroundRepeat: "none",
+                              width: 42, height: 42, backgroundSize: "cover", backgroundRepeat: "none",
                               marginLeft: 6, marginRight: 6,
                               backgroundImage: `url(${process.env.PUBLIC_URL}/icons/achievements/${achievement.icon})`
                             }}>
@@ -261,6 +338,7 @@ class PlayerModal extends Component {
                           <thead>
                             <tr>
                               <th scope="col">#</th>
+                              <th scope="col"></th>
                               <th scope="col">Nome</th>
                               <th scope="col">Data</th>
                               <th scope="col" style={{textAlign: "center"}}>Colocação</th>
@@ -268,15 +346,37 @@ class PlayerModal extends Component {
                           </thead>
                           <tbody>
                             {
-                              this.state.tournaments.sort((a, b) => b.time - a.time).sort((a, b) => Number(b.points) - Number(a.points)).map((tournament, i)=>(
-                                <tr>
+                              this.state.tournaments.sort((a, b) => b.time - a.time).map((tournament, i)=>(
+                                <tr id={i>=5? "collapse1" : ""} class={i>=5? "collapse" : ""}>
                                   <th scope="row">{i+1}</th>
+                                  <td>
+                                    {tournament.ranking == 1 ?
+                                      <span>🥇</span>
+                                      :
+                                      null
+                                    }
+                                    {tournament.ranking == 2 ?
+                                      <span>🥈</span>
+                                      :
+                                      null
+                                    }
+                                    {tournament.ranking == 3 ?
+                                      <span>🥉</span>
+                                      :
+                                      null
+                                    }
+                                  </td>
                                   <td><a target="_blank" href={`https://braacket.com/tournament/${tournament.id}`}>{tournament.name}</a></td>
                                   <td>{moment.unix(tournament.time).add(1, "day").format("DD/MM/YY")}</td>
                                   <td style={{textAlign: "center"}}>{tournament.ranking+"/"+tournament.player_number}</td>
                                 </tr>
                               ))
                             }
+                            <tr data-toggle="collapse" href="#collapse1" style={{
+                              borderBottom: "1px white solid", textAlign: "center", cursor: "pointer"
+                            }}>
+                              <td colSpan="99">Ver todos ({this.state.tournaments.length})</td>
+                            </tr>
                           </tbody>
                         </table>
                       </row>
