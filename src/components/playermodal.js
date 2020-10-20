@@ -44,7 +44,15 @@ class PlayerModal extends Component {
               Object.assign(tournamentEntry, tournament);
               tournamentEntry["ranking"] = tournament.ranking[linkId].rank;
               tournamentEntry["league"] = linkLeague;
-              tournamentsWent.push(tournamentEntry);
+
+              let found = tournamentsWent.find(element =>
+                element.name == tournamentEntry.name ||
+                element.id == tournamentEntry.id
+              );
+
+              if(!found){
+                tournamentsWent.push(tournamentEntry);
+              }
             }
           })
         }
@@ -119,13 +127,15 @@ class PlayerModal extends Component {
     // Traveler
     let offlineNonBrStates = [];
 
-    Object.entries(this.player.rank).map((rank, i)=>{
-      let league = this.props.leagues.find(element => element.id == rank[0]);
-      console.log(league)
-      if(!league.wifi && league.state != "BR"){
-        offlineNonBrStates.push(league.state);
-      }
-    })
+    if(this.player.rank){
+      Object.entries(this.player.rank).map((rank, i)=>{
+        let league = this.props.leagues.find(element => element.id == rank[0]);
+        console.log(league)
+        if(!league.wifi && league.state != "BR"){
+          offlineNonBrStates.push(league.state);
+        }
+      })
+    }
 
     if(offlineNonBrStates.length > 1){
       achievements.push({
@@ -337,7 +347,6 @@ class PlayerModal extends Component {
                         <table class="table table-striped table-sm" style={{color: "white"}}>
                           <thead>
                             <tr>
-                              <th scope="col">#</th>
                               <th scope="col"></th>
                               <th scope="col">Nome</th>
                               <th scope="col">Data</th>
@@ -348,7 +357,6 @@ class PlayerModal extends Component {
                             {
                               this.state.tournaments.sort((a, b) => b.time - a.time).map((tournament, i)=>(
                                 <tr id={i>=5? "collapse1" : ""} class={i>=5? "collapse" : ""}>
-                                  <th scope="row">{i+1}</th>
                                   <td>
                                     {tournament.ranking == 1 ?
                                       <span>🥇</span>
