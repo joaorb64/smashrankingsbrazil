@@ -74,31 +74,35 @@ class PlayerModal extends Component {
     else if(tournamentsWent.length >= 25){
       achievements.push({
         "name": "Tryhard",
-        "description": "Participou de 25 torneios ou mais",
+        "description": "Participou de 25 ou mais torneios",
         "icon": "competitor2.svg"
       });
     }
     else if(tournamentsWent.length >= 10){
       achievements.push({
         "name": "Competidor",
-        "description": "Participou de 10 torneios ou mais",
+        "description": "Participou de 10 ou mais torneios",
         "icon": "competitor1.svg"
       });
     }
     else if(tournamentsWent.length >= 5){
       achievements.push({
         "name": "Iniciante",
-        "description": "Participou de 5 torneios ou mais",
+        "description": "Participou de 5 ou mais torneios",
         "icon": "competitor0.svg"
       });
     }
 
     // Tournaments won
     let tournamentsWon = 0;
+    let bestPlacing = Infinity;
 
     tournamentsWent.some(tournament=>{
       if(Number.parseInt(tournament.ranking) == 1){
         tournamentsWon += 1;
+      }
+      if(Number.parseInt(tournament.ranking) < bestPlacing){
+        bestPlacing = Number.parseInt(tournament.ranking);
       }
     })
 
@@ -120,6 +124,26 @@ class PlayerModal extends Component {
           "name": "Elite",
           "description": "1º lugar em 10 ou mais torneios",
           "icon": "champion3.svg"
+        });
+      }
+    } else {
+      if(bestPlacing == 2){
+        achievements.push({
+          "name": "Na cola",
+          "description": "2º lugar um torneio",
+          "icon": "2nd.svg"
+        });
+      } else if(bestPlacing == 3){
+        achievements.push({
+          "name": "Quase lá",
+          "description": "3º lugar um torneio",
+          "icon": "3rd.svg"
+        });
+      } else if(bestPlacing < 8){
+        achievements.push({
+          "name": "Boa run",
+          "description": "Top 8 um torneio",
+          "icon": "top8.svg"
         });
       }
     }
@@ -338,7 +362,7 @@ class PlayerModal extends Component {
                         ))}
                       </div>
                       :
-                      <div>Este jogador não foi encontrado em nenhuma liga.</div>
+                      <div style={{padding: "10px"}}>Este jogador não foi encontrado no ranking de nenhuma liga.</div>
                     }
 
                     {this.state.tournaments ?
