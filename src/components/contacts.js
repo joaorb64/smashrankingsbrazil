@@ -99,8 +99,8 @@ class Contacts extends Component {
 
           let p = this.props.allplayers["players"][this.props.allplayers["mapping"][league+":"+id]]
 
-          if(p.twitter) {
-            p.avatar = "?";
+          if(p.smashgg_image && !p.twitter) {
+            p.avatar = p.smashgg_image;
           }
 
           if(p.mains.length == 0 || p.mains[0] == ""){

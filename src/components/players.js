@@ -52,8 +52,8 @@ class Players extends Component {
       let players = [];
 
       this.props.allplayers["players"].forEach(function(p){
-        if(p.twitter) {
-          p.avatar = "";
+        if(p.smashgg_image && !p.twitter) {
+          p.avatar = p.smashgg_image;
         }
 
         if(p.mains.length == 0 || p.mains[0] == ""){

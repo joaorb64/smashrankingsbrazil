@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import styles from './playermodal.module.css';
 import CHARACTERS from "../globals";
 import moment from "../../node_modules/moment-timezone/moment-timezone";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faWifi } from '@fortawesome/free-solid-svg-icons';
 
 class PlayerModal extends Component {
   state = {
@@ -44,14 +46,27 @@ class PlayerModal extends Component {
               Object.assign(tournamentEntry, tournament);
               tournamentEntry["ranking"] = tournament.ranking[linkId].rank;
               tournamentEntry["league"] = linkLeague;
+              
+              let leagueObj = this.props.leagues.find(element => element.id == linkLeague);
+
+              if(leagueObj.wifi){
+                tournamentEntry["state"] = "wifi"
+              } else {
+                tournamentEntry["state"] = leagueObj.state;
+              }
 
               let found = tournamentsWent.find(element =>
                 element.name == tournamentEntry.name ||
-                element.id == tournamentEntry.id
+                element.id == tournamentEntry.id ||
+                element.link == tournamentEntry.link
               );
 
               if(!found){
                 tournamentsWent.push(tournamentEntry);
+              } else {
+                if(found.state == "BR" && tournamentEntry["state"] != "BR"){
+                  found.state = tournamentEntry["state"];
+                }
               }
             }
           })
@@ -64,31 +79,45 @@ class PlayerModal extends Component {
     // Achievements
 
     //No of tournaments went
-    if(tournamentsWent.length >= 50){
+    if(tournamentsWent.length >= 75){
       achievements.push({
         "name": "Pro",
-        "description": "Participou de 50 torneios ou mais",
+        "description": "Participou de 75 torneios ou mais",
+        "icon": "competitor5.svg"
+      });
+    }
+    else if(tournamentsWent.length >= 50){
+      achievements.push({
+        "name": "Veterano",
+        "description": "Participou de 50 ou mais torneios",
+        "icon": "competitor4.svg"
+      });
+    }
+    else if(tournamentsWent.length >= 35){
+      achievements.push({
+        "name": "Tryhard",
+        "description": "Participou de 35 ou mais torneios",
         "icon": "competitor3.svg"
       });
     }
-    else if(tournamentsWent.length >= 25){
+    else if(tournamentsWent.length >= 20){
       achievements.push({
-        "name": "Tryhard",
-        "description": "Participou de 25 ou mais torneios",
+        "name": "Competidor",
+        "description": "Participou de 20 ou mais torneios",
         "icon": "competitor2.svg"
       });
     }
     else if(tournamentsWent.length >= 10){
       achievements.push({
-        "name": "Competidor",
+        "name": "Desafiante",
         "description": "Participou de 10 ou mais torneios",
         "icon": "competitor1.svg"
       });
     }
-    else if(tournamentsWent.length >= 5){
+    else if(tournamentsWent.length >= 1){
       achievements.push({
         "name": "Iniciante",
-        "description": "Participou de 5 ou mais torneios",
+        "description": "Participou de 1 ou mais torneios",
         "icon": "competitor0.svg"
       });
     }
@@ -110,7 +139,7 @@ class PlayerModal extends Component {
       if(tournamentsWon < 5){
         achievements.push({
           "name": "Vencedor",
-          "description": "1º lugar em pelo menos um torneio",
+          "description": "1º lugar em 1 ou mais torneios",
           "icon": "champion1.svg"
         });
       } else if(tournamentsWon < 10){
@@ -142,7 +171,7 @@ class PlayerModal extends Component {
       } else if(bestPlacing < 8){
         achievements.push({
           "name": "Boa run",
-          "description": "Top 8 um torneio",
+          "description": "Top 8 em um torneio",
           "icon": "top8.svg"
         });
       }
@@ -151,20 +180,20 @@ class PlayerModal extends Component {
     // Traveler
     let offlineNonBrStates = [];
 
-    if(this.player.rank){
-      Object.entries(this.player.rank).map((rank, i)=>{
-        let league = this.props.leagues.find(element => element.id == rank[0]);
-        console.log(league)
-        if(!league.wifi && league.state != "BR"){
-          offlineNonBrStates.push(league.state);
+    tournamentsWent.some(tournament=>{
+      if(tournament.state != "wifi" && tournament.state != "BR"){
+        if(!offlineNonBrStates.includes(tournament.state)){
+          offlineNonBrStates.push(tournament.state);
         }
-      })
-    }
+      }
+    })
+
+    console.log(offlineNonBrStates)
 
     if(offlineNonBrStates.length > 1){
       achievements.push({
         "name": "Viajante",
-        "description": "Está em mais de 1 liga regional",
+        "description": "Participou de torneios em mais de uma região",
         "icon": "traveler.svg"
       });
     }
@@ -179,11 +208,29 @@ class PlayerModal extends Component {
       }
     })
 
-    if(wifiTournamentsWent >= 10){
+    if(wifiTournamentsWent >= 50){
       achievements.push({
-        "name": "Wifi warrior",
-        "description": "Participou de 10 ou mais torneios online",
-        "icon": "wifiwarrior.svg"
+        "name": "Lan Warrior",
+        "description": "Participou de 50 ou mais torneios online",
+        "icon": "wifiwarrior3.svg"
+      });
+    } else if(wifiTournamentsWent >= 25){
+      achievements.push({
+        "name": "Elite Smash",
+        "description": "Participou de 25 ou mais torneios online",
+        "icon": "wifiwarrior2.svg"
+      });
+    } else if(wifiTournamentsWent >= 15){
+      achievements.push({
+        "name": "Wifi Warrior",
+        "description": "Participou de 15 ou mais torneios online",
+        "icon": "wifiwarrior1.svg"
+      });
+    } else if(wifiTournamentsWent >= 1){
+      achievements.push({
+        "name": "Quickplayer",
+        "description": "Participou de 1 ou mais torneios online",
+        "icon": "wifiwarrior0.svg"
       });
     }
 
@@ -234,15 +281,15 @@ class PlayerModal extends Component {
               {this.state.playerData ?
                   <div>
                     <div style={{
-                      height: "128px", background: "black", display: "flex", alignItems: "center", position: "relative",overflow: "hidden",
-                      borderBottom: "1px solid #3d5466"
+                      minHeight: "128px", background: "black", display: "flex", alignItems: "center", position: "relative",overflow: "hidden",
+                      borderBottom: "1px solid #3d5466", paddingTop: 10, paddingBottom: 10
                     }}>
                       <div style={{backgroundImage: `url(${process.env.PUBLIC_URL}/images/bg_diagonal.webp)`, overflow: "hidden",
                       position: "absolute", width: "100%", height: "100%", backgroundSize: "6px 6px"}}></div>
 
                       {
-                        this.state.playerData.twitter ?
-                          <a style={{zIndex: 1}} href={this.state.playerData.twitter}>
+                        this.state.playerData.avatar ?
+                          <a style={{zIndex: 1}} href={this.state.playerData.twitter || ""}>
                             <div className={styles.avatar} style={{backgroundImage: `url(${this.state.playerData.avatar})`}}>
                             </div>
                           </a>
@@ -273,22 +320,59 @@ class PlayerModal extends Component {
                           null
                         }
 
-                        {this.state.playerData.twitter ? 
-                        <div className={styles.tttag} style={{color: "white", fontSize: ".8rem"}}>
-                          <div className={styles.ttlogo} style={{
-                            backgroundImage: "url(/icons/twitter.svg)", width: 16, height: 16, bottom: 0, right: 0,
-                            display: "inline-block", verticalAlign: "bottom", marginRight: "6px"
-                          }}>
+                        {this.state.playerData.city ? 
+                          <div className={styles.tttag} style={{color: "white", fontSize: ".8rem"}}>
+                            <div className={styles.ttlogo} style={{
+                              backgroundImage: "url(/icons/location.svg)", width: 16, height: 16, bottom: 0, right: 0,
+                              display: "inline-block", verticalAlign: "bottom", marginRight: "6px", backgroundSize: "cover"
+                            }}>
+                            </div>
+                            {this.state.playerData.city}
                           </div>
-                          @{this.getTwitterHandle(this.state.playerData.twitter)}
-                        </div>
-                        :
-                        null}
+                          :
+                          null}
+
+                        {this.state.playerData.twitter ? 
+                          <div className={styles.tttag} style={{color: "white", fontSize: ".8rem"}}>
+                            <div className={styles.ttlogo} style={{
+                              backgroundImage: "url(/icons/twitter.svg)", width: 16, height: 16, bottom: 0, right: 0,
+                              display: "inline-block", verticalAlign: "bottom", marginRight: "6px", backgroundSize: "cover"
+                            }}>
+                            </div>
+                            {this.getTwitterHandle(this.state.playerData.twitter)}
+                          </div>
+                          :
+                          null}
+
+                        {this.state.playerData.twitch ? 
+                          <div className={styles.tttag} style={{color: "white", fontSize: ".8rem"}}>
+                            <div className={styles.ttlogo} style={{
+                              backgroundImage: "url(/icons/twitch.svg)", width: 16, height: 16, bottom: 0, right: 0,
+                              display: "inline-block", verticalAlign: "bottom", marginRight: "6px", backgroundSize: "cover"
+                            }}>
+                            </div>
+                            {this.state.playerData.twitch}
+                          </div>
+                          :
+                          null}
+
+                        {this.state.playerData.discord ? 
+                          <div className={styles.tttag} style={{color: "white", fontSize: ".8rem"}}>
+                            <div className={styles.ttlogo} style={{
+                              backgroundImage: "url(/icons/discord.svg)", width: 16, height: 16, bottom: 0, right: 0,
+                              display: "inline-block", verticalAlign: "bottom", marginRight: "6px", backgroundSize: "cover"
+                            }}>
+                            </div>
+                            {this.state.playerData.discord}
+                          </div>
+                          :
+                          null}
                       </div>
 
                       <div className={styles.characterMain} style={{
                         marginRight: "12px", borderBottom: "1px solid #3d5466",
-                        backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_1_${this.getCharCodename(this.state.playerData, 0)}.png)`
+                        backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_1_${this.getCharCodename(this.state.playerData, 0)}.png)`,
+                        position: "absolute", right: 0
                       }}>
                       </div>
                       <div style={{
@@ -372,6 +456,7 @@ class PlayerModal extends Component {
                           <thead>
                             <tr>
                               <th scope="col"></th>
+                              <th scope="col"></th>
                               <th scope="col">Nome</th>
                               <th scope="col">Data</th>
                               <th scope="col" style={{textAlign: "center"}}>Colocação</th>
@@ -396,6 +481,13 @@ class PlayerModal extends Component {
                                       <span>🥉</span>
                                       :
                                       null
+                                    }
+                                  </td>
+                                  <td>
+                                    {tournament.state == "wifi" ?
+                                      <span><FontAwesomeIcon icon={faWifi} /></span>
+                                      :
+                                      <span>{tournament.state}</span>
                                     }
                                   </td>
                                   <td><a target="_blank" href={`https://braacket.com/tournament/${tournament.id}`}>{tournament.name}</a></td>
