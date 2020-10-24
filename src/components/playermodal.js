@@ -234,6 +234,21 @@ class PlayerModal extends Component {
       });
     }
 
+    // Character specialist
+    if(this.player.bestPlayerCharacter && this.props.leagues){
+      Object.entries(this.player.bestPlayerCharacter).forEach(entry=>{
+        let league = this.props.leagues.find(element => element.id == entry[0]);
+        if(league){
+          achievements.push({
+            "name": "Especialista",
+            "description": "Melhor "+entry[1][0]+" na liga "+league.name,
+            "icon": "bestplayercharacter.svg",
+            "icon_middle": entry[1][1]
+          });
+        }
+      })
+    }
+
     console.log(achievements);
 
     this.state.playerData = this.player;
@@ -390,7 +405,7 @@ class PlayerModal extends Component {
                     </div>
 
                     {this.state.achievements && this.state.achievements.length > 0 ?
-                      <div class="row" style={{padding: "10px", margin: 0, backgroundColor: "black", borderBottom: "1px solid #3d5466"}}>
+                      <div class="row" style={{padding: "10px", margin: 0, backgroundColor: "black", borderBottom: "1px solid #3d5466", display: "flex", justifyContent: "center"}}>
                         {this.state.achievements.map((achievement, i)=>(
                           <a key={this.state.playerData.name+i} style={{width: 72, textAlign: "center", display: "flex",
                           flexDirection: "column", alignItems: "center", placeContent: "center"}}
@@ -398,9 +413,18 @@ class PlayerModal extends Component {
                             <div style={{
                               width: 42, height: 42, backgroundSize: "cover", backgroundRepeat: "none",
                               marginLeft: 6, marginRight: 6,
-                              backgroundImage: `url(${process.env.PUBLIC_URL}/icons/achievements/${achievement.icon})`
+                              backgroundImage: `url(${process.env.PUBLIC_URL}/icons/achievements/${achievement.icon})`,
+                              display: "flex", alignItems: "center", justifyContent: "center"
                             }}>
-                              
+                              {achievement.icon_middle ?
+                                <div style={{
+                                  width: 24, height: 24, backgroundSize: "contain",
+                                  backgroundImage: `url(${process.env.PUBLIC_URL}/portraits-mini/${this.getCharName(achievement.icon_middle)}.png`,
+                                  filter: "grayscale(100%) brightness(80%) sepia(100%) hue-rotate(5deg) saturate(500%) contrast(.9)"
+                                }}></div>
+                                :
+                                null
+                              }
                             </div>
                             <small style={{textAlign: "center"}}>{achievement.name}</small>
                           </a>
