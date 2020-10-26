@@ -6,6 +6,8 @@ import LeafletAjax from '../../node_modules/leaflet-ajax/dist/leaflet.ajax'
 import styles from './statistics.module.css'
 import Chart from '../../node_modules/chart.js/dist/Chart'
 
+import CHARACTERS from '../globals'
+
 class Statistics extends Component {
   state = {
     statistics: null
@@ -158,7 +160,7 @@ class Statistics extends Component {
         let icon = chartData.icons[i];
         var $img = window.jQuery("<img/>").attr("id", lab).attr(
           "src",
-          process.env.PUBLIC_URL+"/portraits-mini/"+this.getCharName(icon)+".png"
+          `${process.env.PUBLIC_URL}/portraits/ssbu/chara_2_${CHARACTERS[icon]}_00.png`
         );
         $img.onload = function(){
           this.draw();
@@ -233,7 +235,7 @@ class Statistics extends Component {
         let icon = chartData.icons[i];
         var $img = window.jQuery("<img/>").attr("id", lab).attr(
           "src",
-          process.env.PUBLIC_URL+"/portraits-mini/"+this.getCharName(icon)+".png"
+          `${process.env.PUBLIC_URL}/portraits/ssbu/chara_2_${CHARACTERS[icon]}_00.png`
         );
         $img.onload = function(){
           this.draw();
@@ -423,7 +425,7 @@ class Statistics extends Component {
                       {
                         Object.entries(this.state.statistics.best_player_character).sort((a, b) => {return a[1].rank[this.props.league].rank - b[1].rank[this.props.league].rank}).map((line)=>(
                           <tr>
-                            <td><img src={process.env.PUBLIC_URL+"/portraits-mini/"+this.getCharName(line[1].mains[0])+".png"}
+                            <td><img src={`${process.env.PUBLIC_URL}/portraits/ssbu/chara_2_${CHARACTERS[line[1].mains[0]]}_00.png`}
                               style={{width: 32, height: 32}} /> {line[0]}</td>
                             <td>{line[1].name}</td>
                             <td>{line[1].rank[this.props.league].rank}</td>
