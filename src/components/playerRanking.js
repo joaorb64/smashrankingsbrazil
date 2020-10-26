@@ -165,9 +165,9 @@ class PlayerRanking extends Component {
                           display: "flex", flexGrow: 1, flexWrap: "wrap", alignSelf: "flex-end", padding: "10px", filter: "drop-shadow(2px 2px 0px black)"
                         }}>
                           {player.mains.length > 0 ?
-                            player.mains.slice(1).map((main)=>(
+                            player.mains.slice(1).map((main, i)=>(
                               <div style={{
-                                backgroundImage: `url(${process.env.PUBLIC_URL}/portraits-mini/${this.getCharName(main)}.png)`,
+                                backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_2_${this.getCharCodename(player, i+1)}.png)`,
                                 width: "32px", height: "32px", backgroundPosition: "center", backgroundSize: "cover",
                                 flexGrow: 0, display: "inline-block"
                               }}></div>
@@ -301,9 +301,9 @@ class PlayerRanking extends Component {
                       width: "128px", backgroundPosition: "center 45%", backgroundSize: "cover", backgroundColor: "#ababab", overflow: "hidden"
                     }}>
                       <div style={{overflow: "hidden", display: "flex", height: "100%", alignItems: "flex-end", justifyContent: "flex-end"}}>
-                        {player.mains.slice(1).map((main)=>(
+                        {player.mains.slice(1).map((main, i)=>(
                           <div class="player-main-mini" style={{
-                            backgroundImage: `url(${process.env.PUBLIC_URL}/portraits-mini/${this.getCharName(main)}.png)`,
+                            backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_2_${this.getCharCodename(player, i+1)}.png)`,
                             width: "24px", height: "24px", backgroundPosition: "center", backgroundSize: "cover",
                             flexGrow: 0, display: "flex", flexShrink: 1
                           }}></div>
@@ -312,7 +312,7 @@ class PlayerRanking extends Component {
                     </div>
                     :
                     <div style={{
-                      backgroundImage: `url(${process.env.PUBLIC_URL}/portraits-small/${"random"}.png)`,
+                      backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_0_random.png)`,
                       width: "128px", backgroundPosition: "center", backgroundSize: "cover", backgroundColor: "#ababab"
                     }}></div>
                   }

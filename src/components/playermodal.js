@@ -236,17 +236,23 @@ class PlayerModal extends Component {
 
     // Character specialist
     if(this.player.bestPlayerCharacter && this.props.leagues){
+      let leagues_best = []
+      let character = []
       Object.entries(this.player.bestPlayerCharacter).forEach(entry=>{
         let league = this.props.leagues.find(element => element.id == entry[0]);
         if(league){
-          achievements.push({
-            "name": "Especialista",
-            "description": "Melhor "+entry[1][0]+" na liga "+league.name,
-            "icon": "bestplayercharacter.svg",
-            "icon_middle": entry[1][1]
-          });
+          leagues_best.push(league.name)
+          character = entry
         }
       })
+      if(leagues_best.length > 0){
+        achievements.push({
+          "name": "Especialista",
+          "description": "Melhor "+character[1][0]+" ("+leagues_best.join(", ")+")",
+          "icon": "bestplayercharacter.svg",
+          "icon_middle": CHARACTERS[character[1][1]]+"_00"
+        });
+      }
     }
 
     console.log(achievements);
@@ -394,9 +400,9 @@ class PlayerModal extends Component {
                         position: "absolute", right: "14px", zIndex: 9, bottom: "2px",
                         filter: "drop-shadow(black 2px 2px 0px)", display: "flex"
                       }}>
-                        {this.state.playerData.mains.slice(1).map((main)=>(
+                        {this.state.playerData.mains.slice(1).map((main, i)=>(
                             <div class="" style={{
-                              backgroundImage: `url(${process.env.PUBLIC_URL}/portraits-mini/${this.getCharName(main)}.png)`,
+                              backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_2_${this.getCharCodename(this.state.playerData, i+1)}.png)`,
                               width: "24px", height: "24px", backgroundPosition: "center", backgroundSize: "cover",
                               flexGrow: 0, display: "flex", flexShrink: 1
                             }}></div>
@@ -419,7 +425,7 @@ class PlayerModal extends Component {
                               {achievement.icon_middle ?
                                 <div style={{
                                   width: 24, height: 24, backgroundSize: "contain",
-                                  backgroundImage: `url(${process.env.PUBLIC_URL}/portraits-mini/${this.getCharName(achievement.icon_middle)}.png`,
+                                  backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_2_${achievement.icon_middle}.png)`,
                                   filter: "grayscale(100%) brightness(80%) sepia(100%) hue-rotate(5deg) saturate(500%) contrast(.9)"
                                 }}></div>
                                 :
