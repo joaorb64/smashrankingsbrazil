@@ -43,7 +43,7 @@ class NextTournaments extends Component {
             Próximos torneios
           </h2>
           <a href="https://twitter.com/smash_bot_br" class="col-12" style={{backgroundColor: "white", minHeight: "64px", display: "flex", alignItems: "center"}}>
-            <img src="/images/bot.jpg" style={{height: 48, width: 48, borderRadius: 8}} />
+            <img src="/images/bot.png" style={{height: 48, width: 48, borderRadius: 8}} />
             <div style={{padding: 8, color: "black"}}>Siga o @smash_bot_br para ser notificado de próximos eventos e resultados de torneios em tempo real!</div>
           </a>
         </div>
