@@ -7,6 +7,8 @@ import LeafletAjax from '../../node_modules/leaflet-ajax/dist/leaflet.ajax'
 import styles from './map.module.css'
 import { withRouter } from 'react-router-dom'
 
+import CHARACTERS from '../globals'
+
 class Mapa extends Component {
   state = {
     leagues: {}
@@ -81,7 +83,7 @@ class Mapa extends Component {
               let iconUrl = "http://braacket.com/assets/images/game/ssbu/characters/random.png"
 
               if(this.props.leagues[element].players.length > 0){
-                iconUrl = process.env.PUBLIC_URL+"/portraits-mini/"+this.getCharName(this.props.leagues[element].players[0].mains[0])+".png"
+                iconUrl = process.env.PUBLIC_URL+"/portraits/ssbu/chara_2_"+CHARACTERS[this.props.leagues[element].players[0].mains[0]]+"_00.png"
               }
 
               let charIcon = L.icon({
