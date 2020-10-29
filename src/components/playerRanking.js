@@ -260,7 +260,7 @@ class PlayerRanking extends Component {
                 <div class="state-flag-container" style={{
                   width: "64px", display: "flex", justifyContent: "center", alignItems: "center", padding: "8px"
                 }}>
-                  {player.state ?
+                  {player.state && player.state != "null" ?
                     <div class="state-flag" style={{
                       backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/master/state_icon/${player.state}.png)`,
                       width: "100%", height: "100%", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
