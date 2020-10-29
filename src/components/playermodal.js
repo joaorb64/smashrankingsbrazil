@@ -35,43 +35,45 @@ class PlayerModal extends Component {
     if(this.state.alltournaments != null){
       console.log(this.state.alltournaments);
 
-      this.player.braacket_links.forEach(link => {
-        let linkLeague = link.split(":")[0];
-        let linkId = link.split(":")[1];
-
-        if(Object.keys(this.state.alltournaments).includes(linkLeague)){
-          Object.values(this.state.alltournaments[linkLeague]).forEach(tournament => {
-            if(Object.keys(tournament.ranking).includes(linkId)){
-              let tournamentEntry = {};
-              Object.assign(tournamentEntry, tournament);
-              tournamentEntry["ranking"] = tournament.ranking[linkId].rank;
-              tournamentEntry["league"] = linkLeague;
-              
-              let leagueObj = this.props.leagues.find(element => element.id == linkLeague);
-
-              if(leagueObj.wifi){
-                tournamentEntry["state"] = "wifi"
-              } else {
-                tournamentEntry["state"] = leagueObj.state;
-              }
-
-              let found = tournamentsWent.find(element =>
-                element.name == tournamentEntry.name ||
-                element.id == tournamentEntry.id ||
-                element.link == tournamentEntry.link
-              );
-
-              if(!found){
-                tournamentsWent.push(tournamentEntry);
-              } else {
-                if(found.state == "BR" && tournamentEntry["state"] != "BR"){
-                  found.state = tournamentEntry["state"];
+      if(this.player.braacket_links){
+        this.player.braacket_links.forEach(link => {
+          let linkLeague = link.split(":")[0];
+          let linkId = link.split(":")[1];
+  
+          if(Object.keys(this.state.alltournaments).includes(linkLeague)){
+            Object.values(this.state.alltournaments[linkLeague]).forEach(tournament => {
+              if(Object.keys(tournament.ranking).includes(linkId)){
+                let tournamentEntry = {};
+                Object.assign(tournamentEntry, tournament);
+                tournamentEntry["ranking"] = tournament.ranking[linkId].rank;
+                tournamentEntry["league"] = linkLeague;
+                
+                let leagueObj = this.props.leagues.find(element => element.id == linkLeague);
+  
+                if(leagueObj.wifi){
+                  tournamentEntry["state"] = "wifi"
+                } else {
+                  tournamentEntry["state"] = leagueObj.state;
+                }
+  
+                let found = tournamentsWent.find(element =>
+                  element.name == tournamentEntry.name ||
+                  element.id == tournamentEntry.id ||
+                  element.link == tournamentEntry.link
+                );
+  
+                if(!found){
+                  tournamentsWent.push(tournamentEntry);
+                } else {
+                  if(found.state == "BR" && tournamentEntry["state"] != "BR"){
+                    found.state = tournamentEntry["state"];
+                  }
                 }
               }
-            }
-          })
-        }
-      });
+            })
+          }
+        });
+      }
     }
 
     console.log("Tournaments: "+tournamentsWent.length);
