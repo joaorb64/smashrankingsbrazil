@@ -56,7 +56,7 @@ class Players extends Component {
           p.avatar = p.smashgg_image;
         }
 
-        if(p.mains.length == 0 || p.mains[0] == ""){
+        if(!p.mains || p.mains.length == 0 || p.mains[0] == ""){
           p.mains = ["Random"]
         }
 
@@ -140,7 +140,7 @@ class Players extends Component {
     return(
       <div style={{textAlign: "center", fontFamily: "SmashFont"}}>
 
-        {this.state.players ?
+        {this.state.players && Object.entries(this.state.players).length > 0 ?
           <>
             <div class="col-md-12" style={{padding: 0, marginBottom: "12px"}}>
               <input ref={(input)=>this.myinput = input} class="form-control" type="text" placeholder={"Pesquisar em "+Object.entries(this.state.players).length+" jogadores"}
