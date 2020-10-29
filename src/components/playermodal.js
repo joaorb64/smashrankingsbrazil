@@ -324,7 +324,7 @@ class PlayerModal extends Component {
 
                           {this.state.playerData.name}
 
-                          {this.state.playerData.state ?
+                          {this.state.playerData.state && this.state.playerData.state != "null" ?
                             <div className={styles.stateFlag + " state-flag"} style={{
                               backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/master/state_icon/${this.state.playerData.state}.png)`,
                               width: "32px", height: "32px", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
