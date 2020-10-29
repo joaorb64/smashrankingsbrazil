@@ -103,14 +103,16 @@ class Contacts extends Component {
             p.avatar = p.smashgg_image;
           }
 
-          if(p.mains.length == 0 || p.mains[0] == ""){
+          if(p.mains == null || p.mains.length == 0 || p.mains[0] == ""){
             p.mains = ["Random"]
           }
 
-          p.ranking = p["rank"][league]["rank"]
-          p.score = p["rank"][league]["score"]
-
-          players.push(p);
+          if(p.rank && p.rank[league]){
+            p.ranking = p["rank"][league]["rank"]
+            p.score = p["rank"][league]["score"]
+  
+            players.push(p);
+          }
         }, this)
         
         players.sort(function(a, b){

@@ -65,6 +65,7 @@ class PlayerModal extends Component {
                 if(!found){
                   tournamentsWent.push(tournamentEntry);
                 } else {
+                  console.log(found)
                   if(found.state == "BR" && tournamentEntry["state"] != "BR"){
                     found.state = tournamentEntry["state"];
                   }
