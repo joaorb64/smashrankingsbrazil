@@ -59,7 +59,7 @@ class PlayerModal extends Component {
                 let found = tournamentsWent.find(element =>
                   element.name == tournamentEntry.name ||
                   element.id == tournamentEntry.id ||
-                  element.link == tournamentEntry.link
+                  (element.link != null && element.link == tournamentEntry.link)
                 );
   
                 if(!found){
