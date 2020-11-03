@@ -80,7 +80,11 @@ class About extends Component {
           Meus dados no ranking estão vazios ou desatualizados!
         </h2>
         <p>
-          <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+          Em primeiro lugar, certifique-se de que seu perfil no smash.gg esteja atualizado. Dados como nome, prefixo, twitter, nome real são extraídos de lá.
+        </p>
+        <p>
+          Para inserção de dados como mains e cores usadas, ou para outros problemas, utilize o formulário abaixo:
+          <a class="btn btn-primary col-12" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
             Formulário
           </a>
         </p>
