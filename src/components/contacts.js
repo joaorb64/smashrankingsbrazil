@@ -7,6 +7,7 @@ import PlayerRanking from './playerRanking';
 import Statistics from './statistics';
 import Information from './information';
 import TournamentList from './tournamentList';
+import moment from "../../node_modules/moment-timezone/moment-timezone";
 
 class Contacts extends Component {
   state = {
@@ -126,7 +127,12 @@ class Contacts extends Component {
           players: players,
           updateTime: data["update_time"],
           statistics: data["statistics"],
-          tournaments: data["tournaments"]
+          tournaments: data["tournaments"],
+          rankingName: data["name"],
+          rankingType: data["type"],
+          rankingAlltimes: data["alltimes"],
+          rankingStartTime: data["timeStart"],
+          rankingEndTime: data["timeEnd"]
         })
 
         this.preloadImages();
@@ -178,6 +184,23 @@ class Contacts extends Component {
           selectLeague={this.selectLeague.bind(this)}
           selectedLeague={this.state.selectedLeague}
         />
+
+        {this.state.rankingName ?
+          <div className="teste btn-group btn-group-toggle col-12" style={{padding: "5px 10px 0px 10px"}}>
+            <button className={styles_selector.teste+" btn col-12"}>
+              {this.state.rankingName}
+              {" ("+this.state.rankingType+")"}
+              <br/>
+              {this.state.alltimes ?
+                <>{"All times"}</>
+                :
+                <>{"De " + moment.unix(this.state.rankingStartTime).format("DD/MM/YY") + " a " + moment.unix(this.state.rankingEndTime).format("DD/MM/YY")}</>
+              }
+            </button>
+          </div>
+          :
+          null
+        }
 
         <div className="teste btn-group btn-group-toggle col-12" style={{padding: "5px 8px 0px 10px", marginBottom: "-5px"}}>
           <button className={styles_selector.teste+" btn col-3"} value="ranking" aria-expanded={this.state.selectedTab === "ranking"} onClick={(event)=>this.handleTabChange(event.target.value)}>
