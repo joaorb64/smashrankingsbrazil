@@ -95,26 +95,28 @@ class Contacts extends Component {
       if(data){
         let players = []
 
-        Object.keys(data["ranking"]).forEach(function(id){
-          let league = this.props.contacts[this.state.selectedLeague].id;
-
-          let p = this.props.allplayers["players"][this.props.allplayers["mapping"][league+":"+id]]
-
-          if(p.smashgg_image && !p.twitter) {
-            p.avatar = p.smashgg_image;
-          }
-
-          if(p.mains == null || p.mains.length == 0 || p.mains[0] == ""){
-            p.mains = ["Random"]
-          }
-
-          if(p.rank && p.rank[league]){
-            p.ranking = p["rank"][league]["rank"]
-            p.score = p["rank"][league]["score"]
+        if(data["ranking"]){
+          Object.keys(data["ranking"]).forEach(function(id){
+            let league = this.props.contacts[this.state.selectedLeague].id;
   
-            players.push(p);
-          }
-        }, this)
+            let p = this.props.allplayers["players"][this.props.allplayers["mapping"][league+":"+id]]
+  
+            if(p.smashgg_image && !p.twitter) {
+              p.avatar = p.smashgg_image;
+            }
+  
+            if(p.mains == null || p.mains.length == 0 || p.mains[0] == ""){
+              p.mains = ["Random"]
+            }
+  
+            if(p.rank && p.rank[league]){
+              p.ranking = p["rank"][league]["rank"]
+              p.score = p["rank"][league]["score"]
+    
+              players.push(p);
+            }
+          }, this)
+        }
         
         players.sort(function(a, b){
           let league = this.props.contacts[this.state.selectedLeague].id;
@@ -189,9 +191,9 @@ class Contacts extends Component {
           <div className="teste btn-group btn-group-toggle col-12" style={{padding: "5px 10px 0px 10px"}}>
             <button className={styles_selector.teste+" btn col-12"}>
               {this.state.rankingName}
-              {" ("+this.state.rankingType+")"}
+              {this.state.rankingType ? " ("+this.state.rankingType+")" : ""}
               <br/>
-              {this.state.alltimes ?
+              {this.state.alltimes || this.state.rankingStartTime == null ?
                 <>{"All times"}</>
                 :
                 <>{"De " + moment.unix(this.state.rankingStartTime).format("DD/MM/YY") + " a " + moment.unix(this.state.rankingEndTime).format("DD/MM/YY")}</>
