@@ -70,7 +70,7 @@ class TopBar extends Component {
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
             <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/home/smash/homeonline" href="/home/smash/homeonline">
-              <div class="nav-link">Home</div>
+              <div class="nav-link">{i18n.t("home")}</div>
             </NavLink>
             <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/players" href="/players">
               <div class="nav-link">{i18n.t("players")}</div>
