@@ -8,6 +8,7 @@ import Statistics from './statistics';
 import Information from './information';
 import TournamentList from './tournamentList';
 import moment from "../../node_modules/moment-timezone/moment-timezone";
+import i18n from '../locales/i18n';
 
 class Contacts extends Component {
   state = {
@@ -196,7 +197,7 @@ class Contacts extends Component {
               {this.state.alltimes || this.state.rankingStartTime == null ?
                 <>{"All times"}</>
                 :
-                <>{"De " + moment.unix(this.state.rankingStartTime).format("DD/MM/YY") + " a " + moment.unix(this.state.rankingEndTime).format("DD/MM/YY")}</>
+                <>{i18n.t("dateFrom") + " " + i18n.t("date_format", {date: moment.unix(this.state.rankingStartTime).toDate()}) + " " + i18n.t("dateFromAfter") + " " + i18n.t("dateTo") + " " + i18n.t("date_format", {date: moment.unix(this.state.rankingEndTime).toDate()}) + " " + i18n.t("dateToAfter")}</>
               }
             </button>
           </div>
@@ -206,16 +207,16 @@ class Contacts extends Component {
 
         <div className="teste btn-group btn-group-toggle col-12" style={{padding: "5px 8px 0px 10px", marginBottom: "-5px"}}>
           <button className={styles_selector.teste+" btn col-3"} value="ranking" aria-expanded={this.state.selectedTab === "ranking"} onClick={(event)=>this.handleTabChange(event.target.value)}>
-            Ranking
+            {i18n.t("Ranking")}
           </button>
           <button className={styles_selector.teste+" btn col-3"} value="tournaments" aria-expanded={this.state.selectedTab === "tournaments"} onClick={(event)=>this.handleTabChange(event.target.value)}>
-            Torneios
+            {i18n.t("Tournaments")}
           </button>
           <button className={styles_selector.teste+" btn col-3"} value="statistics" aria-expanded={this.state.selectedTab === "statistics"} onClick={(event)=>this.handleTabChange(event.target.value)}>
-            Estatísticas
+            {i18n.t("Statistics")}
           </button>
           <button className={styles_selector.teste+" btn col-3"} value="info" aria-expanded={this.state.selectedTab === "info"} onClick={(event)=>this.handleTabChange(event.target.value)}>
-            Informações
+            {i18n.t("Info")}
           </button>
         </div>
 

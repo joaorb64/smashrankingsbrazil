@@ -1,7 +1,16 @@
 {
+    "date_format": "{{date, YYYY年MM月DD日}}",
     "home": "ホーム",
     "players": "プレイヤー",
     "map": "マップ",
     "next-tournaments": "次のトーナメント",
-    "about": "アバウト"
+    "about": "アバウト",
+    "dateFrom": "",
+    "dateFromAfter": "から",
+    "dateTo": "",
+    "dateToAfter": "まで",
+    "Ranking": "ランキング",
+    "Tournaments": "トーナメント",
+    "Statistics": "統計学",
+    "Info": "情報"
 }

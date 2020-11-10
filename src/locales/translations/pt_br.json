@@ -1,7 +1,16 @@
 {
+    "date_format": "{{date, DD/MM/YYYY}}",
     "home": "Home",
     "players": "Jogadores",
     "map": "Mapa",
     "next-tournaments": "Próximos torneios",
-    "about": "Sobre"
+    "about": "Sobre",
+    "dateFrom": "De",
+    "dateFromAfter": "",
+    "dateTo": "a",
+    "dateToAfter": "",
+    "Ranking": "Ranking",
+    "Tournaments": "Torneios",
+    "Statistics": "Estatísticas",
+    "Info": "Informações"
 }

@@ -1,6 +1,8 @@
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
+import moment from 'moment-timezone';
+
 import pt_br from './translations/pt_br.json';
 import es from './translations/es.json';
 import en from './translations/en.json';
@@ -25,7 +27,15 @@ i18n.use(LanguageDetector).init({
   detection: options,
   interpolation: {
     escapeValue: false,
+    format: function(value, format, lng) {
+      if(value instanceof Date) return moment(value).format(format);
+      return value;
+    }
   },
+});
+
+i18n.on('languageChanged', function(lng) {
+  moment.locale(lng);
 });
 
 export default i18n;
