@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import styles from './topbar.module.css'
+import i18n from '../locales/i18n';
 
 class TopBar extends Component {
   state = {
@@ -72,19 +73,19 @@ class TopBar extends Component {
               <div class="nav-link">Home</div>
             </NavLink>
             <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/players" href="/players">
-              <div class="nav-link">Jogadores</div>
+              <div class="nav-link">{i18n.t("players")}</div>
             </NavLink>
             <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/map/" href="/map/">
-              <div class="nav-link">Mapa</div>
+              <div class="nav-link">{i18n.t("map")}</div>
             </NavLink>
             <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/nexttournaments/" href="/nexttournaments/">
-              <div class="nav-link">Próximos torneios</div>
+              <div class="nav-link">{i18n.t("next-tournaments")}</div>
             </NavLink>
             <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/matcherino/" href="/matcherino/">
               <div class="nav-link">Matcherino</div>
             </NavLink>
             <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/about/" href="/about/">
-              <div class="nav-link">Sobre</div>
+              <div class="nav-link">{i18n.t("about")}</div>
             </NavLink>
           </ul>
         </div>
