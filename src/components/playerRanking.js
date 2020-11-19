@@ -105,7 +105,7 @@ class PlayerRanking extends Component {
           <ul class="list-group" style={{padding: "10px"}}>
             <div class="row no-gutters" style={{margin: "0 -4px"}}>
               {this.state.players.slice(0,3).map((player, i) => (
-                <div class={"col-md-4 " + styles.listItemParent}
+                <div class={"col-md-4 col-sm-4 col-xs-12 " + styles.listItemParent}
                 style={{padding: "0px 4px", cursor: "pointer"}}
                 data-toggle="modal" data-target="#playerModal"
                 onClick={()=>this.openPlayerModal(player)}>
@@ -125,22 +125,22 @@ class PlayerRanking extends Component {
                       }}></div>
                       <div style={{
                         backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_1_${this.getCharCodename(player, 0)}.png)`, display: "flex",
-                        width: "100%", backgroundPosition: "center", backgroundSize: "cover",
-                        filter: "drop-shadow(10px 10px 0px #000000AF)"
+                        width: "-webkit-fill-available", backgroundPosition: "center", backgroundSize: "cover",
+                        filter: "drop-shadow(10px 10px 0px #000000AF)", marginLeft: "-10px", marginTop: "-10px"
+                      }}></div>
+                    
+                      <div class={styles.listItemChild} style={{
+                        backgroundColor: "#f0f0f0", alignItems: "center", display: "flex", flexDirection: "column",
+                        height: "60px", position: "absolute", left: "0px", right: "0px", bottom: 0, justifyContent: "center"
                       }}>
-                        <div class={styles.listItemChild} style={{
-                          backgroundColor: "#f0f0f0", alignItems: "center", display: "flex", flexDirection: "column",
-                          height: "60px", position: "absolute", left: "0px", right: "0px", bottom: 0, justifyContent: "center"
-                        }}>
-                          <div style={{
-                            flexGrow: 0, fontSize: "1.6rem", lineHeight: "2rem", width: "100%",
-                            textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap"
-                          }}><b style={{color: "#bb0000"}}>{player.org} </b>{player.name}</div>
-                          <div style={{
-                            flexGrow: 0, fontSize: "1rem", lineHeight: "1rem", width: "100%", color: "darkgray",
-                            textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap"
-                          }}>{player.full_name}</div>
-                        </div>
+                        <div style={{
+                          flexGrow: 0, fontSize: "1.6rem", lineHeight: "2rem", width: "100%",
+                          textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap"
+                        }}><b style={{color: "#bb0000"}}>{player.org} </b>{player.name}</div>
+                        <div style={{
+                          flexGrow: 0, fontSize: "1rem", lineHeight: "1rem", width: "100%", color: "darkgray",
+                          textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap"
+                        }}>{player.full_name}</div>
                       </div>
 
                       <div style={{
@@ -162,7 +162,8 @@ class PlayerRanking extends Component {
                         color: "white", display: "flex", whiteSpace: "nowrap", lineHeight: "32px"
                       }}>
                         <div style={{
-                          display: "flex", flexGrow: 1, flexWrap: "wrap", alignSelf: "flex-end", padding: "10px", filter: "drop-shadow(2px 2px 0px black)"
+                          display: "flex", flexGrow: 1, flexWrap: "wrap", alignSelf: "flex-end",
+                          padding: "10px", filter: "drop-shadow(2px 2px 0px black)",
                         }}>
                           {player.mains.length > 0 ?
                             player.mains.slice(1).map((main, i)=>(
@@ -182,16 +183,16 @@ class PlayerRanking extends Component {
                           {player.state && player.state != "null" ?
                             <div class="state-flag" style={{
                               backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/master/state_icon/${player.state}.png)`,
-                              width: "100%", height: "47px", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
-                              backgroundPosition: "center", paddingTop: "32px"
+                              width: "100%", height: "32px", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
+                              backgroundPosition: "center", paddingTop: "20px"
                             }}>{player.state}</div>
                           :
                             null
                           }
                         </div>
                         <div style={{
-                          fontSize: "2rem", backgroundColor: "black", color: "white", textAlign: "right",
-                          alignSelf: "flex-end", padding: "10px"
+                          fontSize: "1.4rem", backgroundColor: "black", color: "white", textAlign: "right",
+                          alignSelf: "flex-end", padding: "6px", paddingTop: "2px", paddingBottom: "2px"
                         }}>
                           {player.score} pts.
                         </div>

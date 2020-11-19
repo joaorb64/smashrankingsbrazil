@@ -70,6 +70,10 @@ body {
   display: inline;
 }
 
+.player-name {
+  white-space: nowrap;
+}
+
 @media (max-width: 768px) {
   .firstplayer-col {
     padding-right: 0px !important
@@ -95,7 +99,6 @@ body {
 
   .player-name {
     font-size: 0.8rem !important;
-    align-self: center !important;
     line-height: 1.0rem !important;
   }
 
@@ -175,6 +178,10 @@ body {
   }
 }
 
+.modal {
+  z-index: 99999;
+}
+
 .modal-header {
   background-color: black;
   border-bottom: 1px solid rgb(61, 84, 102);
@@ -224,6 +231,79 @@ body {
   border-left-color: white !important;
 }
 
+.sidenav-container {
+  position: fixed;
+  width: 200px;
+  max-width: none;
+  height: 100%;
+}
+
+.main-container {
+  padding-left: 240px;
+  padding-right: 40px;
+  padding-top: 20px;
+}
+
+.sidenav-container-bg {
+  content: "";
+  position: fixed;
+  background-color: blue;
+  z-index: -1;
+  top: 56px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgb(0,0,0,0.5);
+  transition: ease-in-out 200ms;
+  transition-property: all;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sidenav-container-bg-show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.navbar-brand {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .sidenav-container {
+    position: fixed;
+    z-index: 2000;
+    max-width: none;
+    height: 56px;
+    width: 100%;
+    display: flex;
+    top: 0;
+    place-items: center;
+  }
+
+  .sidenav {
+    position: fixed;
+    background-color: inherit;
+    width: 90%;
+    left: 0;
+    padding: 20px;
+    transition: ease-in-out 200ms;
+    height: 100%;
+    top: 56px;
+  }
+
+  .sidenav-hidden {
+    left: -90%;
+  }
+
+  .main-container {
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: 56px;
+  }
+}
+
 @media (max-width: 768px) {
   .modal-dialog {
     margin: 0;
@@ -235,9 +315,5 @@ body {
   .modal-content {
     height: 100%;
     border: 0;
-  }
-
-  .navbar-brand {
-    font-size: 1rem;
   }
 }

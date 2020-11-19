@@ -36,7 +36,7 @@ class NextTournaments extends Component {
     return(
       <div class="slide-fade list-group-item" style={{
         backgroundColor: "#f0f0f000", borderRadius: "10px", border: 0, marginBottom: "5px", width: "100%",
-        padding: "30px", alignSelf: "center"
+        padding: "10px", paddingTop: 0, alignSelf: "center"
       }}>
         <div class="row" style={{marginLeft: -8, marginRight: -8}}>
           <h2 style={{color: "white"}}>
@@ -51,7 +51,7 @@ class NextTournaments extends Component {
           {
             this.state.tournaments != null ?
               this.state.tournaments.filter(t=>{return t.startAt > Date.now()/1000}).map((tournament)=>(
-                <div class="col-md-6 col-xl-4" style={{padding: 2}}>
+                <div class="col-md-6 col-xl-6" style={{padding: 2}}>
                   <a href={tournament.url}>
                     <div className={styles.tournamentContainerHighlight} style={{cursor: "pointer"}}>
                       <div className={styles.tournamentContainer} style={{backgroundColor: "#ff5e24", border: "4px solid black", cursor: "pointer"}}>

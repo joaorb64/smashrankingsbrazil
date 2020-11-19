@@ -181,7 +181,7 @@ class Contacts extends Component {
 
   render (){
     return(
-      <div style={{textAlign: "center", fontFamily: "SmashFont"}}>
+      <div style={{textAlign: "center", fontFamily: "SmashFont", marginLeft: "-10px", marginRight: "-10px"}}>
         <LeagueSelector
           leagues={this.props.contacts}
           selectLeague={this.selectLeague.bind(this)}

@@ -56,11 +56,13 @@ class Matcherino extends Component {
     return(
       <div class="slide-fade list-group-item" style={{
         backgroundColor: "#f0f0f000", borderRadius: "10px", border: 0, marginBottom: "5px", width: "100%",
-        padding: "30px", alignSelf: "center"
+        padding: "10px", paddingTop: 0, alignSelf: "center"
       }}>
-        <h2 style={{color: "white"}}>
-          Campanhas ativas no Matcherino
-        </h2>
+        <div class="row" style={{marginLeft: -8, marginRight: -8}}>
+          <h2 style={{color: "white"}}>
+            Campanhas ativas no Matcherino
+          </h2>
+        </div>
         <div class="row">
           {
             this.state.tournaments != null ?

@@ -89,8 +89,8 @@ class App extends Component {
         <HashRouter basename={process.env.PUBLIC_URL}>
           <Route path="/" render={(props) => <TopBar match={props} />} />
 
-          <div class="container" style={{
-            marginBottom: "128px", paddingTop: "10px"
+          <div class="main-container" style={{
+            marginBottom: "64px"
           }}>
 
             <Switch>
@@ -128,13 +128,13 @@ class App extends Component {
               <input type="hidden" name="cmd" value="_donations" />
               <input type="hidden" name="business" value="ZV95C3G67WXBA" />
               <input type="hidden" name="currency_code" value="BRL" />
-              <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+              <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" height="32px" />
               <img alt="" border="0" src="https://www.paypal.com/en_BR/i/scr/pixel.gif" width="1" height="1" />
             </form>
           </div>
           <div style={{flexGrow: 0}}>
             <a href="https://picpay.me/joaorb64">
-              <img src="/images/donate_picpay.png" style={{height: 50}}></img>
+              <img src="/images/donate_picpay.png" style={{height: 32}}></img>
             </a>
           </div>
           <div style={{flexGrow: 1}}>

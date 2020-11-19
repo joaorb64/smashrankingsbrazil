@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import styles from './topbar.module.css'
 import i18n from '../locales/i18n';
+import { faHome, faUsers, faMap, faCalendar, faCoins, faInfoCircle, faInfo } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class TopBar extends Component {
   state = {
@@ -9,7 +11,8 @@ class TopBar extends Component {
       {id: "smash", name: "Smash Ultimate"},
       {id: "granblue", name: "Granblue"}
     ],
-    game: "smash"
+    game: "smash",
+    hidden: true
   }
 
   componentDidUpdate(nextProps) {
@@ -33,62 +36,38 @@ class TopBar extends Component {
 
   render(){
     return(
-      <nav class="navbar navbar-expand-md navbar-dark" style={{
+      <nav class={"sidenav-container navbar-dark col-2"} style={{
         color: "white", backgroundColor: "#be2018", fontFamily: "SmashFont"
       }}>
-        <div class="dropdown">
-          <button class="btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style={{
-            backgroundColor: "#00000000", padding: 0, marginRight: "10px"
-          }}>
-            <div style={{
-              backgroundImage: `url(/icons/games/${this.state.game}.png)`, backgroundSize: "cover",
-              width: 48, height: 48, bottom: 0, right: 0, borderRadius: "12px"
-            }}></div>
-          </button>
-          <div className={styles["menu-dropdown-background"]+" dropdown-menu"} aria-labelledby="dropdownMenuButton">
-            {this.state.games.map((game)=>(
-              <Link className={styles["menu-dropdown"]+" dropdown-item"} to={`/home/${game.id}`}
-              style={{display: "flex"}} onClick={()=>{this.setState({game: game.id})}}>
-                <div style={{
-                  backgroundImage: `url(/icons/games/${game.id}.png)`, backgroundSize: "cover",
-                  width: 32, height: 32, bottom: 0, right: 0, borderRadius: "8px",
-                  display: "inline-block", marginRight: "10px"
-                }}></div>
-                <div style={{alignSelf: "center"}}>
-                  {game.name}
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-        <Link class="navbar-brand" style={{color: "white"}} to="/home/smash/homeonline">
-          Power Rankings Brasil
+        <div onClick={()=>this.setState({hidden: true})} class={"sidenav-container-bg d-block d-md-none" + (this.state.hidden ? "" : " sidenav-container-bg-show")}></div>
+        
+        <Link class="navbar-brand" style={{color: "white", flexGrow: 1}} to="/home/smash/homeonline">
+          Power Rankings
         </Link>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false">
+
+        <button onClick={()=>this.setState({hidden: !this.state.hidden})} class="navbar-toggler d-block d-md-none" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false">
           <span class="navbar-toggler-icon" style={{fontFamily: "'Montserrat', sans-serif"}}></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
-            <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/home/smash/homeonline" href="/home/smash/homeonline">
-              <div class="nav-link">{i18n.t("home")}</div>
-            </NavLink>
-            <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/players" href="/players">
-              <div class="nav-link">{i18n.t("players")}</div>
-            </NavLink>
-            <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/map/" href="/map/">
-              <div class="nav-link">{i18n.t("map")}</div>
-            </NavLink>
-            <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/nexttournaments/" href="/nexttournaments/">
-              <div class="nav-link">{i18n.t("next-tournaments")}</div>
-            </NavLink>
-            <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/matcherino/" href="/matcherino/">
-              <div class="nav-link">Matcherino</div>
-            </NavLink>
-            <NavLink className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/about/" href="/about/">
-              <div class="nav-link">{i18n.t("about")}</div>
-            </NavLink>
-          </ul>
-        </div>
+        <ul className={"sidenav navbar-nav" + (this.state.hidden ? " sidenav-hidden" : "")}>
+          <NavLink onClick={()=>this.setState({hidden: true})} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/home/smash/homeonline" href="/home/smash/homeonline">
+            <div class="nav-link"><FontAwesomeIcon icon={faHome}/> {i18n.t("home")}</div>
+          </NavLink>
+          <NavLink onClick={()=>this.setState({hidden: true})} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/players" href="/players">
+            <div class="nav-link"><FontAwesomeIcon icon={faUsers}/> {i18n.t("players")}</div>
+          </NavLink>
+          <NavLink onClick={()=>this.setState({hidden: true})} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/map/" href="/map/">
+            <div class="nav-link"><FontAwesomeIcon icon={faMap}/> {i18n.t("map")}</div>
+          </NavLink>
+          <NavLink onClick={()=>this.setState({hidden: true})} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/nexttournaments/" href="/nexttournaments/">
+            <div class="nav-link"><FontAwesomeIcon icon={faCalendar}/> {i18n.t("next-tournaments")}</div>
+          </NavLink>
+          <NavLink onClick={()=>this.setState({hidden: true})} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/matcherino/" href="/matcherino/">
+            <div class="nav-link"><FontAwesomeIcon icon={faCoins}/> Matcherino</div>
+          </NavLink>
+          <NavLink onClick={()=>this.setState({hidden: true})} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/about/" href="/about/">
+            <div class="nav-link"><FontAwesomeIcon icon={faInfoCircle}/> {i18n.t("about")}</div>
+          </NavLink>
+        </ul>
       </nav>
     )
   }

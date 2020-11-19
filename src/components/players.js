@@ -147,7 +147,7 @@ class Players extends Component {
               value={this.state.search} onChange={(e)=>this.search(e.target.value)} />
             </div>
 
-            {Object.values(this.state.filtered).map((player, i) => (
+            {Object.values(this.state.filtered).slice(0, 128).map((player, i) => (
               <li key={"_"+i}
               class={"slide-fade " + styles.listItem + " list-group-item"}
               style={{cursor: "pointer"}}
