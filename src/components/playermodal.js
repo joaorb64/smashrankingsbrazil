@@ -5,6 +5,7 @@ import CHARACTERS from "../globals";
 import moment from "../../node_modules/moment-timezone/moment-timezone";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWifi } from '@fortawesome/free-solid-svg-icons';
+import i18n from '../locales/i18n';
 
 class PlayerModal extends Component {
   state = {
@@ -84,43 +85,43 @@ class PlayerModal extends Component {
     //No of tournaments went
     if(tournamentsWent.length >= 75){
       achievements.push({
-        "name": "Pro",
-        "description": "Participou de 75 torneios ou mais",
+        "name": i18n.t("achievement-pro"),
+        "description": i18n.t("achievement-pro-desc"),
         "icon": "competitor5.svg"
       });
     }
     else if(tournamentsWent.length >= 50){
       achievements.push({
-        "name": "Veterano",
-        "description": "Participou de 50 ou mais torneios",
+        "name": i18n.t("achievement-veteran"),
+        "description": i18n.t("achievement-veteran-desc"),
         "icon": "competitor4.svg"
       });
     }
     else if(tournamentsWent.length >= 35){
       achievements.push({
-        "name": "Tryhard",
-        "description": "Participou de 35 ou mais torneios",
+        "name": i18n.t("achievement-tryhard"),
+        "description": i18n.t("achievement-tryhard-desc"),
         "icon": "competitor3.svg"
       });
     }
     else if(tournamentsWent.length >= 20){
       achievements.push({
-        "name": "Competidor",
-        "description": "Participou de 20 ou mais torneios",
+        "name": i18n.t("achievement-competitor"),
+        "description": i18n.t("achievement-competitor-desc"),
         "icon": "competitor2.svg"
       });
     }
     else if(tournamentsWent.length >= 10){
       achievements.push({
-        "name": "Desafiante",
-        "description": "Participou de 10 ou mais torneios",
+        "name": i18n.t("achievement-challenger"),
+        "description": i18n.t("achievement-challenger-desc"),
         "icon": "competitor1.svg"
       });
     }
     else if(tournamentsWent.length >= 1){
       achievements.push({
-        "name": "Iniciante",
-        "description": "Participou de 1 ou mais torneios",
+        "name": i18n.t("achievement-beginner"),
+        "description": i18n.t("achievement-beginner-desc"),
         "icon": "competitor0.svg"
       });
     }
@@ -141,40 +142,40 @@ class PlayerModal extends Component {
     if(tournamentsWon > 0){
       if(tournamentsWon < 5){
         achievements.push({
-          "name": "Vencedor",
-          "description": "1º lugar em 1 ou mais torneios",
+          "name": i18n.t("achievement-winner"),
+          "description": i18n.t("achievement-winner-desc"),
           "icon": "champion1.svg"
         });
       } else if(tournamentsWon < 10){
         achievements.push({
-          "name": "Campeão",
-          "description": "1º lugar em 5 ou mais torneios",
+          "name": i18n.t("achievement-champion"),
+          "description": i18n.t("achievement-champion-desc"),
           "icon": "champion2.svg"
         });
       } else {
         achievements.push({
-          "name": "Elite",
-          "description": "1º lugar em 10 ou mais torneios",
+          "name": i18n.t("achievement-elite"),
+          "description": i18n.t("achievement-elite-desc"),
           "icon": "champion3.svg"
         });
       }
     } else {
       if(bestPlacing == 2){
         achievements.push({
-          "name": "Na cola",
-          "description": "2º lugar um torneio",
+          "name": i18n.t("achievement-nexttime"),
+          "description": i18n.t("achievement-nexttime-desc"),
           "icon": "2nd.svg"
         });
       } else if(bestPlacing == 3){
         achievements.push({
-          "name": "Quase lá",
-          "description": "3º lugar um torneio",
+          "name": i18n.t("achievement-almostthere"),
+          "description": i18n.t("achievement-almostthere-desc"),
           "icon": "3rd.svg"
         });
       } else if(bestPlacing < 8){
         achievements.push({
-          "name": "Boa run",
-          "description": "Top 8 em um torneio",
+          "name": i18n.t("achievement-goodrun"),
+          "description": i18n.t("achievement-goodrun-desc"),
           "icon": "top8.svg"
         });
       }
@@ -195,8 +196,8 @@ class PlayerModal extends Component {
 
     if(offlineNonBrStates.length > 1){
       achievements.push({
-        "name": "Viajante",
-        "description": "Participou de torneios em mais de uma região",
+        "name": i18n.t("achievement-traveler"),
+        "description": i18n.t("achievement-traveler-desc"),
         "icon": "traveler.svg"
       });
     }

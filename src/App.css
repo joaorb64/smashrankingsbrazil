@@ -210,6 +210,10 @@ body {
   background-color: black;
 }
 
+.tooltip {
+  z-index: 999999;
+}
+
 .tooltip-inner {
   box-shadow: #ffffff 0 0 2px 1px;
 }

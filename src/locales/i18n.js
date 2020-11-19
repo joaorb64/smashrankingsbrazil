@@ -22,7 +22,7 @@ const options = {
 
 i18n.use(LanguageDetector).init({
   resources,
-  fallbackLng: 'en',
+  fallbackLng: ['en'],
   debug: true,
   detection: options,
   interpolation: {
