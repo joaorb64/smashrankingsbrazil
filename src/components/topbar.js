@@ -41,15 +41,16 @@ class TopBar extends Component {
       }}>
         <div onClick={()=>this.setState({hidden: true})} class={"sidenav-container-bg d-block d-md-none" + (this.state.hidden ? "" : " sidenav-container-bg-show")}></div>
         
+        <button onClick={()=>this.setState({hidden: !this.state.hidden})} class="navbar-toggler d-block d-md-none" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false">
+          <span class="navbar-toggler-icon" style={{fontFamily: "'Montserrat', sans-serif"}}></span>
+        </button>
+
         <Link class="navbar-brand" style={{color: "white", flexGrow: 1}} to="/home/smash/homeonline">
           Power Rankings
         </Link>
 
-        <button onClick={()=>this.setState({hidden: !this.state.hidden})} class="navbar-toggler d-block d-md-none" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false">
-          <span class="navbar-toggler-icon" style={{fontFamily: "'Montserrat', sans-serif"}}></span>
-        </button>
         <ul className={"sidenav navbar-nav" + (this.state.hidden ? " sidenav-hidden" : "")}>
-          <NavLink onClick={()=>this.setState({hidden: true})} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/home/smash/homeonline" href="/home/smash/homeonline">
+          <NavLink onClick={()=>this.setState({hidden: true})} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/home/smash/homeonline" href="/home/">
             <div class="nav-link"><FontAwesomeIcon icon={faHome}/> {i18n.t("home")}</div>
           </NavLink>
           <NavLink onClick={()=>this.setState({hidden: true})} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/players" href="/players">

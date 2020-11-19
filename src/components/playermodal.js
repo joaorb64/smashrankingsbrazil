@@ -214,26 +214,26 @@ class PlayerModal extends Component {
 
     if(wifiTournamentsWent >= 50){
       achievements.push({
-        "name": "Lan Warrior",
-        "description": "Participou de 50 ou mais torneios online",
+        "name": i18n.t("achievement-lanwarrior"),
+        "description": i18n.t("achievement-lanwarrior-desc"),
         "icon": "wifiwarrior3.svg"
       });
     } else if(wifiTournamentsWent >= 25){
       achievements.push({
-        "name": "Elite Smash",
-        "description": "Participou de 25 ou mais torneios online",
+        "name": i18n.t("achievement-elitesmash"),
+        "description": i18n.t("achievement-elitesmash-desc"),
         "icon": "wifiwarrior2.svg"
       });
     } else if(wifiTournamentsWent >= 15){
       achievements.push({
-        "name": "Wifi Warrior",
-        "description": "Participou de 15 ou mais torneios online",
+        "name": i18n.t("achievement-wifiwarrior"),
+        "description": i18n.t("achievement-wifiwarrior-desc"),
         "icon": "wifiwarrior1.svg"
       });
     } else if(wifiTournamentsWent >= 1){
       achievements.push({
-        "name": "Quickplayer",
-        "description": "Participou de 1 ou mais torneios online",
+        "name": i18n.t("achievement-quickplayer"),
+        "description": i18n.t("achievement-quickplayer-desc"),
         "icon": "wifiwarrior0.svg"
       });
     }
@@ -251,8 +251,8 @@ class PlayerModal extends Component {
       })
       if(leagues_best.length > 0){
         achievements.push({
-          "name": "Especialista",
-          "description": "Melhor "+character[1][0]+" ("+leagues_best.join(", ")+")",
+          "name": i18n.t("achievement-specialist"),
+          "description": i18n.t("achievement-specialist-desc")+" "+character[1][0]+" ("+leagues_best.join(", ")+")",
           "icon": "bestplayercharacter.svg",
           "icon_middle": CHARACTERS[character[1][1]]+"_00"
         });

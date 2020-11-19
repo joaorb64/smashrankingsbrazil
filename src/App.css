@@ -274,6 +274,11 @@ body {
   padding-bottom: 20px;
 }
 
+.navbar-toggler {
+  padding: 0.25rem;
+  margin-right: 20px;
+}
+
 @media (max-width: 768px) {
   .sidenav-container {
     position: fixed;

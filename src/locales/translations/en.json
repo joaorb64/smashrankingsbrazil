@@ -38,5 +38,15 @@
     "achievement-goodrun": "Good run",
     "achievement-goodrun-desc": "Top 8 in a tournament",
     "achievement-traveler": "Traveler",
-    "achievement-traveler-desc": "Participated in tournaments in more than one region"
+    "achievement-traveler-desc": "Participated in tournaments in more than one region",
+    "achievement-quickplayer": "Quickplayer",
+    "achievement-quickplayer-desc": "Participated in 1 or more online tournaments",
+    "achievement-wifiwarrior": "Wifi Warrior",
+    "achievement-wifiwarrior-desc": "Participated in 15 or more online tournaments",
+    "achievement-elitesmash": "Elite Smash",
+    "achievement-elitesmash-desc": "Participated in 25 or more online tournaments",
+    "achievement-lanwarrior": "Lan Warrior",
+    "achievement-lanwarrior-desc": "Participated in 50 or more online tournaments",
+    "achievement-specialist": "Specialist",
+    "achievement-specialist-desc": "Best"
 }
