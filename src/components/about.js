@@ -16,7 +16,7 @@ class About extends Component {
   }
 
   componentDidMount() {
-    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/out/tournament/prbth.json')
+    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/tournament/prbth.json')
     .then(res => res.json())
     .then((data) => {
       this.state.tournaments = Object.keys(data).map(function(_) { return data[_]; })

@@ -36,10 +36,21 @@ class PlayerModal extends Component {
     if(this.state.alltournaments != null){
       console.log(this.state.alltournaments);
 
+      this.player.rank = {}
+
       if(this.player.braacket_links){
         this.player.braacket_links.forEach(link => {
           let linkLeague = link.split(":")[0];
           let linkId = link.split(":")[1];
+
+          fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/'+linkLeague+'/ranking.json')
+          .then(res => res.json())
+          .then((data) => {
+            if(data.ranking.ranking[linkId]){
+              this.player.rank[linkLeague] = {rank: data.ranking.ranking[linkId].rank, score: data.ranking.ranking[linkId].score};
+              this.setState({playerData: this.player})
+            }
+          }, this);
   
           if(Object.keys(this.state.alltournaments).includes(linkLeague)){
             Object.values(this.state.alltournaments[linkLeague]).forEach(tournament => {
@@ -330,7 +341,7 @@ class PlayerModal extends Component {
 
                           {this.state.playerData.state && this.state.playerData.state != "null" ?
                             <div className={styles.stateFlag + " state-flag"} style={{
-                              backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/master/state_icon/${this.state.playerData.state}.png)`,
+                              backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/state_icon/${this.state.playerData.state}.png)`,
                               width: "32px", height: "32px", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
                               backgroundPosition: "center", paddingTop: "22px", marginLeft: "10px", textAlign: "center", verticalAlign: "bottom"
                             }}></div>
@@ -352,7 +363,7 @@ class PlayerModal extends Component {
                               display: "inline-block", verticalAlign: "bottom", marginRight: "6px", backgroundSize: "cover"
                             }}>
                             </div>
-                            {this.state.playerData.city}
+                            {this.state.playerData.city}{" - "}{this.state.playerData.country}
                           </div>
                           :
                           null}
@@ -462,7 +473,7 @@ class PlayerModal extends Component {
                                   <div style={{
                                     width: "48px", height: "48px", display: "inline-block", backgroundSize: "cover", backgroundPosition: "center",
                                     flexShrink: 0,
-                                    backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/master/league_icon/${rank[0]}.png)`}}></div>
+                                    backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/league_icon/${rank[0]}.png)`}}></div>
                                   <div style={{display: "flex", flexDirection: "column", overflow: "hidden", width: "100%", backgroundColor: "lightgray"}}>
                                     <div style={{paddingLeft: "5px", textOverflow: "ellipsis", fontSize: "0.8rem", 
                                     whiteSpace: "nowrap", overflow: "hidden", backgroundColor: "gray", color: "white"}}>

@@ -4,52 +4,79 @@ import styles from "./nextTournaments.module.css"
 
 class Matcherino extends Component {
   state = {
-    tournaments: null
+    tournaments: null,
+    loading: true
   }
 
   componentDidUpdate(nextProps) {
   }
 
   componentDidMount() {
-    fetch('https://matcherino.com/__api/bounties/list?size=50&creatorId=490735&published=true&gameId=112')
-    .then(res => res.json())
-    .then((data) => {
-      console.log(data);
+    let offset = 0;
+    let perPage = 10;
 
-      data.body = data.body.filter((tournament) => {
-        if(tournament.status=="ready"){
-          return true;
+    let fetchPage = function(offset, perPage) {
+      fetch('https://matcherino.com/__api/bounties/list?offset='+offset+'&size='+perPage+'&creatorId=490735&published=true&gameId=112')
+      .then(res => res.json())
+      .then((data) => {
+        console.log(data);
+  
+        data.body = data.body.filter((tournament) => {
+          if(tournament.status=="ready"){
+            return true;
+          }
+          return false;
+        });
+  
+        console.log(data.body)
+  
+        data.body.forEach(tournament => {
+          let used = 0;
+  
+          if(tournament.transactions){
+            tournament.transactions.forEach(transaction => {
+              if(transaction.action == "coupon:use"){
+                used += 1;
+              }
+            })
+          }
+  
+          tournament.usedCoupons = used;
+  
+          let coupon = tournament.description.match(/cupom:[\s][a-zA-Z|0-9]+/gi);
+  
+          if(coupon != null){
+            coupon = coupon[0].substring(6).trim()
+          }
+  
+          tournament.coupon = coupon;
+        });
+
+        if(this.state.tournaments == null){
+          this.state.tournaments = []
         }
-        return false;
-      });
 
-      console.log(data.body)
+        data.body.forEach((tournament) => {
+          this.state.tournaments.push(tournament);
+        })
 
-      data.body.forEach(tournament => {
-        let used = 0;
+        this.setState(this.state);
 
-        if(tournament.transactions){
-          tournament.transactions.forEach(transaction => {
-            if(transaction.action == "coupon:use"){
-              used += 1;
-            }
-          })
+        offset+=10;
+
+        if(offset < 100){
+          fetchPage.call(this, offset, perPage);
+        } else {
+          this.setState({loading: false});
         }
+      })
+      .catch((err)=>{
+        console.log(err);
+        this.setState({loading: false});
+      })
+    };
 
-        tournament.usedCoupons = used;
-
-        let coupon = tournament.description.match(/cupom:[\s][a-zA-Z|0-9]+/gi);
-
-        if(coupon != null){
-          coupon = coupon[0].substring(6).trim()
-        }
-
-        tournament.coupon = coupon;
-      });
-      this.state.tournaments = data.body;
-      this.setState(this.state);
-    })
-    .catch(console.log)
+    fetchPage.call(this, offset, perPage)
   }
 
   render(){
@@ -115,9 +142,14 @@ class Matcherino extends Component {
                 </div>
               ))
               :
-              <div class="loader"></div>
+              null
           }
         </div>
+        {this.state.loading ?
+          <div class="loader"></div>
+          :
+          null
+        }
       </div>
     )
   }

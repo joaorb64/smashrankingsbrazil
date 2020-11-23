@@ -182,7 +182,7 @@ class PlayerRanking extends Component {
                         }}>
                           {player.state && player.state != "null" ?
                             <div class="state-flag" style={{
-                              backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/master/state_icon/${player.state}.png)`,
+                              backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/state_icon/${player.state}.png)`,
                               width: "100%", height: "32px", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
                               backgroundPosition: "center", paddingTop: "20px"
                             }}>{player.state}</div>
@@ -259,11 +259,25 @@ class PlayerRanking extends Component {
                 }
 
                 <div class="state-flag-container" style={{
-                  width: "64px", display: "flex", justifyContent: "center", alignItems: "center", padding: "8px"
+                  width: "40px", display: "flex", justifyContent: "center", alignItems: "center", padding: "6px"
+                }}>
+                  {player.country_code && player.country_code != "null" ?
+                    <div class="state-flag" style={{
+                      backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/country_flag/${player.country_code.toLowerCase()}.png)`,
+                      width: "100%", height: "100%", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
+                      backgroundPosition: "center"
+                    }}>{player.country_code}</div>
+                  :
+                    null
+                  }
+                </div>
+
+                <div class="state-flag-container" style={{
+                  width: "40px", display: "flex", justifyContent: "center", alignItems: "center", padding: "6px"
                 }}>
                   {player.state && player.state != "null" ?
                     <div class="state-flag" style={{
-                      backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/master/state_icon/${player.state}.png)`,
+                      backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/state_flag/${player.country_code}/${player.state}.png)`,
                       width: "100%", height: "100%", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
                       backgroundPosition: "center"
                     }}>{player.state}</div>

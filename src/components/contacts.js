@@ -89,57 +89,65 @@ class Contacts extends Component {
     if(!this.props) return
     if(!this.props.contacts) return
     if(!this.props.allplayers) return
+    if(!this.props.alltournaments) return
 
-    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/out/'+this.props.contacts[this.state.selectedLeague].id+'.json')
+    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/'+this.props.contacts[this.state.selectedLeague].id+'/ranking.json')
     .then(res => res.json())
     .then((data) => {
-      if(data){
-        let players = []
+      fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/'+this.props.contacts[this.state.selectedLeague].id+'/statistics.json')
+      .then(res => res.json())
+      .then((statistics) => {
+        if(data){
+          let players = []
 
-        if(data["ranking"]){
-          Object.keys(data["ranking"]).forEach(function(id){
-            let league = this.props.contacts[this.state.selectedLeague].id;
-  
-            let p = this.props.allplayers["players"][this.props.allplayers["mapping"][league+":"+id]]
-  
-            if(p.smashgg_image && !p.twitter) {
-              p.avatar = p.smashgg_image;
-            }
-  
-            if(p.mains == null || p.mains.length == 0 || p.mains[0] == ""){
-              p.mains = ["Random"]
-            }
-  
-            if(p.rank && p.rank[league]){
-              p.ranking = p["rank"][league]["rank"]
-              p.score = p["rank"][league]["score"]
+          if(data.ranking){
+            Object.entries(data.ranking.ranking).forEach(function(id){
+              let league = this.props.contacts[this.state.selectedLeague].id;
+    
+              let p = this.props.allplayers["players"][this.props.allplayers["mapping"][league+":"+id[0]]]
+    
+              if(p.smashgg_image && !p.twitter) {
+                p.avatar = p.smashgg_image;
+              }
+    
+              if(p.mains == null || p.mains.length == 0 || p.mains[0] == ""){
+                p.mains = ["Random"]
+              }
+    
+              
+              p.ranking = id[1]["rank"]
+              p.score = id[1]["score"]
     
               players.push(p);
-            }
-          }, this)
+            }, this)
+          }
+          
+          players.sort(function(a, b){
+            let league = this.props.contacts[this.state.selectedLeague].id;
+            return Number(a["ranking"]) - Number(b["ranking"]);
+          }.bind(this));
+
+          this.state.players = players;
+
+          console.log(statistics)
+          console.log(this.props.alltournaments[this.props.contacts[this.state.selectedLeague].id])
+
+          this.setState({
+            players: players,
+            updateTime: data["update_time"],
+            statistics: statistics,
+            tournaments: this.props.alltournaments[this.props.contacts[this.state.selectedLeague].id],
+            rankingName: data.ranking["name"],
+            rankingType: data.ranking["type"],
+            rankingAlltimes: data.ranking["alltimes"],
+            rankingStartTime: data.ranking["timeStart"],
+            rankingEndTime: data.ranking["timeEnd"]
+          })
+
+          this.preloadImages();
         }
-        
-        players.sort(function(a, b){
-          let league = this.props.contacts[this.state.selectedLeague].id;
-          return Number(a["rank"][league]["rank"]) - Number(b["rank"][league]["rank"]);
-        }.bind(this));
-
-        this.state.players = players;
-
-        this.setState({
-          players: players,
-          updateTime: data["update_time"],
-          statistics: data["statistics"],
-          tournaments: data["tournaments"],
-          rankingName: data["name"],
-          rankingType: data["type"],
-          rankingAlltimes: data["alltimes"],
-          rankingStartTime: data["timeStart"],
-          rankingEndTime: data["timeEnd"]
-        })
-
-        this.preloadImages();
-      }
+      })
+      .catch(console.log)
     })
     .catch(console.log)
   }

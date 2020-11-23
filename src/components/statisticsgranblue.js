@@ -115,7 +115,7 @@ class StatisticsGranblue extends Component {
           let icon = chartData.icons[i];
           var $img = window.jQuery("<img/>").attr("id", lab).attr(
             "src",
-            "https://raw.githubusercontent.com/joaorb64/tournament_api/master/league_icon/"+icon+".png"
+            "https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/league_icon/"+icon+".png"
           );
           window.jQuery("#pics").append($img);
         }
@@ -266,7 +266,7 @@ class StatisticsGranblue extends Component {
           let icon = chartData.icons[i];
           var $img = window.jQuery("<img/>").attr("id", lab).attr(
             "src",
-            "https://raw.githubusercontent.com/joaorb64/tournament_api/master/state_icon/"+icon+".png"
+            "https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/state_icon/"+icon+".png"
           );
           window.jQuery("#pics").append($img);
         }

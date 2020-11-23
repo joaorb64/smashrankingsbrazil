@@ -11,7 +11,8 @@ import CHARACTERS from '../globals'
 
 class Mapa extends Component {
   state = {
-    leagues: {}
+    leagues: {},
+    allplayers : {}
   }
 
   mymap = null;
@@ -21,88 +22,60 @@ class Mapa extends Component {
   componentDidUpdate(nextProps) {
     if(this.props !== nextProps){
       this.state.leagues = nextProps.leagues;
+      this.state.allplayers = nextProps.allplayers;
       this.updateData();
     }
   }
 
   updateData() {
     if(this.state.leagues.length == 0) return;
+    if(this.state.allplayers.length == 0) return;
 
-    Object.keys(this.state.leagues).forEach(element => {
-      fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/out/'+this.props.leagues[element].id+'.json')
-      .then(res => res.json())
-      .then((data) => {
-        if(data){
-          let players = [];
+    Object.keys(this.state.leagues).forEach(league => {
+      if(this.state.leagues[league].latlng != null && !this.state.leagues[league].wifi){
+        fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/'+this.props.leagues[league].id+'/ranking.json')
+        .then(res => res.json())
+        .then((ranking) => {
+          let player = null;
 
-          Object.keys(data["ranking"]).forEach(function(player){
-            if(data["ranking"][player].avatar){
-              data["ranking"][player].avatar = `https://raw.githubusercontent.com/joaorb64/tournament_api/master/${data["ranking"][player].avatar}`;
-            } else if (data["ranking"][player].twitter) {
-              data["ranking"][player].avatar = `http://twitter-avatar.now.sh/${this.getTwitterHandle(data["ranking"][player].twitter)}`;
-            }
-
-            if(!data["ranking"][player].mains){
-              data["ranking"][player].mains = [];
-            }
-
-            if(data["ranking"][player].mains.length == 0){
-              data["ranking"][player].mains.push({name: "Random", icon: "assets/images/game/ssbu/characters/random.png"});
-            }
-
-            if((data["ranking"][player]["rank"])){
-              data["ranking"][player]["score"] = data["ranking"][player]["rank"][this.props.leagues[element].id]["score"];
-              data["ranking"][player]["ranking"] = data["ranking"][player]["rank"][this.props.leagues[element].id]["rank"];
-              if(data["ranking"][player]["ranking"]){
-                players.push(data["ranking"][player]);
+          if(ranking.ranking.ranking != null){
+            let best = null;
+            Object.entries(ranking.ranking.ranking).forEach((player)=>{
+              if(parseInt(player[1].rank) == 1){
+                best = player[0];
+                return;
               }
+            })
+
+            if(best != null){
+              let playerId = this.state.allplayers["mapping"][this.props.leagues[league].id+":"+best];
+              player = this.state.allplayers["players"][playerId];
             }
-          }, this);
-          
-          players.sort(function(a, b){
-            return Number(a["ranking"]) - Number(b["ranking"]);
-          });
-
-          //console.log(players)
-
-          this.state.leagues[element]["players"] = players;
-
-          this.setState(this.state);
-
-          // add marker
-          let found = null;
-
-          if(this.props.leagues[element].codigo_uf){
-            found = this.municipios.find(cidade => cidade.nome == this.props.leagues[element].city && cidade.codigo_uf == this.props.leagues[element].codigo_uf);
-          } else {
-            found = this.municipios.find(cidade => cidade.nome == this.props.leagues[element].city);
           }
 
-          if(found){
-            if(this.props.leagues[element].players){
-              let iconUrl = "http://braacket.com/assets/images/game/ssbu/characters/random.png"
+          if(!player.mains || player.mains.length == 0){
+            player.mains.push("Random");
+          }
 
-              if(this.props.leagues[element].players.length > 0){
-                iconUrl = process.env.PUBLIC_URL+"/portraits/ssbu/chara_2_"+CHARACTERS[this.props.leagues[element].players[0].mains[0]]+"_00.png"
-              }
+          let iconUrl = process.env.PUBLIC_URL+"/portraits/ssbu/chara_2_"+CHARACTERS[player.mains[0]]+"_00.png"
 
-              let charIcon = L.icon({
-                iconUrl: iconUrl,
-                iconSize: [32, 32],
-                popupAnchor: [0, -8],
-                className: styles.mapCharIcon
-              });
+          let charIcon = L.icon({
+            iconUrl: iconUrl,
+            iconSize: [32, 32],
+            popupAnchor: [0, -8],
+            className: styles.mapCharIcon
+          });
 
-              window.routerHistory = this.props.history;
-  
-              let marker = L.marker([found.latitude, found.longitude], {icon: charIcon}).addTo(this.mymap);
-              marker.bindPopup('<a onClick="window.routerHistory.push(\'/home/smash/'+this.props.leagues[element].id+'\');">'+this.props.leagues[element].name+'</a>');
-              this.markers.push(marker);
-            }
-          };
-        }
-      })
-      .catch(console.log)
+          window.routerHistory = this.props.history;
+
+          let lat = this.state.leagues[league].latlng[0];
+          let lng = this.state.leagues[league].latlng[1];
+
+          let marker = L.marker([lat, lng], {icon: charIcon}).addTo(this.mymap);
+          marker.bindPopup('<a onClick="window.routerHistory.push(\'/home/smash/'+this.props.leagues[league].id+'\');">'+this.props.leagues[league].name+'</a>');
+          this.markers.push(marker);
+        }).catch(console.log)
+      }
     });
   }
 

@@ -27,6 +27,7 @@ class Statistics extends Component {
   chartRef = React.createRef();
   chartSecondaryRef = React.createRef();
   chartStatesRef = React.createRef();
+  chartCountriesRef = React.createRef();
 
   getCharName(name){
     return name.toLowerCase().replace(/ /g, "");
@@ -103,11 +104,19 @@ class Statistics extends Component {
         });
       }
 
+      if("players_per_country" in data){
+        data["players_per_country"] = Object.entries(data["players_per_country"])
+
+        data["players_per_country"].sort(function(a, b) {
+          return b[1] - a[1];
+        });
+      }
+
       if("players_per_state" in data){
         data["players_per_state"] = Object.entries(data["players_per_state"])
 
         data["players_per_state"].sort(function(a, b) {
-          return b[1] - a[1];
+          return b[1]["count"] - a[1]["count"];
         });
       }
 
@@ -289,21 +298,21 @@ class Statistics extends Component {
       });
     }
 
-    // players per state chart
-    if("players_per_state" in this.state.statistics){
+    // players per country chart
+    if("players_per_country" in this.state.statistics){
       // Points per league chart
-      this.myChartStatesRef = this.chartStatesRef.current.getContext("2d");
+      this.myChartCountriesRef = this.chartCountriesRef.current.getContext("2d");
 
-      if(this.myChartStatesRef){
+      if(this.myChartCountriesRef){
         var chartData = {
-          "labels": this.state.statistics.players_per_state.map((a)=>{return a[0]}),
+          "labels": this.state.statistics.players_per_country.map((a)=>{return a[0]}),
           "datasets": [{
-            "data": this.state.statistics.players_per_state.map((a)=>{return a[1]}),
+            "data": this.state.statistics.players_per_country.map((a)=>{return a[1]}),
             "fill": false,
             "backgroundColor": "rgba(255, 183, 0, 1)",
             "borderWidth": 0
           }],
-          "icons": this.state.statistics.players_per_state.map((a)=>{return a[0]})
+          "icons": this.state.statistics.players_per_country.map((a)=>{return a[0]})
         };
       
         for (var i in chartData.labels) {
@@ -311,7 +320,82 @@ class Statistics extends Component {
           let icon = chartData.icons[i];
           var $img = window.jQuery("<img/>").attr("id", lab).attr(
             "src",
-            "https://raw.githubusercontent.com/joaorb64/tournament_api/master/state_icon/"+icon+".png"
+            "https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/country_flag/"+lab.toLowerCase()+".png"
+          );
+          window.jQuery("#pics").append($img);
+        }
+
+        Chart.controllers.bar = originalBarController.extend({
+          draw: function() {
+            originalBarController.prototype.draw.call(this, arguments);
+            drawFlags3(this);
+          }
+        });
+        
+        function drawFlags3(t) {
+          if(!t) return;
+          if(!t.chart.ctx) return;
+          var chartInstance = t.chart;
+          var dataset = chartInstance.config.data.datasets[0].data;
+          var meta = chartInstance.controller.getDatasetMeta(0);
+          t.chart.ctx.imageSmoothingQuality = "high"
+          t.chart.ctx.textAlign = "center";
+          meta.data.forEach(function(bar, index) {
+            var lab = bar._model.label;
+            var img = document.getElementById(lab);
+            if(img != null && img.naturalHeight !== 0){
+              t.chart.ctx.drawImage(img,bar._model.x-12,bar._view.y-12,24,24);
+            }
+              t.chart.ctx.fillText(parseFloat(dataset[bar._index]).toFixed(0), bar._model.x,bar._view.y-12)
+          });
+        }
+      
+        var myBar = new Chart(this.myChartCountriesRef, {
+          "type": "bar",
+          "data": chartData,
+          gridLines: {"drawBorder": false},
+          borderWidth: 0,
+          border: 0,
+          "options": {
+            legend: { display: false },
+            layout: { padding: "32" },
+            "scales": {
+              "yAxes": [{
+                id: "y0",
+                "ticks": {
+                  "beginAtZero": true
+                }
+              }]
+            }
+          }
+        });
+      }
+    }
+
+    // players per state chart
+    if("players_per_state" in this.state.statistics){
+      // Points per league chart
+      this.myChartStatesRef = this.chartStatesRef.current.getContext("2d");
+
+      if(this.myChartStatesRef){
+        var chartData = {
+          "labels": this.state.statistics.players_per_state.map((a)=>{return a[1]["country_code"]+"_"+a[0]}),
+          "datasets": [{
+            "data": this.state.statistics.players_per_state.map((a)=>{return a[1]["count"]}),
+            "fill": false,
+            "backgroundColor": "rgba(255, 183, 0, 1)",
+            "borderWidth": 0
+          }],
+          "icons": this.state.statistics.players_per_state.map((a)=>{return a[1]["country_code"]+"/"+a[0]})
+        };
+      
+        for (var i in chartData.labels) {
+          let lab = chartData.labels[i];
+          let icon = chartData.icons[i];
+          console.log(icon)
+          var $img = window.jQuery("<img/>").attr("id", lab).attr(
+            "src",
+            "https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/state_flag/"+icon+".png"
           );
           window.jQuery("#pics").append($img);
         }
@@ -372,6 +456,21 @@ class Statistics extends Component {
       }}>
         {this.state.statistics ?
           <div>
+            {"players_per_country" in this.state.statistics ?
+              <div class="row mb-3 mt-3">
+                <div class="col">
+                  <h5>Jogadores por país</h5>
+                  <div style={{width: "100%", overflowX: "scroll", backgroundColor: "#e4e4e4"}}>
+                    <div style={{width: 800, height:300}}>
+                      <canvas style={{width: 800, height: 300}} ref={this.chartCountriesRef} id="myChartCountries" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              :
+              null
+            }
+
             {"players_per_state" in this.state.statistics ?
               <div class="row mb-3 mt-3">
                 <div class="col">
@@ -423,12 +522,12 @@ class Statistics extends Component {
                     </thead>
                     <tbody>
                       {
-                        Object.entries(this.state.statistics.best_player_character).sort((a, b) => {return a[1].rank[this.props.league].rank - b[1].rank[this.props.league].rank}).map((line)=>(
+                        Object.entries(this.state.statistics.best_player_character).sort((a, b) => {return a[1].rank - b[1].rank}).map((line)=>(
                           <tr>
                             <td><img src={`${process.env.PUBLIC_URL}/portraits/ssbu/chara_2_${CHARACTERS[line[1].mains[0]]}_00.png`}
                               style={{width: 32, height: 32}} /> {line[0]}</td>
                             <td>{line[1].name}</td>
-                            <td>{line[1].rank[this.props.league].rank}</td>
+                            <td>{line[1].rank}</td>
                           </tr>
                         ))
                       }

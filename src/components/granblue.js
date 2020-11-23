@@ -87,10 +87,10 @@ class Granblue extends Component {
   }
 
   updateData() {
-    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/granblue/out/ranking.json')
+    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/granblue/out/ranking.json')
     .then(res => res.json())
     .then((data) => {
-      fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/granblue/allplayers.json')
+      fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/granblue/allplayers.json')
       .then(res => res.json())
       .then((allplayers_data) => {
         if(data && allplayers_data){
@@ -278,7 +278,7 @@ class Granblue extends Component {
                           }}>
                             {player.state ?
                               <div class="state-flag" style={{
-                                backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/master/state_icon/${player.state}.png)`,
+                                backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/state_icon/${player.state}.png)`,
                                 width: "100%", height: "47px", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
                                 backgroundPosition: "center", paddingTop: "32px"
                               }}>{player.state}</div>
@@ -359,7 +359,7 @@ class Granblue extends Component {
                   }}>
                     {player.state ?
                       <div class="state-flag" style={{
-                        backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/master/state_icon/${player.state}.png)`,
+                        backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/state_icon/${player.state}.png)`,
                         width: "100%", height: "100%", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
                         backgroundPosition: "center"
                       }}>{player.state}</div>

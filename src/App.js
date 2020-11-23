@@ -20,13 +20,13 @@ class App extends Component {
   }
 
   componentWillMount() {
-    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/leagues.json')
+    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/leagues.json')
     .then(res => res.json())
     .then((data) => {
       let promises = [];
 
       Object.keys(data).forEach((league) => {
-        promises.push(fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/league_info/'+league+'.json')
+        promises.push(fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/'+league+'/data.json')
         .then(res => res.json())
           .then((leagueInfo) => {
             data[league]["info"] = {
@@ -34,12 +34,13 @@ class App extends Component {
               name: leagueInfo.name,
               state: data[league].state,
               city: data[league].city,
-              codigo_uf: data[league].codigo_uf,
+              country: data[league].country,
               wifi: data[league].wifi,
               twitter: data[league].twitter,
               twitch: data[league].twitch,
               youtube: data[league].youtube,
-              facebook: data[league].facebook
+              facebook: data[league].facebook,
+              latlng: data[league].latlng
             };
           }))
       })
@@ -53,7 +54,7 @@ class App extends Component {
     })
     .catch(console.log)
 
-    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/allplayers.json')
+    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/allplayers.json')
     .then(res => res.json())
     .then((data) => {
       this.state.allplayers = data;
@@ -61,7 +62,7 @@ class App extends Component {
     })
     .catch(console.log)
 
-    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/master/alltournaments.json')
+    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/alltournaments.json')
     .then(res => res.json())
     .then((data) => {
       this.state.alltournaments = data;
