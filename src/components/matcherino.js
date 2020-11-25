@@ -15,68 +15,74 @@ class Matcherino extends Component {
     let offset = 0;
     let perPage = 10;
 
-    let fetchPage = function(offset, perPage) {
-      fetch('https://matcherino.com/__api/bounties/list?offset='+offset+'&size='+perPage+'&creatorId=490735&published=true&gameId=112')
-      .then(res => res.json())
-      .then((data) => {
-        console.log(data);
-  
-        data.body = data.body.filter((tournament) => {
-          if(tournament.status=="ready"){
-            return true;
-          }
-          return false;
-        });
-  
-        console.log(data.body)
-  
-        data.body.forEach(tournament => {
-          let used = 0;
-  
-          if(tournament.transactions){
-            tournament.transactions.forEach(transaction => {
-              if(transaction.action == "coupon:use"){
-                used += 1;
-              }
-            })
-          }
-  
-          tournament.usedCoupons = used;
-  
-          let coupon = tournament.description.match(/cupom:[\s][a-zA-Z|0-9]+/gi);
-  
-          if(coupon != null){
-            coupon = coupon[0].substring(6).trim()
-          }
-  
-          tournament.coupon = coupon;
-        });
+    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/matcherinos.json')
+    .then(res => res.json())
+    .then((data) => {
+      console.log(data);
 
-        if(this.state.tournaments == null){
-          this.state.tournaments = []
-        }
+      let fetchPage = function(offset, perPage) {
+        fetch('https://matcherino.com/__api/bounties/list?offset='+offset+'&size='+perPage+'&creatorId='+data["BR"][0]+'&published=true&gameId=112')
+        .then(res => res.json())
+        .then((data) => {
+          console.log(data);
+    
+          data.body = data.body.filter((tournament) => {
+            if(tournament.status=="ready"){
+              return true;
+            }
+            return false;
+          });
+    
+          console.log(data.body)
+    
+          data.body.forEach(tournament => {
+            let used = 0;
+    
+            if(tournament.transactions){
+              tournament.transactions.forEach(transaction => {
+                if(transaction.action == "coupon:use"){
+                  used += 1;
+                }
+              })
+            }
+    
+            tournament.usedCoupons = used;
+    
+            let coupon = tournament.description.match(/cupom:[\s][a-zA-Z|0-9]+/gi);
+    
+            if(coupon != null){
+              coupon = coupon[0].substring(6).trim()
+            }
+    
+            tournament.coupon = coupon;
+          });
 
-        data.body.forEach((tournament) => {
-          this.state.tournaments.push(tournament);
+          if(this.state.tournaments == null){
+            this.state.tournaments = []
+          }
+
+          data.body.forEach((tournament) => {
+            this.state.tournaments.push(tournament);
+          })
+
+          this.setState(this.state);
+
+          offset+=10;
+
+          if(offset < 100){
+            fetchPage.call(this, offset, perPage);
+          } else {
+            this.setState({loading: false});
+          }
         })
-
-        this.setState(this.state);
-
-        offset+=10;
-
-        if(offset < 100){
-          fetchPage.call(this, offset, perPage);
-        } else {
+        .catch((err)=>{
+          console.log(err);
           this.setState({loading: false});
-        }
-      })
-      .catch((err)=>{
-        console.log(err);
-        this.setState({loading: false});
-      })
-    };
+        })
+      };
 
-    fetchPage.call(this, offset, perPage)
+      fetchPage.call(this, offset, perPage)
+    });
   }
 
   render(){

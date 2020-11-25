@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
 import styles from './playermodal.module.css';
-import CHARACTERS from "../globals";
+import { CHARACTERS, CHARACTERS_GG_TO_BRAACKET } from "../globals";
 import moment from "../../node_modules/moment-timezone/moment-timezone";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWifi } from '@fortawesome/free-solid-svg-icons';
@@ -33,9 +33,25 @@ class PlayerModal extends Component {
 
     let myIds = []
 
-    if(this.state.alltournaments != null){
-      console.log(this.state.alltournaments);
+    if(this.player.character_usage){
+      let usage_percent = {};
+      Object.assign(usage_percent, this.player.character_usage);
+      this.player.character_usage_percent = usage_percent;
 
+      this.player.character_usage_percent = Object.entries(this.player.character_usage_percent).sort((a,b)=>{return b[1]-a[1]});
+
+      let sum = 0;
+
+      this.player.character_usage_percent.forEach((character)=>{
+        sum += character[1];
+      })
+
+      this.player.character_usage_percent.forEach((character)=>{
+        character[1] = character[1]/sum;
+      })
+    }
+
+    if(this.state.alltournaments != null){
       this.player.rank = {}
 
       if(this.player.braacket_links){
@@ -77,7 +93,6 @@ class PlayerModal extends Component {
                 if(!found){
                   tournamentsWent.push(tournamentEntry);
                 } else {
-                  console.log(found)
                   if(found.state == "BR" && tournamentEntry["state"] != "BR"){
                     found.state = tournamentEntry["state"];
                   }
@@ -493,6 +508,29 @@ class PlayerModal extends Component {
                       :
                       <div style={{padding: "10px"}}>Este jogador não foi encontrado no ranking de nenhuma liga.</div>
                     }
+
+                    {this.state.playerData.character_usage_percent ?
+                      <row style={{display: "block", padding: "12px"}}>
+                        <h5>Uso de personagens nos últimos 30 sets</h5>
+                        <div class="row" style={{padding: "10px", margin: 0, backgroundColor: "black", borderBottom: "1px solid #3d5466", justifyContent: "center"}}>
+                          {this.state.playerData.character_usage_percent.map((character, i)=>(
+                            <a key={this.state.playerData.name+i} style={{textAlign: "center", display: "flex",
+                            flexDirection: "column", alignItems: "center", placeContent: "center"}}
+                            data-toggle="tooltip" data-placement="top">
+                              <div class="" style={{
+                                backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_2_${CHARACTERS[CHARACTERS_GG_TO_BRAACKET[character[0]]]+"_00"}.png)`,
+                                width: "24px", height: "24px", backgroundPosition: "center", backgroundSize: "cover",
+                                flexGrow: 0, display: "flex", flexShrink: 1, margin: "0 20px 0 20px"
+                              }}></div>
+                              <small>{(100*character[1]).toFixed(2)}%</small>
+                            </a>
+                          ))}
+                        </div>
+                      </row>
+                      :
+                      null
+                    }
+                    {console.log(this.state)}
 
                     {this.state.tournaments ?
                       <row style={{display: "block", padding: "12px"}}>

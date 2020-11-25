@@ -237,14 +237,14 @@ body {
 
 .sidenav-container {
   position: fixed;
-  width: 200px;
+  width: 240px;
   max-width: none;
   height: 100%;
 }
 
 .main-container {
   padding-left: 240px;
-  padding-right: 40px;
+  padding-right: 0px;
   padding-top: 20px;
 }
 

@@ -23,6 +23,7 @@ class Mapa extends Component {
     if(this.props !== nextProps){
       this.state.leagues = nextProps.leagues;
       this.state.allplayers = nextProps.allplayers;
+      this.setState(this.state);
       this.updateData();
     }
   }
@@ -36,6 +37,27 @@ class Mapa extends Component {
         fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/'+this.props.leagues[league].id+'/ranking.json')
         .then(res => res.json())
         .then((ranking) => {
+          let geojson = new L.GeoJSON.AJAX("https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/geojson/"+this.props.leagues[league].id+".geojson");
+
+          geojson.on('data:loaded', () => {
+            function style(estado) {      
+              return {
+                fillColor: 'rgba(255, 183, 0, 0.8)',
+                weight: 2,
+                opacity: 1,
+                color: 'black',
+                dashArray: '3',
+                fillOpacity: 1
+              };
+            }
+
+            geojson.addTo(this.mymap);
+
+            geojson.eachLayer(function (layer) {   
+              layer.setStyle(style.call(this, layer));
+            }, this);
+          })
+
           let player = null;
 
           if(ranking.ranking.ranking != null){
@@ -89,6 +111,8 @@ class Mapa extends Component {
   }
 
   componentDidMount() {
+    if(!this.props.leagues) return;
+
     this.state.leagues = this.props.leagues;
 
     var mapOptions = {
@@ -109,40 +133,28 @@ class Mapa extends Component {
     this.mymap = L.map('mapid', mapOptions);
     baseMap.addTo(this.mymap);
 
-    fetch('/geojson/municipios.json')
-    .then(res => res.json()).then((data) => {
-      this.municipios = data;
+    this.estados = new L.GeoJSON.AJAX("https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/geojson/countries.geojson");
 
-      this.estados = new L.GeoJSON.AJAX("/geojson/brazil-states.geojson");
+    this.estados.on('data:loaded', () => {
+      function style(estado) {  
+        return {
+          fillColor: "rgba(0, 0, 0, 0.5)",
+          weight: 2,
+          opacity: 1,
+          color: 'black',
+          dashArray: '3',
+          fillOpacity: 1
+        };
+      }
 
-      this.estados.on('data:loaded', () => {
-        function style(estado) {
-          let sigla = estado.feature.properties.sigla;
+      this.estados.addTo(this.mymap);
 
-          let achou = this.state.leagues.find(
-            league => sigla == league.state
-          );
-  
-          return {
-            fillColor: achou ? 'rgba(255, 183, 0, 0.8)' : "rgba(0, 0, 0, 0.6)",
-            weight: 2,
-            opacity: 1,
-            color: 'black',
-            dashArray: '3',
-            fillOpacity: 1
-          };
-        }
+      this.estados.eachLayer(function (layer) {   
+        layer.setStyle(style.call(this, layer));
+      }, this);
 
-        this.estados.addTo(this.mymap);
-
-        this.estados.eachLayer(function (layer) {   
-          layer.setStyle(style.call(this, layer));
-        }, this);
-
-        this.mymap.fitBounds(this.estados.getBounds());
-        this.updateData();
-      });
-    })
+      this.mymap.fitBounds(this.estados.getBounds());
+    });
   }
 
   render (){

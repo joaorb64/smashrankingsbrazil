@@ -108,8 +108,9 @@ class PlayerRanking extends Component {
                 <div class={"col-md-4 col-sm-4 col-xs-12 " + styles.listItemParent}
                 style={{padding: "0px 4px", cursor: "pointer"}}
                 data-toggle="modal" data-target="#playerModal"
-                onClick={()=>this.openPlayerModal(player)}>
-                  <li key={this.state.selectedLeague+'_'+i} class={styles.top3container + " slide-fade list-group-item"} style={{
+                onClick={()=>this.openPlayerModal(player)}
+                key={this.state.selectedLeague+'_'+i}>
+                  <li class={styles.top3container + " slide-fade list-group-item"} style={{
                       backgroundColor: this.state.top3Colors[i], borderRadius: "10px", border: 0, marginBottom: "5px", width: "100%", lineHeight: "48px",
                       padding: 0, display: "flex", alignSelf: "center", overflow: "hidden"
                     }}>
@@ -309,7 +310,7 @@ class PlayerRanking extends Component {
                   </div>
                 </div>
 
-                <div class="player-main" style={{display: "flex", width: "128px"}}>
+                <div class="player-main" style={{display: "flex", width: "120px"}}>
                   {player.mains.length > 0 ?
                     <div style={{
                       backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_0_${this.getCharCodename(player, 0)}.png)`,

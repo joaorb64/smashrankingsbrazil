@@ -32,6 +32,7 @@ class App extends Component {
             data[league]["info"] = {
               id: league,
               name: leagueInfo.name,
+              region: data[league].region,
               state: data[league].state,
               city: data[league].city,
               country: data[league].country,
@@ -90,7 +91,7 @@ class App extends Component {
         <HashRouter basename={process.env.PUBLIC_URL}>
           <Route path="/" render={(props) => <TopBar match={props} />} />
 
-          <div class="main-container" style={{
+          <div class="container main-container" style={{
             marginBottom: "64px"
           }}>
 

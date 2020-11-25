@@ -221,7 +221,7 @@ class Players extends Component {
                   </div>
                 </div>
 
-                <div class="player-main" style={{display: "flex", width: "128px"}}>
+                <div class="player-main" style={{display: "flex", width: "120px"}}>
                   {player.mains.length > 0 ?
                     <div style={{
                       backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_0_${this.getCharCodename(player, 0)}.png)`,

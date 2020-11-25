@@ -9,6 +9,7 @@ import Information from './information';
 import TournamentList from './tournamentList';
 import moment from "../../node_modules/moment-timezone/moment-timezone";
 import i18n from '../locales/i18n';
+import Players from './players';
 
 class Contacts extends Component {
   state = {
@@ -97,55 +98,68 @@ class Contacts extends Component {
       fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/'+this.props.contacts[this.state.selectedLeague].id+'/statistics.json')
       .then(res => res.json())
       .then((statistics) => {
-        if(data){
-          let players = []
+        fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/'+this.props.contacts[this.state.selectedLeague].id+'/players.json')
+        .then(res => res.json())
+        .then((league_players) => {
+          if(data){
+            let players = []
 
-          if(data.ranking){
-            Object.entries(data.ranking.ranking).forEach(function(id){
-              let league = this.props.contacts[this.state.selectedLeague].id;
-    
-              let p = this.props.allplayers["players"][this.props.allplayers["mapping"][league+":"+id[0]]]
-    
-              if(p.smashgg_image && !p.twitter) {
-                p.avatar = p.smashgg_image;
-              }
-    
-              if(p.mains == null || p.mains.length == 0 || p.mains[0] == ""){
-                p.mains = ["Random"]
-              }
-    
-              
-              p.ranking = id[1]["rank"]
-              p.score = id[1]["score"]
-    
-              players.push(p);
-            }, this)
+            if(data.ranking){
+              Object.entries(data.ranking.ranking).forEach(function(id){
+                let league = this.props.contacts[this.state.selectedLeague].id;
+      
+                let p = {}
+                p = Object.assign(p, this.props.allplayers["players"][this.props.allplayers["mapping"][league+":"+id[0]]]);
+      
+                if(p.smashgg_image && !p.twitter) {
+                  p.avatar = p.smashgg_image;
+                }
+      
+                if(p.mains == null || p.mains.length == 0 || p.mains[0] == ""){
+                  p.mains = ["Random"]
+                }
+                
+                p.ranking = id[1]["rank"]
+                p.score = id[1]["score"]
+      
+                players.push(p);
+              }, this)
+            }
+            
+            players.sort(function(a, b){
+              return Number(a["ranking"]) - Number(b["ranking"]);
+            });
+
+            this.state.players = players;
+
+            console.log(this.state.players)
+
+            console.log(statistics)
+            console.log(this.props.alltournaments[this.props.contacts[this.state.selectedLeague].id])
+
+            let final_league_players = [];
+            Object.keys(league_players.players).forEach((player) => {
+              let globalId = this.props.allplayers["mapping"][this.props.contacts[this.state.selectedLeague].id+":"+player];
+              final_league_players.push(this.props.allplayers["players"][globalId])
+            })
+
+            this.setState({
+              players: players,
+              league_players: final_league_players,
+              updateTime: data["update_time"],
+              statistics: statistics,
+              tournaments: this.props.alltournaments[this.props.contacts[this.state.selectedLeague].id],
+              rankingName: data.ranking["name"],
+              rankingType: data.ranking["type"],
+              rankingAlltimes: data.ranking["alltimes"],
+              rankingStartTime: data.ranking["timeStart"],
+              rankingEndTime: data.ranking["timeEnd"]
+            })
+
+            this.preloadImages();
           }
-          
-          players.sort(function(a, b){
-            let league = this.props.contacts[this.state.selectedLeague].id;
-            return Number(a["ranking"]) - Number(b["ranking"]);
-          }.bind(this));
-
-          this.state.players = players;
-
-          console.log(statistics)
-          console.log(this.props.alltournaments[this.props.contacts[this.state.selectedLeague].id])
-
-          this.setState({
-            players: players,
-            updateTime: data["update_time"],
-            statistics: statistics,
-            tournaments: this.props.alltournaments[this.props.contacts[this.state.selectedLeague].id],
-            rankingName: data.ranking["name"],
-            rankingType: data.ranking["type"],
-            rankingAlltimes: data.ranking["alltimes"],
-            rankingStartTime: data.ranking["timeStart"],
-            rankingEndTime: data.ranking["timeEnd"]
-          })
-
-          this.preloadImages();
-        }
+        })
+        .catch(console.log)
       })
       .catch(console.log)
     })
@@ -217,6 +231,9 @@ class Contacts extends Component {
           <button className={styles_selector.teste+" btn col-3"} value="ranking" aria-expanded={this.state.selectedTab === "ranking"} onClick={(event)=>this.handleTabChange(event.target.value)}>
             {i18n.t("Ranking")}
           </button>
+          <button className={styles_selector.teste+" btn col-3"} value="players" aria-expanded={this.state.selectedTab === "players"} onClick={(event)=>this.handleTabChange(event.target.value)}>
+            {i18n.t("players")}
+          </button>
           <button className={styles_selector.teste+" btn col-3"} value="tournaments" aria-expanded={this.state.selectedTab === "tournaments"} onClick={(event)=>this.handleTabChange(event.target.value)}>
             {i18n.t("Tournaments")}
           </button>
@@ -232,19 +249,24 @@ class Contacts extends Component {
           this.state.selectedTab == "ranking" && this.state.players ?
             <PlayerRanking contacts={this.props.contacts} allplayers={this.state.players} ranking={this.state.players} updateTime={this.state.updateTime} />
             :
-            this.state.selectedTab == "tournaments" ?
-              <TournamentList tournaments={this.state.tournaments} />
+            this.state.selectedTab == "players" ?
+              <div style={{padding: "10px"}}>
+                <Players leagues={this.props.contacts} alltournaments={this.state.tournaments} allplayers={{"players": this.state.league_players}} />
+              </div>
               :
-              this.state.selectedTab == "statistics" ?
-                this.state.statistics ? 
-                  <Statistics league={this.props.contacts[this.state.selectedLeague].id} statistics={this.state.statistics} />
-                  :
-                  null
+              this.state.selectedTab == "tournaments" ?
+                <TournamentList tournaments={this.state.tournaments} />
                 :
-                this.state.selectedTab == "info" ?
-                  <Information info={this.props.contacts[this.state.selectedLeague]} />
+                this.state.selectedTab == "statistics" ?
+                  this.state.statistics ? 
+                    <Statistics league={this.props.contacts[this.state.selectedLeague].id} statistics={this.state.statistics} />
+                    :
+                    null
                   :
-                  null
+                  this.state.selectedTab == "info" ?
+                    <Information info={this.props.contacts[this.state.selectedLeague]} />
+                    :
+                    null
         }
       </div>
     )
