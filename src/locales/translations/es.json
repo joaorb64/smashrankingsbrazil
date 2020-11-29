@@ -48,5 +48,7 @@
     "achievement-lanwarrior": "Lan Warrior",
     "achievement-lanwarrior-desc": "Participó en 50 o más torneos en línea",
     "achievement-specialist": "Especialista",
-    "achievement-specialist-desc": "Mejor"
+    "achievement-specialist-desc": "Mejor",
+    "region-sa": "América del Sur",
+    "region-na": "América del Norte"
 }

@@ -9,11 +9,24 @@
   border-bottom: 1px solid #801e19;
 }
 
-.teste:active, .teste[aria-expanded="true"], .teste:hover, .teste:focus, .teste:active:focus, .teste.active:focus {
+.teste:active, .teste:hover, .teste:focus, .teste:active:focus, .teste.active:focus {
   background-color: #97312b !important;
   color: white;
   border-color: #752c29 !important;
   box-shadow: none !important;
+}
+
+.folder-icon {
+  transition-property: all;
+  transition: ease-in-out 0.2s;
+  width: 32px;
+  height: 32px;
+  position: absolute;
+  margin-left: -32px;
+}
+
+.teste[aria-expanded="true"] > .folder-icon {
+  transform: rotate(90deg);
 }
 
 .teste-menu {

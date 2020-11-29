@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import styles from './leagueselector.module.css'
 import { Link } from 'react-router-dom'
+import i18n from '../locales/i18n';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCaretRight } from '@fortawesome/free-solid-svg-icons';
 
 class LeagueSelector extends Component {
   state = {
@@ -35,7 +38,8 @@ class LeagueSelector extends Component {
           if(!this.state.league_tree["subleagues"][league.region]){
             this.state.league_tree["subleagues"][league.region] = {
               leagues: [],
-              subleagues: {}
+              subleagues: {},
+              name: i18n.t("region-"+league.region.toLowerCase())
             };
           }
 
@@ -74,7 +78,7 @@ class LeagueSelector extends Component {
       <>
         {head.leagues.map((contact, i)=>(
           <Link class={"dropdown-item " + styles.teste} to={`/home/smash/${contact.id}`} href={`/home/smash/${contact.id}`} onClick={()=>{this.props.selectLeague(i); this.closeModal()}} style={{
-            display: "flex", lineHeight: "32px", paddingLeft: 1.5*(recursion+1)+"rem"
+            display: "flex", lineHeight: "32px", paddingLeft: (32*(recursion)+32)+"px"
           }} key={"league_"+contact.name}>
             <div style={{
               width: "32px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
@@ -116,10 +120,13 @@ class LeagueSelector extends Component {
         {Object.entries(head.subleagues).map((league, i) => (
           <>
             <div class={"dropdown-item " + styles.teste} 
-            data-toggle="collapse" data-target={"#collapse_"+recursion+"_"+i} aria-expanded="true" aria-controls={"#collapse_"+recursion+"_"+i}
+            data-toggle="collapse" data-target={"#collapse_"+recursion+"_"+i} aria-controls={"#collapse_"+recursion+"_"+i}
             style={{
-              display: "flex", lineHeight: "32px", paddingLeft: 1.5*(recursion+1)+"rem"
+              display: "flex", lineHeight: "32px", paddingLeft: (32*(recursion)+32)+"px"
             }}>
+              <div class={styles["folder-icon"]}>
+                <FontAwesomeIcon icon={faCaretRight} />
+              </div>
               {league[1].icon?
                 <div style={{
                   width: "32px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
@@ -134,7 +141,11 @@ class LeagueSelector extends Component {
                 flexShrink: 1, flexGrow: 1, textOverflow: "ellipsis", overflow: "hidden",
                 textAlign: "left"
               }}>
-                {league[0]}
+                {league[1].name ?
+                  league[1].name
+                :
+                  league[0]
+                }
               </div>
               {league[1].show_count ?
                 <div style={{
@@ -214,7 +225,7 @@ class LeagueSelector extends Component {
                   <span aria-hidden="true" style={{color: "white"}}>&times;</span>
                 </button>
               </div>
-              <div class="modal-body" style={{padding: 0}}>
+              <div class="modal-body" style={{padding: 0, backgroundColor: "#be2018"}}>
                 <div class={"col-md-12 " + styles.teste} style={{padding: 10}}>
                   <input class="form-control" type="text" placeholder={"Pesquisar"}
                   value={this.state.search} />

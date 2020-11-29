@@ -42,7 +42,7 @@ class Mapa extends Component {
           fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/'+this.props.leagues[league].id+'/players.json')
           .then(res => res.json())
           .then((players) => {
-            let geojson = new L.GeoJSON.AJAX("https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/geojson/"+this.props.leagues[league].id+".geojson");
+            /*let geojson = new L.GeoJSON.AJAX("https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/geojson/"+this.props.leagues[league].id+".geojson");
 
             geojson.on('data:loaded', () => {
               function style(estado) {      
@@ -61,7 +61,7 @@ class Mapa extends Component {
               geojson.eachLayer(function (layer) {   
                 layer.setStyle(style.call(this, layer));
               }, this);
-            })
+            })*/
 
             let player = null;
 
@@ -98,7 +98,7 @@ class Mapa extends Component {
             let lat = this.state.leagues[league].latlng[0];
             let lng = this.state.leagues[league].latlng[1];
 
-            let radius = 100000 + 1000 * Object.keys(players.players).length;
+            let radius = 150000 + 200 * Object.keys(players.players).length;
 
             L.circle([lat,lng], radius, {color: "rgba(255, 183, 0, 0.8)", fillColor: "rgba(255, 183, 0, 0.8)"}).addTo(this.mymap);
 
@@ -144,13 +144,12 @@ class Mapa extends Component {
     };
 
     let myFilter = [
-      //'invert:100%',
-      'brightness:200%',
-      //'hue:186deg',
+      'hue:180deg',
+      'invert:100%',
     ]
 
     var baseMap = L.tileLayer.colorFilter(
-      "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
+      "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       {
         minZoom: 2,
         maxZoom: 19,
