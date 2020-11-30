@@ -11,6 +11,55 @@ import { withRouter } from 'react-router-dom'
 import CHARACTERS from '../globals'
 import { parse } from '@fortawesome/fontawesome-svg-core';
 
+Math.getDistance = function( x1, y1, x2, y2 ) {
+	var xs = x2 - x1, ys = y2 - y1;		
+	xs *= xs;
+	ys *= ys;
+	return Math.sqrt( xs + ys );
+};
+
+// angle in radians
+Math.angleRadians = function(p1, p2){return Math.atan2(p2.y - p1.y, p2.x - p1.x);}
+
+// angle in degrees
+Math.angleDeg = function(p1, p2){return Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI;}
+
+var myMarker = L.Marker.extend({
+  update: function () {
+		if (this._icon && this._map) {
+      var pos = this._map.latLngToLayerPoint(this._latlng);
+      
+      for(let i=0; i<Object.keys(this._map._layers).length; i+=1){
+        let other = Object.values(this._map._layers)[i];
+
+        if(other._latlng && other != this && other._icon){
+          let otherPos = this._map.latLngToContainerPoint(other._latlng);
+          let myPos = this._map.latLngToContainerPoint(this._latlng);
+
+          let distance = Math.getDistance(
+            otherPos.x, otherPos.y,
+            myPos.x, myPos.y
+          );
+
+          console.log(distance)
+
+          if(distance<32){
+            let angle = Math.angleRadians(myPos, otherPos);
+            pos.y -= Math.sin(angle)*((32-distance)/4);
+            pos.x -= Math.cos(angle)*((32-distance)/4);
+          }
+        }
+      }
+
+			this._setPos(pos);
+		}
+
+		return this;
+	}
+})
+
+console.log(myMarker.update)
+
 class Mapa extends Component {
   state = {
     leagues: null,
@@ -99,11 +148,19 @@ class Mapa extends Component {
             let lat = this.state.leagues[league].latlng[0];
             let lng = this.state.leagues[league].latlng[1];
 
+            let found = false;
+            
+            this.markers.forEach(marker=>{
+              if(marker._latlng.lat == lat && marker._latlng.lng == lng){
+                lng+=0.001;
+              }
+            })
+
             let radius = 150000 + 200 * Object.keys(players.players).length;
 
             L.circle([lat,lng], radius, {color: "rgba(255, 183, 0, 0.8)", fillColor: "rgba(255, 183, 0, 0.8)"}).addTo(this.mymap);
 
-            let marker = L.marker([lat, lng], {icon: charIcon}).addTo(this.mymap);
+            let marker = new myMarker([lat, lng], {icon: charIcon}).addTo(this.mymap);
             marker.bindPopup('\
               <div style="display: flex; align-items: center">\
                 <div style="width: 32px; height: 32px; background-image: url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/league_icon/'+this.props.leagues[league].id+'.png); background-size: cover; background-position: center; border-radius: 8px"></div>\
@@ -115,6 +172,7 @@ class Mapa extends Component {
                 +'</div>\
               </div>\
             ');
+
             this.markers.push(marker);
             this.zoomFitMarkers();
           }).catch(console.log)
