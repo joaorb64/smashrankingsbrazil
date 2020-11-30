@@ -9,6 +9,7 @@ import styles from './map.module.css'
 import { withRouter } from 'react-router-dom'
 
 import CHARACTERS from '../globals'
+import { parse } from '@fortawesome/fontawesome-svg-core';
 
 class Mapa extends Component {
   state = {
@@ -103,7 +104,17 @@ class Mapa extends Component {
             L.circle([lat,lng], radius, {color: "rgba(255, 183, 0, 0.8)", fillColor: "rgba(255, 183, 0, 0.8)"}).addTo(this.mymap);
 
             let marker = L.marker([lat, lng], {icon: charIcon}).addTo(this.mymap);
-            marker.bindPopup('<a onClick="window.routerHistory.push(\'/home/smash/'+this.props.leagues[league].id+'\');">'+this.props.leagues[league].name+'</a>');
+            marker.bindPopup('\
+              <div style="display: flex; align-items: center">\
+                <div style="width: 32px; height: 32px; background-image: url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/league_icon/'+this.props.leagues[league].id+'.png); background-size: cover; background-position: center; border-radius: 8px"></div>\
+                <div style="display: flex; align-items: left; flex-direction: column; padding-left: 10px">\
+                  <a onClick="window.routerHistory.push(\'/home/smash/'+this.props.leagues[league].id+'\');">'+this.props.leagues[league].name+'</a>'+
+                  (this.props.leagues[league].city ? this.props.leagues[league].city+", " : "")+
+                  (this.props.leagues[league].state ? this.props.leagues[league].state+", " : "")+
+                  (this.props.leagues[league].country ? this.props.leagues[league].country : "")
+                +'</div>\
+              </div>\
+            ');
             this.markers.push(marker);
             this.zoomFitMarkers();
           }).catch(console.log)
