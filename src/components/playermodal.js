@@ -354,9 +354,19 @@ class PlayerModal extends Component {
 
                           {this.state.playerData.name}
 
+                          {this.state.playerData.country_code && this.state.playerData.country_code != "null" ?
+                            <div className={styles.stateFlag + " state-flag"} style={{
+                              backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/country_flag/${this.state.playerData.country_code.toLowerCase()}.png)`,
+                              width: "32px", height: "32px", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
+                              backgroundPosition: "center", paddingTop: "22px", marginLeft: "10px", textAlign: "center", verticalAlign: "bottom"
+                            }}></div>
+                          :
+                            null
+                          }
+
                           {this.state.playerData.state && this.state.playerData.state != "null" ?
                             <div className={styles.stateFlag + " state-flag"} style={{
-                              backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/state_icon/${this.state.playerData.state}.png)`,
+                              backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/state_flag/${this.state.playerData.country_code}/${this.state.playerData.state}.png)`,
                               width: "32px", height: "32px", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
                               backgroundPosition: "center", paddingTop: "22px", marginLeft: "10px", textAlign: "center", verticalAlign: "bottom"
                             }}></div>
@@ -421,9 +431,9 @@ class PlayerModal extends Component {
                       </div>
 
                       <div className={styles.characterMain} style={{
-                        marginRight: "12px", borderBottom: "1px solid #3d5466",
+                        marginRight: "12px", marginTop: "-10px", marginBottom: "-10px",
                         backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_1_${this.getCharCodename(this.state.playerData, 0)}.png)`,
-                        position: "absolute", right: 0
+                        right: 0, flexGrow: 0, flexShrink: 0, height: "auto", alignSelf: "normal"
                       }}>
                       </div>
                       <div style={{
@@ -511,7 +521,7 @@ class PlayerModal extends Component {
 
                     {this.state.playerData.character_usage_percent ?
                       <row style={{display: "block", padding: "12px"}}>
-                        <h5>Uso de personagens nos últimos 30 sets</h5>
+                        <h5>Character usage (latest 30 sets)</h5>
                         <div class="row" style={{padding: "10px", margin: 0, backgroundColor: "black", borderBottom: "1px solid #3d5466", justifyContent: "center"}}>
                           {this.state.playerData.character_usage_percent.map((character, i)=>(
                             <a key={this.state.playerData.name+i} style={{textAlign: "center", display: "flex",
@@ -575,7 +585,7 @@ class PlayerModal extends Component {
                                   </td>
                                   <td><a target="_blank" href={`https://braacket.com/tournament/${tournament.id}`}>{tournament.name}</a></td>
                                   <td>{moment.unix(tournament.time).add(1, "day").format("DD/MM/YY")}</td>
-                                  <td style={{textAlign: "center"}}>{tournament.ranking+"/"+tournament.player_number}</td>
+                                  <td style={{textAlign: "center"}}>{tournament.ranking}<small>/{tournament.player_number}</small></td>
                                 </tr>
                               ))
                             }
