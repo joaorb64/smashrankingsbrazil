@@ -18,12 +18,13 @@ class Contacts extends Component {
     players: [],
     top3Colors: ["#D6AF36", "#D7D7D7", "#A77044"],
     top3Colors2: ["#AF9500", "#B4B4B4", "#6A3805"],
-    top3Colors3: ["#C9B037", "#A7A7AD", "#824A02"]
+    top3Colors3: ["#C9B037", "#A7A7AD", "#824A02"],
+    userCountry: null
   }
 
   componentDidUpdate(nextProps) {
     if(nextProps !== this.props) {
-      if(this.props.match){
+      if(this.props){
         let selectedId = this.props.match.match.params["id"];    
         if(selectedId){
           let selectedLeague = this.props.contacts.findIndex((a)=>{return a.id == selectedId});
@@ -34,7 +35,22 @@ class Contacts extends Component {
       }
 
       if(this.props.contacts.length > 0){
-        this.updateData();
+        if(!this.props.match || !this.props.match.match.params["id"]){
+          console.log(this.props.usercountry);
+          if(this.props.usercountry != this.state.usercountry){
+            let selectLeague = 0;
+    
+            for(let i=0; i<this.props.contacts.length; i+=1){
+              if(this.props.contacts[i].country && this.props.contacts[i].country == this.props.usercountry){
+                selectLeague = i;
+                break;
+              }
+            }
+    
+            this.selectLeague(selectLeague);
+          }
+          this.updateData();
+        }
       }
     }
   }
@@ -56,7 +72,23 @@ class Contacts extends Component {
     }
 
     if(this.props.contacts.length > 0){
-      this.updateData();
+      if(!this.props.match || !this.props.match.match.params["id"]){
+        if(this.props.usercountry){
+          console.log(this.props.usercountry);
+          
+          let selectLeague = 0;
+  
+          for(let i=0; i<this.props.contacts.length; i+=1){
+            if(this.props.contacts[i].country && this.props.contacts[i].country == this.props.usercountry){
+              selectLeague = i;
+              break;
+            }
+          }
+  
+          this.selectLeague(selectLeague);
+        }
+        this.updateData();
+      }
     }
   }
 
@@ -228,19 +260,19 @@ class Contacts extends Component {
         }
 
         <div className="teste btn-group btn-group-toggle col-12" style={{padding: "5px 8px 0px 10px", marginBottom: "-5px"}}>
-          <button className={styles_selector.teste+" btn col-3"} value="ranking" aria-expanded={this.state.selectedTab === "ranking"} onClick={(event)=>this.handleTabChange(event.target.value)}>
+          <button className={styles_selector.teste+" "+styles_selector.aria+" btn col-3"} value="ranking" aria-expanded={this.state.selectedTab == "ranking"} onClick={(event)=>this.handleTabChange(event.target.value)}>
             {i18n.t("Ranking")}
           </button>
-          <button className={styles_selector.teste+" btn col-3"} value="players" aria-expanded={this.state.selectedTab === "players"} onClick={(event)=>this.handleTabChange(event.target.value)}>
+          <button className={styles_selector.teste+" "+styles_selector.aria+" btn col-3"} value="players" aria-expanded={this.state.selectedTab == "players"} onClick={(event)=>this.handleTabChange(event.target.value)}>
             {i18n.t("players")}
           </button>
-          <button className={styles_selector.teste+" btn col-3"} value="tournaments" aria-expanded={this.state.selectedTab === "tournaments"} onClick={(event)=>this.handleTabChange(event.target.value)}>
+          <button className={styles_selector.teste+" "+styles_selector.aria+" btn col-3"} value="tournaments" aria-expanded={this.state.selectedTab == "tournaments"} onClick={(event)=>this.handleTabChange(event.target.value)}>
             {i18n.t("Tournaments")}
           </button>
-          <button className={styles_selector.teste+" btn col-3"} value="statistics" aria-expanded={this.state.selectedTab === "statistics"} onClick={(event)=>this.handleTabChange(event.target.value)}>
+          <button className={styles_selector.teste+" "+styles_selector.aria+" btn col-3"} value="statistics" aria-expanded={this.state.selectedTab == "statistics"} onClick={(event)=>this.handleTabChange(event.target.value)}>
             {i18n.t("Statistics")}
           </button>
-          <button className={styles_selector.teste+" btn col-3"} value="info" aria-expanded={this.state.selectedTab === "info"} onClick={(event)=>this.handleTabChange(event.target.value)}>
+          <button className={styles_selector.teste+" "+styles_selector.aria+" btn col-3"} value="info" aria-expanded={this.state.selectedTab == "info"} onClick={(event)=>this.handleTabChange(event.target.value)}>
             {i18n.t("Info")}
           </button>
         </div>

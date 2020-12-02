@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import styles from './topbar.module.css'
 import i18n from '../locales/i18n';
-import { faHome, faUsers, faMap, faCalendar, faCoins, faInfoCircle, faInfo } from '@fortawesome/free-solid-svg-icons'
+import { faHome, faUsers, faMap, faCalendar, faCoins, faInfoCircle, faInfo, faChartLine, faTrophy } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class TopBar extends Component {
@@ -45,27 +45,27 @@ class TopBar extends Component {
           <span class="navbar-toggler-icon" style={{fontFamily: "'Montserrat', sans-serif"}}></span>
         </button>
 
-        <Link class="navbar-brand" style={{color: "white", flexGrow: 1}} to="/home/smash/homeonline">
+        <Link class="navbar-brand" style={{color: "white", flexGrow: 1}} to="/leagues/smash/">
           Power Rankings
         </Link>
 
         <ul className={"sidenav navbar-nav" + (this.state.hidden ? " sidenav-hidden" : "")}>
-          <NavLink onClick={()=>this.setState({hidden: true})} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/home/smash/homeonline" href="/home/">
-            <div class="nav-link"><FontAwesomeIcon icon={faHome}/> {i18n.t("home")}</div>
+          <NavLink onClick={()=>this.setState({hidden: true})} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/leagues/smash/" href="/leagues">
+            <div class="nav-link"><FontAwesomeIcon icon={faTrophy}/> {i18n.t("leagues")}</div>
           </NavLink>
           <NavLink onClick={()=>this.setState({hidden: true})} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/players" href="/players">
             <div class="nav-link"><FontAwesomeIcon icon={faUsers}/> {i18n.t("players")}</div>
           </NavLink>
-          <NavLink onClick={()=>this.setState({hidden: true})} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/map/" href="/map/">
+          <NavLink onClick={()=>this.setState({hidden: true})} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/map/" href="/map">
             <div class="nav-link"><FontAwesomeIcon icon={faMap}/> {i18n.t("map")}</div>
           </NavLink>
-          <NavLink onClick={()=>this.setState({hidden: true})} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/nexttournaments/" href="/nexttournaments/">
+          <NavLink onClick={()=>this.setState({hidden: true})} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/nexttournaments/" href="/nexttournaments">
             <div class="nav-link"><FontAwesomeIcon icon={faCalendar}/> {i18n.t("next-tournaments")}</div>
           </NavLink>
-          <NavLink onClick={()=>this.setState({hidden: true})} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/matcherino/" href="/matcherino/">
+          <NavLink onClick={()=>this.setState({hidden: true})} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/matcherino/" href="/matcherino">
             <div class="nav-link"><FontAwesomeIcon icon={faCoins}/> Matcherino</div>
           </NavLink>
-          <NavLink onClick={()=>this.setState({hidden: true})} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/about/" href="/about/">
+          <NavLink onClick={()=>this.setState({hidden: true})} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/about/" href="/about">
             <div class="nav-link"><FontAwesomeIcon icon={faInfoCircle}/> {i18n.t("about")}</div>
           </NavLink>
         </ul>

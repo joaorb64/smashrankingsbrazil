@@ -1,6 +1,7 @@
 {
     "date_format": "{{date, DD/MM/YYYY}}",
     "home": "Home",
+    "leagues": "Ligas",
     "players": "Jogadores",
     "map": "Mapa",
     "next-tournaments": "Próximos torneios",

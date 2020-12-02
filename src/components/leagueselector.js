@@ -70,14 +70,14 @@ class LeagueSelector extends Component {
   }
 
   renderTree(head, recursion=0){
-    console.log(head)
+    //console.log(head)
     if(head.leagues == null || head.subleagues == null){
       return;
     }
     return(
       <>
         {head.leagues.map((contact, i)=>(
-          <Link class={"dropdown-item " + styles.teste} to={`/home/smash/${contact.id}`} href={`/home/smash/${contact.id}`} onClick={()=>{this.props.selectLeague(i); this.closeModal()}} style={{
+          <Link class={"dropdown-item " + styles.teste} to={`/leagues/smash/${contact.id}`} href={`/leagues/smash/${contact.id}`} onClick={()=>{this.props.selectLeague(i); this.closeModal()}} style={{
             display: "flex", lineHeight: "32px", paddingLeft: (32*(recursion)+32)+"px"
           }} key={"league_"+contact.name}>
             <div style={{
@@ -226,10 +226,10 @@ class LeagueSelector extends Component {
                 </button>
               </div>
               <div class="modal-body" style={{padding: 0, backgroundColor: "#be2018"}}>
-                <div class={"col-md-12 " + styles.teste} style={{padding: 10}}>
+                {/*<div class={"col-md-12 " + styles.teste} style={{padding: 10}}>
                   <input class="form-control" type="text" placeholder={"Pesquisar"}
                   value={this.state.search} />
-                </div>
+                </div>*/}
                 {this.renderTree(this.state.league_tree)}
               </div>
               <div class="modal-footer" style={{backgroundColor: "#be2018", borderTop: 0}}>

@@ -16,7 +16,8 @@ class App extends Component {
   state = {
     leagues: [],
     allplayers: null,
-    alltournaments: null
+    alltournaments: null,
+    userCountry: null
   }
 
   componentWillMount() {
@@ -70,6 +71,13 @@ class App extends Component {
       this.setState(this.state);
     })
     .catch(console.log)
+
+    // Get user country
+    fetch('https://get.geojs.io/v1/ip/country.json').then(res => res.json()).then((data) => {
+      if(data && data.country){
+        this.setState({userCountry: data.country});
+      }
+    })
   }
 
   componentDidMount() {
@@ -96,16 +104,16 @@ class App extends Component {
           }}>
 
             <Switch>
-              <Route path="/home/smash/:id?/:tab?" exact render={
-                (props) => <Contacts contacts={this.state.leagues} allplayers={this.state.allplayers} alltournaments={this.state.alltournaments} match={props}></Contacts>
+              <Route path="/leagues/smash/:id?/:tab?" exact render={
+                (props) => <Contacts contacts={this.state.leagues} allplayers={this.state.allplayers} alltournaments={this.state.alltournaments} usercountry={this.state.userCountry} match={props}></Contacts>
               } />
               <Route path="/players/" exact render={(props) => <Players leagues={this.state.leagues} alltournaments={this.state.alltournaments} allplayers={this.state.allplayers} />} />
-              <Route path="/home/granblue/" exact render={(props) => <Granblue />} />
+              <Route path="/leagues/granblue/" exact render={(props) => <Granblue />} />
               <Route path="/map/" exact render={(props) => <Mapa allplayers={this.state.allplayers} leagues={this.state.leagues} />} />
               <Route path="/matcherino/" exact render={(props) => <Matcherino />} />
               <Route path="/nexttournaments/" exact render={(props) => <NextTournaments />} />
               <Route path="/about/" exact render={(props) => <About />} />
-              <Redirect to="/home/smash/" />
+              <Redirect to="/leagues/smash/" />
             </Switch>
 
             <PlayerModal leagues={this.state.leagues} allplayers={this.state.allplayers} alltournaments={this.state.alltournaments} />

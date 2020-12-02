@@ -97,14 +97,8 @@ class Statistics extends Component {
         });
       }
 
-      if("score_per_league" in data){
-        data["score_per_league"] = Object.entries(data["score_per_league"])
-        data["score_per_league"].sort(function(a, b) {
-          return b[1]["average"] - a[1]["average"];
-        });
-      }
-
       if("players_per_country" in data){
+        if(data["players_per_country"]["null"]){delete data["players_per_country"]["null"]}
         data["players_per_country"] = Object.entries(data["players_per_country"])
 
         data["players_per_country"].sort(function(a, b) {
@@ -113,10 +107,13 @@ class Statistics extends Component {
       }
 
       if("players_per_state" in data){
+        if(data["players_per_state"]["null"]){delete data["players_per_state"]["null"]}
         data["players_per_state"] = Object.entries(data["players_per_state"])
 
+        console.log(data["players_per_state"])
+
         data["players_per_state"].sort(function(a, b) {
-          return b[1]["count"] - a[1]["count"];
+          return b[1] - a[1];
         });
       }
 
@@ -318,6 +315,12 @@ class Statistics extends Component {
         for (var i in chartData.labels) {
           let lab = chartData.labels[i];
           let icon = chartData.icons[i];
+
+          if(lab == "null"){
+            lab = "null"
+            icon = "null"
+          }
+
           var $img = window.jQuery("<img/>").attr("id", lab).attr(
             "src",
             "https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/country_flag/"+lab.toLowerCase()+".png"
@@ -379,19 +382,23 @@ class Statistics extends Component {
 
       if(this.myChartStatesRef){
         var chartData = {
-          "labels": this.state.statistics.players_per_state.map((a)=>{return a[1]["country_code"]+"_"+a[0]}),
+          "labels": this.state.statistics.players_per_state.map((a)=>{return a[0]}),
           "datasets": [{
-            "data": this.state.statistics.players_per_state.map((a)=>{return a[1]["count"]}),
+            "data": this.state.statistics.players_per_state.map((a)=>{return a[1]}),
             "fill": false,
             "backgroundColor": "rgba(255, 183, 0, 1)",
             "borderWidth": 0
           }],
-          "icons": this.state.statistics.players_per_state.map((a)=>{return a[1]["country_code"]+"/"+a[0]})
+          "icons": this.state.statistics.players_per_state.map((a)=>{return a[0].split("_")[0]+"/"+a[0].split("_")[1]})
         };
       
         for (var i in chartData.labels) {
           let lab = chartData.labels[i];
           let icon = chartData.icons[i];
+          if(lab == "null"){
+            lab = "Unknown"
+            icon = "null"
+          }
           console.log(icon)
           var $img = window.jQuery("<img/>").attr("id", lab).attr(
             "src",

@@ -476,7 +476,7 @@ class PlayerModal extends Component {
                           <div class="col-lg-4 col-md-6" style={{padding: "2px"}} id={i}>
                             {this.props.leagues ?
                               <Link 
-                                to={`/home/smash/${rank[0]}`}
+                                to={`/leagues/smash/${rank[0]}`}
                                 onClick={()=>this.closeModal()}
                                 style={{display: "flex"}}>
                                   <div style={{width: "42px", textAlign: "center", fontSize: "1.5rem",

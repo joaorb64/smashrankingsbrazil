@@ -349,11 +349,7 @@ class PlayerRanking extends Component {
                 </div>
               </div>
             :
-            <div class={"col-12"} style={{paddingTop: 10}}>
-              <div class={styles.listItem} style={{padding: "10px 10px", lineHeight: "24px", height: "auto"}}>
-                Loading...
-              </div>
-            </div>
+            <div class="loader"></div>
         }
       </div>
     )

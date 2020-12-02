@@ -9,7 +9,8 @@
   border-bottom: 1px solid #801e19;
 }
 
-.teste:active, .teste:hover, .teste:focus, .teste:active:focus, .teste.active:focus {
+.teste:active, .teste:hover, .teste:focus, .teste:active:focus, .teste.active:focus,
+.teste.aria[aria-expanded="true"] {
   background-color: #97312b !important;
   color: white;
   border-color: #752c29 !important;

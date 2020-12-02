@@ -1,9 +1,10 @@
 {
     "date_format": "{{date, MM-DD-YYYY}}",
     "home": "Home",
+    "leagues": "Leagues",
     "players": "Players",
     "map": "Map",
-    "next-tournaments": "Next tournaments",
+    "next-tournaments": "Upcoming tournaments",
     "about": "About",
     "dateFrom": "From",
     "dateFromAfter": "",
