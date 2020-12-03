@@ -178,19 +178,32 @@ class PlayerRanking extends Component {
                             null
                           }
                         </div>
-                        <div class="" style={{
-                          width: "64px", display: "flex", justifyContent: "center", alignItems: "center", padding: "8px", alignSelf: "flex-end"
-                        }}>
-                          {player.state && player.state != "null" ?
+                        {player.country_code && player.country_code != "null" ?
+                          <div class="" style={{
+                            width: "48px", display: "flex", justifyContent: "center", alignItems: "center", padding: "8px", alignSelf: "flex-end"
+                          }}>
                             <div class="state-flag" style={{
-                              backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/state_icon/${player.state}.png)`,
+                              backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/country_flag/${player.country_code.toLowerCase()}.png)`,
+                              width: "100%", height: "32px", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
+                              backgroundPosition: "center", paddingTop: "20px"
+                            }}>{player.country_code}</div>
+                          </div>
+                          :
+                          null
+                        }
+                        {player.state && player.state != "null" ?
+                          <div class="" style={{
+                            width: "48px", display: "flex", justifyContent: "center", alignItems: "center", padding: "8px", alignSelf: "flex-end"
+                          }}>
+                            <div class="state-flag" style={{
+                              backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/state_flag/${player.country_code}/${player.state}.png)`,
                               width: "100%", height: "32px", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
                               backgroundPosition: "center", paddingTop: "20px"
                             }}>{player.state}</div>
+                          </div>
                           :
-                            null
-                          }
-                        </div>
+                          null
+                        }
                         <div style={{
                           fontSize: "1.4rem", backgroundColor: "black", color: "white", textAlign: "right",
                           alignSelf: "flex-end", padding: "6px", paddingTop: "2px", paddingBottom: "2px"

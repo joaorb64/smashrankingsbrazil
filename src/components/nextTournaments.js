@@ -3,6 +3,7 @@ import moment from "../../node_modules/moment-timezone/moment-timezone";
 import styles from "./nextTournaments.module.css"
 import { faCalendar, faEdit, faMapMarkerAlt, faUser, faWifi } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import i18n from '../locales/i18n';
 
 var WEEKDAYS = {
   0: "DOM",
@@ -16,20 +17,74 @@ var WEEKDAYS = {
 
 class NextTournaments extends Component {
   state = {
-    tournaments: null
+    tournaments: [],
+    selectedCountry: null,
+    selections: {},
+    alltournaments: null
   }
 
   componentDidUpdate(nextProps) {
   }
 
   componentDidMount() {
-    fetch('https://raw.githubusercontent.com/joaorb64/SmashTwitterBot/master/events.json')
+    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/nexttournaments.json')
     .then(res => res.json())
     .then((data) => {
-      this.state.tournaments = Object.values(data).sort((a, b) => (a.startAt > b.startAt) ? 1 : -1);
+      console.log(data);
+
+      Object.entries(data).forEach(country => {
+        country[1].events.forEach((event)=>{
+          event.country = country[0];
+        })
+      })
+
+      this.state.alltournaments = data;
+
+      let selections = {}
+
+      Object.entries(data).forEach(country => {
+        if(!selections.hasOwnProperty(country[1].region)){
+          selections[country[1].region] = []
+        }
+        selections[country[1].region].push(country[0])
+      });
+
+      this.state.selections = selections;
+
       this.setState(this.state);
+      
+      this.filterTournaments("all");
     })
     .catch(console.log)
+  }
+
+  selectCountry(e){
+    this.state.selectedCountry = e.target.value;
+    this.filterTournaments(e.target.value);
+  }
+
+  filterTournaments(value){
+    let selectedTournaments = [];
+
+    if(value == "all"){
+      Object.entries(this.state.alltournaments).forEach((country)=>{
+        selectedTournaments = selectedTournaments.concat(country[1].events)
+      })
+    } else if(value.startsWith("region_")){
+      Object.entries(this.state.alltournaments).forEach((country)=>{
+        if(country[1].region == value.split("region_")[1]){
+          selectedTournaments = selectedTournaments.concat(country[1].events)
+        }
+      })
+    } else {
+      selectedTournaments = this.state.alltournaments[value].events;
+    }
+    
+    selectedTournaments = selectedTournaments.sort((a, b) => (a.startAt > b.startAt) ? 1 : -1);
+
+    this.state.tournaments = selectedTournaments;
+
+    this.setState(this.state);
   }
 
   render (){
@@ -42,10 +97,27 @@ class NextTournaments extends Component {
           <h2 style={{color: "white"}}>
             Próximos torneios
           </h2>
-          <a href="https://twitter.com/smash_bot_br" class="col-12" style={{backgroundColor: "white", minHeight: "64px", display: "flex", alignItems: "center"}}>
-            <img src="/images/bot.png" style={{height: 48, width: 48, borderRadius: 8}} />
-            <div style={{padding: 8, color: "black"}}>Siga o @smash_bot_br para ser notificado de próximos eventos e resultados de torneios em tempo real!</div>
-          </a>
+          <select class="form-control form-control-lg" onChange={(e)=>this.selectCountry(e)}>
+            <option value="all">All</option>
+            {Object.keys(this.state.selections).map((region) => (
+              <>
+                <optgroup label={i18n.t("region-"+region.toLowerCase())}>
+                  <option value={"region_"+region}>All</option>
+                  {this.state.selections[region].map((country) => (
+                    <option value={country}>{country+" ("+this.state.alltournaments[country].events.length+")"}</option>
+                  ))}
+                </optgroup>
+              </>
+            ))}
+          </select>
+          {this.state.selectedCountry == "BR" ? 
+            <a href="https://twitter.com/smash_bot_br" class="col-12" style={{backgroundColor: "white", minHeight: "64px", display: "flex", alignItems: "center"}}>
+              <img src="/images/bot.png" style={{height: 48, width: 48, borderRadius: 8}} />
+              <div style={{padding: 8, color: "black"}}>Siga o @smash_bot_br para ser notificado de próximos eventos e resultados de torneios em tempo real!</div>
+            </a>
+            :
+            null
+          }          
         </div>
         <div class="row">
           {
@@ -56,9 +128,12 @@ class NextTournaments extends Component {
                     <div className={styles.tournamentContainerHighlight} style={{cursor: "pointer"}}>
                       <div className={styles.tournamentContainer} style={{backgroundColor: "#ff5e24", border: "4px solid black", cursor: "pointer"}}>
                         <div style={{backgroundImage: "url("+
-                          (tournament.images.find(img => img["type"]=="banner") || tournament.images[tournament.images.length-1]).url+
+                          ((tournament.images.find(img => img["type"]=="banner") || tournament.images[tournament.images.length-1])?.url || "") +
                           ")", height: 140, margin: "4px",
-                        backgroundSize: "cover", backgroundPosition: "center", backgroundColor: "black"}}></div>
+                        backgroundSize: "cover", backgroundPosition: "center", backgroundColor: "black"}}>
+                          <div style={{position: "absolute", width: 50, height: 30, backgroundPosition: "center", backgroundSize: "cover", margin: "2px", border: "2px solid black",
+                          backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/country_flag/${tournament.country.toLowerCase()}.png)`}}></div>
+                        </div>
 
                         <div style={{height: 60, display: "flex", flexDirection: "column", alignItems: "center", placeContent: "center",
                         paddingLeft: "8px", paddingRight: "8px", background: "rgb(255,113,40)",
@@ -93,10 +168,6 @@ class NextTournaments extends Component {
                           
                           <div style={{backgroundColor: "#dedede", padding: "2px", paddingRight: "8px", paddingLeft: "8px", flexGrow: 1, textAlign: "left"}}>
                             <FontAwesomeIcon icon={faEdit}/> Inscrições até: {WEEKDAYS[moment(tournament.tournament_registrationClosesAt * 1000).day()]+" "}{moment(tournament.tournament_registrationClosesAt * 1000).format("DD/MM/YY HH:mm") + " (GMT-3)"}
-                          </div>
-
-                          <div style={{backgroundColor: "#dedede", padding: "2px", paddingRight: "8px", paddingLeft: "8px", flexGrow: 1, textAlign: "left"}}>
-                            <FontAwesomeIcon icon={faUser}/> Inscritos: {tournament.numEntrants}
                           </div>
                         </div>
                       </div>

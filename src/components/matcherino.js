@@ -4,85 +4,107 @@ import styles from "./nextTournaments.module.css"
 
 class Matcherino extends Component {
   state = {
+    matcherinos: {},
+    selected: null,
     tournaments: null,
-    loading: true
+    loading: false
   }
 
   componentDidUpdate(nextProps) {
   }
 
   componentDidMount() {
-    let offset = 0;
-    let perPage = 10;
-
     fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/matcherinos.json')
     .then(res => res.json())
     .then((data) => {
       console.log(data);
 
-      let fetchPage = function(offset, perPage) {
-        fetch('https://matcherino.com/__api/bounties/list?offset='+offset+'&size='+perPage+'&creatorId='+data["BR"][0]+'&published=true&gameId=112')
-        .then(res => res.json())
-        .then((data) => {
-          console.log(data);
-    
-          data.body = data.body.filter((tournament) => {
-            if(tournament.status=="ready"){
-              return true;
-            }
-            return false;
-          });
-    
-          console.log(data.body)
-    
-          data.body.forEach(tournament => {
-            let used = 0;
-    
-            if(tournament.transactions){
-              tournament.transactions.forEach(transaction => {
-                if(transaction.action == "coupon:use"){
-                  used += 1;
-                }
-              })
-            }
-    
-            tournament.usedCoupons = used;
-    
-            let coupon = tournament.description.match(/cupom:[\s][a-zA-Z|0-9]+/gi);
-    
-            if(coupon != null){
-              coupon = coupon[0].substring(6).trim()
-            }
-    
-            tournament.coupon = coupon;
-          });
+      this.setState({
+        matcherinos: data,
+        selected: Object.keys(data)[0]
+      });
 
-          if(this.state.tournaments == null){
-            this.state.tournaments = []
-          }
-
-          data.body.forEach((tournament) => {
-            this.state.tournaments.push(tournament);
-          })
-
-          this.setState(this.state);
-
-          offset+=10;
-
-          if(offset < 100){
-            fetchPage.call(this, offset, perPage);
-          } else {
-            this.setState({loading: false});
-          }
-        })
-        .catch((err)=>{
-          console.log(err);
-          this.setState({loading: false});
-        })
-      };
-
-      fetchPage.call(this, offset, perPage)
+      let offset = 0;
+      let perPage = 10;
+      this.fetchPage(offset, perPage);
     });
+  }
+
+  fetchPage(offset, perPage) {
+    if(this.state.selected == null) return;
+    if(offset == 0){
+      this.state.tournaments = [];
+      this.state.loading = true;
+      this.setState(this.state);
+    }
+
+    fetch('https://matcherino.com/__api/bounties/list?offset='+offset+'&size='+perPage+'&creatorId='+this.state.matcherinos[this.state.selected][0]+'&published=true&gameId=112')
+    .then(res => res.json())
+    .then((data) => {
+      console.log(data);
+
+      data.body = data.body.filter((tournament) => {
+        if(tournament.status=="ready"){
+          return true;
+        }
+        return false;
+      });
+
+      console.log(data.body)
+
+      data.body.forEach(tournament => {
+        let used = 0;
+
+        if(tournament.transactions){
+          tournament.transactions.forEach(transaction => {
+            if(transaction.action == "coupon:use"){
+              used += 1;
+            }
+          })
+        }
+
+        tournament.usedCoupons = used;
+
+        let coupon = tournament.description.match(/cupom:[\s][a-zA-Z|0-9]+/gi);
+
+        if(coupon != null){
+          coupon = coupon[0].substring(6).trim()
+        }
+
+        tournament.coupon = coupon;
+      });
+
+      if(this.state.tournaments == null){
+        this.state.tournaments = []
+      }
+
+      data.body.forEach((tournament) => {
+        this.state.tournaments.push(tournament);
+      })
+
+      this.setState(this.state);
+
+      offset+=10;
+
+      if(offset < 100){
+        this.fetchPage(offset, perPage);
+      } else {
+        this.setState({loading: false});
+      }
+    })
+    .catch((err)=>{
+      console.log(err);
+      this.setState({loading: false});
+    })
+  };
+
+  selectCountry(e){
+    this.state.selected = e.target.value;
+    this.setState(this.state);
+
+    let offset = 0;
+    let perPage = 10;
+    this.fetchPage(offset, perPage);
   }
 
   render(){
@@ -96,6 +118,13 @@ class Matcherino extends Component {
             Campanhas ativas no Matcherino
           </h2>
         </div>
+        <select class="form-control form-control-lg" onChange={(e)=>this.selectCountry(e)}>
+          {Object.keys(this.state.matcherinos).map((country) => (
+            <>
+              <option value={country}>{country}</option>
+            </>
+          ))}
+        </select>
         <div class="row">
           {
             this.state.tournaments != null ?
