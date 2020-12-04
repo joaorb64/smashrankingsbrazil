@@ -4,6 +4,7 @@ import { Link, useParams, useLocation } from 'react-router-dom';
 import LeagueSelector from './leagueselector';
 import moment from "../../node_modules/moment-timezone/moment-timezone";
 import CHARACTERS from "../globals";
+import LazyLoad from 'react-lazyload';
 
 class PlayerRanking extends Component {
   state = {
@@ -28,10 +29,14 @@ class PlayerRanking extends Component {
 
       if(this.props.ranking){
         this.state.players = this.props.ranking;
+      } else {
+        this.state.players = null;
       }
 
       if(this.props.updateTime){
         this.state.updateTime = this.props.updateTime;
+      } else {
+        this.state.updateTime = null;
       }
 
       this.setState(this.state);
@@ -51,11 +56,11 @@ class PlayerRanking extends Component {
 
     if(this.props.ranking){
       this.state.players = this.props.ranking;
+    } else {
+      this.state.players = [];
     }
 
-    if(this.props.updateTime){
-      this.state.updateTime = this.props.updateTime;
-    }
+    this.state.updateTime = this.props.updateTime;
 
     this.setState(this.state);
   }
@@ -213,22 +218,24 @@ class PlayerRanking extends Component {
                       </div>
 
                       {player.avatar ?
-                        <a href={player.twitter}>
-                          <div style={{
-                            backgroundImage: `url(${player.avatar})`,
-                            width: "96px", height: "96px", backgroundSize: "cover", backgroundPosition: "center",
-                            borderRadius: "100%", position: "absolute", right: 10, top: 10, border: "5px #f0f0f0 solid",
-                            backgroundColor: "gray"
-                          }}>
-                            {player.twitter ? 
-                              <div style={{width: "100%", height: "100%", display: "flex", alignItems: "flex-end", justifyContent: "flex-end", margin: "5px"}}>
-                                <div style={{
-                                  backgroundImage: "url(/icons/twitter.svg)", width: 32, height: 32, bottom: 0, right: 0
-                                }}></div>
-                              </div>
-                              :
-                              null}
-                          </div>
+                        <a href={"http://twitter.com/"+player.twitter}>
+                          <LazyLoad>
+                            <div style={{
+                              backgroundImage: `url(${player.avatar})`,
+                              width: "96px", height: "96px", backgroundSize: "cover", backgroundPosition: "center",
+                              borderRadius: "100%", position: "absolute", right: 10, top: 10, border: "5px #f0f0f0 solid",
+                              backgroundColor: "gray"
+                            }}>
+                              {player.twitter ? 
+                                <div style={{width: "100%", height: "100%", display: "flex", alignItems: "flex-end", justifyContent: "flex-end", margin: "5px"}}>
+                                  <div style={{
+                                    backgroundImage: "url(/icons/twitter.svg)", width: 32, height: 32, bottom: 0, right: 0
+                                  }}></div>
+                                </div>
+                                :
+                                null}
+                            </div>
+                          </LazyLoad>
                         </a>
                       :
                         null
@@ -249,22 +256,24 @@ class PlayerRanking extends Component {
                 <div class={styles.playerRanking}>{player.ranking}</div>
 
                 {player.avatar ?
-                  <a href={player.twitter}>
-                    <div class="player-avatar" style={{
-                      backgroundImage: `url(${player.avatar})`,
-                      width: "64px", height: "100%", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
-                      backgroundPosition: "center", backgroundColor: "white",
-                    }}>
-                      {player.twitter ? 
-                        <div style={{width: "100%", height: "100%", display: "flex", alignItems: "flex-end", justifyContent: "flex-end"}}>
-                          <div style={{
-                            backgroundImage: "url(/icons/twitter.svg)", width: 16, height: 16, bottom: 0, right: 0, margin: "2px"
-                          }}></div>
-                        </div>
-                        :
-                        null}
-                    </div>
-                  </a>
+                  <LazyLoad>
+                    <a href={player.twitter}>
+                      <div class="player-avatar" style={{
+                        backgroundImage: `url(${player.avatar})`,
+                        width: "64px", height: "100%", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
+                        backgroundPosition: "center", backgroundColor: "white",
+                      }}>
+                        {player.twitter ? 
+                          <div style={{width: "100%", height: "100%", display: "flex", alignItems: "flex-end", justifyContent: "flex-end"}}>
+                            <div style={{
+                              backgroundImage: "url(/icons/twitter.svg)", width: 16, height: 16, bottom: 0, right: 0, margin: "2px"
+                            }}></div>
+                          </div>
+                          :
+                          null}
+                      </div>
+                    </a>
+                  </LazyLoad>
                 :
                   <div class="player-avatar" style={{
                     width: "64px", height: "48px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",

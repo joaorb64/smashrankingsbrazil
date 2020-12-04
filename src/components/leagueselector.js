@@ -77,7 +77,7 @@ class LeagueSelector extends Component {
     return(
       <>
         {head.leagues.map((contact, i)=>(
-          <Link class={"dropdown-item " + styles.teste} to={`/leagues/smash/${contact.id}`} href={`/leagues/smash/${contact.id}`} onClick={()=>{this.props.selectLeague(i); this.closeModal()}} style={{
+          <Link class={"dropdown-item " + styles.teste} to={`/leagues/smash/${contact.id}`} href={`/leagues/smash/${contact.id}`} onClick={()=>{this.props.selectLeague(this.props.leagues.indexOf(contact)); this.closeModal()}} style={{
             display: "flex", lineHeight: "32px", paddingLeft: (32*(recursion)+32)+"px"
           }} key={"league_"+contact.name}>
             <div style={{

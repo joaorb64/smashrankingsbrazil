@@ -37,8 +37,8 @@ class Contacts extends Component {
       if(this.props.contacts.length > 0){
         if(!this.props.match || !this.props.match.match.params["id"]){
           console.log(this.props.usercountry);
-          if(this.props.usercountry != this.state.usercountry){
-            let selectLeague = 0;
+          if(!this.props.usercountry && nextProps.usercountry){
+            let selectLeague = -1;
     
             for(let i=0; i<this.props.contacts.length; i+=1){
               if(this.props.contacts[i].country && this.props.contacts[i].country == this.props.usercountry){
@@ -47,9 +47,9 @@ class Contacts extends Component {
               }
             }
     
-            this.selectLeague(selectLeague);
+            if(selectLeague != -1)
+              this.selectLeague(selectLeague);
           }
-          this.updateData();
         }
       }
     }
@@ -92,32 +92,6 @@ class Contacts extends Component {
     }
   }
 
-  preloadImages(index) {
-    index = index || 0;
-
-    if(!this.state.players) return
-    if(index >= this.state.players.length){
-      this.setState(this.state);
-      return;
-    }
-
-    if(!this.state.players[index].twitter){
-      this.preloadImages(index+1);
-      return;
-    }
-
-    var img = new Image();
-
-    setTimeout(()=>{
-      this.state.players[index].avatar = img.src;
-      this.preloadImages(index + 1);
-      if(index % 8 == 0)
-        this.setState(this.state);
-    }, 5);
-
-    img.src = `http://twitter-avatar.now.sh/${this.getTwitterHandle(this.state.players[index].twitter)}`;
-  }
-
   updateData() {
     if(!this.props) return
     if(!this.props.contacts) return
@@ -143,6 +117,9 @@ class Contacts extends Component {
                 let p = {}
                 p = Object.assign(p, this.props.allplayers["players"][this.props.allplayers["mapping"][league+":"+id[0]]]);
       
+                if(p.twitter) {
+                  p.avatar = `http://twitter-avatar.now.sh/${this.getTwitterHandle(p.twitter)}`;
+                }
                 if(p.smashgg_image && !p.twitter) {
                   p.avatar = p.smashgg_image;
                 }
@@ -162,9 +139,7 @@ class Contacts extends Component {
               return Number(a["ranking"]) - Number(b["ranking"]);
             });
 
-            this.state.players = players;
-
-            console.log(this.state.players)
+            console.log(players)
 
             console.log(statistics)
             console.log(this.props.alltournaments[this.props.contacts[this.state.selectedLeague].id])
@@ -187,21 +162,40 @@ class Contacts extends Component {
               rankingStartTime: data.ranking["timeStart"],
               rankingEndTime: data.ranking["timeEnd"]
             })
-
-            this.preloadImages();
           }
         })
-        .catch(console.log)
+        .catch((e)=>{
+          console.log(e)
+          this.setState({
+            players: [],
+            updateTime: 1
+          })
+        })
       })
-      .catch(console.log)
+      .catch((e)=>{
+        console.log(e)
+        this.setState({
+          players: [],
+          updateTime: 1
+        })
+      })
     })
-    .catch(console.log)
+    .catch((e)=>{
+      console.log(e)
+      this.setState({
+        players: [],
+        updateTime: 1
+      })
+    })
   }
 
   selectLeague(i){
     if(i != this.state.selectedLeague){
       this.state.selectedLeague = i;
+      this.state.players = [];
+      this.state.updateTime = null;
       this.state.statistics = null;
+      this.setState(this.state);
       this.updateData();
     }
   }
