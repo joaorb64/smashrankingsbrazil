@@ -41,8 +41,20 @@ var myMarker = L.Marker.extend({
             myPos.x, myPos.y
           );
 
+          let angle;
+
+          if(distance == 0){
+            angle = Math.angleRadians(
+              {x: this._latlng.lng, y: this._latlng.lat},
+              {x: other._latlng.lng, y: other._latlng.lat}
+            )
+          }
+
           if(distance<32){
-            let angle = Math.angleRadians(myPos, otherPos);
+            if(angle == undefined)
+              angle = Math.angleRadians(myPos, otherPos);
+            console.log(angle);
+            console.log(distance);
             pos.y -= Math.sin(angle)*((32-distance)/4);
             pos.x -= Math.cos(angle)*((32-distance)/4);
           }
@@ -156,7 +168,7 @@ class Mapa extends Component {
             
             this.markers.forEach(marker=>{
               if(marker._latlng.lat == lat && marker._latlng.lng == lng){
-                lng+=0.001;
+                lng+=0.005;
               }
             })
 
