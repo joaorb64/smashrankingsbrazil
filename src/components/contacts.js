@@ -31,6 +31,8 @@ class Contacts extends Component {
           if(selectedLeague != -1){
             this.selectLeague(selectedLeague);
           }
+        } else {
+          this.updateData();
         }
       }
 
@@ -97,6 +99,7 @@ class Contacts extends Component {
     if(!this.props.contacts) return
     if(!this.props.allplayers) return
     if(!this.props.alltournaments) return
+    if(!this.props.contacts[this.state.selectedLeague]) return
 
     fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/'+this.props.contacts[this.state.selectedLeague].id+'/ranking.json')
     .then(res => res.json())
