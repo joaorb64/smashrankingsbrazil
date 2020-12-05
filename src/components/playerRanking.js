@@ -256,7 +256,7 @@ class PlayerRanking extends Component {
                 <div class={styles.playerRanking}>{player.ranking}</div>
 
                 {player.avatar ?
-                  <LazyLoad>
+                  <LazyLoad style={{width: "64px", height: "100%"}}>
                     <a href={player.twitter}>
                       <div class="player-avatar" style={{
                         backgroundImage: `url(${player.avatar})`,

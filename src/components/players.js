@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styles from './contacts.module.css'
 import CHARACTERS from "../globals";
+import LazyLoad from 'react-lazyload';
 
 const fuzzysort = require('fuzzysort')
 
@@ -20,38 +21,15 @@ class Players extends Component {
   componentDidMount() {
     this.fetchPlayers();
   }
-
-  preloadImages(index) {
-    index = index || 0;
-
-    if(!this.state.players) return
-    if(index >= this.state.players.length){
-      this.setState(this.state);
-      return;
-    }
-
-    if(!this.state.players[index].twitter){
-      this.preloadImages(index+1);
-      return;
-    }
-
-    var img = new Image();
-
-    setTimeout(()=>{
-      this.state.players[index].avatar = img.src;
-      this.preloadImages(index + 1);
-      if(index % 8 == 0)
-        this.setState(this.state);
-    }, 5);
-
-    img.src = `http://twitter-avatar.now.sh/${this.getTwitterHandle(this.state.players[index].twitter)}`;
-  }
   
   fetchPlayers() {
     if(this.props.allplayers){
       let players = [];
 
       this.props.allplayers["players"].forEach(function(p){
+        if(p.twitter){
+          p.avatar = `http://twitter-avatar.now.sh/${this.getTwitterHandle(p.twitter)}`;
+        }
         if(p.smashgg_image && !p.twitter) {
           p.avatar = p.smashgg_image;
         }
@@ -65,9 +43,10 @@ class Players extends Component {
         players.push(p);
       }, this)
 
+      players.sort((a, b) => {return a.org+a.name > b.org+b.name ? -1 : 1});
+
       this.state.players = players;
       this.setState({players: players, filtered: players})
-      this.preloadImages();
     }
   }
 
@@ -112,6 +91,7 @@ class Players extends Component {
           'name',
           'full_name',
           'org',
+          'country',
           'state',
           'mainnames'
         ],
@@ -121,9 +101,10 @@ class Players extends Component {
           return Math.max(
             a[0]?a[0].score:-1000,
             a[1]?a[1].score-10:-1000,
-            a[2]?a[2].score-100:-1000,
+            a[2]?a[2].score-10:-1000,
             a[3]?a[3].score-100:-1000,
             a[4]?a[4].score-100:-1000,
+            a[5]?a[5].score-10:-1000,
           )}
       })
       this.state.filtered = []
@@ -155,22 +136,24 @@ class Players extends Component {
               onClick={()=>this.openPlayerModal(player)}
               >
                 {player.avatar ?
-                  <a href={player.twitter}>
-                    <div class="player-avatar" style={{
-                      backgroundImage: `url(${player.avatar})`,
-                      width: "64px", height: "100%", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
-                      backgroundPosition: "center", backgroundColor: "white",
-                    }}>
-                      {player.twitter ? 
-                        <div style={{width: "100%", height: "100%", display: "flex", alignItems: "flex-end", justifyContent: "flex-end"}}>
-                          <div style={{
-                            backgroundImage: "url(/icons/twitter.svg)", width: 16, height: 16, bottom: 0, right: 0, margin: "2px"
-                          }}></div>
-                        </div>
-                        :
-                        null}
-                    </div>
-                  </a>
+                  <LazyLoad style={{width: "64px", height: "100%"}}>
+                    <a href={player.twitter}>
+                      <div class="player-avatar" style={{
+                        backgroundImage: `url(${player.avatar})`,
+                        width: "64px", height: "100%", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
+                        backgroundPosition: "center", backgroundColor: "white",
+                      }}>
+                        {player.twitter ? 
+                          <div style={{width: "100%", height: "100%", display: "flex", alignItems: "flex-end", justifyContent: "flex-end"}}>
+                            <div style={{
+                              backgroundImage: "url(/icons/twitter.svg)", width: 16, height: 16, bottom: 0, right: 0, margin: "2px"
+                            }}></div>
+                          </div>
+                          :
+                          null}
+                      </div>
+                    </a>
+                  </LazyLoad>
                 :
                   <div class="player-avatar" style={{
                     width: "64px", height: "48px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
