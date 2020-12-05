@@ -340,10 +340,10 @@ class PlayerModal extends Component {
 
                       {
                         this.state.playerData.avatar ?
-                          <a style={{zIndex: 1}} href={this.state.playerData.twitter || ""}>
+                          <div style={{zIndex: 1}}>
                             <div className={styles.avatar} style={{backgroundImage: `url(${this.state.playerData.avatar})`}}>
                             </div>
-                          </a>
+                          </div>
                       :
                         null
                       }
