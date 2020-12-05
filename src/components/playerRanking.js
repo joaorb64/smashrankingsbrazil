@@ -131,20 +131,21 @@ class PlayerRanking extends Component {
                       }}></div>
                       <div style={{
                         backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_1_${this.getCharCodename(player, 0)}.png)`, display: "flex",
-                        width: "-webkit-fill-available", backgroundPosition: "center", backgroundSize: "cover",
+                        width: "200%", backgroundPosition: "center", backgroundSize: "cover",
                         filter: "drop-shadow(10px 10px 0px #000000AF)", marginLeft: "-10px", marginTop: "-10px"
                       }}></div>
                     
                       <div class={styles.listItemChild} style={{
                         backgroundColor: "#f0f0f0", alignItems: "center", display: "flex", flexDirection: "column",
-                        height: "60px", position: "absolute", left: "0px", right: "0px", bottom: 0, justifyContent: "center"
+                        height: "60px", position: "absolute", left: "0px", right: "0px", bottom: 0, justifyContent: "center",
+                        paddingLeft: "10px", paddingRight: "10px"
                       }}>
                         <div style={{
-                          flexGrow: 0, fontSize: "1.6rem", lineHeight: "2rem", width: "100%",
+                          flexGrow: 0, fontSize: "1.2rem", lineHeight: "1.8rem", width: "100%",
                           textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap"
                         }}><b style={{color: "#bb0000"}}>{player.org} </b>{player.name}</div>
                         <div style={{
-                          flexGrow: 0, fontSize: "1rem", lineHeight: "1rem", width: "100%", color: "darkgray",
+                          flexGrow: 0, fontSize: ".8rem", lineHeight: ".8rem", width: "100%", color: "darkgray",
                           textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap"
                         }}>{player.full_name}</div>
                       </div>
@@ -183,37 +184,41 @@ class PlayerRanking extends Component {
                             null
                           }
                         </div>
-                        {player.country_code && player.country_code != "null" ?
-                          <div class="" style={{
-                            width: "48px", display: "flex", justifyContent: "center", alignItems: "center", padding: "8px", alignSelf: "flex-end"
-                          }}>
-                            <div class="state-flag" style={{
-                              backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/country_flag/${player.country_code.toLowerCase()}.png)`,
-                              width: "100%", height: "32px", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
-                              backgroundPosition: "center", paddingTop: "20px"
-                            }}>{player.country_code}</div>
+                        <div style={{display: "flex", flexDirection: "column"}}>
+                          <div style={{display: "flex", justifyContent: "flex-end"}}>
+                            {player.country_code && player.country_code != "null" ?
+                            <div class="" style={{
+                              width: "48px", display: "flex", justifyContent: "center", alignItems: "center", padding: "8px", alignSelf: "flex-end"
+                            }}>
+                              <div class="state-flag" style={{
+                                backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/country_flag/${player.country_code.toLowerCase()}.png)`,
+                                width: "100%", height: "32px", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
+                                backgroundPosition: "center", paddingTop: "20px"
+                              }}>{player.country_code}</div>
+                            </div>
+                            :
+                            null
+                          }
+                          {player.state && player.state != "null" ?
+                            <div class="" style={{
+                              width: "48px", display: "flex", justifyContent: "center", alignItems: "center", padding: "8px", alignSelf: "flex-end"
+                            }}>
+                              <div class="state-flag" style={{
+                                backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/state_flag/${player.country_code}/${player.state}.png)`,
+                                width: "100%", height: "32px", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
+                                backgroundPosition: "center", paddingTop: "20px"
+                              }}>{player.state}</div>
+                            </div>
+                            :
+                            null
+                          }
                           </div>
-                          :
-                          null
-                        }
-                        {player.state && player.state != "null" ?
-                          <div class="" style={{
-                            width: "48px", display: "flex", justifyContent: "center", alignItems: "center", padding: "8px", alignSelf: "flex-end"
+                          <div style={{
+                            fontSize: "1.2rem", backgroundColor: "black", color: "white", textAlign: "right",
+                            alignSelf: "flex-end", padding: "6px", paddingTop: "2px", paddingBottom: "2px"
                           }}>
-                            <div class="state-flag" style={{
-                              backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/state_flag/${player.country_code}/${player.state}.png)`,
-                              width: "100%", height: "32px", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
-                              backgroundPosition: "center", paddingTop: "20px"
-                            }}>{player.state}</div>
+                            {player.score} pts.
                           </div>
-                          :
-                          null
-                        }
-                        <div style={{
-                          fontSize: "1.4rem", backgroundColor: "black", color: "white", textAlign: "right",
-                          alignSelf: "flex-end", padding: "6px", paddingTop: "2px", paddingBottom: "2px"
-                        }}>
-                          {player.score} pts.
                         </div>
                       </div>
 
@@ -222,7 +227,7 @@ class PlayerRanking extends Component {
                           <LazyLoad>
                             <div style={{
                               backgroundImage: `url(${player.avatar})`,
-                              width: "96px", height: "96px", backgroundSize: "cover", backgroundPosition: "center",
+                              width: "80px", height: "80px", backgroundSize: "cover", backgroundPosition: "center",
                               borderRadius: "100%", position: "absolute", right: 10, top: 10, border: "5px #f0f0f0 solid",
                               backgroundColor: "gray"
                             }}>
