@@ -220,7 +220,7 @@ class LeagueSelector extends Component {
             <div class="modal-content">
               <div class="modal-header" style={{backgroundColor: "#be2018",
               borderBottom: "1px solid #801e19", color: "white"}}>
-                <h5 class="modal-title" id="exampleModalLongTitle">Select a league</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">{i18n.t("select-league")}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true" style={{color: "white"}}>&times;</span>
                 </button>

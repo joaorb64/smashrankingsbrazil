@@ -76,5 +76,6 @@
     "weekday-thu": "JUE",
     "weekday-fri": "VIE",
     "weekday-sat": "SÁB",
-    "weekday-sun": "DOM"
+    "weekday-sun": "DOM",
+    "select-league": "Seleccione una liga"
 }

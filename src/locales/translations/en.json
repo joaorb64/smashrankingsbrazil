@@ -76,5 +76,6 @@
     "weekday-thu": "THU",
     "weekday-fri": "FRI",
     "weekday-sat": "SAT",
-    "weekday-sun": "SUN"
+    "weekday-sun": "SUN",
+    "select-league": "Select a league"
 }

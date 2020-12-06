@@ -76,5 +76,6 @@
     "weekday-thu": "QUI",
     "weekday-fri": "SEX",
     "weekday-sat": "SÁB",
-    "weekday-sun": "DOM"
+    "weekday-sun": "DOM",
+    "select-league": "Selecione uma liga"
 }
