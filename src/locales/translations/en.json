@@ -77,5 +77,11 @@
     "weekday-fri": "FRI",
     "weekday-sat": "SAT",
     "weekday-sun": "SUN",
-    "select-league": "Select a league"
+    "select-league": "Select a league",
+    "creators": "Creators",
+    "about-text": "This site aggregates leagues of Super Smash Bros Ultimate scenes from all over the world in one place. The data is extracted from Braacket and SmashGG, from time to time, every day. The site's interface is heavily based on Super Smash Bros. Ultimate's <i>Tourney</i> mode.",
+    "faq-old-data": "My data is empty or out of date!",
+    "faq-old-data-desc": "Make sure your SmashGG profile is up to date. If your characters are wrong, it may be the fault of one of the leagues in Braacket with characters defined wrong or outdated. In that case, talk to the Braacket league administrator.",
+    "faq-duplicated": "My profile is duplicated!",
+    "faq-duplicated-desc": "Your profile will be duplicated if no tournament is played using SmashGG in a league. Tournaments using SmashGG are currently the only way to know if a player in a league is the same player in another league and merge profiles."
 }

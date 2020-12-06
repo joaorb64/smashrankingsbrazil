@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import i18n from '../locales/i18n';
 
 class About extends Component {
   state = {
@@ -47,15 +48,12 @@ class About extends Component {
         padding: "30px", alignSelf: "center"
       }}>
         <h2>
-          Sobre
+          {i18n.t("about")}
         </h2>
-        <p>
-          Esse site agrega todos os resultados de cenas locais de Super Smash Bros Ultimate de todo o Brasil em um só lugar e usa esses dados para calcular um ranking nacional.
-          Os dados utilizados são extraídos do Braacket e o ranking nacional é recalculado a cada 3h.
-          A interface deste site é baseada fortemente no modo <i>Tourney</i> do Super Smash Bros. Ultimate.
+        <p dangerouslySetInnerHTML={{__html: i18n.t("about-text")}}>
         </p>
         <h2>
-          Idealizadores
+          {i18n.t("creators")}
         </h2>
         <p>
           <ul>
@@ -77,63 +75,17 @@ class About extends Component {
           </ul>
         </p>
         <h2>
-          Meus dados no ranking estão vazios ou desatualizados!
+          {i18n.t("faq-old-data")}
         </h2>
         <p>
-          Em primeiro lugar, certifique-se de que seu perfil no smash.gg esteja atualizado. Dados como nome, prefixo, twitter, nome real são extraídos de lá.
-        </p>
-        <p>
-          Para inserção de dados como mains e cores usadas, ou para outros problemas, utilize o formulário abaixo:
-          <a class="btn btn-primary col-12" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-            Formulário
-          </a>
-        </p>
-        <div class="collapse" id="collapseExample">
-          <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfwTV63ynY_kG9H3w-LUB8cAhz4QknJM2JMKWHWzGXA_7SRig/viewform?embedded=true" width="100%" height="1265" frameborder="0" marginheight="0" marginwidth="0">Carregando…</iframe>
-        </div>
-        <p>
-          Para outros casos individuais, entre em contato com um dos idealizadores listados acima.
+          {i18n.t("faq-old-data-desc")}
         </p>
         <h2>
-          Metodologia do ranking brasileiro
+          {i18n.t("faq-duplicated")}
         </h2>
         <p>
-          O cálculo do ranking é realizado seguindo a seguinte lógica:
-          <ul>
-            <li>Para cada torneio da lista em que o jogador participou, calcular a quantidade de pontos obtidos neste torneio (utilizando a tabela de Tiers)</li>
-            <li>A pontuação final do jogador é a soma das 10 maiores pontuações obtidas</li>
-          </ul>
-          Campeonatos utilizados para cálculo do ranking nacional:
+          {i18n.t("faq-duplicated-desc")}
         </p>
-        <table class="table table-striped table-sm">
-          <thead>
-            <tr>
-              <th scope="col">Nome</th>
-              <th scope="col">Jogadores</th>
-              <th scope="col">Tier</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              this.state.tournaments != null ?
-                this.state.tournaments.map((tournament)=>(
-                  <tr>
-                    <td><a target="_blank" href={`https://braacket.com/tournament/${tournament.id}`}>{tournament.name}</a></td>
-                    <td>{tournament.player_number}</td>
-                    <td style={{color: this.state.tournamentColor[tournament.rank]}}><b>{tournament.rank}</b></td>
-                  </tr>
-                ))
-                :
-                null
-            }
-          </tbody>
-        </table>
-        <p>
-          Tabela de pontuação dos torneios:
-        </p>
-        <div style={{textAlign: "center"}}>
-          <img src="/images/ranking-tiers.jpg" />
-        </div>
       </div>
     )
   }
