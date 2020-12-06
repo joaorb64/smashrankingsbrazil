@@ -22,7 +22,7 @@ class Information extends Component {
         {this.props.info ?
           <p>
             <FontAwesomeIcon icon={faExternalLinkSquareAlt} /> <a href={"https://braacket.com/league/" + this.props.info.id}>
-              League on Braacket
+              Braacket
             </a><br/>
             {this.props.info.twitter ?
               <span><FontAwesomeIcon icon={faTwitter} /> <a href={this.props.info.twitter}>{this.props.info.twitter}</a><br/></span>

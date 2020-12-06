@@ -5,16 +5,6 @@ import { faCalendar, faEdit, faMapMarkerAlt, faUser, faWifi } from '@fortawesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import i18n from '../locales/i18n';
 
-var WEEKDAYS = {
-  0: "DOM",
-  1: "SEG",
-  2: "TER",
-  3: "QUA",
-  4: "QUI",
-  5: "SEX",
-  6: "SÁB"
-}
-
 class NextTournaments extends Component {
   state = {
     tournaments: [],
@@ -95,14 +85,14 @@ class NextTournaments extends Component {
       }}>
         <div class="row" style={{marginLeft: -8, marginRight: -8}}>
           <h2 style={{color: "white"}}>
-            Próximos torneios
+            {i18n.t("next-tournaments")}
           </h2>
           <select class="form-control form-control-lg" onChange={(e)=>this.selectCountry(e)}>
-            <option value="all">All</option>
+            <option value="all">{i18n.t("all")}</option>
             {Object.keys(this.state.selections).map((region) => (
               <>
                 <optgroup label={i18n.t("region-"+region.toLowerCase())}>
-                  <option value={"region_"+region}>All</option>
+                  <option value={"region_"+region}>{i18n.t("all")} ({i18n.t("region-"+region.toLowerCase())})</option>
                   {this.state.selections[region].map((country) => (
                     <option value={country}>{country+" ("+this.state.alltournaments[country].events.length+")"}</option>
                   ))}
@@ -111,7 +101,7 @@ class NextTournaments extends Component {
             ))}
           </select>
           {this.state.selectedCountry == "BR" ? 
-            <a href="https://twitter.com/smash_bot_br" class="col-12" style={{backgroundColor: "white", minHeight: "64px", display: "flex", alignItems: "center"}}>
+            <a href="https://twitter.com/smash_bot_br" class="col-12" style={{backgroundColor: "white", minHeight: "64px", display: "flex", alignItems: "center", marginTop: 8}}>
               <img src="/images/bot.png" style={{height: 48, width: 48, borderRadius: 8}} />
               <div style={{padding: 8, color: "black"}}>Siga o @smash_bot_br para ser notificado de próximos eventos e resultados de torneios em tempo real!</div>
             </a>
@@ -158,16 +148,16 @@ class NextTournaments extends Component {
                             {tournament.isOnline ?
                               <span><FontAwesomeIcon icon={faWifi}/> Online</span>
                               :
-                              <span><FontAwesomeIcon icon={faMapMarkerAlt}/> {tournament.tournament_venueName + " - " + tournament.tournament_addrState}</span>
+                              <span><FontAwesomeIcon icon={faMapMarkerAlt}/> {(tournament.tournament_venueName ? tournament.tournament_venueName+" - " : "") + tournament.tournament_addrState}</span>
                             }
                           </div>
 
                           <div style={{backgroundColor: "#dedede", padding: "2px", paddingRight: "8px", paddingLeft: "8px", flexGrow: 1, textAlign: "left"}}>
-                            <FontAwesomeIcon icon={faCalendar}/> Início: {WEEKDAYS[moment(tournament.startAt * 1000).day()]+" "}{moment(tournament.startAt * 1000).format("DD/MM/YY HH:mm") + " (GMT-3)"}
+                            <FontAwesomeIcon icon={faCalendar}/> {i18n.t("starts-time")}: {i18n.t("weekday-"+moment(tournament.startAt * 1000).format("ddd").toLowerCase())} {moment(tournament.startAt * 1000).format("DD/MM/YY HH:mm")} GMT{moment(tournament.startAt * 1000).format("Z")}
                           </div>
                           
                           <div style={{backgroundColor: "#dedede", padding: "2px", paddingRight: "8px", paddingLeft: "8px", flexGrow: 1, textAlign: "left"}}>
-                            <FontAwesomeIcon icon={faEdit}/> Inscrições até: {WEEKDAYS[moment(tournament.tournament_registrationClosesAt * 1000).day()]+" "}{moment(tournament.tournament_registrationClosesAt * 1000).format("DD/MM/YY HH:mm") + " (GMT-3)"}
+                            <FontAwesomeIcon icon={faEdit}/> {i18n.t("register-due")}: {i18n.t("weekday-"+moment(tournament.tournament_registrationClosesAt * 1000).format("ddd").toLowerCase())} {moment(tournament.tournament_registrationClosesAt * 1000).format("DD/MM/YY HH:mm")} GMT{moment(tournament.tournament_registrationClosesAt * 1000).format("Z")}
                           </div>
                         </div>
                       </div>

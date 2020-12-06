@@ -521,7 +521,7 @@ class PlayerModal extends Component {
 
                     {this.state.playerData.character_usage_percent ?
                       <row style={{display: "block", padding: "12px"}}>
-                        <h5>Character usage (latest 30 sets)</h5>
+                        <h5>{i18n.t("char-usage-latest-30-sets")}</h5>
                         <div class="row" style={{padding: "10px", margin: 0, backgroundColor: "black", borderBottom: "1px solid #3d5466", justifyContent: "center"}}>
                           {this.state.playerData.character_usage_percent.map((character, i)=>(
                             <a key={this.state.playerData.name+i} style={{textAlign: "center", display: "flex",
@@ -544,15 +544,15 @@ class PlayerModal extends Component {
 
                     {this.state.tournaments ?
                       <row style={{display: "block", padding: "12px"}}>
-                        <h5>Torneios</h5>
+                        <h5>{i18n.t("Tournaments")}</h5>
                         <table class="table table-striped table-sm" style={{color: "white"}}>
                           <thead>
                             <tr>
                               <th scope="col"></th>
                               <th scope="col"></th>
-                              <th scope="col">Nome</th>
-                              <th scope="col">Data</th>
-                              <th scope="col" style={{textAlign: "center"}}>Colocação</th>
+                              <th scope="col">{i18n.t("Name")}</th>
+                              <th scope="col">{i18n.t("Date")}</th>
+                              <th scope="col" style={{textAlign: "center"}}>{i18n.t("Placing")}</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -592,7 +592,7 @@ class PlayerModal extends Component {
                             <tr data-toggle="collapse" href="#collapse1" style={{
                               borderBottom: "1px white solid", textAlign: "center", cursor: "pointer"
                             }}>
-                              <td colSpan="99">Ver todos ({this.state.tournaments.length})</td>
+                              <td colSpan="99">{i18n.t("View-all")} ({this.state.tournaments.length})</td>
                             </tr>
                           </tbody>
                         </table>

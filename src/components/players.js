@@ -2,13 +2,14 @@ import React, { Component } from 'react'
 import styles from './contacts.module.css'
 import CHARACTERS from "../globals";
 import LazyLoad from 'react-lazyload';
+import i18n from '../locales/i18n';
 
 const fuzzysort = require('fuzzysort')
 
 class Players extends Component {
   state = {
-    players: {},
-    filtered: {},
+    players: [],
+    filtered: [],
     search: ""
   }
 
@@ -45,7 +46,6 @@ class Players extends Component {
 
       players.sort((a, b) => {return a.org+a.name > b.org+b.name ? -1 : 1});
 
-      this.state.players = players;
       this.setState({players: players, filtered: players})
     }
   }
@@ -124,11 +124,11 @@ class Players extends Component {
         {this.state.players && Object.entries(this.state.players).length > 0 ?
           <>
             <div class="col-md-12" style={{padding: 0, marginBottom: "12px"}}>
-              <input ref={(input)=>this.myinput = input} class="form-control" type="text" placeholder={"Pesquisar em "+Object.entries(this.state.players).length+" jogadores"}
+              <input ref={(input)=>this.myinput = input} class="form-control" type="text" placeholder={i18n.t("search-in")+Object.entries(this.state.players).length+i18n.t("search-players")}
               value={this.state.search} onChange={(e)=>this.search(e.target.value)} />
             </div>
 
-            {Object.values(this.state.filtered).slice(0, 128).map((player, i) => (
+            {Object.values(this.state.filtered).slice(0, 64).map((player, i) => (
               <li key={"_"+i}
               class={"slide-fade " + styles.listItem + " list-group-item"}
               style={{cursor: "pointer"}}

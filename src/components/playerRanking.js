@@ -110,7 +110,7 @@ class PlayerRanking extends Component {
           <ul class="list-group" style={{padding: "10px"}}>
             <div class="row no-gutters" style={{margin: "0 -4px"}}>
               {this.state.players.slice(0,3).map((player, i) => (
-                <div class={"col-md-4 col-sm-4 col-xs-12 " + styles.listItemParent}
+                <div class={"col-lg-4 col-sm-12 col-xs-12 " + styles.listItemParent}
                 style={{padding: "0px 4px", cursor: "pointer"}}
                 data-toggle="modal" data-target="#playerModal"
                 onClick={()=>this.openPlayerModal(player)}
@@ -151,7 +151,7 @@ class PlayerRanking extends Component {
                       </div>
 
                       <div style={{
-                        width: "200px", height: "200px", position: "absolute", backgroundColor: "#f0f0f0", top: -100, left: -100,
+                        width: "200px", height: "200px", position: "absolute", backgroundColor: "#f0f0f0", top: -110, left: -110,
                         transform: "rotate(-45deg)"
                       }}>
                       </div>
@@ -184,8 +184,11 @@ class PlayerRanking extends Component {
                             null
                           }
                         </div>
-                        <div style={{display: "flex", flexDirection: "column"}}>
-                          <div style={{display: "flex", justifyContent: "flex-end"}}>
+                        <div style={{display: "flex", flexDirection: "column", justifyContent: "flex-end"}}>
+                          <div style={{
+                            display: "flex", justifyContent: "flex-end",
+                            filter: "drop-shadow(0px 0px 2px black)"
+                          }}>
                             {player.country_code && player.country_code != "null" ?
                             <div class="" style={{
                               width: "48px", display: "flex", justifyContent: "center", alignItems: "center", padding: "8px", alignSelf: "flex-end"

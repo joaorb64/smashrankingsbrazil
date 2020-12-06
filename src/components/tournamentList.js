@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styles from './statistics.module.css'
 import moment from "../../node_modules/moment-timezone/moment-timezone";
+import i18n from '../locales/i18n';
 
 class TournamentList extends Component {
   state = {
@@ -20,9 +21,9 @@ class TournamentList extends Component {
             <table class="table table-striped table-sm">
               <thead>
                 <tr>
-                  <th scope="col">Nome</th>
-                  <th scope="col">Data</th>
-                  <th scope="col">Jogadores</th>
+                  <th scope="col">{i18n.t("Name")}</th>
+                  <th scope="col">{i18n.t("Date")}</th>
+                  <th scope="col">{i18n.t("Participants")}</th>
                 </tr>
               </thead>
               <tbody>

@@ -6,6 +6,8 @@ import LeafletAjax from '../../node_modules/leaflet-ajax/dist/leaflet.ajax'
 import styles from './statistics.module.css'
 import Chart from '../../node_modules/chart.js/dist/Chart'
 
+import i18n from '../locales/i18n';
+
 import CHARACTERS from '../globals'
 
 class Statistics extends Component {
@@ -466,7 +468,7 @@ class Statistics extends Component {
             {"players_per_country" in this.state.statistics ?
               <div class="row mb-3 mt-3">
                 <div class="col">
-                  <h5>Jogadores por país</h5>
+                  <h5>{i18n.t("players-per-country")}</h5>
                   <div style={{width: "100%", overflowX: "scroll", backgroundColor: "#e4e4e4"}}>
                     <div style={{width: 800, height:300}}>
                       <canvas style={{width: 800, height: 300}} ref={this.chartCountriesRef} id="myChartCountries" />
@@ -481,7 +483,7 @@ class Statistics extends Component {
             {"players_per_state" in this.state.statistics ?
               <div class="row mb-3 mt-3">
                 <div class="col">
-                  <h5>Jogadores por Estado</h5>
+                  <h5>{i18n.t("players-per-state")}</h5>
                   <div style={{width: "100%", overflowX: "scroll", backgroundColor: "#e4e4e4"}}>
                     <div style={{width: 800, height:300}}>
                       <canvas style={{width: 800, height: 300}} ref={this.chartStatesRef} id="myChartStates" />
@@ -495,7 +497,7 @@ class Statistics extends Component {
             
             <div class="row mb-3 mt-3">
               <div class="col">
-                <h5>Uso de personagens</h5>
+                <h5>{i18n.t("character-usage")}</h5>
                 <div style={{width: "100%", overflowX: "scroll", backgroundColor: "#e4e4e4"}}>
                   <div style={{width: 2000, height:300}}>
                     <canvas style={{width: 2000, height: 300}} ref={this.chartRef} id="myChart" />
@@ -506,7 +508,7 @@ class Statistics extends Component {
 
             <div class="row mb-3 mt-3">
               <div class="col">
-                <h5>Personagens secundários</h5>
+                <h5>{i18n.t("character-usage-secondary")}</h5>
                 <div style={{width: "100%", overflowX: "scroll", backgroundColor: "#e4e4e4"}}>
                   <div style={{width: 2000, height:300}}>
                     <canvas style={{width: 2000, height: 300}} ref={this.chartSecondaryRef} id="mySecondaryChart" />
@@ -518,13 +520,13 @@ class Statistics extends Component {
             {"best_player_character" in this.state.statistics && this.props.league ?
               <div class="row mb-3 mt-3">
                 <div class="col">
-                  <h5>Jogador melhor colocado com cada personagem</h5>
+                  <h5>{i18n.t("best-player-ranked-character")}</h5>
                   <table class="table table-striped table-sm">
                     <thead>
                       <tr>
-                        <th scope="col">Personagem</th>
-                        <th scope="col">Jogador</th>
-                        <th scope="col">Colocação</th>
+                        <th scope="col">{i18n.t("Character")}</th>
+                        <th scope="col">{i18n.t("Player")}</th>
+                        <th scope="col">{i18n.t("Placing")}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -533,7 +535,7 @@ class Statistics extends Component {
                           <tr>
                             <td><img src={`${process.env.PUBLIC_URL}/portraits/ssbu/chara_2_${CHARACTERS[line[1].mains[0]]}_00.png`}
                               style={{width: 32, height: 32}} /> {line[0]}</td>
-                            <td>{line[1].name}</td>
+                            <td>{line[1].org} {line[1].name}</td>
                             <td>{line[1].rank}</td>
                           </tr>
                         ))
