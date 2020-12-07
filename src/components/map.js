@@ -152,9 +152,14 @@ class Mapa extends Component {
 
             let iconUrl = process.env.PUBLIC_URL+"/portraits/ssbu/chara_2_"+CHARACTERS[player.mains[0]]+"_00.png"
 
+            let iconSize = 36;
+
+            if(!online && this.state.leagues[league].state != null) iconSize = 24;
+            else if(online && this.state.leagues[league].country != null) iconSize = 24;
+
             let charIcon = L.icon({
               iconUrl: iconUrl,
-              iconSize: [32, 32],
+              iconSize: [iconSize, iconSize],
               popupAnchor: [0, -8],
               className: styles.mapCharIcon
             });
@@ -175,6 +180,8 @@ class Mapa extends Component {
             let radius;
             if(!online) radius = 150000 + 200 * Object.keys(players.players).length;
             else radius = 400000 + 1000 * Object.keys(players.players).length;
+
+            radius *= iconSize/24;
 
             let color;
             if(!online) color = "rgba(255, 183, 0, 0.9)"
