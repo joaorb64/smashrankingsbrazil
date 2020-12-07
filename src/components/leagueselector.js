@@ -174,7 +174,7 @@ class LeagueSelector extends Component {
         <div class="col-12" style={{padding: "0 10px"}}>
           <button class={styles.teste + " btn btn-secondary col-12 dropdown-toggle"} type="button" id="dropdownMenuButton"
             data-toggle="modal" data-target="#leagueSelectModal" aria-haspopup="true" aria-expanded="false">
-            {this.state.leagues && this.state.leagues.length > 0 ?
+            {this.state.leagues && this.state.leagues.length > 0 && this.props.selectedLeague != -1 ?
               <div class={styles.title} style={{display: "flex", lineHeight: "32px"}}>
                 <div style={{
                   width: "32px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",

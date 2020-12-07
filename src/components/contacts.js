@@ -10,10 +10,12 @@ import TournamentList from './tournamentList';
 import moment from "../../node_modules/moment-timezone/moment-timezone";
 import i18n from '../locales/i18n';
 import Players from './players';
+import { browserHistory } from 'react-router';
+import { withRouter } from 'react-router-dom'
 
 class Contacts extends Component {
   state = {
-    selectedLeague: 0,
+    selectedLeague: -1,
     selectedTab: "ranking",
     players: [],
     top3Colors: ["#D6AF36", "#D7D7D7", "#A77044"],
@@ -22,74 +24,52 @@ class Contacts extends Component {
     userCountry: null
   }
 
-  componentDidUpdate(nextProps) {
-    if(nextProps !== this.props) {
-      if(this.props){
-        let selectedId = this.props.match.match.params["id"];    
+  componentDidUpdate(prevProps) {
+    if(this.props != prevProps)
+      this.manageUrl(prevProps);
+  }
+
+  componentDidMount() {
+    if(!this.props.match) return;
+    this.manageUrl();
+  }
+
+  manageUrl(prevProps = null){
+    if(!this.props.match) return;
+
+    if(this.props.contacts && this.props.contacts.length > 0) {
+      if(this.props.match.params["id"]){
+        let selectedId = this.props.match.params["id"];    
         if(selectedId){
           let selectedLeague = this.props.contacts.findIndex((a)=>{return a.id == selectedId});
           if(selectedLeague != -1){
             this.selectLeague(selectedLeague);
           }
         } else {
-          this.updateData();
+          this.selectLeague(0);
         }
-      }
+      } else if(!this.props.match.params["id"]) {
+        let selectLeague = 0;
 
-      if(this.props.contacts.length > 0){
-        if(!this.props.match || !this.props.match.match.params["id"]){
-          console.log(this.props.usercountry);
-          if(!this.props.usercountry && nextProps.usercountry){
-            let selectLeague = -1;
-    
-            for(let i=0; i<this.props.contacts.length; i+=1){
-              if(this.props.contacts[i].country && this.props.contacts[i].country == this.props.usercountry){
-                selectLeague = i;
-                break;
-              }
-            }
-    
-            if(selectLeague != -1)
-              this.selectLeague(selectLeague);
-          }
-        }
-      }
-    }
-  }
-
-  componentDidMount() {
-    if(this.props.match){
-      let selectedId = this.props.match.match.params["id"];
-      if(selectedId){
-        let selectedLeague = this.props.contacts.findIndex((a)=>{return a.id == selectedId});
-        if(selectedLeague != -1){
-          this.selectLeague(selectedLeague);
-        }
-      }
-      let selectedTab = this.props.match.match.params["tab"];
-      if(selectedTab){
-        this.handleTabChange(selectedTab);
-        console.log(this.state.selectedTab)
-      }
-    }
-
-    if(this.props.contacts.length > 0){
-      if(!this.props.match || !this.props.match.match.params["id"]){
         if(this.props.usercountry){
-          console.log(this.props.usercountry);
-          
-          let selectLeague = 0;
-  
           for(let i=0; i<this.props.contacts.length; i+=1){
             if(this.props.contacts[i].country && this.props.contacts[i].country == this.props.usercountry){
               selectLeague = i;
               break;
             }
           }
-  
-          this.selectLeague(selectLeague);
+        } else {
+          selectLeague = 0;
         }
-        this.updateData();
+
+        console.log(selectLeague)
+
+        if(selectLeague != -1){
+          console.log(selectLeague)
+          console.log(this.props.contacts)
+          this.selectLeague(selectLeague);
+          this.props.history.push('/leagues/smash/'+this.props.contacts[selectLeague].id);
+        }
       }
     }
   }
@@ -193,14 +173,15 @@ class Contacts extends Component {
   }
 
   selectLeague(i){
-    if(i != this.state.selectedLeague){
+    //if(i != this.state.selectedLeague){
       this.state.selectedLeague = i;
       this.state.players = [];
       this.state.updateTime = null;
       this.state.statistics = null;
-      this.setState(this.state);
-      this.updateData();
-    }
+      this.setState(this.state, ()=>{
+        this.updateData();
+      });
+    //}
   }
 
   getCharName(name){
@@ -302,4 +283,4 @@ class Contacts extends Component {
   }
 };
 
-export default Contacts
+export default withRouter(Contacts)
