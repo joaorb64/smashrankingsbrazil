@@ -6,6 +6,8 @@ import moment from "../../node_modules/moment-timezone/moment-timezone";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWifi } from '@fortawesome/free-solid-svg-icons';
 import i18n from '../locales/i18n';
+import { browserHistory } from 'react-router';
+import { withRouter } from 'react-router-dom'
 
 class PlayerModal extends Component {
   state = {
@@ -15,14 +17,23 @@ class PlayerModal extends Component {
     achievements: {}
   }
 
-  componentDidUpdate(nextProps) {
-    if(nextProps !== this.props) {
+  componentDidUpdate(prevProps) {
+    if(this.props != prevProps)
       this.setState({alltournaments: this.props.alltournaments});
-    }
   }
 
   componentDidMount() {
     window.playerModal = this;
+    window.jQuery("#playerModal").on('hidden.bs.modal', () => {
+      console.log(this.props);
+      if(this.props.match.params["id"] && this.props.match.params["tab"]){
+        this.props.history.replace('/leagues/smash/'+
+          this.props.match.params["id"]+'/'+
+          this.props.match.params["tab"]+'/')
+      } else if(this.props.match.params["player_id"]) {
+        this.props.history.replace('/players/')
+      }
+    });
   }
 
   fetchPlayer(){
@@ -650,4 +661,4 @@ class PlayerModal extends Component {
   }
 };
 
-export default PlayerModal
+export default withRouter(PlayerModal)

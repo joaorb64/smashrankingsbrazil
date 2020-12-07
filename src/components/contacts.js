@@ -37,6 +37,8 @@ class Contacts extends Component {
   manageUrl(prevProps = null){
     if(!this.props.match) return;
 
+    let leagueId = this.props.match.params["id"];
+
     if(this.props.contacts && this.props.contacts.length > 0) {
       if(this.props.match.params["id"]){
         let selectedId = this.props.match.params["id"];    
@@ -47,6 +49,7 @@ class Contacts extends Component {
           }
         } else {
           this.selectLeague(0);
+          leagueId = this.props.contacts[0].id;
         }
       } else if(!this.props.match.params["id"]) {
         let selectLeague = 0;
@@ -69,7 +72,16 @@ class Contacts extends Component {
           console.log(this.props.contacts)
           this.selectLeague(selectLeague);
           this.props.history.push('/leagues/smash/'+this.props.contacts[selectLeague].id);
+          leagueId = this.props.contacts[selectLeague].id;
         }
+      }
+
+      if(this.props.match.params["tab"]){
+        this.handleTabChange(this.props.match.params["tab"]);
+      } else {
+        this.props.history.push(
+          '/leagues/smash/'+leagueId+'/ranking'
+        );
       }
     }
   }
@@ -113,6 +125,8 @@ class Contacts extends Component {
                 
                 p.ranking = id[1]["rank"]
                 p.score = id[1]["score"]
+
+                p.league_id = id[0];
       
                 players.push(p);
               }, this)
@@ -173,7 +187,7 @@ class Contacts extends Component {
   }
 
   selectLeague(i){
-    //if(i != this.state.selectedLeague){
+    if(i != this.state.selectedLeague){
       this.state.selectedLeague = i;
       this.state.players = [];
       this.state.updateTime = null;
@@ -181,7 +195,7 @@ class Contacts extends Component {
       this.setState(this.state, ()=>{
         this.updateData();
       });
-    //}
+    }
   }
 
   getCharName(name){
@@ -201,11 +215,15 @@ class Contacts extends Component {
     if(window.playerModal){
       window.playerModal.player = player;
       window.playerModal.fetchPlayer();
+      console.log(player);
     }
   }
 
   handleTabChange(value){
     if(this.state.selectedTab != value){
+      this.props.history.push(
+        '/leagues/smash/'+this.props.match.params["id"]+'/'+value
+      );
       this.state.selectedTab = value;
       this.setState(this.state);
     }
@@ -257,11 +275,11 @@ class Contacts extends Component {
 
         {
           this.state.selectedTab == "ranking" && this.state.players ?
-            <PlayerRanking contacts={this.props.contacts} allplayers={this.state.players} ranking={this.state.players} updateTime={this.state.updateTime} />
+            <PlayerRanking contacts={this.props.contacts} allplayers={this.state.players} ranking={this.state.players} updateTime={this.state.updateTime} history={this.props.history} match={this.props.match} />
             :
             this.state.selectedTab == "players" ?
               <div style={{padding: "10px"}}>
-                <Players leagues={this.props.contacts} alltournaments={this.state.tournaments} allplayers={{"players": this.state.league_players}} />
+                <Players leagues={this.props.contacts} alltournaments={this.state.tournaments} allplayers={{"players": this.state.league_players}} history={this.props.history} match={this.props.match} />
               </div>
               :
               this.state.selectedTab == "tournaments" ?

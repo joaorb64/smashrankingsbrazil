@@ -13,8 +13,8 @@ class Players extends Component {
     search: ""
   }
 
-  componentDidUpdate(nextProps) {
-    if(nextProps != this.props){
+  componentDidUpdate(prevProps) {
+    if(prevProps != this.props && !prevProps.allplayers){
       this.fetchPlayers();
     }
   }
@@ -24,7 +24,7 @@ class Players extends Component {
   }
   
   fetchPlayers() {
-    if(this.props.allplayers){
+    if(this.props.allplayers && this.props.allplayers.players && Object.keys(this.props.allplayers.players).length > 0){
       let players = [];
 
       this.props.allplayers["players"].forEach(function(p){
@@ -40,6 +40,25 @@ class Players extends Component {
         }
 
         p.mainnames = p.mains.join(" ");
+
+        if(this.props.match){
+          if(this.props.match.params["id"]){
+            p.braacket_links.forEach(link => {
+              let linkLeague = link.split(":")[0];
+              let linkId = link.split(":")[1];
+    
+              if(linkLeague == this.props.match.params["id"]){
+                p.league_id = linkId;
+              }
+            })
+          } else {
+            if(p.braacket_links.length > 0){
+              p.league_id = p.braacket_links[0];
+            } else {
+              p.league_id = 0;
+            }
+          }
+        }
 
         players.push(p);
       }, this)
@@ -77,6 +96,16 @@ class Players extends Component {
     if(window.playerModal){
       window.playerModal.player = player;
       window.playerModal.fetchPlayer();
+      if(this.props.match.params["id"]){
+        this.props.history.push(
+          '/leagues/smash/'+this.props.match.params["id"]+'/'+
+          this.props.match.params["tab"]+"/"+player.league_id
+        );
+      } else{
+        this.props.history.push(
+          '/players/'+player.league_id
+        );
+      }
     }
   }
 

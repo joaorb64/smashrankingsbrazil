@@ -17,16 +17,6 @@ class PlayerRanking extends Component {
 
   componentDidUpdate(nextProps) {
     if(nextProps !== this.props) {
-      if(this.props.match){
-        let selectedId = this.props.match.match.params["id"];    
-        if(selectedId){
-          let selectedLeague = this.props.contacts.findIndex((a)=>{return a.id == selectedId});
-          if(selectedLeague != -1){
-            this.selectLeague(selectedLeague);
-          }
-        }
-      }
-
       if(this.props.ranking){
         this.state.players = this.props.ranking;
       } else {
@@ -44,16 +34,6 @@ class PlayerRanking extends Component {
   }
 
   componentDidMount() {
-    if(this.props.match){
-      let selectedId = this.props.match.match.params["id"];    
-      if(selectedId){
-        let selectedLeague = this.props.contacts.findIndex((a)=>{return a.id == selectedId});
-        if(selectedLeague != -1){
-          this.selectLeague(selectedLeague);
-        }
-      }
-    }
-
     if(this.props.ranking){
       this.state.players = this.props.ranking;
     } else {
@@ -99,6 +79,10 @@ class PlayerRanking extends Component {
     if(window.playerModal){
       window.playerModal.player = player;
       window.playerModal.fetchPlayer();
+      this.props.history.push(
+        '/leagues/smash/'+this.props.match.params["id"]+'/'+
+        this.props.match.params["tab"]+"/"+player.league_id
+      );
     }
   }
 

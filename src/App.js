@@ -104,10 +104,20 @@ class App extends Component {
           }}>
 
             <Switch>
-              <Route path="/leagues/smash/:id?/:tab?" exact render={
-                (props) => <Contacts contacts={this.state.leagues} allplayers={this.state.allplayers} alltournaments={this.state.alltournaments} usercountry={this.state.userCountry} match={props}></Contacts>
+              <Route path="/leagues/smash/:id?/:tab?/:player_id?" exact render={
+                (props) => 
+                  <>
+                    <Contacts contacts={this.state.leagues} allplayers={this.state.allplayers} alltournaments={this.state.alltournaments} usercountry={this.state.userCountry} match={props}></Contacts>
+                    <PlayerModal leagues={this.state.leagues} allplayers={this.state.allplayers} alltournaments={this.state.alltournaments} props={props} />
+                  </>
               } />
-              <Route path="/players/" exact render={(props) => <Players leagues={this.state.leagues} alltournaments={this.state.alltournaments} allplayers={this.state.allplayers} />} />
+              <Route path="/players/:player_id?" exact render={
+                (props) => 
+                  <>
+                    <Players leagues={this.state.leagues} alltournaments={this.state.alltournaments} allplayers={this.state.allplayers} match={props.match} history={props.history} />
+                    <PlayerModal leagues={this.state.leagues} allplayers={this.state.allplayers} alltournaments={this.state.alltournaments} props={props} />
+                  </>
+              } />
               <Route path="/leagues/granblue/" exact render={(props) => <Granblue />} />
               <Route path="/map/" exact render={(props) => <Mapa allplayers={this.state.allplayers} leagues={this.state.leagues} />} />
               <Route path="/matcherino/" exact render={(props) => <Matcherino />} />
@@ -115,8 +125,6 @@ class App extends Component {
               <Route path="/about/" exact render={(props) => <About />} />
               <Redirect to="/leagues/smash/" />
             </Switch>
-
-            <PlayerModal leagues={this.state.leagues} allplayers={this.state.allplayers} alltournaments={this.state.alltournaments} />
 
             <Route path="/" render={({location}) => {
               if ("ga" in window) {
