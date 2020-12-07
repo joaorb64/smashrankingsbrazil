@@ -14,7 +14,7 @@ class Players extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if(prevProps != this.props && !prevProps.allplayers){
+    if(prevProps != this.props && (!prevProps.allplayers || !prevProps.allplayers.players || !this.props.allplayers)){
       this.fetchPlayers();
     }
   }

@@ -310,6 +310,10 @@ class PlayerModal extends Component {
     return parts[parts.length-1];
   }
 
+  open(){
+    window.jQuery("#playerModal").modal("toggle");
+  }
+
   closeModal(){
     window.jQuery("#playerModal").modal("toggle");
   }

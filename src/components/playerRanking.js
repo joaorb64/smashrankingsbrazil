@@ -98,7 +98,8 @@ class PlayerRanking extends Component {
                 style={{padding: "0px 4px", cursor: "pointer"}}
                 data-toggle="modal" data-target="#playerModal"
                 onClick={()=>this.openPlayerModal(player)}
-                key={this.state.selectedLeague+'_'+i}>
+                key={this.state.selectedLeague+'_'+i}
+                id={"ranking_player_"+i}>
                   <li class={styles.top3container + " slide-fade list-group-item"} style={{
                       backgroundColor: this.state.top3Colors[i], borderRadius: "10px", border: 0, marginBottom: "5px", width: "100%", lineHeight: "48px",
                       padding: 0, display: "flex", alignSelf: "center", overflow: "hidden"
@@ -240,6 +241,7 @@ class PlayerRanking extends Component {
 
             {this.state.players.slice(3).map((player, i) => (
               <li key={this.state.selectedLeague+"_"+i}
+              id={"ranking_player_"+(i+3)}
               class={"slide-fade " + styles.listItem + " list-group-item"}
               style={{cursor: "pointer"}}
               data-toggle="modal" data-target="#playerModal"

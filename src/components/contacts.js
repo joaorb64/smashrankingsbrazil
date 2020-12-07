@@ -158,6 +158,20 @@ class Contacts extends Component {
               rankingAlltimes: data.ranking["alltimes"],
               rankingStartTime: data.ranking["timeStart"],
               rankingEndTime: data.ranking["timeEnd"]
+            }, ()=>{
+              if(this.props.match.params["player_id"]){
+                console.log(this.props.match.params["player_id"])
+
+                setTimeout(()=>{
+                  let div = document.getElementById("ranking_player_"+players.findIndex((p)=>p.league_id == this.props.match.params["player_id"]));
+                  console.log(div)
+
+                  if(div)
+                    window.scrollTo({behavior: "smooth", top: div.offsetTop})
+
+                  this.openPlayerModal(players.find((p)=>p.league_id == this.props.match.params["player_id"]));
+                }, 500);
+              }
             })
           }
         })
@@ -215,7 +229,11 @@ class Contacts extends Component {
     if(window.playerModal){
       window.playerModal.player = player;
       window.playerModal.fetchPlayer();
-      console.log(player);
+      this.props.history.push(
+        '/leagues/smash/'+this.props.match.params["id"]+'/'+
+        this.props.match.params["tab"]+"/"+player.league_id
+      );
+      window.playerModal.open();
     }
   }
 
