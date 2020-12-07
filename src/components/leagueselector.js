@@ -120,7 +120,7 @@ class LeagueSelector extends Component {
         {Object.entries(head.subleagues).map((league, i) => (
           <>
             <div class={"dropdown-item " + styles.teste} 
-            data-toggle="collapse" data-target={"#collapse_"+recursion+"_"+i} aria-controls={"#collapse_"+recursion+"_"+i}
+            data-toggle={recursion == 0 ? "" : "collapse"} data-target={"#collapse_"+league[0]+"_"+recursion+"_"+i} aria-controls={recursion == 0 ? "true" : "#collapse_"+league[0]+"_"+recursion+"_"+i}
             style={{
               display: "flex", lineHeight: "32px", paddingLeft: (32*(recursion)+32)+"px"
             }}>
@@ -159,7 +159,7 @@ class LeagueSelector extends Component {
                 null
               }
             </div>
-            <div class="collapse" id={"collapse_"+recursion+"_"+i}>
+            <div class={recursion == 0 ? "" : "collapse"} id={"collapse_"+league[0]+"_"+recursion+"_"+i}>
               {this.renderTree(league[1], recursion+1)}
             </div>
           </>
