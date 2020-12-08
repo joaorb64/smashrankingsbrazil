@@ -29,7 +29,7 @@ class Players extends Component {
 
       this.props.allplayers["players"].forEach(function(p){
         if(p.twitter){
-          p.avatar = `http://twitter-avatar.now.sh/${this.getTwitterHandle(p.twitter)}`;
+          p.avatar = `http://unavatar.now.sh/twitter/${this.getTwitterHandle(p.twitter)}`;
         }
         if(p.smashgg_image && !p.twitter) {
           p.avatar = p.smashgg_image;

@@ -30,12 +30,16 @@ class Contacts extends Component {
   }
 
   componentDidMount() {
+    this.state.selectedLeague = -1;
     if(!this.props.match) return;
     this.manageUrl();
   }
 
   manageUrl(prevProps = null){
     if(!this.props.match) return;
+    if(!this.props.allplayers) return;
+    if(!this.props.alltournaments) return;
+    if(!this.props.contacts) return;
 
     let leagueId = this.props.match.params["id"];
 
@@ -46,6 +50,9 @@ class Contacts extends Component {
           let selectedLeague = this.props.contacts.findIndex((a)=>{return a.id == selectedId});
           if(selectedLeague != -1){
             this.selectLeague(selectedLeague);
+          } else {
+            this.selectLeague(0);
+            leagueId = this.props.contacts[0].id
           }
         } else {
           this.selectLeague(0);
@@ -87,6 +94,7 @@ class Contacts extends Component {
   }
 
   updateData() {
+    console.log("Update data");
     if(!this.props) return
     if(!this.props.contacts) return
     if(!this.props.allplayers) return
@@ -113,7 +121,7 @@ class Contacts extends Component {
                 p = Object.assign(p, this.props.allplayers["players"][this.props.allplayers["mapping"][league+":"+id[0]]]);
       
                 if(p.twitter) {
-                  p.avatar = `http://twitter-avatar.now.sh/${this.getTwitterHandle(p.twitter)}`;
+                  p.avatar = `http://unavatar.now.sh/twitter/${this.getTwitterHandle(p.twitter)}`;
                 }
                 if(p.smashgg_image && !p.twitter) {
                   p.avatar = p.smashgg_image;
@@ -242,8 +250,7 @@ class Contacts extends Component {
       this.props.history.push(
         '/leagues/smash/'+this.props.match.params["id"]+'/'+value
       );
-      this.state.selectedTab = value;
-      this.setState(this.state);
+      this.setState({selectedTab: value});
     }
   }
 

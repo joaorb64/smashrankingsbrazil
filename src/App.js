@@ -59,25 +59,23 @@ class App extends Component {
     fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/allplayers.json')
     .then(res => res.json())
     .then((data) => {
-      this.state.allplayers = data;
-      this.setState(this.state);
+      this.setState({allplayers: data});
     })
     .catch(console.log)
 
     fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/alltournaments.json')
     .then(res => res.json())
     .then((data) => {
-      this.state.alltournaments = data;
-      this.setState(this.state);
+      this.setState({alltournaments: data});
     })
     .catch(console.log)
 
     // Get user country
-    fetch('https://get.geojs.io/v1/ip/country.json').then(res => res.json()).then((data) => {
+    fetch('http://get.geojs.io/v1/ip/country.json').then(res => res.json()).then((data) => {
       if(data && data.country){
         this.setState({userCountry: data.country});
       }
-    })
+    }).catch(console.log())
   }
 
   componentDidMount() {
@@ -96,7 +94,7 @@ class App extends Component {
           <source src="/background.mp4" type="video/mp4" />
         </video>
 
-        <HashRouter basename={process.env.PUBLIC_URL}>
+        <Router basename={process.env.PUBLIC_URL}>
           <Route path="/" render={(props) => <TopBar match={props} />} />
 
           <div class="container main-container" style={{
@@ -138,7 +136,7 @@ class App extends Component {
             }} />
 
           </div>
-        </HashRouter>
+        </Router>
 
         <nav class="navbar bottom-bar fixed-bottom" style={{display: "flex", flexFlow: "nowrap"}}>
           <div style={{flexGrow: 0}}>

@@ -15,8 +15,8 @@ class PlayerRanking extends Component {
     top3Colors3: ["#C9B037", "#A7A7AD", "#824A02"]
   }
 
-  componentDidUpdate(nextProps) {
-    if(nextProps !== this.props) {
+  componentDidUpdate(prevProps) {
+    if(prevProps != this.props) {
       if(this.props.ranking){
         this.state.players = this.props.ranking;
       } else {
@@ -37,10 +37,14 @@ class PlayerRanking extends Component {
     if(this.props.ranking){
       this.state.players = this.props.ranking;
     } else {
-      this.state.players = [];
+      this.state.players = null;
     }
 
-    this.state.updateTime = this.props.updateTime;
+    if(this.props.updateTime){
+      this.state.updateTime = this.props.updateTime;
+    } else {
+      this.state.updateTime = null;
+    }
 
     this.setState(this.state);
   }
