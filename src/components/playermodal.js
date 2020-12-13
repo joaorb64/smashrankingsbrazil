@@ -81,7 +81,7 @@ class PlayerModal extends Component {
   
           if(Object.keys(this.state.alltournaments).includes(linkLeague)){
             Object.values(this.state.alltournaments[linkLeague]).forEach(tournament => {
-              if(Object.keys(tournament.ranking).includes(linkId)){
+              if(tournament.ranking && Object.keys(tournament.ranking).includes(linkId)){
                 let tournamentEntry = {};
                 Object.assign(tournamentEntry, tournament);
                 tournamentEntry["ranking"] = tournament.ranking[linkId].rank;
@@ -534,7 +534,8 @@ class PlayerModal extends Component {
                       <div style={{padding: "10px"}}>Este jogador não foi encontrado no ranking de nenhuma liga.</div>
                     }
 
-                    {this.state.playerData.character_usage_percent ?
+                    {this.state.playerData.character_usage_percent &&
+                    this.state.playerData.character_usage_percent.length > 0 ?
                       <row style={{display: "block", padding: "12px"}}>
                         <h5>{i18n.t("char-usage-latest-30-sets")}</h5>
                         <div class="row" style={{padding: "10px", margin: 0, backgroundColor: "black", borderBottom: "1px solid #3d5466", justifyContent: "center"}}>
