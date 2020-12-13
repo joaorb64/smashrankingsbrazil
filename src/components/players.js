@@ -190,32 +190,30 @@ class Players extends Component {
                   }}></div>
                 }
 
-                <div class="state-flag-container" style={{
-                  width: "40px", display: "flex", justifyContent: "center", alignItems: "center", padding: "6px"
-                }}>
-                  {player.country && player.country != "null" ?
-                    <div class="state-flag" style={{
-                      backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/country_flag/${player.country_code.toLowerCase()}.png)`,
-                      width: "100%", height: "100%", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
-                      backgroundPosition: "center"
-                    }}>{player.country_code}</div>
-                  :
-                    null
-                  }
-                </div>
+<div class="flags-container">
+                  <div class="state-flag-container" style={{
+                    width: "40px", display: "flex", justifyContent: "center", alignItems: "center", padding: "6px"
+                  }}>
+                    {player.country_code && player.country_code != "null" ?
+                      <div class="flag" style={{
+                        backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/country_flag/${player.country_code.toLowerCase()}.png)`
+                      }}><span>{player.country_code}</span></div>
+                    :
+                      null
+                    }
+                  </div>
 
-                <div class="state-flag-container" style={{
-                  width: "40px", display: "flex", justifyContent: "center", alignItems: "center", padding: "6px"
-                }}>
-                  {player.state && player.state != "null" ?
-                    <div class="state-flag" style={{
-                      backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/state_flag/${player.country_code}/${player.state}.png)`,
-                      width: "100%", height: "100%", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
-                      backgroundPosition: "center"
-                    }}>{player.state}</div>
-                  :
-                    null
-                  }
+                  <div class="state-flag-container" style={{
+                    width: "40px", display: "flex", justifyContent: "center", alignItems: "center", padding: "6px"
+                  }}>
+                    {player.state && player.state != "null" ?
+                      <div class="flag" style={{
+                        backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/state_flag/${player.country_code}/${player.state}.png)`
+                      }}><span>{player.state}</span></div>
+                    :
+                      null
+                    }
+                  </div>
                 </div>
 
                 <div class="player-name-container" style={{display: "flex", flexGrow: 1, overflow: "hidden", textOverflow: "ellipsis", justifyContent: "center"}}>
