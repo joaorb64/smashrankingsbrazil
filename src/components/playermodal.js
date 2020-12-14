@@ -407,6 +407,21 @@ class PlayerModal extends Component {
                           </div>
                           :
                           null}
+                        
+                        {this.state.playerData.smashgg_slug ? 
+                          <div className={styles.tttag} style={{color: "white", fontSize: ".8rem"}}>
+                            <div className={styles.ttlogo} style={{
+                              backgroundImage: "url(/icons/smashgg.svg)", width: 16, height: 16, bottom: 0, right: 0,
+                              display: "inline-block", verticalAlign: "bottom", marginRight: "6px", backgroundSize: "cover",
+                              borderRadius: "100%"
+                            }}>
+                            </div>
+                            <a href={"http://smash.gg/"+this.state.playerData.smashgg_slug} target="_blank">
+                              {this.state.playerData.smashgg_slug}
+                            </a>
+                          </div>
+                          :
+                          null}
 
                         {this.state.playerData.twitter ? 
                           <div className={styles.tttag} style={{color: "white", fontSize: ".8rem"}}>
@@ -415,7 +430,9 @@ class PlayerModal extends Component {
                               display: "inline-block", verticalAlign: "bottom", marginRight: "6px", backgroundSize: "cover"
                             }}>
                             </div>
-                            {this.getTwitterHandle(this.state.playerData.twitter)}
+                            <a href={"http://twitter.com/"+this.getTwitterHandle(this.state.playerData.twitter)} target="_blank">
+                              {this.getTwitterHandle(this.state.playerData.twitter)}
+                            </a>
                           </div>
                           :
                           null}
@@ -427,7 +444,9 @@ class PlayerModal extends Component {
                               display: "inline-block", verticalAlign: "bottom", marginRight: "6px", backgroundSize: "cover"
                             }}>
                             </div>
-                            {this.state.playerData.twitch}
+                            <a href={"http://twitch.tv/"+this.state.playerData.twitch} target="_blank">
+                              {this.state.playerData.twitch}
+                            </a>
                           </div>
                           :
                           null}
