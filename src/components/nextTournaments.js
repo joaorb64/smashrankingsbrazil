@@ -4,6 +4,7 @@ import styles from "./nextTournaments.module.css"
 import { faCalendar, faEdit, faMapMarkerAlt, faUser, faWifi } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import i18n from '../locales/i18n';
+import HelpButton from './HelpButton';
 
 class NextTournaments extends Component {
   state = {
@@ -85,7 +86,7 @@ class NextTournaments extends Component {
       }}>
         <div class="row" style={{marginLeft: -8, marginRight: -8}}>
           <h2 style={{color: "white"}}>
-            {i18n.t("next-tournaments")}
+            {i18n.t("next-tournaments")} <HelpButton content="To have your tournaments listed on this page, set their location to your country, even for online tournaments." />
           </h2>
           <select class="form-control form-control-lg" onChange={(e)=>this.selectCountry(e)}>
             <option value="all">{i18n.t("all")}</option>

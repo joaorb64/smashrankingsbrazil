@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import moment from "../../node_modules/moment-timezone/moment-timezone";
+import HelpButton from './HelpButton';
 import styles from "./nextTournaments.module.css"
 
 class Matcherino extends Component {
@@ -117,7 +118,7 @@ class Matcherino extends Component {
       }}>
         <div class="row" style={{marginLeft: -8, marginRight: -8}}>
           <h2 style={{color: "white"}}>
-            Campanhas ativas no Matcherino
+            Campanhas ativas no Matcherino <HelpButton content="To have your Matcherino campains listed on this page, contact @joao_shino on twitter" />
           </h2>
         </div>
         <select class="form-control form-control-lg" onChange={(e)=>this.selectCountry(e)}>
@@ -132,7 +133,7 @@ class Matcherino extends Component {
             this.state.tournaments[this.state.selected] != null ?
               this.state.tournaments[this.state.selected].map((tournament)=>(
                 <div class="col-md-6 col-lg-4" style={{padding: 2}}>
-                  <a href={"https://matcherino.com/tournaments/"+tournament.id}>
+                  <a href={"https://matcherino.com/tournaments/"+tournament.id} target="_blank">
                     <div className={styles.tournamentContainerHighlight} style={{cursor: "pointer"}}>
                       <div className={styles.tournamentContainer} style={{backgroundColor: "#ff5e24", border: "4px solid black", cursor: "pointer"}}>
                         <div style={{backgroundImage: "url("+tournament.meta.backgroundImg+")", height: 140, margin: "4px",
@@ -150,7 +151,7 @@ class Matcherino extends Component {
                         <div style={{height: 40, display: "flex", flexDirection: "column", alignItems: "center", placeContent: "center",
                         paddingLeft: "8px", paddingRight: "8px", background: "rgb(255,113,40)",
                         background: "linear-gradient(180deg, rgba(255,113,40,1) 0%, rgba(221,87,37,1) 100%)"}}>
-                          <div style={{color: "white", textAlign: "center", fontSize: "20px",
+                          <div style={{color: "white", textAlign: "center", fontSize: "18px",
                           whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden",
                           textShadow: "2px 2px 0px #00000070", width: "100%"}}>
                             {tournament.title}
