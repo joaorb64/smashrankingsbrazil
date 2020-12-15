@@ -39,59 +39,64 @@ class Matcherino extends Component {
       this.setState(this.state);
     }
 
-    fetch('https://matcherino.com/__api/bounties/list?offset='+offset+'&size='+perPage+'&creatorId='+this.state.matcherinos[this.state.selected][0]+'&published=true')
-    .then(res => res.json())
-    .then((data) => {
-      console.log(data);
+    let promises = [];
 
-      data.body = data.body.filter((tournament) => {
-        if(tournament.status=="ready" && [112,115].includes(tournament.gameId)){
-          return true;
-        }
-        return false;
-      });
+    this.state.matcherinos[this.state.selected].forEach((accountId)=>{
+      promises.push(fetch('https://matcherino.com/__api/bounties/list?offset='+offset+'&size='+perPage+'&creatorId='+accountId+'&published=true')
+      .then(res => res.json())
+      .then((data) => {
+        console.log(data);
 
-      console.log(data.body)
+        data.body = data.body.filter((tournament) => {
+          if(tournament.status=="ready" && [112,115].includes(tournament.gameId)){
+            return true;
+          }
+          return false;
+        });
 
-      data.body.forEach(tournament => {
-        let used = 0;
+        console.log(data.body)
 
-        if(tournament.transactions){
-          tournament.transactions.forEach(transaction => {
-            if(transaction.action == "coupon:use"){
-              used += 1;
-            }
-          })
-        }
+        data.body.forEach(tournament => {
+          let used = 0;
 
-        tournament.usedCoupons = used;
+          if(tournament.transactions){
+            tournament.transactions.forEach(transaction => {
+              if(transaction.action == "coupon:use"){
+                used += 1;
+              }
+            })
+          }
 
-        let coupon = tournament.description.match(/cupom:[\s][a-zA-Z|0-9]+/gi);
+          tournament.usedCoupons = used;
 
-        if(coupon != null){
-          coupon = coupon[0].substring(6).trim()
-        }
+          let coupon = tournament.description.match(/cupom:[\s][a-zA-Z|0-9]+/gi);
 
-        tournament.coupon = coupon;
-      });
+          if(coupon != null){
+            coupon = coupon[0].substring(6).trim()
+          }
 
-      data.body.forEach((tournament) => {
-        this.state.tournaments[stateSelection].push(tournament);
+          tournament.coupon = coupon;
+        });
+
+        data.body.forEach((tournament) => {
+          this.state.tournaments[stateSelection].push(tournament);
+        })
       })
+      .catch((err)=>{
+        console.log(err);
+      }))
+    })
 
+    Promise.all(promises).then(()=>{
       this.setState(this.state);
-
+      
       offset+=10;
 
-      if(offset < 100){
+      if(offset < 200){
         this.fetchPage(stateSelection, offset, perPage);
       } else {
         this.setState({loading: false});
       }
-    })
-    .catch((err)=>{
-      console.log(err);
-      this.setState({loading: false});
     })
   };
 
@@ -149,6 +154,19 @@ class Matcherino extends Component {
                           whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden",
                           textShadow: "2px 2px 0px #00000070", width: "100%"}}>
                             {tournament.title}
+                          </div>
+                        </div>
+
+                        <div style={{display: "flex", color: "black", backgroundColor: "#dedede"}}>
+                          <div style={{backgroundColor: "#dedede", padding: "4px", paddingLeft: "8px",
+                          flex: "1 1 0", display: "flex", placeItems: "center"}}>
+                            <div style={{
+                              width: 32, height: 32, backgroundRepeat: "no-repeat",
+                              backgroundPosition: "center", backgroundSize: "cover",
+                              backgroundImage: `url(${tournament.creator.avatar})`,
+                              borderRadius: "100%"
+                            }}></div>
+                            <div style={{marginLeft: 8}}>{tournament.creator.displayName}</div>
                           </div>
                         </div>
 
