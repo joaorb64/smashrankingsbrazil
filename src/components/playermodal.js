@@ -81,7 +81,8 @@ class PlayerModal extends Component {
   
           if(Object.keys(this.state.alltournaments).includes(linkLeague)){
             Object.values(this.state.alltournaments[linkLeague]).forEach(tournament => {
-              if(tournament.ranking && Object.keys(tournament.ranking).includes(linkId)){
+              if(tournament.ranking && Object.keys(tournament.ranking).includes(linkId)
+              && !tournament.name.includes("[MATCHMAKING]")){
                 let tournamentEntry = {};
                 Object.assign(tournamentEntry, tournament);
                 tournamentEntry["ranking"] = tournament.ranking[linkId].rank;
