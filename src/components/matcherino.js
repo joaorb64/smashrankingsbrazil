@@ -6,7 +6,7 @@ class Matcherino extends Component {
   state = {
     matcherinos: {},
     selected: null,
-    tournaments: null,
+    tournaments: {},
     loading: false
   }
 
@@ -26,25 +26,26 @@ class Matcherino extends Component {
 
       let offset = 0;
       let perPage = 10;
-      this.fetchPage(offset, perPage);
+      this.fetchPage(this.state.selected, offset, perPage);
     });
   }
 
-  fetchPage(offset, perPage) {
-    if(this.state.selected == null) return;
+  fetchPage(stateSelection, offset, perPage) {
+    if(this.state.selected == null || this.state.selected != stateSelection) return;
+    
     if(offset == 0){
-      this.state.tournaments = [];
+      this.state.tournaments[stateSelection] = [];
       this.state.loading = true;
       this.setState(this.state);
     }
 
-    fetch('https://matcherino.com/__api/bounties/list?offset='+offset+'&size='+perPage+'&creatorId='+this.state.matcherinos[this.state.selected][0]+'&published=true&gameId=112')
+    fetch('https://matcherino.com/__api/bounties/list?offset='+offset+'&size='+perPage+'&creatorId='+this.state.matcherinos[this.state.selected][0]+'&published=true')
     .then(res => res.json())
     .then((data) => {
       console.log(data);
 
       data.body = data.body.filter((tournament) => {
-        if(tournament.status=="ready"){
+        if(tournament.status=="ready" && [112,115].includes(tournament.gameId)){
           return true;
         }
         return false;
@@ -74,12 +75,8 @@ class Matcherino extends Component {
         tournament.coupon = coupon;
       });
 
-      if(this.state.tournaments == null){
-        this.state.tournaments = []
-      }
-
       data.body.forEach((tournament) => {
-        this.state.tournaments.push(tournament);
+        this.state.tournaments[stateSelection].push(tournament);
       })
 
       this.setState(this.state);
@@ -87,7 +84,7 @@ class Matcherino extends Component {
       offset+=10;
 
       if(offset < 100){
-        this.fetchPage(offset, perPage);
+        this.fetchPage(stateSelection, offset, perPage);
       } else {
         this.setState({loading: false});
       }
@@ -100,11 +97,11 @@ class Matcherino extends Component {
 
   selectCountry(e){
     this.state.selected = e.target.value;
-    this.setState(this.state);
+    this.setState({selected: e.target.value});
 
     let offset = 0;
     let perPage = 10;
-    this.fetchPage(offset, perPage);
+    this.fetchPage(e.target.value, offset, perPage);
   }
 
   render(){
@@ -127,8 +124,8 @@ class Matcherino extends Component {
         </select>
         <div class="row">
           {
-            this.state.tournaments != null ?
-              this.state.tournaments.map((tournament)=>(
+            this.state.tournaments[this.state.selected] != null ?
+              this.state.tournaments[this.state.selected].map((tournament)=>(
                 <div class="col-md-6 col-lg-4" style={{padding: 2}}>
                   <a href={"https://matcherino.com/tournaments/"+tournament.id}>
                     <div className={styles.tournamentContainerHighlight} style={{cursor: "pointer"}}>
