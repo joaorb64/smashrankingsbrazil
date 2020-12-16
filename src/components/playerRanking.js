@@ -250,24 +250,26 @@ class PlayerRanking extends Component {
                 <div class={styles.playerRanking}>{player.ranking}</div>
 
                 {player.avatar ?
-                  <LazyLoad style={{width: "64px", height: "100%"}}>
-                    <a href={player.twitter}>
-                      <div class="player-avatar" style={{
-                        backgroundImage: `url(${player.avatar})`,
-                        width: "64px", height: "100%", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
-                        backgroundPosition: "center", backgroundColor: "white",
-                      }}>
-                        {player.twitter ? 
-                          <div style={{width: "100%", height: "100%", display: "flex", alignItems: "flex-end", justifyContent: "flex-end"}}>
-                            <div style={{
-                              backgroundImage: "url(/icons/twitter.svg)", width: 16, height: 16, bottom: 0, right: 0, margin: "2px"
-                            }}></div>
+                    <div class="player-avatar">
+                      <LazyLoad style={{height: "100%"}}>
+                        <a href={player.twitter}>
+                          <div class="player-avatar" style={{
+                            backgroundImage: `url(${player.avatar})`,
+                            width: "64px", height: "100%", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
+                            backgroundPosition: "center", backgroundColor: "white",
+                          }}>
+                            {player.twitter ? 
+                              <div style={{width: "100%", height: "100%", display: "flex", alignItems: "flex-end", justifyContent: "flex-end"}}>
+                                <div style={{
+                                  backgroundImage: "url(/icons/twitter.svg)", width: 16, height: 16, bottom: 0, right: 0, margin: "2px"
+                                }}></div>
+                              </div>
+                              :
+                              null}
                           </div>
-                          :
-                          null}
-                      </div>
-                    </a>
-                  </LazyLoad>
+                        </a>
+                      </LazyLoad>
+                    </div>
                 :
                   <div class="player-avatar" style={{
                     width: "64px", height: "48px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
@@ -316,10 +318,10 @@ class PlayerRanking extends Component {
                   </div>
                 </div>
 
-                <div class="player-score" style={{width: "128px", padding: "5px", display: "flex", flexDirection: "column", justifyContent: "center", flexShrink: 0}}>
+                <div class="player-score" style={{width: "110px", padding: "5px", display: "flex", flexDirection: "column", justifyContent: "center", flexShrink: 0}}>
                   <div style={{backgroundColor: "black", flexGrow: 1, display: "flex"}}>
                     <div style={{
-                      backgroundColor: "black", color: "white", fontSize: "1.2rem", lineHeight: "1.2rem", flexGrow: 1, alignSelf: "center", width: "100%"
+                      backgroundColor: "black", color: "white", fontSize: "1rem", lineHeight: "1rem", flexGrow: 1, alignSelf: "center", width: "100%"
                     }}>{player.score} pts.</div>
                   </div>
                 </div>

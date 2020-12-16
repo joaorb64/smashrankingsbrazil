@@ -281,19 +281,19 @@ class Contacts extends Component {
         }
 
         <div className="teste btn-group btn-group-toggle col-12" style={{padding: "5px 8px 0px 10px", marginBottom: "-5px"}}>
-          <button className={styles_selector.teste+" "+styles_selector.aria+" btn col-3"} value="ranking" aria-expanded={this.state.selectedTab == "ranking"} onClick={(event)=>this.handleTabChange(event.target.value)}>
+          <button className={"tab " + styles_selector.teste+" "+styles_selector.aria+" btn col-3"} value="ranking" aria-expanded={this.state.selectedTab == "ranking"} onClick={(event)=>this.handleTabChange(event.target.value)}>
             {i18n.t("Ranking")}
           </button>
-          <button className={styles_selector.teste+" "+styles_selector.aria+" btn col-3"} value="players" aria-expanded={this.state.selectedTab == "players"} onClick={(event)=>this.handleTabChange(event.target.value)}>
+          <button className={"tab " + styles_selector.teste+" "+styles_selector.aria+" btn col-3"} value="players" aria-expanded={this.state.selectedTab == "players"} onClick={(event)=>this.handleTabChange(event.target.value)}>
             {i18n.t("players")}
           </button>
-          <button className={styles_selector.teste+" "+styles_selector.aria+" btn col-3"} value="tournaments" aria-expanded={this.state.selectedTab == "tournaments"} onClick={(event)=>this.handleTabChange(event.target.value)}>
+          <button className={"tab " + styles_selector.teste+" "+styles_selector.aria+" btn col-3"} value="tournaments" aria-expanded={this.state.selectedTab == "tournaments"} onClick={(event)=>this.handleTabChange(event.target.value)}>
             {i18n.t("Tournaments")}
           </button>
-          <button className={styles_selector.teste+" "+styles_selector.aria+" btn col-3"} value="statistics" aria-expanded={this.state.selectedTab == "statistics"} onClick={(event)=>this.handleTabChange(event.target.value)}>
+          <button className={"tab " + styles_selector.teste+" "+styles_selector.aria+" btn col-3"} value="statistics" aria-expanded={this.state.selectedTab == "statistics"} onClick={(event)=>this.handleTabChange(event.target.value)}>
             {i18n.t("Statistics")}
           </button>
-          <button className={styles_selector.teste+" "+styles_selector.aria+" btn col-3"} value="info" aria-expanded={this.state.selectedTab == "info"} onClick={(event)=>this.handleTabChange(event.target.value)}>
+          <button className={"tab " + styles_selector.teste+" "+styles_selector.aria+" btn col-3"} value="info" aria-expanded={this.state.selectedTab == "info"} onClick={(event)=>this.handleTabChange(event.target.value)}>
             {i18n.t("Info")}
           </button>
         </div>

@@ -78,7 +78,7 @@ class LeagueSelector extends Component {
       <>
         {head.leagues.map((contact, i)=>(
           <Link class={"dropdown-item " + styles.teste} to={`/leagues/smash/${contact.id}`} href={`/leagues/smash/${contact.id}`} onClick={()=>{this.props.selectLeague(this.props.leagues.indexOf(contact)); this.closeModal()}} style={{
-            display: "flex", lineHeight: "32px", paddingLeft: (32*(recursion)+32)+"px"
+            display: "flex", lineHeight: "32px", paddingLeft: (24*(Math.max(recursion-1, 0))+32)+"px"
           }} key={"league_"+contact.name}>
             <div style={{
               width: "32px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
@@ -90,6 +90,17 @@ class LeagueSelector extends Component {
               flexShrink: 1, flexGrow: 1, textOverflow: "ellipsis", overflow: "hidden",
               textAlign: "left"
             }}>{contact.name}</div>
+            {contact.state?
+              <div style={{
+                width: "32px", height: "32px", display: "inline-block",
+                backgroundPosition: "center", verticalAlign: "inherit",
+                display: "flex", flexShrink: 0
+              }}>
+                {contact.state}
+              </div>
+              :
+              null
+            }
             {
               contact.wifi ? 
                 <div style={{
@@ -108,13 +119,6 @@ class LeagueSelector extends Component {
               :
                 null
             }
-            <div style={{
-              width: "32px", height: "32px", display: "inline-block",
-              backgroundPosition: "center", verticalAlign: "inherit",
-              display: "flex", flexShrink: 0
-            }}>
-              {contact.state}
-            </div>
           </Link>
         ))}
         {Object.entries(head.subleagues).map((league, i) => (
@@ -122,7 +126,7 @@ class LeagueSelector extends Component {
             <div class={"dropdown-item " + styles.teste} 
             data-toggle={recursion == 0 ? "" : "collapse"} data-target={"#collapse_"+league[0]+"_"+recursion+"_"+i} aria-controls={recursion == 0 ? "true" : "#collapse_"+league[0]+"_"+recursion+"_"+i}
             style={{
-              display: "flex", lineHeight: "32px", paddingLeft: (32*(recursion)+32)+"px"
+              display: "flex", lineHeight: "32px", paddingLeft: (24*(Math.max(recursion-1, 0))+32)+"px"
             }}>
               <div class={styles["folder-icon"]}>
                 <FontAwesomeIcon icon={faCaretRight} />
@@ -151,7 +155,7 @@ class LeagueSelector extends Component {
                 <div style={{
                   width: "32px", height: "32px", display: "inline-block",
                   backgroundPosition: "center", verticalAlign: "inherit",
-                  display: "flex", flexShrink: 0, placeContent: "flex-end"
+                  display: "flex", flexShrink: 0, placeContent: "center"
                 }}>
                   {Object.keys(league[1].leagues).length}
                 </div>
@@ -185,6 +189,15 @@ class LeagueSelector extends Component {
                 <div style={{
                   flexShrink: 1, flexGrow: 1, textOverflow: "ellipsis", overflow: "hidden"
                 }}>{this.state.leagues[this.props.selectedLeague].name}</div>
+                {this.state.leagues[this.props.selectedLeague].state ?
+                  <div style={{
+                    width: "32px", height: "32px", display: "inline-block",
+                    backgroundPosition: "center", verticalAlign: "inherit",
+                    display: "flex", flexShrink: 0
+                  }}>{this.state.leagues[this.props.selectedLeague].state}</div>
+                  :
+                  null
+                }
                 {
                   this.state.leagues[this.props.selectedLeague].wifi ? 
                     <div style={{
@@ -203,11 +216,6 @@ class LeagueSelector extends Component {
                   :
                     null
                 }
-                <div style={{
-                  width: "32px", height: "32px", display: "inline-block",
-                  backgroundPosition: "center", verticalAlign: "inherit",
-                  display: "flex", flexShrink: 0
-                }}>{this.state.leagues[this.props.selectedLeague].state}</div>
               </div>
               :
               "Loading..."
