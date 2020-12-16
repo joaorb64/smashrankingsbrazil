@@ -139,21 +139,17 @@ class App extends Component {
         </Router>
 
         <nav class="navbar bottom-bar fixed-bottom" style={{display: "flex", flexFlow: "nowrap"}}>
-          <div style={{flexGrow: 0}}>
-            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-              <input type="hidden" name="cmd" value="_donations" />
-              <input type="hidden" name="business" value="ZV95C3G67WXBA" />
-              <input type="hidden" name="currency_code" value="BRL" />
-              <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" height="32px" />
-              <img alt="" border="0" src="https://www.paypal.com/en_BR/i/scr/pixel.gif" width="1" height="1" />
-            </form>
-          </div>
-          <div style={{flexGrow: 0}}>
-            <a href="https://picpay.me/joaorb64">
-              <img src="/images/donate_picpay.png" style={{height: 32}}></img>
+          <div style={{flexGrow: 0, margin: 2}}>
+            <a href='https://ko-fi.com/W7W22YK26' target='_blank'>
+              <img style={{border: 0, height: 32}} src='https://cdn.ko-fi.com/cdn/kofi1.png?v=2' border='0' alt='Buy Me a Coffee at ko-fi.com'></img>
             </a>
           </div>
-          <div style={{flexGrow: 1}}>
+          <div style={{flexGrow: 0, margin: 2}}>
+            <a href="https://picpay.me/joaorb64">
+              <img src="/images/donate_picpay.png" style={{height: 32, borderRadius: 5}}></img>
+            </a>
+          </div>
+          <div style={{flexGrow: 1, margin: 2}}>
             By João "Shino" (joaorb64@gmail.com, <a style={{color: "white"}} href="https://twitter.com/joao_shino">@joao_shino</a>) <br/>
           </div>
         </nav>
