@@ -3,7 +3,7 @@ import styles from './contacts.module.css'
 import { Link, useParams, useLocation } from 'react-router-dom';
 import LeagueSelector from './leagueselector';
 import moment from "../../node_modules/moment-timezone/moment-timezone";
-import CHARACTERS from "../globals";
+import {CHARACTERS, CHARACTER_EYE_HEIGHT_PERCENTAGE} from "../globals";
 import LazyLoad from 'react-lazyload';
 
 class PlayerRanking extends Component {
@@ -328,7 +328,8 @@ class PlayerRanking extends Component {
                   {player.mains.length > 0 ?
                     <div style={{
                       backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_0_${this.getCharCodename(player, 0)}.png)`,
-                      width: "128px", backgroundPosition: "center 45%", backgroundSize: "cover", backgroundColor: "#ababab", overflow: "hidden"
+                      width: "128px", backgroundPositionX: "center", backgroundSize: "cover", backgroundColor: "#ababab", overflow: "hidden",
+                      backgroundPositionY: (CHARACTER_EYE_HEIGHT_PERCENTAGE[player.mains[0]]+"%" || "center")
                     }}>
                       <div style={{overflow: "hidden", display: "flex", height: "100%", alignItems: "flex-end", justifyContent: "flex-end"}}>
                         {player.mains.slice(1).map((main, i)=>(

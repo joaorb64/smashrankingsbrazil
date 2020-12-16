@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styles from './contacts.module.css'
-import CHARACTERS from "../globals";
+import {CHARACTERS, CHARACTER_EYE_HEIGHT_PERCENTAGE} from "../globals";
 import LazyLoad from 'react-lazyload';
 import i18n from '../locales/i18n';
 
@@ -235,7 +235,8 @@ class Players extends Component {
                   {player.mains.length > 0 ?
                     <div style={{
                       backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_0_${this.getCharCodename(player, 0)}.png)`,
-                      width: "128px", backgroundPosition: "center 45%", backgroundSize: "cover", backgroundColor: "#ababab", overflow: "hidden"
+                      width: "128px", backgroundPositionX: "center", backgroundSize: "cover", backgroundColor: "#ababab", overflow: "hidden",
+                      backgroundPositionY: (CHARACTER_EYE_HEIGHT_PERCENTAGE[player.mains[0]]+"%" || "center")
                     }}>
                       <div style={{overflow: "hidden", display: "flex", height: "100%", alignItems: "flex-end", justifyContent: "flex-end"}}>
                         {player.mains.slice(1).map((main, i)=>(
