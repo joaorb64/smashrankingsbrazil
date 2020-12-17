@@ -211,7 +211,7 @@ class PlayerRanking extends Component {
                       </div>
 
                       {player.avatar ?
-                        <a href={"http://twitter.com/"+player.twitter}>
+                        <div class="player-avatar">
                           <LazyLoad>
                             <div style={{
                               backgroundImage: `url(${player.avatar})`,
@@ -219,7 +219,7 @@ class PlayerRanking extends Component {
                               borderRadius: "100%", position: "absolute", right: 10, top: 10, border: "5px #f0f0f0 solid",
                               backgroundColor: "gray"
                             }}>
-                              {player.twitter ? 
+                              {!player.smashgg_image ? 
                                 <div style={{width: "100%", height: "100%", display: "flex", alignItems: "flex-end", justifyContent: "flex-end", margin: "5px"}}>
                                   <div style={{
                                     backgroundImage: "url(/icons/twitter.svg)", width: 32, height: 32, bottom: 0, right: 0
@@ -229,7 +229,7 @@ class PlayerRanking extends Component {
                                 null}
                             </div>
                           </LazyLoad>
-                        </a>
+                        </div>
                       :
                         null
                       }
@@ -252,22 +252,20 @@ class PlayerRanking extends Component {
                 {player.avatar ?
                     <div class="player-avatar">
                       <LazyLoad style={{height: "100%"}}>
-                        <a href={player.twitter}>
-                          <div class="player-avatar" style={{
-                            backgroundImage: `url(${player.avatar})`,
-                            width: "64px", height: "100%", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
-                            backgroundPosition: "center", backgroundColor: "white",
-                          }}>
-                            {player.twitter ? 
-                              <div style={{width: "100%", height: "100%", display: "flex", alignItems: "flex-end", justifyContent: "flex-end"}}>
-                                <div style={{
-                                  backgroundImage: "url(/icons/twitter.svg)", width: 16, height: 16, bottom: 0, right: 0, margin: "2px"
-                                }}></div>
-                              </div>
-                              :
-                              null}
-                          </div>
-                        </a>
+                        <div class="player-avatar" style={{
+                          backgroundImage: `url(${player.avatar})`,
+                          width: "64px", height: "100%", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
+                          backgroundPosition: "center", backgroundColor: "white",
+                        }}>
+                          {!player.smashgg_image ? 
+                            <div style={{width: "100%", height: "100%", display: "flex", alignItems: "flex-end", justifyContent: "flex-end"}}>
+                              <div style={{
+                                backgroundImage: "url(/icons/twitter.svg)", width: 16, height: 16, bottom: 0, right: 0, margin: "2px"
+                              }}></div>
+                            </div>
+                            :
+                            null}
+                        </div>
                       </LazyLoad>
                     </div>
                 :

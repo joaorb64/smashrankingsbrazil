@@ -28,11 +28,11 @@ class Players extends Component {
       let players = [];
 
       this.props.allplayers["players"].forEach(function(p){
-        if(p.twitter){
-          p.avatar = `http://unavatar.now.sh/twitter/${this.getTwitterHandle(p.twitter)}`;
-        }
-        if(p.smashgg_image && !p.twitter) {
+        if(p.smashgg_image) {
           p.avatar = p.smashgg_image;
+        }
+        if(!p.smashgg_image && p.twitter) {
+          p.avatar = `http://unavatar.now.sh/twitter/${this.getTwitterHandle(p.twitter)}`;
         }
 
         if(!p.mains || p.mains.length == 0 || p.mains[0] == ""){
@@ -165,26 +165,24 @@ class Players extends Component {
               onClick={()=>this.openPlayerModal(player)}
               >
                 {player.avatar ?
-                    <div class="player-avatar">
-                      <LazyLoad style={{height: "100%"}}>
-                        <a href={player.twitter}>
-                          <div class="player-avatar" style={{
-                            backgroundImage: `url(${player.avatar})`,
-                            width: "64px", height: "100%", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
-                            backgroundPosition: "center", backgroundColor: "white",
-                          }}>
-                            {player.twitter ? 
-                              <div style={{width: "100%", height: "100%", display: "flex", alignItems: "flex-end", justifyContent: "flex-end"}}>
-                                <div style={{
-                                  backgroundImage: "url(/icons/twitter.svg)", width: 16, height: 16, bottom: 0, right: 0, margin: "2px"
-                                }}></div>
-                              </div>
-                              :
-                              null}
+                  <div class="player-avatar">
+                    <LazyLoad style={{height: "100%"}}>
+                      <div class="player-avatar" style={{
+                        backgroundImage: `url(${player.avatar})`,
+                        width: "64px", height: "100%", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
+                        backgroundPosition: "center", backgroundColor: "white",
+                      }}>
+                        {!player.smashgg_image ? 
+                          <div style={{width: "100%", height: "100%", display: "flex", alignItems: "flex-end", justifyContent: "flex-end"}}>
+                            <div style={{
+                              backgroundImage: "url(/icons/twitter.svg)", width: 16, height: 16, bottom: 0, right: 0, margin: "2px"
+                            }}></div>
                           </div>
-                        </a>
-                      </LazyLoad>
-                    </div>
+                          :
+                          null}
+                      </div>
+                    </LazyLoad>
+                  </div>
                 :
                   <div class="player-avatar" style={{
                     width: "64px", height: "48px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
