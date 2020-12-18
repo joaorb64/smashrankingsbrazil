@@ -81,6 +81,7 @@ export const CHARACTERS = {
     "Byleth": "master",
     "Min Min": "tantan",
     "Steve": "pickel",
+    "Sephiroth": "edge",
     "Random": "random"
 }
 
@@ -167,6 +168,7 @@ export const CHARACTER_EYE_HEIGHT_PERCENTAGE = {
     "Byleth": 52,
     "Min Min": 74,
     "Steve": 42,
+    "Sephiroth": 56,
     "Random": 50
 }
 
@@ -252,7 +254,8 @@ export const CHARACTERS_GG_TO_BRAACKET = {
 	"Terry": "Terry",
 	"Byleth": "Byleth",
 	"Min Min": "Min Min",
-	"Steve": "Steve"
+    "Steve": "Steve",
+    "Sephiroth": "Sephiroth"
 }
 
 export default CHARACTERS
