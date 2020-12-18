@@ -114,7 +114,7 @@ class Contacts extends Component {
             let players = []
 
             if(data.ranking){
-              Object.entries(data.ranking.ranking).forEach(function(id){
+              Object.entries(data.ranking).forEach(function(id){
                 let league = this.props.contacts[this.state.selectedLeague].id;
       
                 let p = {}

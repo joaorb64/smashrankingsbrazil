@@ -128,16 +128,24 @@ class Mapa extends Component {
 
             let player = null;
 
-            if(ranking.ranking.ranking != null){
-              let best = Object.entries(ranking.ranking.ranking)[0][0];
-              let lowestNum = parseInt(Object.entries(ranking.ranking.ranking)[0][1].rank);
+            if(ranking.ranking != null){
+              console.log(ranking.ranking)
+              
+              let best = null;
 
-              Object.entries(ranking.ranking.ranking).forEach((player)=>{
-                if(parseInt(player[1].rank) < lowestNum){
-                  best = player[0];
-                  lowestNum = parseInt(player[1].rank);
-                }
-              })
+              try {
+                best = Object.entries(ranking.ranking)[0][0];
+                let lowestNum = parseInt(Object.entries(ranking.ranking)[0][1].rank);
+
+                Object.entries(ranking.ranking).forEach((player)=>{
+                  if(parseInt(player[1].rank) < lowestNum){
+                    best = player[0];
+                    lowestNum = parseInt(player[1].rank);
+                  }
+                })
+              } catch(e) {
+                console.log(e);
+              }
 
               if(best != null){
                 let playerId = this.state.allplayers["mapping"][this.props.leagues[league].id+":"+best];
@@ -150,7 +158,7 @@ class Mapa extends Component {
               player.mains.push("Random");
             }
 
-            let iconUrl = process.env.PUBLIC_URL+"/portraits/ssbu/chara_2_"+CHARACTERS[player.mains[0]]+"_00.png"
+            let iconUrl = process.env.PUBLIC_URL+"/portraits/ssbu/chara_2_"+(CHARACTERS[player.mains[0]] || "random")+"_00.png"
 
             let iconSize = 36;
 
