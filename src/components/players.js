@@ -28,11 +28,15 @@ class Players extends Component {
       let players = [];
 
       this.props.allplayers["players"].forEach(function(p){
-        if(p.smashgg_image) {
-          p.avatar = p.smashgg_image;
+
+        p.avatars = [];
+
+        if(p.twitter) {
+          p.avatars.push(`http://unavatar.now.sh/twitter/${this.getTwitterHandle(p.twitter)}?fallback=false`);
+          p.avatars.push(`https://api.microlink.io/?url=https://twitter.com/${this.getTwitterHandle(p.twitter)}&embed=image.url`);
         }
-        if(!p.smashgg_image && p.twitter) {
-          p.avatar = `http://unavatar.now.sh/twitter/${this.getTwitterHandle(p.twitter)}`;
+        if(p.smashgg_image) {
+          p.avatars.push(p.smashgg_image);
         }
 
         if(!p.mains || p.mains.length == 0 || p.mains[0] == ""){
@@ -164,15 +168,15 @@ class Players extends Component {
               data-toggle="modal" data-target="#playerModal"
               onClick={()=>this.openPlayerModal(player)}
               >
-                {player.avatar ?
+                {player.avatars && player.avatars.length > 0 ?
                   <div class="player-avatar">
                     <LazyLoad style={{height: "100%"}}>
                       <div class="player-avatar" style={{
-                        backgroundImage: `url(${player.avatar})`,
+                        backgroundImage: "url("+player.avatars.join("), url(")+")",
                         width: "64px", height: "100%", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
                         backgroundPosition: "center", backgroundColor: "white",
                       }}>
-                        {!player.smashgg_image ? 
+                        {player.twitter ? 
                           <div style={{width: "100%", height: "100%", display: "flex", alignItems: "flex-end", justifyContent: "flex-end"}}>
                             <div style={{
                               backgroundImage: "url(/icons/twitter.svg)", width: 16, height: 16, bottom: 0, right: 0, margin: "2px"
@@ -190,7 +194,7 @@ class Players extends Component {
                   }}></div>
                 }
 
-<div class="flags-container">
+                <div class="flags-container">
                   <div class="state-flag-container" style={{
                     width: "40px", display: "flex", justifyContent: "center", alignItems: "center", padding: "6px"
                   }}>

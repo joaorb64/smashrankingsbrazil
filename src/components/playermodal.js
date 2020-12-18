@@ -355,9 +355,9 @@ class PlayerModal extends Component {
                       position: "absolute", width: "100%", height: "100%", backgroundSize: "6px 6px"}}></div>
 
                       {
-                        this.state.playerData.avatar ?
+                        this.state.playerData.avatars && this.state.playerData.avatars.length > 0 ?
                           <div style={{zIndex: 1}}>
-                            <div className={styles.avatar} style={{backgroundImage: `url(${this.state.playerData.avatar})`}}>
+                            <div className={styles.avatar} style={{backgroundImage: "url("+this.state.playerData.avatars.join("), url(")+")"}}>
                             </div>
                           </div>
                       :
