@@ -73,8 +73,8 @@ class PlayerModal extends Component {
           fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/'+linkLeague+'/ranking.json')
           .then(res => res.json())
           .then((data) => {
-            if(data.ranking[linkId]){
-              this.player.rank[linkLeague] = {rank: data.ranking[linkId].rank, score: data.ranking[linkId].score};
+            if(data.ranking.ranking[linkId]){
+              this.player.rank[linkLeague] = {rank: data.ranking.ranking[linkId].rank, score: data.ranking.ranking[linkId].score};
               this.setState({playerData: this.player})
             }
           }, this);

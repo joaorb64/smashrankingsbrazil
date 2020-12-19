@@ -128,16 +128,16 @@ class Mapa extends Component {
 
             let player = null;
 
-            if(ranking.ranking != null){
-              console.log(ranking.ranking)
+            if(ranking.ranking != null && ranking.ranking.ranking != null){
+              console.log(ranking.ranking.ranking)
               
               let best = null;
 
               try {
-                best = Object.entries(ranking.ranking)[0][0];
-                let lowestNum = parseInt(Object.entries(ranking.ranking)[0][1].rank);
+                best = Object.entries(ranking.ranking.ranking)[0][0];
+                let lowestNum = parseInt(Object.entries(ranking.ranking.ranking)[0][1].rank);
 
-                Object.entries(ranking.ranking).forEach((player)=>{
+                Object.entries(ranking.ranking.ranking).forEach((player)=>{
                   if(parseInt(player[1].rank) < lowestNum){
                     best = player[0];
                     lowestNum = parseInt(player[1].rank);
