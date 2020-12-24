@@ -4,6 +4,7 @@ import styles from './topbar.module.css'
 import i18n from '../locales/i18n';
 import { faHome, faUsers, faMap, faCalendar, faCoins, faInfoCircle, faInfo, faChartLine, faTrophy } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTwitch } from '@fortawesome/free-brands-svg-icons';
 
 class TopBar extends Component {
   state = {
@@ -61,6 +62,9 @@ class TopBar extends Component {
           </NavLink>
           <NavLink onClick={()=>this.setState({hidden: true})} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/nexttournaments/" href="/nexttournaments">
             <div class="nav-link"><FontAwesomeIcon icon={faCalendar}/> {i18n.t("next-tournaments")}</div>
+          </NavLink>
+          <NavLink onClick={()=>this.setState({hidden: true})} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/clips/" href="/clips">
+            <div class="nav-link"><FontAwesomeIcon icon={faTwitch}/> Top Clips</div>
           </NavLink>
           <NavLink onClick={()=>this.setState({hidden: true})} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/matcherino/" href="/matcherino">
             <div class="nav-link"><FontAwesomeIcon icon={faCoins}/> Matcherino</div>

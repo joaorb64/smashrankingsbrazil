@@ -11,6 +11,7 @@ import Granblue from './components/granblue';
 import Players from './components/players';
 import NextTournaments from './components/nextTournaments';
 import Matcherino from './components/matcherino';
+import Clips from './components/clips';
 
 class App extends Component {
   state = {
@@ -118,8 +119,9 @@ class App extends Component {
               } />
               <Route path="/leagues/granblue/" exact render={(props) => <Granblue />} />
               <Route path="/map/" exact render={(props) => <Mapa allplayers={this.state.allplayers} leagues={this.state.leagues} />} />
-              <Route path="/matcherino/" exact render={(props) => <Matcherino />} />
-              <Route path="/nexttournaments/" exact render={(props) => <NextTournaments />} />
+              <Route path="/matcherino/:country?" exact render={(props) => <Matcherino match={props.match} />} />
+              <Route path="/nexttournaments/:country?" exact render={(props) => <NextTournaments match={props.match} />} />
+              <Route path="/clips/:lang?" exact render={(props) => <Clips match={props.match} history={props.history} />} />
               <Route path="/about/" exact render={(props) => <About />} />
               <Redirect to="/leagues/smash/" />
             </Switch>

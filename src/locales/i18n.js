@@ -8,6 +8,8 @@ import es from './translations/es.json';
 import en from './translations/en.json';
 import jp from './translations/jp.json';
 
+import localeToLanguageJson from './localeToLanguage.json'
+
 const resources = {
   'pt': {translation: pt_br},
   'es': {translation: es},
@@ -37,5 +39,13 @@ i18n.use(LanguageDetector).init({
 i18n.on('languageChanged', function(lng) {
   moment.locale(lng);
 });
+
+i18n.localeToLanguage = function(locale){
+  let ret = Object.keys(localeToLanguageJson).find((a)=>{return a.toLowerCase() == locale.toLowerCase()});
+  if(ret){
+    return localeToLanguageJson[ret].nativeName;
+  }
+  return locale;
+}
 
 export default i18n;
