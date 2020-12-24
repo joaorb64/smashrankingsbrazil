@@ -5,6 +5,7 @@ import { faCalendar, faEdit, faMapMarkerAlt, faUser, faWifi } from '@fortawesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import i18n from '../locales/i18n';
 import HelpButton from './HelpButton';
+import LazyLoad from 'react-lazyload';
 
 class Clips extends Component {
   state = {
@@ -98,7 +99,7 @@ class Clips extends Component {
         <div class="row">
           {
             this.state.clipsFiltered != null ?
-              this.state.clipsFiltered.map((clip)=>(
+              this.state.clipsFiltered.slice(0,50).map((clip)=>(
                 <div class="col-sm-6 col-md-6 col-xl-4" style={{padding: 2}}>
                   <a href={clip.url}>
                     <div className={styles.tournamentContainerHighlight} style={{cursor: "pointer"}}>
