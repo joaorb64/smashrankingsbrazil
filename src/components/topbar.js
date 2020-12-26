@@ -47,7 +47,9 @@ class TopBar extends Component {
         </button>
 
         <Link class="navbar-brand" style={{color: "white", flexGrow: 1}} to="/leagues/smash/">
-          Power Rankings
+          <div class="site-logo"
+          style={{backgroundImage: `url(${process.env.PUBLIC_URL}/favicon.svg)`}}></div>
+          <div style={{marginLeft: 6, paddingTop: 4}}>Power Rankings</div>
         </Link>
 
         <ul className={"sidenav navbar-nav" + (this.state.hidden ? " sidenav-hidden" : "")}>

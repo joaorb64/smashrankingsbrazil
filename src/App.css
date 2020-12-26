@@ -315,6 +315,18 @@ body {
 .navbar-brand {
   padding-top: 20px;
   padding-bottom: 20px;
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  margin-right: 0;
+}
+
+.site-logo {
+  width: 32px;
+  height: 32px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: inline-block;
 }
 
 .navbar-toggler {

@@ -101,7 +101,7 @@ class Clips extends Component {
             this.state.clipsFiltered != null ?
               this.state.clipsFiltered.slice(0,50).map((clip)=>(
                 <div class="col-sm-6 col-md-6 col-xl-4" style={{padding: 2}}>
-                  <a href={clip.url}>
+                  <a href={clip.url} target="_blank">
                     <div className={styles.tournamentContainerHighlight} style={{cursor: "pointer"}}>
                       <div className={styles.tournamentContainer} style={{backgroundColor: "#ff5e24", border: "4px solid black", cursor: "pointer"}}>
                         <div style={{backgroundImage: "url("+(clip.thumbnail_url || "") +
