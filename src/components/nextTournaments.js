@@ -9,7 +9,7 @@ import HelpButton from './HelpButton';
 class NextTournaments extends Component {
   state = {
     tournaments: [],
-    selectedCountry: null,
+    selectedCountry: "all",
     selections: {},
     alltournaments: null
   }
@@ -44,7 +44,13 @@ class NextTournaments extends Component {
 
       this.setState(this.state);
       
-      this.filterTournaments("all");
+      if(this.props.match && this.props.match.params && this.props.match.params.country){
+        if(this.state.alltournaments && this.state.alltournaments[this.props.match.params.country.toUpperCase()] != null){
+          this.state.selectedCountry = this.props.match.params.country.toUpperCase();
+        }
+      }
+
+      this.filterTournaments(this.state.selectedCountry);
     })
     .catch(console.log)
   }
@@ -76,6 +82,8 @@ class NextTournaments extends Component {
     this.state.tournaments = selectedTournaments;
 
     this.setState(this.state);
+
+    this.props.history.push('/nexttournaments/'+this.state.selectedCountry.toLowerCase());
   }
 
   render (){
@@ -88,7 +96,7 @@ class NextTournaments extends Component {
           <h2 style={{color: "white"}}>
             {i18n.t("next-tournaments")} <HelpButton content="To have your tournaments listed on this page, set their location to your country, even for online tournaments." />
           </h2>
-          <select class="form-control form-control-lg" onChange={(e)=>this.selectCountry(e)}>
+          <select value={this.state.selectedCountry} class="form-control form-control-lg" onChange={(e)=>this.selectCountry(e)}>
             <option value="all">{i18n.t("all")}</option>
             {Object.keys(this.state.selections).map((region) => (
               <>
@@ -115,7 +123,7 @@ class NextTournaments extends Component {
             this.state.tournaments != null ?
               this.state.tournaments.filter(t=>{return t.startAt > Date.now()/1000}).map((tournament)=>(
                 <div class="col-md-6 col-xl-6" style={{padding: 2}}>
-                  <a href={tournament.url}>
+                  <a href={tournament.url} target="_blank">
                     <div className={styles.tournamentContainerHighlight} style={{cursor: "pointer"}}>
                       <div className={styles.tournamentContainer} style={{backgroundColor: "#ff5e24", border: "4px solid black", cursor: "pointer"}}>
                         <div style={{backgroundImage: "url("+

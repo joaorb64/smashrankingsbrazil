@@ -25,6 +25,14 @@ class Matcherino extends Component {
         selected: Object.keys(data)[0]
       });
 
+      if(this.props.match && this.props.match.params && this.props.match.params.country){
+        if(this.state.matcherinos && this.state.matcherinos[this.props.match.params.country.toUpperCase()] != null){
+          this.state.selected = this.props.match.params.country.toUpperCase();
+        }
+      }
+
+      this.selectCountry({target: {value: this.state.selected}});
+
       let offset = 0;
       let perPage = 10;
       this.fetchPage(this.state.selected, offset, perPage);
@@ -104,6 +112,7 @@ class Matcherino extends Component {
   selectCountry(e){
     this.state.selected = e.target.value;
     this.setState({selected: e.target.value});
+    this.props.history.push('/matcherino/'+this.state.selected.toLowerCase());
 
     let offset = 0;
     let perPage = 10;
@@ -121,7 +130,7 @@ class Matcherino extends Component {
             Campanhas ativas no Matcherino <HelpButton content="To have your Matcherino campains listed on this page, contact @joao_shino on twitter" />
           </h2>
         </div>
-        <select class="form-control form-control-lg" onChange={(e)=>this.selectCountry(e)}>
+        <select value={this.state.selected} class="form-control form-control-lg" onChange={(e)=>this.selectCountry(e)}>
           {Object.keys(this.state.matcherinos).map((country) => (
             <>
               <option value={country}>{country}</option>

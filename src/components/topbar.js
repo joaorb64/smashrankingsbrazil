@@ -35,6 +35,11 @@ class TopBar extends Component {
     
   }
 
+  scrollToTop() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+  }
+
   render(){
     return(
       <nav class={"sidenav-container navbar-dark col-2"} style={{
@@ -46,32 +51,32 @@ class TopBar extends Component {
           <span class="navbar-toggler-icon" style={{fontFamily: "'Montserrat', sans-serif"}}></span>
         </button>
 
-        <Link class="navbar-brand" style={{color: "white", flexGrow: 1}} to="/leagues/smash/">
+        <Link class="navbar-brand" style={{color: "white", flexGrow: 1}} to="/leagues/smash/" onClick={()=>this.scrollToTop()}>
           <div class="site-logo"
           style={{backgroundImage: `url(${process.env.PUBLIC_URL}/favicon.svg)`}}></div>
           <div style={{marginLeft: 6, paddingTop: 4}}>Power Rankings</div>
         </Link>
 
         <ul className={"sidenav navbar-nav" + (this.state.hidden ? " sidenav-hidden" : "")}>
-          <NavLink onClick={()=>this.setState({hidden: true})} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/leagues/smash/" href="/leagues">
+          <NavLink onClick={()=>{this.setState({hidden: true}); this.scrollToTop()}} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/leagues/smash/" href="/leagues">
             <div class="nav-link"><FontAwesomeIcon icon={faTrophy}/> {i18n.t("leagues")}</div>
           </NavLink>
-          <NavLink onClick={()=>this.setState({hidden: true})} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/players" href="/players">
+          <NavLink onClick={()=>{this.setState({hidden: true}); this.scrollToTop()}} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/players" href="/players">
             <div class="nav-link"><FontAwesomeIcon icon={faUsers}/> {i18n.t("players")}</div>
           </NavLink>
-          <NavLink onClick={()=>this.setState({hidden: true})} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/map/" href="/map">
+          <NavLink onClick={()=>{this.setState({hidden: true}); this.scrollToTop()}} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/map/" href="/map">
             <div class="nav-link"><FontAwesomeIcon icon={faMap}/> {i18n.t("map")}</div>
           </NavLink>
-          <NavLink onClick={()=>this.setState({hidden: true})} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/nexttournaments/" href="/nexttournaments">
+          <NavLink onClick={()=>{this.setState({hidden: true}); this.scrollToTop()}} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/nexttournaments/" href="/nexttournaments">
             <div class="nav-link"><FontAwesomeIcon icon={faCalendar}/> {i18n.t("next-tournaments")}</div>
           </NavLink>
-          <NavLink onClick={()=>this.setState({hidden: true})} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/clips/" href="/clips">
+          <NavLink onClick={()=>{this.setState({hidden: true}); this.scrollToTop()}} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/clips/" href="/clips">
             <div class="nav-link"><FontAwesomeIcon icon={faTwitch}/> Top Clips</div>
           </NavLink>
-          <NavLink onClick={()=>this.setState({hidden: true})} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/matcherino/" href="/matcherino">
+          <NavLink onClick={()=>{this.setState({hidden: true}); this.scrollToTop()}} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/matcherino/" href="/matcherino">
             <div class="nav-link"><FontAwesomeIcon icon={faCoins}/> Matcherino</div>
           </NavLink>
-          <NavLink onClick={()=>this.setState({hidden: true})} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/about/" href="/about">
+          <NavLink onClick={()=>{this.setState({hidden: true}); this.scrollToTop()}} className="nav-item nav-link" activeClassName="nav-item nav-link active" to="/about/" href="/about">
             <div class="nav-link"><FontAwesomeIcon icon={faInfoCircle}/> {i18n.t("about")}</div>
           </NavLink>
         </ul>
