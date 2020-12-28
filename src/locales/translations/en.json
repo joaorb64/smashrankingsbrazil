@@ -70,6 +70,8 @@
     "all": "All",
     "starts-time": "Starts",
     "register-due": "Registration ends",
+    "registration-open": "Registration open",
+    "registration-closed": "Registration closed",
     "weekday-mon": "MON",
     "weekday-tue": "TUE",
     "weekday-wed": "WED",

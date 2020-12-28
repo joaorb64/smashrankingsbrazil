@@ -33,9 +33,9 @@ class Matcherino extends Component {
 
       this.selectCountry({target: {value: this.state.selected}});
 
-      let offset = 0;
+      /*let offset = 0;
       let perPage = 10;
-      this.fetchPage(this.state.selected, offset, perPage);
+      this.fetchPage(this.state.selected, offset, perPage);*/
     });
   }
 

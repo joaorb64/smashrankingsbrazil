@@ -45,9 +45,7 @@ class NextTournaments extends Component {
       this.setState(this.state);
       
       if(this.props.match && this.props.match.params && this.props.match.params.country){
-        if(this.state.alltournaments && this.state.alltournaments[this.props.match.params.country.toUpperCase()] != null){
-          this.state.selectedCountry = this.props.match.params.country.toUpperCase();
-        }
+        this.state.selectedCountry = this.props.match.params.country.toLowerCase();
       }
 
       this.filterTournaments(this.state.selectedCountry);
@@ -61,20 +59,22 @@ class NextTournaments extends Component {
   }
 
   filterTournaments(value){
+    value = value.toLowerCase();
+
     let selectedTournaments = [];
 
-    if(value == "all"){
+    if(value.startsWith("region_")){
       Object.entries(this.state.alltournaments).forEach((country)=>{
-        selectedTournaments = selectedTournaments.concat(country[1].events)
-      })
-    } else if(value.startsWith("region_")){
-      Object.entries(this.state.alltournaments).forEach((country)=>{
-        if(country[1].region == value.split("region_")[1]){
+        if(country[1].region.toLowerCase() == value.split("region_")[1]){
           selectedTournaments = selectedTournaments.concat(country[1].events)
         }
       })
+    } else if(Object.keys(this.state.alltournaments).includes(value.toUpperCase())) {
+      selectedTournaments = this.state.alltournaments[value.toUpperCase()].events;
     } else {
-      selectedTournaments = this.state.alltournaments[value].events;
+      Object.entries(this.state.alltournaments).forEach((country)=>{
+        selectedTournaments = selectedTournaments.concat(country[1].events)
+      })
     }
     
     selectedTournaments = selectedTournaments.sort((a, b) => (a.startAt > b.startAt) ? 1 : -1);
@@ -101,9 +101,9 @@ class NextTournaments extends Component {
             {Object.keys(this.state.selections).map((region) => (
               <>
                 <optgroup label={i18n.t("region-"+region.toLowerCase())}>
-                  <option value={"region_"+region}>{i18n.t("all")} ({i18n.t("region-"+region.toLowerCase())})</option>
+                  <option value={"region_"+region.toLowerCase()}>{i18n.t("all")} ({i18n.t("region-"+region.toLowerCase())})</option>
                   {this.state.selections[region].map((country) => (
-                    <option value={country}>{country+" ("+this.state.alltournaments[country].events.length+")"}</option>
+                    <option value={country.toLowerCase()}>{country+" ("+this.state.alltournaments[country].events.length+")"}</option>
                   ))}
                 </optgroup>
               </>
@@ -121,31 +121,31 @@ class NextTournaments extends Component {
         <div class="row">
           {
             this.state.tournaments != null ?
-              this.state.tournaments.filter(t=>{return t.startAt > Date.now()/1000}).map((tournament)=>(
-                <div class="col-md-6 col-xl-6" style={{padding: 2}}>
+              this.state.tournaments.filter(t=>{return t.url != null}).map((tournament)=>(
+                <div class="col-md-6 col-xl-4" style={{padding: 2}}>
                   <a href={tournament.url} target="_blank">
                     <div className={styles.tournamentContainerHighlight} style={{cursor: "pointer"}}>
                       <div className={styles.tournamentContainer} style={{backgroundColor: "#ff5e24", border: "4px solid black", cursor: "pointer"}}>
                         <div style={{backgroundImage: "url("+
-                          ((tournament.images.find(img => img["type"]=="banner") || tournament.images[tournament.images.length-1])?.url || "") +
+                          (tournament.images ? ((tournament.images.find(img => img["type"]=="banner") || tournament.images[tournament.images.length-1])?.url || "") : "") +
                           ")", height: 140, margin: "4px",
                         backgroundSize: "cover", backgroundPosition: "center", backgroundColor: "black"}}>
                           <div style={{position: "absolute", width: 50, height: 30, backgroundPosition: "center", backgroundSize: "cover", margin: "2px", border: "2px solid black",
                           backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/country_flag/${tournament.country.toLowerCase()}.png)`}}></div>
                         </div>
 
-                        <div style={{height: 60, display: "flex", flexDirection: "column", alignItems: "center", placeContent: "center",
+                        <div style={{height: 48, display: "flex", flexDirection: "column", alignItems: "center", placeContent: "center",
                         paddingLeft: "8px", paddingRight: "8px", background: "rgb(255,113,40)",
                         background: "linear-gradient(180deg, rgba(255,113,40,1) 0%, rgba(221,87,37,1) 100%)"}}>
                           {tournament.tournament_multievent ?
-                            <div style={{color: "white", textAlign: "center", fontSize: "14px",
+                            <div style={{color: "white", textAlign: "center", fontSize: "12px",
                             whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden",
                             textShadow: "2px 2px 0px #00000070", width: "100%"}}>
                               {tournament.tournament}
                             </div>
                             :
                             null}
-                          <div style={{color: "white", textAlign: "center", fontSize: "20px",
+                          <div style={{color: "white", textAlign: "center", fontSize: "16px",
                           whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden",
                           textShadow: "2px 2px 0px #00000070", width: "100%"}}>
                             {tournament.tournament_multievent ? tournament.name : tournament.tournament}
@@ -162,11 +162,11 @@ class NextTournaments extends Component {
                           </div>
 
                           <div style={{backgroundColor: "#dedede", padding: "2px", paddingRight: "8px", paddingLeft: "8px", flexGrow: 1, textAlign: "left"}}>
-                            <FontAwesomeIcon icon={faCalendar}/> {i18n.t("starts-time")}: {i18n.t("weekday-"+moment(tournament.startAt * 1000).format("ddd").toLowerCase())} {moment(tournament.startAt * 1000).format("DD/MM/YY HH:mm")} GMT{moment(tournament.startAt * 1000).format("Z")}
+                            <FontAwesomeIcon icon={faCalendar}/> {i18n.t("starts-time")}: {i18n.t("weekday-"+moment(tournament.startAt * 1000).format("ddd").toLowerCase())} {i18n.t("date_format", {date: moment.unix(tournament.startAt).toDate()})} {moment(tournament.startAt * 1000).format("HH:mm")} GMT{moment(tournament.startAt * 1000).format("Z")}
                           </div>
                           
                           <div style={{backgroundColor: "#dedede", padding: "2px", paddingRight: "8px", paddingLeft: "8px", flexGrow: 1, textAlign: "left"}}>
-                            <FontAwesomeIcon icon={faEdit}/> {i18n.t("register-due")}: {i18n.t("weekday-"+moment(tournament.tournament_registrationClosesAt * 1000).format("ddd").toLowerCase())} {moment(tournament.tournament_registrationClosesAt * 1000).format("DD/MM/YY HH:mm")} GMT{moment(tournament.tournament_registrationClosesAt * 1000).format("Z")}
+                            <FontAwesomeIcon icon={faEdit}/> {i18n.t("register-due")}: {i18n.t("weekday-"+moment(tournament.tournament_registrationClosesAt * 1000).format("ddd").toLowerCase())} {i18n.t("date_format", {date: moment.unix(tournament.tournament_registrationClosesAt).toDate()})} {moment(tournament.tournament_registrationClosesAt * 1000).format("HH:mm")} GMT{moment(tournament.tournament_registrationClosesAt * 1000).format("Z")}
                           </div>
                         </div>
                       </div>
