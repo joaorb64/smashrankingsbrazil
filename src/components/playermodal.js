@@ -41,6 +41,7 @@ class PlayerModal extends Component {
 
     let tournamentsWent = [];
     let achievements = [];
+    let matchesPlayed = [];
 
     let myIds = []
 
@@ -62,8 +63,9 @@ class PlayerModal extends Component {
       })
     }
 
-    if(this.state.alltournaments != null){
+    if(this.state.alltournaments != null && this.props.allplayers != null){
       this.player.rank = {}
+      this.player.matches = []
 
       if(this.player.braacket_links){
         this.player.braacket_links.forEach(link => {
@@ -111,6 +113,37 @@ class PlayerModal extends Component {
                     found.state = tournamentEntry["state"];
                   }
                 }
+
+                if(tournament.matches){
+                  tournament.matches.forEach(match => {
+                    if(match.participants.hasOwnProperty(playerIdInTournament)){
+                      let matchEntry = {}
+                      matchEntry.tournamentName = tournament.name;
+                      matchEntry.tournamentTime = tournament.time;
+                      matchEntry.participants = match.participants;
+                      matchEntry.tournamentId = tournament.id;
+                      if(leagueObj.wifi){
+                        matchEntry.wifi = true;
+                      }
+                      matchEntry.participantsLeague = {};
+                      Object.keys(match.participants).forEach(tournamentId => {
+                        let participantPlayer = Object.entries(tournament.linkage).find(i => i[1] == tournamentId);
+                        let participantPlayerGlobalId = this.props.allplayers["mapping"][linkLeague+":"+participantPlayer[0]];
+                        matchEntry.participantsLeague[tournamentId] = this.props.allplayers["players"][participantPlayerGlobalId];
+                        if(participantPlayer[1] != playerIdInTournament){
+                          matchEntry.opponent = matchEntry.participantsLeague[tournamentId];
+                          matchEntry.scoreOther = match.participants[tournamentId];
+                        } else {
+                          matchEntry.scoreMe = match.participants[tournamentId];
+                        }
+                      })
+                      if(match.winner == playerIdInTournament){
+                        matchEntry.won = true;
+                      }
+                      matchesPlayed.push(matchEntry);
+                    }
+                  });
+                }
               }
             })
           }
@@ -119,6 +152,9 @@ class PlayerModal extends Component {
     }
 
     console.log("Tournaments: "+tournamentsWent.length);
+    console.log("Matches: "+matchesPlayed.length)
+
+    matchesPlayed = matchesPlayed.sort((a, b) => {return b.tournamentTime - a.tournamentTime;})
 
     // Achievements
 
@@ -303,6 +339,7 @@ class PlayerModal extends Component {
 
     this.state.playerData = this.player;
     this.state.tournaments = tournamentsWent;
+    this.state.matches = matchesPlayed;
     this.state.achievements = achievements;
 
     this.setState(this.state);
@@ -579,6 +616,54 @@ class PlayerModal extends Component {
                       null
                     }
                     {console.log(this.state)}
+
+                    {this.state.matches ?
+                      <row style={{display: "block", padding: "12px"}}>
+                        <h5>{"Sets played"}</h5>
+                        <table class="table table-striped table-sm" style={{color: "white"}}>
+                          <thead>
+                            <tr>
+                              <th></th>
+                              <th></th>
+                              <th scope="col">Opponent</th>
+                              <th scope="col">Tournament</th>
+                              <th scope="col">{i18n.t("Date")}</th>
+                              <th scope="col" style={{textAlign: "center"}}>Score</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {
+                              this.state.matches.map((match, i)=>(
+                                <tr id={i>=5? "collapse2" : ""} class={i>=5? "collapse" : ""}>
+                                  <td>
+                                    {match.won ?
+                                      "W" : "L"
+                                    }
+                                  </td>
+                                  <td>
+                                    {match.state == "wifi" ?
+                                      <span><FontAwesomeIcon icon={faWifi} /></span>
+                                      :
+                                      null
+                                    }
+                                  </td>
+                                  <td>{match.opponent.org ? match.opponent.org+" " : ""}{match.opponent.name}</td>
+                                  <td><a target="_blank" href={`https://braacket.com/tournament/${match.tournamentId}`}>{match.tournamentName}</a></td>
+                                  <td>{moment.unix(match.tournamentTime).add(1, "day").format("DD/MM/YY")}</td>
+                                  <td style={{textAlign: "center"}}>{match.scoreMe} - {match.scoreOther}</td>
+                                </tr>
+                              ))
+                            }
+                            <tr data-toggle="collapse" href="#collapse2" style={{
+                              borderBottom: "1px white solid", textAlign: "center", cursor: "pointer"
+                            }}>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </row>
+                      :
+                      null
+                    }
 
                     {this.state.tournaments ?
                       <row style={{display: "block", padding: "12px"}}>
