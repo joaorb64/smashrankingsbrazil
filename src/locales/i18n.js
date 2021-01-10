@@ -10,6 +10,8 @@ import jp from './translations/jp.json';
 
 import localeToLanguageJson from './localeToLanguage.json'
 
+import numeral from 'numeral';
+
 const resources = {
   'pt': {translation: pt_br},
   'es': {translation: es},
@@ -37,6 +39,7 @@ i18n.use(LanguageDetector).init({
 });
 
 i18n.on('languageChanged', function(lng) {
+  numeral.locale(lng);
   moment.locale(lng);
 });
 

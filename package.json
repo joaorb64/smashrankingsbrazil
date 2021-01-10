@@ -21,6 +21,7 @@
     "leaflet-ajax": "^2.1.0",
     "leaflet.tilelayer.colorfilter": "^1.2.5",
     "moment-timezone": "^0.5.31",
+    "numeral": "^2.0.6",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-lazyload": "^3.1.0",

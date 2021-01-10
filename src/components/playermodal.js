@@ -8,6 +8,7 @@ import { faWifi } from '@fortawesome/free-solid-svg-icons';
 import i18n from '../locales/i18n';
 import { browserHistory } from 'react-router';
 import { withRouter } from 'react-router-dom'
+import numeral from 'numeral';
 
 class PlayerModal extends Component {
   state = {
@@ -83,8 +84,7 @@ class PlayerModal extends Component {
   
           if(Object.keys(this.state.alltournaments).includes(linkLeague)){
             Object.values(this.state.alltournaments[linkLeague]).forEach(tournament => {
-              if(tournament.ranking && Object.keys(tournament.linkage).includes(linkId)
-              && !tournament.name.includes("[MATCHMAKING]")){
+              if(tournament.ranking && Object.keys(tournament.linkage).includes(linkId)){
                 let playerIdInTournament = tournament.linkage[linkId];
 
                 let tournamentEntry = {};
@@ -99,18 +99,20 @@ class PlayerModal extends Component {
                 } else {
                   tournamentEntry["state"] = leagueObj.state;
                 }
-  
-                let found = tournamentsWent.find(element =>
-                  element.name == tournamentEntry.name ||
-                  element.id == tournamentEntry.id ||
-                  (element.link != null && element.link == tournamentEntry.link)
-                );
-  
-                if(!found){
-                  tournamentsWent.push(tournamentEntry);
-                } else {
-                  if(found.state == "BR" && tournamentEntry["state"] != "BR"){
-                    found.state = tournamentEntry["state"];
+
+                if(!tournament.name.includes("[MATCHMAKING]")){
+                  let found = tournamentsWent.find(element =>
+                    element.name == tournamentEntry.name ||
+                    element.id == tournamentEntry.id ||
+                    (element.link != null && element.link == tournamentEntry.link)
+                  );
+    
+                  if(!found){
+                    tournamentsWent.push(tournamentEntry);
+                  } else {
+                    if(found.state == "BR" && tournamentEntry["state"] != "BR"){
+                      found.state = tournamentEntry["state"];
+                    }
                   }
                 }
 
@@ -128,19 +130,23 @@ class PlayerModal extends Component {
                       matchEntry.participantsLeague = {};
                       Object.keys(match.participants).forEach(tournamentId => {
                         let participantPlayer = Object.entries(tournament.linkage).find(i => i[1] == tournamentId);
-                        let participantPlayerGlobalId = this.props.allplayers["mapping"][linkLeague+":"+participantPlayer[0]];
-                        matchEntry.participantsLeague[tournamentId] = this.props.allplayers["players"][participantPlayerGlobalId];
-                        if(participantPlayer[1] != playerIdInTournament){
-                          matchEntry.opponent = matchEntry.participantsLeague[tournamentId];
-                          matchEntry.scoreOther = match.participants[tournamentId];
-                        } else {
-                          matchEntry.scoreMe = match.participants[tournamentId];
+                        if(participantPlayer){
+                          let participantPlayerGlobalId = this.props.allplayers["mapping"][linkLeague+":"+participantPlayer[0]];
+                          matchEntry.participantsLeague[tournamentId] = this.props.allplayers["players"][participantPlayerGlobalId];
+                          if(participantPlayer[1] != playerIdInTournament){
+                            matchEntry.opponent = matchEntry.participantsLeague[tournamentId];
+                            matchEntry.scoreOther = match.participants[tournamentId];
+                          } else {
+                            matchEntry.scoreMe = match.participants[tournamentId];
+                          }
                         }
                       })
                       if(match.winner == playerIdInTournament){
                         matchEntry.won = true;
                       }
-                      matchesPlayed.push(matchEntry);
+                      if(Object.keys(matchEntry.participantsLeague).length == 2 && matchEntry.opponent){
+                        matchesPlayed.push(matchEntry);
+                      }
                     }
                   });
                 }
@@ -155,6 +161,58 @@ class PlayerModal extends Component {
     console.log("Matches: "+matchesPlayed.length)
 
     matchesPlayed = matchesPlayed.sort((a, b) => {return b.tournamentTime - a.tournamentTime;})
+
+    // Stats
+    let stats = []
+    
+    stats.push({text: "Tournaments played", value: tournamentsWent.length})
+    stats.push({text: "Sets played", value: matchesPlayed.length})
+
+    let wins = 0;
+    matchesPlayed.forEach((match) => {if(match.won) wins += 1;})
+    stats.push({
+      text: "Win rate",
+      value: (wins/matchesPlayed.length*100).toLocaleString(i18n.language, {minimumFractionDigits: 2,maximumFractionDigits: 2})+"%"
+    })
+
+    wins = 0;
+    matchesPlayed.slice(0, 50).forEach((match) => {if(match.won) wins += 1;})
+    stats.push({
+      text: "Win rate (Last 50 sets)",
+      value: (wins/Math.min(matchesPlayed.length, 50)*100).toLocaleString(i18n.language, {minimumFractionDigits: 2,maximumFractionDigits: 2})+"%"
+    })
+
+    let rivals = {};
+    matchesPlayed.slice(0, 50).forEach((match)=>{
+      if(!rivals.hasOwnProperty(match.opponent.apid)){
+        rivals[match.opponent.apid] = {
+          apid: match.opponent.apid,
+          matches: 1,
+          wins: match.won ? 1 : 0
+        }
+      } else {
+        rivals[match.opponent.apid].matches += 1;
+        rivals[match.opponent.apid].wins += match.won ? 1 : 0;
+      }
+    })
+    rivals = Object.values(rivals).sort((a, b) => a.matches - b.matches);
+
+    console.log(rivals)
+    
+    let rival = null;
+
+    for(let i=0; i<rivals.length; i++){
+      console.log(rivals[i].wins/rivals[i].matches)
+      if(rivals[i].matches >= 3 &&
+        rivals[i].wins/rivals[i].matches <= .60) {
+        rival = this.props.allplayers["players"][rivals[i].apid]
+        break;
+      }
+    }
+
+    if(rival){
+      stats.push({text: "Rival", value: (rival.org ? rival.org+" " : "") + rival.name})
+    }
 
     // Achievements
 
@@ -337,10 +395,25 @@ class PlayerModal extends Component {
 
     console.log(achievements);
 
+    this.state.exp = 0;
+    
+    tournamentsWent.forEach(tournament => {
+      this.state.exp += tournament.player_number + 5 * (1 - tournament.ranking/tournament.player_number);
+    });
+
+    matchesPlayed.forEach(match => {
+      this.state.exp += 8 * (1 + (match.won ? 0.4 : 0));
+    })
+
+    stats.push({text: "Global PowerRankings Power", value: Math.round(this.state.exp).toLocaleString(i18n.language)})
+
     this.state.playerData = this.player;
     this.state.tournaments = tournamentsWent;
     this.state.matches = matchesPlayed;
+    this.state.stats = stats;
     this.state.achievements = achievements;
+
+    console.log(this.state.level)
 
     this.setState(this.state);
   }
@@ -590,7 +663,45 @@ class PlayerModal extends Component {
                         ))}
                       </div>
                       :
-                      <div style={{padding: "10px"}}>Este jogador não foi encontrado no ranking de nenhuma liga.</div>
+                      <div style={{padding: "10px"}}>Player not found in any league's ranking.</div>
+                    }
+
+                    {this.state.stats && this.state.stats.length > 0 ?
+                      <div class="row" style={{padding: "10px", margin: 0, backgroundColor: "black", borderBottom: "1px solid #3d5466"}}>
+                        {this.state.stats.map(stat => (
+                          <div class="col-12" style={{
+                            display: "flex", backgroundColor: "white", borderRadius: "20px",
+                            padding: 0, overflow: "hidden", marginTop: "3px", marginBottom: "3px",
+                            height: "40px", whiteSpace: "nowrap"
+                          }}>
+                            <div style={{
+                              flexGrow: 1, padding: "8px 16px", color: "white", textOverflow: "ellipsis",
+                              backgroundColor: "gray", flexShrink: 1, overflow: "hidden", display: "flex"
+                            }}>
+                              <div class={styles["stats-text"]} style={{overflow: "hidden", textOverflow: "ellipsis", alignSelf: "center"}}>
+                                {stat.text}
+                              </div>
+                            </div>
+                            <div style={{
+                              width: "16px", backgroundColor: "gray",
+                              clipPath: "polygon(0 0, 100% 0, 0% 100%, 0% 100%)",
+                              flexShrink: 0
+                            }}></div>
+                            <div class={styles["stats-text"]} style={{
+                              padding: "8px 16px", backgroundColor: "white",
+                              color: "black", textAlign: "right", width: "40%",
+                              overflow: "hidden", textOverflow: "ellipsis", display: "flex",
+                              justifyContent: "flex-end"
+                            }}>
+                              <div class={styles["stats-text"]} style={{overflow: "hidden", textOverflow: "ellipsis", alignSelf: "center"}}>
+                                {stat.value}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      :
+                      null
                     }
 
                     {this.state.playerData.character_usage_percent &&
@@ -657,6 +768,11 @@ class PlayerModal extends Component {
                             <tr data-toggle="collapse" href="#collapse2" style={{
                               borderBottom: "1px white solid", textAlign: "center", cursor: "pointer"
                             }}>
+                            </tr>
+                            <tr data-toggle="collapse" href="#collapse2" style={{
+                              borderBottom: "1px white solid", textAlign: "center", cursor: "pointer"
+                            }}>
+                              <td colSpan="99">{i18n.t("View-all")} ({this.state.matches.length})</td>
                             </tr>
                           </tbody>
                         </table>

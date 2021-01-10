@@ -31,6 +31,12 @@
     color: white;
 }
 
+@media (max-width: 576px) {
+    .stats-text {
+        font-size: .6rem;
+    }
+}
+
 @media (max-width: 991px) {
     .avatar {
         width: 64px;
