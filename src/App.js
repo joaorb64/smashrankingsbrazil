@@ -22,38 +22,27 @@ class App extends Component {
   }
 
   componentWillMount() {
-    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/leagues.json')
+    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/allleagues.json')
     .then(res => res.json())
     .then((data) => {
-      let promises = [];
+      Object.keys(data).forEach(league => {
+        this.state.leagues.push({
+          id: league,
+          name: data[league].name,
+          region: data[league].region,
+          state: data[league].state,
+          city: data[league].city,
+          country: data[league].country,
+          wifi: data[league].wifi,
+          twitter: data[league].twitter,
+          twitch: data[league].twitch,
+          youtube: data[league].youtube,
+          facebook: data[league].facebook,
+          latlng: data[league].latlng
+        });
+      });
 
-      Object.keys(data).forEach((league) => {
-        promises.push(fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/'+league+'/data.json')
-        .then(res => res.json())
-          .then((leagueInfo) => {
-            data[league]["info"] = {
-              id: league,
-              name: leagueInfo.name,
-              region: data[league].region,
-              state: data[league].state,
-              city: data[league].city,
-              country: data[league].country,
-              wifi: data[league].wifi,
-              twitter: data[league].twitter,
-              twitch: data[league].twitch,
-              youtube: data[league].youtube,
-              facebook: data[league].facebook,
-              latlng: data[league].latlng
-            };
-          }))
-      })
-
-      Promise.all(promises).then(()=>{
-        Object.keys(data).forEach((league) => {
-          this.state.leagues.push(data[league]["info"]);
-        })
-        this.setState(this.state);
-      })
+      this.setState(this.state);
     })
     .catch(console.log)
 
