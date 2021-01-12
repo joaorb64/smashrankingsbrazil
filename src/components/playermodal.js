@@ -165,6 +165,9 @@ class PlayerModal extends Component {
     // Stats
     let stats = []
     
+    if(this.player.ts){
+      stats.push({text: "Global PowerRankings Power", value: Math.round(this.player.ts * 160000000).toLocaleString(i18n.language)})
+    }
     stats.push({text: "Tournaments played", value: tournamentsWent.length})
     stats.push({text: "Sets played", value: matchesPlayed.length})
 
@@ -405,7 +408,10 @@ class PlayerModal extends Component {
       this.state.exp += 8 * (1 + (match.won ? 0.4 : 0));
     })
 
-    stats.push({text: "Global PowerRankings Power", value: Math.round(this.state.exp).toLocaleString(i18n.language)})
+    let level = Math.cbrt(this.state.exp * 5);
+    console.log(level);
+
+    //stats.push({text: "Player Level", value: level.toLocaleString(i18n.language)})
 
     this.state.playerData = this.player;
     this.state.tournaments = tournamentsWent;
