@@ -144,7 +144,8 @@ class PlayerModal extends Component {
                       if(match.winner == playerIdInTournament){
                         matchEntry.won = true;
                       }
-                      if(Object.keys(matchEntry.participantsLeague).length == 2 && matchEntry.opponent){
+                      if(Object.keys(matchEntry.participantsLeague).length == 2 && matchEntry.opponent &&
+                      matchEntry.scoreMe != -1 && matchEntry.scoreOther != -1){
                         matchesPlayed.push(matchEntry);
                       }
                     }
