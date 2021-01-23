@@ -9,36 +9,35 @@ import i18n from '../locales/i18n';
 import { browserHistory } from 'react-router';
 import { withRouter } from 'react-router-dom'
 import numeral from 'numeral';
+import { Dialog, DialogTitle, DialogContent, IconButton } from '@material-ui/core';
+import { CloseIcon } from '@material-ui/icons/Close';
+import { ArrowBack } from '@material-ui/icons/ArrowBack'
 
 class PlayerModal extends Component {
   state = {
     playerData: null,
     alltournaments: {},
     tournaments: {},
-    achievements: {}
+    achievements: {},
+    open: false,
+    player: null
   }
 
-  componentDidUpdate(prevProps) {
-    if(this.props != prevProps)
-      this.setState({alltournaments: this.props.alltournaments});
+  componentDidUpdate(prevProps, prevState) {
+    if(this.state.open && !prevState.open){
+      this.fetchPlayer();
+    }
   }
 
   componentDidMount() {
-    window.playerModal = this;
-    window.jQuery("#playerModal").on('hidden.bs.modal', () => {
-      console.log(this.props);
-      if(this.props.match.params["id"] && this.props.match.params["tab"]){
-        this.props.history.replace('/leagues/smash/'+
-          this.props.match.params["id"]+'/'+
-          this.props.match.params["tab"]+'/')
-      } else if(this.props.match.params["player_id"]) {
-        this.props.history.replace('/players/')
-      }
-    });
   }
 
   fetchPlayer(){
-    if(this.player == null) return;
+    console.log("fetchplayer");
+    
+    if(this.state.player == null) return;
+
+    this.player = this.state.player;
 
     let tournamentsWent = [];
     let achievements = [];
@@ -64,7 +63,7 @@ class PlayerModal extends Component {
       })
     }
 
-    if(this.state.alltournaments != null && this.props.allplayers != null){
+    if(this.props.alltournaments != null && this.props.allplayers != null){
       this.player.rank = {}
       this.player.matches = []
 
@@ -82,8 +81,8 @@ class PlayerModal extends Component {
             }
           }, this);
   
-          if(Object.keys(this.state.alltournaments).includes(linkLeague)){
-            Object.values(this.state.alltournaments[linkLeague]).forEach(tournament => {
+          if(Object.keys(this.props.alltournaments).includes(linkLeague)){
+            Object.values(this.props.alltournaments[linkLeague]).forEach(tournament => {
               if(tournament.ranking && Object.keys(tournament.linkage).includes(linkId)){
                 let playerIdInTournament = tournament.linkage[linkId];
 
@@ -174,16 +173,20 @@ class PlayerModal extends Component {
 
     let wins = 0;
     matchesPlayed.forEach((match) => {if(match.won) wins += 1;})
+    let winRate = wins/matchesPlayed.length*100;
+    if(!winRate) winRate = 0;
     stats.push({
       text: "Win rate",
-      value: (wins/matchesPlayed.length*100).toLocaleString(i18n.language, {minimumFractionDigits: 2,maximumFractionDigits: 2})+"%"
+      value: winRate.toLocaleString(i18n.language, {minimumFractionDigits: 2,maximumFractionDigits: 2})+"%"
     })
 
     wins = 0;
     matchesPlayed.slice(0, 50).forEach((match) => {if(match.won) wins += 1;})
+    winRate = wins/Math.min(matchesPlayed.length, 50)*100;
+    if(!winRate) winRate = 0;
     stats.push({
       text: "Win rate (Last 50 sets)",
-      value: (wins/Math.min(matchesPlayed.length, 50)*100).toLocaleString(i18n.language, {minimumFractionDigits: 2,maximumFractionDigits: 2})+"%"
+      value: winRate.toLocaleString(i18n.language, {minimumFractionDigits: 2,maximumFractionDigits: 2})+"%"
     })
 
     let rivals = {};
@@ -454,446 +457,440 @@ class PlayerModal extends Component {
 
   render (){
     return(
-      <div class="modal fade" id="playerModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLongTitle"></h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              {this.state.playerData ?
-                  <div>
-                    <div style={{
-                      minHeight: "128px", background: "black", display: "flex", alignItems: "center", position: "relative",overflow: "hidden",
-                      borderBottom: "1px solid #3d5466", paddingTop: 10, paddingBottom: 10
-                    }}>
-                      <div style={{backgroundImage: `url(${process.env.PUBLIC_URL}/images/bg_diagonal.webp)`, overflow: "hidden",
-                      position: "absolute", width: "100%", height: "100%", backgroundSize: "6px 6px"}}></div>
+      <Dialog
+        fullWidth={true}
+        maxWidth={"md"}
+        keepMounted={true}
+        open={this.state.open}
+        onClose={()=>{this.setState({open: false}); this.props.closeModal()}} style={{overflow: "scroll"}}
+      >
+        <DialogTitle>a</DialogTitle>
+        <DialogContent>
+          {this.state.playerData ?
+              <div>
+                <div style={{
+                  minHeight: "128px", background: "black", display: "flex", alignItems: "center", position: "relative",overflow: "hidden",
+                  borderBottom: "1px solid #3d5466", paddingTop: 10, paddingBottom: 10
+                }}>
+                  <div style={{backgroundImage: `url(${process.env.PUBLIC_URL}/images/bg_diagonal.webp)`, overflow: "hidden",
+                  position: "absolute", width: "100%", height: "100%", backgroundSize: "6px 6px"}}></div>
 
-                      {
-                        this.state.playerData.avatars && this.state.playerData.avatars.length > 0 ?
-                          <div style={{zIndex: 1}}>
-                            <div className={styles.avatar} style={{backgroundImage: "url("+this.state.playerData.avatars.join("), url(")+")"}}>
-                            </div>
-                          </div>
+                  {
+                    this.state.playerData.avatars && this.state.playerData.avatars.length > 0 ?
+                      <div style={{zIndex: 1}}>
+                        <div className={styles.avatar} style={{backgroundImage: "url("+this.state.playerData.avatars.join("), url(")+")"}}>
+                        </div>
+                      </div>
+                  :
+                    null
+                  }
+
+                  <div style={{zIndex: 1, flexGrow: 1, marginLeft: "10px"}}>
+                    <h3 className={styles.playerTag} style={{color: "white"}}>
+                      <b style={{color: "#bb0000"}}>{this.state.playerData.org} </b>
+
+                      {this.state.playerData.name}
+
+                      {this.state.playerData.country_code && this.state.playerData.country_code != "null" ?
+                        <div className={styles.stateFlag + " state-flag"} style={{
+                          backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/country_flag/${this.state.playerData.country_code.toLowerCase()}.png)`,
+                          width: "32px", height: "32px", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
+                          backgroundPosition: "center", paddingTop: "22px", marginLeft: "10px", textAlign: "center", verticalAlign: "bottom"
+                        }}></div>
                       :
                         null
                       }
 
-                      <div style={{zIndex: 1, flexGrow: 1, marginLeft: "10px"}}>
-                        <h3 className={styles.playerTag} style={{color: "white"}}>
-                          <b style={{color: "#bb0000"}}>{this.state.playerData.org} </b>
-
-                          {this.state.playerData.name}
-
-                          {this.state.playerData.country_code && this.state.playerData.country_code != "null" ?
-                            <div className={styles.stateFlag + " state-flag"} style={{
-                              backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/country_flag/${this.state.playerData.country_code.toLowerCase()}.png)`,
-                              width: "32px", height: "32px", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
-                              backgroundPosition: "center", paddingTop: "22px", marginLeft: "10px", textAlign: "center", verticalAlign: "bottom"
-                            }}></div>
-                          :
-                            null
-                          }
-
-                          {this.state.playerData.state && this.state.playerData.state != "null" ?
-                            <div className={styles.stateFlag + " state-flag"} style={{
-                              backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/state_flag/${this.state.playerData.country_code}/${this.state.playerData.state}.png)`,
-                              width: "32px", height: "32px", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
-                              backgroundPosition: "center", paddingTop: "22px", marginLeft: "10px", textAlign: "center", verticalAlign: "bottom"
-                            }}></div>
-                          :
-                            null
-                          }
-                        </h3>
-
-                        {this.state.playerData.full_name?
-                          <div className={styles.fullName}>{this.state.playerData.full_name}</div>
-                        :
-                          null
-                        }
-
-                        {this.state.playerData.city ? 
-                          <div className={styles.tttag} style={{color: "white", fontSize: ".8rem"}}>
-                            <div className={styles.ttlogo} style={{
-                              backgroundImage: "url(/icons/location.svg)", width: 16, height: 16, bottom: 0, right: 0,
-                              display: "inline-block", verticalAlign: "bottom", marginRight: "6px", backgroundSize: "cover"
-                            }}>
-                            </div>
-                            {this.state.playerData.city}{" - "}{this.state.playerData.country}
-                          </div>
-                          :
-                          null}
-                        
-                        {this.state.playerData.smashgg_slug ? 
-                          <div className={styles.tttag} style={{color: "white", fontSize: ".8rem"}}>
-                            <div className={styles.ttlogo} style={{
-                              backgroundImage: "url(/icons/smashgg.svg)", width: 16, height: 16, bottom: 0, right: 0,
-                              display: "inline-block", verticalAlign: "bottom", marginRight: "6px", backgroundSize: "cover",
-                              borderRadius: "100%"
-                            }}>
-                            </div>
-                            <a href={"http://smash.gg/"+this.state.playerData.smashgg_slug} target="_blank">
-                              {this.state.playerData.smashgg_slug}
-                            </a>
-                          </div>
-                          :
-                          null}
-
-                        {this.state.playerData.twitter ? 
-                          <div className={styles.tttag} style={{color: "white", fontSize: ".8rem"}}>
-                            <div className={styles.ttlogo} style={{
-                              backgroundImage: "url(/icons/twitter.svg)", width: 16, height: 16, bottom: 0, right: 0,
-                              display: "inline-block", verticalAlign: "bottom", marginRight: "6px", backgroundSize: "cover"
-                            }}>
-                            </div>
-                            <a href={"http://twitter.com/"+this.getTwitterHandle(this.state.playerData.twitter)} target="_blank">
-                              {this.getTwitterHandle(this.state.playerData.twitter)}
-                            </a>
-                          </div>
-                          :
-                          null}
-
-                        {this.state.playerData.twitch ? 
-                          <div className={styles.tttag} style={{color: "white", fontSize: ".8rem"}}>
-                            <div className={styles.ttlogo} style={{
-                              backgroundImage: "url(/icons/twitch.svg)", width: 16, height: 16, bottom: 0, right: 0,
-                              display: "inline-block", verticalAlign: "bottom", marginRight: "6px", backgroundSize: "cover"
-                            }}>
-                            </div>
-                            <a href={"http://twitch.tv/"+this.state.playerData.twitch} target="_blank">
-                              {this.state.playerData.twitch}
-                            </a>
-                          </div>
-                          :
-                          null}
-
-                        {this.state.playerData.discord ? 
-                          <div className={styles.tttag} style={{color: "white", fontSize: ".8rem"}}>
-                            <div className={styles.ttlogo} style={{
-                              backgroundImage: "url(/icons/discord.svg)", width: 16, height: 16, bottom: 0, right: 0,
-                              display: "inline-block", verticalAlign: "bottom", marginRight: "6px", backgroundSize: "cover"
-                            }}>
-                            </div>
-                            {this.state.playerData.discord}
-                          </div>
-                          :
-                          null}
-                      </div>
-
-                      <div className={styles.characterMain} style={{
-                        marginRight: "12px", marginTop: "-10px", marginBottom: "-10px",
-                        backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_1_${this.getCharCodename(this.state.playerData, 0)}.png)`,
-                        right: 0, flexGrow: 0, flexShrink: 0, height: "auto", alignSelf: "normal"
-                      }}>
-                      </div>
-                      <div style={{
-                        position: "absolute", right: "14px", zIndex: 9, bottom: "2px",
-                        filter: "drop-shadow(black 2px 2px 0px)", display: "flex"
-                      }}>
-                        {this.state.playerData.mains.slice(1).map((main, i)=>(
-                            <div class="" style={{
-                              backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_2_${this.getCharCodename(this.state.playerData, i+1)}.png)`,
-                              width: "24px", height: "24px", backgroundPosition: "center", backgroundSize: "cover",
-                              flexGrow: 0, display: "flex", flexShrink: 1
-                            }}></div>
-                          ))}
-                      </div>
-                    </div>
-
-                    {this.state.achievements && this.state.achievements.length > 0 ?
-                      <div class="row" style={{padding: "10px", margin: 0, backgroundColor: "black", borderBottom: "1px solid #3d5466", display: "flex", justifyContent: "center"}}>
-                        {this.state.achievements.map((achievement, i)=>(
-                          <a key={this.state.playerData.name+i} style={{width: 72, textAlign: "center", display: "flex",
-                          flexDirection: "column", alignItems: "center", placeContent: "center"}}
-                          data-toggle="tooltip" data-placement="top" title={achievement.description}>
-                            <div style={{
-                              width: 42, height: 42, backgroundSize: "cover", backgroundRepeat: "none",
-                              marginLeft: 6, marginRight: 6,
-                              backgroundImage: `url(${process.env.PUBLIC_URL}/icons/achievements/${achievement.icon})`,
-                              display: "flex", alignItems: "center", justifyContent: "center"
-                            }}>
-                              {achievement.icon_middle ?
-                                <div style={{
-                                  width: 24, height: 24, backgroundSize: "contain",
-                                  backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_2_${achievement.icon_middle}.png)`,
-                                  filter: "grayscale(100%) brightness(80%) sepia(100%) hue-rotate(5deg) saturate(500%) contrast(.9)"
-                                }}></div>
-                                :
-                                null
-                              }
-                            </div>
-                            <small style={{textAlign: "center"}}>{achievement.name}</small>
-                          </a>
-                        ))}
-                      </div>
+                      {this.state.playerData.state && this.state.playerData.state != "null" ?
+                        <div className={styles.stateFlag + " state-flag"} style={{
+                          backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/state_flag/${this.state.playerData.country_code}/${this.state.playerData.state}.png)`,
+                          width: "32px", height: "32px", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
+                          backgroundPosition: "center", paddingTop: "22px", marginLeft: "10px", textAlign: "center", verticalAlign: "bottom"
+                        }}></div>
                       :
-                      null
-                    }
-                  
-                    {this.state.playerData.rank ?
-                      <div class="row" style={{padding: "10px", margin: 0, backgroundColor: "black", borderBottom: "1px solid #3d5466"}}>
-                        {Object.entries(this.state.playerData.rank).sort((a, b)=>{return a[1].rank-b[1].rank}).map((rank, i)=>(
-                          <div class="col-lg-4 col-md-6" style={{padding: "2px"}} id={i}>
-                            {this.props.leagues ?
-                              <Link 
-                                to={`/leagues/smash/${rank[0]}`}
-                                onClick={()=>this.closeModal()}
-                                style={{display: "flex"}}>
-                                  <div style={{width: "42px", textAlign: "center", fontSize: "1.5rem",
-                                  backgroundColor: "lightgray", display: "flex", flexShrink: 0, color: "black"}}>
-                                    <div style={{alignSelf: "center", width: "100%"}}>
-                                      {rank[1].rank}
-                                    </div>
-                                  </div>
-                                  <div style={{
-                                    width: "48px", height: "48px", display: "inline-block", backgroundSize: "cover", backgroundPosition: "center",
-                                    flexShrink: 0,
-                                    backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/league_icon/${rank[0]}.png)`}}></div>
-                                  <div style={{display: "flex", flexDirection: "column", overflow: "hidden", width: "100%", backgroundColor: "lightgray"}}>
-                                    <div style={{paddingLeft: "5px", textOverflow: "ellipsis", fontSize: "0.8rem", 
-                                    whiteSpace: "nowrap", overflow: "hidden", backgroundColor: "gray", color: "white"}}>
-                                      {this.props.leagues.find(element => element.id == rank[0]).name}
-                                    </div>
-                                    <div style={{paddingLeft: "5px", color: "black", flexGrow: 1, fontSize: "1.2rem"}}>
-                                      {rank[1].score} pts.
-                                    </div>
-                                  </div>
-                              </Link>
-                            :
-                              <div>{Object.keys(this.state.playerData.rank)[i]}</div>
-                            }
-                          </div>
-                        ))}
-                      </div>
-                      :
-                      <div style={{padding: "10px"}}>Player not found in any league's ranking.</div>
-                    }
+                        null
+                      }
+                    </h3>
 
-                    {this.state.stats && this.state.stats.length > 0 ?
-                      <div class="row" style={{padding: "10px", margin: 0, backgroundColor: "black", borderBottom: "1px solid #3d5466"}}>
-                        {this.state.stats.map(stat => (
-                          <div class="col-12" style={{
-                            display: "flex", backgroundColor: "white", borderRadius: "20px",
-                            padding: 0, overflow: "hidden", marginTop: "3px", marginBottom: "3px",
-                            height: "40px", whiteSpace: "nowrap"
-                          }}>
-                            <div style={{
-                              flexGrow: 1, padding: "8px 16px", color: "white", textOverflow: "ellipsis",
-                              backgroundColor: "gray", flexShrink: 1, overflow: "hidden", display: "flex"
-                            }}>
-                              <div class={styles["stats-text"]} style={{overflow: "hidden", textOverflow: "ellipsis", alignSelf: "center"}}>
-                                {stat.text}
-                              </div>
-                            </div>
-                            <div style={{
-                              width: "16px", backgroundColor: "gray",
-                              clipPath: "polygon(0 0, 100% 0, 0% 100%, 0% 100%)",
-                              flexShrink: 0
-                            }}></div>
-                            <div class={styles["stats-text"]} style={{
-                              padding: "8px 16px", backgroundColor: "white",
-                              color: "black", textAlign: "right", width: "40%",
-                              overflow: "hidden", textOverflow: "ellipsis", display: "flex",
-                              justifyContent: "flex-end"
-                            }}>
-                              <div class={styles["stats-text"]} style={{overflow: "hidden", textOverflow: "ellipsis", alignSelf: "center"}}>
-                                {stat.value}
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                      :
+                    {this.state.playerData.full_name?
+                      <div className={styles.fullName}>{this.state.playerData.full_name}</div>
+                    :
                       null
                     }
 
-                    {this.state.playerData.character_usage_percent &&
-                    this.state.playerData.character_usage_percent.length > 0 ?
-                      <row style={{display: "block", padding: "12px"}}>
-                        <h5>{i18n.t("char-usage-latest-30-sets")}</h5>
-                        <div class="row" style={{padding: "10px", margin: 0, backgroundColor: "black", borderBottom: "1px solid #3d5466", justifyContent: "center"}}>
-                          {this.state.playerData.character_usage_percent.map((character, i)=>(
-                            <a key={this.state.playerData.name+i} style={{textAlign: "center", display: "flex",
-                            flexDirection: "column", alignItems: "center", placeContent: "center"}}
-                            data-toggle="tooltip" data-placement="top">
-                              <div class="" style={{
-                                backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_2_${CHARACTERS[CHARACTERS_GG_TO_BRAACKET[character[0]]]+"_00"}.png)`,
-                                width: "24px", height: "24px", backgroundPosition: "center", backgroundSize: "cover",
-                                flexGrow: 0, display: "flex", flexShrink: 1, margin: "0 20px 0 20px"
-                              }}></div>
-                              <small>{(100*character[1]).toFixed(2)}%</small>
-                            </a>
-                          ))}
+                    {this.state.playerData.city ? 
+                      <div className={styles.tttag} style={{color: "white", fontSize: ".8rem"}}>
+                        <div className={styles.ttlogo} style={{
+                          backgroundImage: "url(/icons/location.svg)", width: 16, height: 16, bottom: 0, right: 0,
+                          display: "inline-block", verticalAlign: "bottom", marginRight: "6px", backgroundSize: "cover"
+                        }}>
                         </div>
-                      </row>
+                        {this.state.playerData.city}{" - "}{this.state.playerData.country}
+                      </div>
                       :
-                      null
-                    }
-                    {console.log(this.state)}
+                      null}
+                    
+                    {this.state.playerData.smashgg_slug ? 
+                      <div className={styles.tttag} style={{color: "white", fontSize: ".8rem"}}>
+                        <div className={styles.ttlogo} style={{
+                          backgroundImage: "url(/icons/smashgg.svg)", width: 16, height: 16, bottom: 0, right: 0,
+                          display: "inline-block", verticalAlign: "bottom", marginRight: "6px", backgroundSize: "cover",
+                          borderRadius: "100%"
+                        }}>
+                        </div>
+                        <a href={"http://smash.gg/"+this.state.playerData.smashgg_slug} target="_blank">
+                          {this.state.playerData.smashgg_slug}
+                        </a>
+                      </div>
+                      :
+                      null}
 
-                    {this.state.matches ?
-                      <row style={{display: "block", padding: "12px"}}>
-                        <h5>{"Sets played"}</h5>
-                        <table class="table table-striped table-sm" style={{color: "white"}}>
-                          <thead>
-                            <tr>
-                              <th></th>
-                              <th></th>
-                              <th scope="col">Opponent</th>
-                              <th scope="col">Tournament</th>
-                              <th scope="col">{i18n.t("Date")}</th>
-                              <th scope="col" style={{textAlign: "center"}}>Score</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {
-                              this.state.matches.map((match, i)=>(
-                                <tr id={i>=5? "collapse2" : ""} class={i>=5? "collapse" : ""}>
-                                  <td>
-                                    {match.won ?
-                                      "W" : "L"
-                                    }
-                                  </td>
-                                  <td>
-                                    {match.state == "wifi" ?
-                                      <span><FontAwesomeIcon icon={faWifi} /></span>
-                                      :
-                                      null
-                                    }
-                                  </td>
-                                  <td>{match.opponent.org ? match.opponent.org+" " : ""}{match.opponent.name}</td>
-                                  <td><a target="_blank" href={`https://braacket.com/tournament/${match.tournamentId}`}>{match.tournamentName}</a></td>
-                                  <td>{moment.unix(match.tournamentTime).add(1, "day").format("DD/MM/YY")}</td>
-                                  <td style={{textAlign: "center"}}>{match.scoreMe} - {match.scoreOther}</td>
-                                </tr>
-                              ))
-                            }
-                            <tr data-toggle="collapse" href="#collapse2" style={{
-                              borderBottom: "1px white solid", textAlign: "center", cursor: "pointer"
-                            }}>
-                            </tr>
-                            <tr data-toggle="collapse" href="#collapse2" style={{
-                              borderBottom: "1px white solid", textAlign: "center", cursor: "pointer"
-                            }}>
-                              <td colSpan="99">{i18n.t("View-all")} ({this.state.matches.length})</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </row>
+                    {this.state.playerData.twitter ? 
+                      <div className={styles.tttag} style={{color: "white", fontSize: ".8rem"}}>
+                        <div className={styles.ttlogo} style={{
+                          backgroundImage: "url(/icons/twitter.svg)", width: 16, height: 16, bottom: 0, right: 0,
+                          display: "inline-block", verticalAlign: "bottom", marginRight: "6px", backgroundSize: "cover"
+                        }}>
+                        </div>
+                        <a href={"http://twitter.com/"+this.getTwitterHandle(this.state.playerData.twitter)} target="_blank">
+                          {this.getTwitterHandle(this.state.playerData.twitter)}
+                        </a>
+                      </div>
                       :
-                      null
-                    }
+                      null}
 
-                    {this.state.tournaments ?
-                      <row style={{display: "block", padding: "12px"}}>
-                        <h5>{i18n.t("Tournaments")}</h5>
-                        <table class="table table-striped table-sm" style={{color: "white"}}>
-                          <thead>
-                            <tr>
-                              <th scope="col"></th>
-                              <th scope="col"></th>
-                              <th scope="col">{i18n.t("Name")}</th>
-                              <th scope="col">{i18n.t("Date")}</th>
-                              <th scope="col" style={{textAlign: "center"}}>{i18n.t("Placing")}</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {
-                              this.state.tournaments.sort((a, b) => b.time - a.time).map((tournament, i)=>(
-                                <tr id={i>=5? "collapse1" : ""} class={i>=5? "collapse" : ""}>
-                                  <td>
-                                    {tournament.ranking == 1 ?
-                                      <span>🥇</span>
-                                      :
-                                      null
-                                    }
-                                    {tournament.ranking == 2 ?
-                                      <span>🥈</span>
-                                      :
-                                      null
-                                    }
-                                    {tournament.ranking == 3 ?
-                                      <span>🥉</span>
-                                      :
-                                      null
-                                    }
-                                  </td>
-                                  <td>
-                                    {tournament.state == "wifi" ?
-                                      <span><FontAwesomeIcon icon={faWifi} /></span>
-                                      :
-                                      <span>{tournament.state}</span>
-                                    }
-                                  </td>
-                                  <td><a target="_blank" href={`https://braacket.com/tournament/${tournament.id}`}>{tournament.name}</a></td>
-                                  <td>{moment.unix(tournament.time).add(1, "day").format("DD/MM/YY")}</td>
-                                  <td style={{textAlign: "center"}}>{tournament.ranking}<small>/{tournament.player_number}</small></td>
-                                </tr>
-                              ))
-                            }
-                            <tr data-toggle="collapse" href="#collapse1" style={{
-                              borderBottom: "1px white solid", textAlign: "center", cursor: "pointer"
-                            }}>
-                              <td colSpan="99">{i18n.t("View-all")} ({this.state.tournaments.length})</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </row>
+                    {this.state.playerData.twitch ? 
+                      <div className={styles.tttag} style={{color: "white", fontSize: ".8rem"}}>
+                        <div className={styles.ttlogo} style={{
+                          backgroundImage: "url(/icons/twitch.svg)", width: 16, height: 16, bottom: 0, right: 0,
+                          display: "inline-block", verticalAlign: "bottom", marginRight: "6px", backgroundSize: "cover"
+                        }}>
+                        </div>
+                        <a href={"http://twitch.tv/"+this.state.playerData.twitch} target="_blank">
+                          {this.state.playerData.twitch}
+                        </a>
+                      </div>
                       :
-                      null
-                    }
+                      null}
 
-                    {this.state.playerData.tournaments ?
-                      <row style={{display: "block", padding: "12px"}}>
-                        <h5>Ranking Brasileiro</h5>
-                        <table class="table table-striped table-sm" style={{color: "white"}}>
-                          <thead>
-                            <tr>
-                              <th scope="col">#</th>
-                              <th scope="col">Nome</th>
-                              <th scope="col">Tier</th>
-                              <th scope="col">Colocação</th>
-                              <th scope="col">Pontuação</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {
-                              this.state.playerData.tournaments.sort((a, b) => Number(b.name) - Number(a.name)).sort((a, b) => Number(b.points) - Number(a.points)).map((tournament, i)=>(
-                                <tr class={i<10? "" : "text-muted"}>
-                                  <th scope="row">{i+1}</th>
-                                  <td>{tournament.name}</td>
-                                  <td>{tournament.rank}</td>
-                                  <td>{tournament.placing}</td>
-                                  {i<10?
-                                    <td><b>{tournament.points}</b></td>
-                                    :
-                                    <td>{tournament.points}</td>
-                                  }
-                                </tr>
-                              ))
-                            }
-                          </tbody>
-                        </table>
-                      </row>
+                    {this.state.playerData.discord ? 
+                      <div className={styles.tttag} style={{color: "white", fontSize: ".8rem"}}>
+                        <div className={styles.ttlogo} style={{
+                          backgroundImage: "url(/icons/discord.svg)", width: 16, height: 16, bottom: 0, right: 0,
+                          display: "inline-block", verticalAlign: "bottom", marginRight: "6px", backgroundSize: "cover"
+                        }}>
+                        </div>
+                        {this.state.playerData.discord}
+                      </div>
                       :
-                      null
-                    }
+                      null}
                   </div>
-                :
-                null
-              }
-            </div>
-            <div class="modal-footer">
-            </div>
-          </div>
-        </div>
-      </div>
+
+                  <div className={styles.characterMain} style={{
+                    marginRight: "12px", marginTop: "-10px", marginBottom: "-10px",
+                    backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_1_${this.getCharCodename(this.state.playerData, 0)}.png)`,
+                    right: 0, flexGrow: 0, flexShrink: 0, height: "auto", alignSelf: "normal"
+                  }}>
+                  </div>
+                  <div style={{
+                    position: "absolute", right: "14px", zIndex: 9, bottom: "2px",
+                    filter: "drop-shadow(black 2px 2px 0px)", display: "flex"
+                  }}>
+                    {this.state.playerData.mains.slice(1).map((main, i)=>(
+                        <div class="" style={{
+                          backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_2_${this.getCharCodename(this.state.playerData, i+1)}.png)`,
+                          width: "24px", height: "24px", backgroundPosition: "center", backgroundSize: "cover",
+                          flexGrow: 0, display: "flex", flexShrink: 1
+                        }}></div>
+                      ))}
+                  </div>
+                </div>
+
+                {this.state.achievements && this.state.achievements.length > 0 ?
+                  <div class="row" style={{padding: "10px", margin: 0, backgroundColor: "black", borderBottom: "1px solid #3d5466", display: "flex", justifyContent: "center"}}>
+                    {this.state.achievements.map((achievement, i)=>(
+                      <a key={this.state.playerData.name+i} style={{width: 72, textAlign: "center", display: "flex",
+                      flexDirection: "column", alignItems: "center", placeContent: "center"}}
+                      data-toggle="tooltip" data-placement="top" title={achievement.description}>
+                        <div style={{
+                          width: 42, height: 42, backgroundSize: "cover", backgroundRepeat: "none",
+                          marginLeft: 6, marginRight: 6,
+                          backgroundImage: `url(${process.env.PUBLIC_URL}/icons/achievements/${achievement.icon})`,
+                          display: "flex", alignItems: "center", justifyContent: "center"
+                        }}>
+                          {achievement.icon_middle ?
+                            <div style={{
+                              width: 24, height: 24, backgroundSize: "contain",
+                              backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_2_${achievement.icon_middle}.png)`,
+                              filter: "grayscale(100%) brightness(80%) sepia(100%) hue-rotate(5deg) saturate(500%) contrast(.9)"
+                            }}></div>
+                            :
+                            null
+                          }
+                        </div>
+                        <small style={{textAlign: "center"}}>{achievement.name}</small>
+                      </a>
+                    ))}
+                  </div>
+                  :
+                  null
+                }
+              
+                {this.state.playerData.rank ?
+                  <div class="row" style={{padding: "10px", margin: 0, backgroundColor: "black", borderBottom: "1px solid #3d5466"}}>
+                    {Object.entries(this.state.playerData.rank).sort((a, b)=>{return a[1].rank-b[1].rank}).map((rank, i)=>(
+                      <div class="col-lg-4 col-md-6" style={{padding: "2px"}} id={i}>
+                        {this.props.leagues ?
+                          <Link 
+                            to={`/leagues/smash/${rank[0]}`}
+                            onClick={()=>this.closeModal()}
+                            style={{display: "flex"}}>
+                              <div style={{width: "42px", textAlign: "center", fontSize: "1.5rem",
+                              backgroundColor: "lightgray", display: "flex", flexShrink: 0, color: "black"}}>
+                                <div style={{alignSelf: "center", width: "100%"}}>
+                                  {rank[1].rank}
+                                </div>
+                              </div>
+                              <div style={{
+                                width: "48px", height: "48px", display: "inline-block", backgroundSize: "cover", backgroundPosition: "center",
+                                flexShrink: 0,
+                                backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/league_icon/${rank[0]}.png)`}}></div>
+                              <div style={{display: "flex", flexDirection: "column", overflow: "hidden", width: "100%", backgroundColor: "lightgray"}}>
+                                <div style={{paddingLeft: "5px", textOverflow: "ellipsis", fontSize: "0.8rem", 
+                                whiteSpace: "nowrap", overflow: "hidden", backgroundColor: "gray", color: "white"}}>
+                                  {this.props.leagues.find(element => element.id == rank[0]).name}
+                                </div>
+                                <div style={{paddingLeft: "5px", color: "black", flexGrow: 1, fontSize: "1.2rem"}}>
+                                  {rank[1].score} pts.
+                                </div>
+                              </div>
+                          </Link>
+                        :
+                          <div>{Object.keys(this.state.playerData.rank)[i]}</div>
+                        }
+                      </div>
+                    ))}
+                  </div>
+                  :
+                  <div style={{padding: "10px"}}>Player not found in any league's ranking.</div>
+                }
+
+                {this.state.stats && this.state.stats.length > 0 ?
+                  <div class="row" style={{padding: "10px", margin: 0, backgroundColor: "black", borderBottom: "1px solid #3d5466"}}>
+                    {this.state.stats.map(stat => (
+                      <div class="col-12" style={{
+                        display: "flex", backgroundColor: "white", borderRadius: "20px",
+                        padding: 0, overflow: "hidden", marginTop: "3px", marginBottom: "3px",
+                        height: "40px", whiteSpace: "nowrap"
+                      }}>
+                        <div style={{
+                          flexGrow: 1, padding: "8px 16px", color: "white", textOverflow: "ellipsis",
+                          backgroundColor: "gray", flexShrink: 1, overflow: "hidden", display: "flex"
+                        }}>
+                          <div class={styles["stats-text"]} style={{overflow: "hidden", textOverflow: "ellipsis", alignSelf: "center"}}>
+                            {stat.text}
+                          </div>
+                        </div>
+                        <div style={{
+                          width: "16px", backgroundColor: "gray",
+                          clipPath: "polygon(0 0, 100% 0, 0% 100%, 0% 100%)",
+                          flexShrink: 0
+                        }}></div>
+                        <div class={styles["stats-text"]} style={{
+                          padding: "8px 16px", backgroundColor: "white",
+                          color: "black", textAlign: "right", width: "40%",
+                          overflow: "hidden", textOverflow: "ellipsis", display: "flex",
+                          justifyContent: "flex-end"
+                        }}>
+                          <div class={styles["stats-text"]} style={{overflow: "hidden", textOverflow: "ellipsis", alignSelf: "center"}}>
+                            {stat.value}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  :
+                  null
+                }
+
+                {this.state.playerData.character_usage_percent &&
+                this.state.playerData.character_usage_percent.length > 0 ?
+                  <row style={{display: "block", padding: "12px"}}>
+                    <h5>{i18n.t("char-usage-latest-30-sets")}</h5>
+                    <div class="row" style={{padding: "10px", margin: 0, backgroundColor: "black", borderBottom: "1px solid #3d5466", justifyContent: "center"}}>
+                      {this.state.playerData.character_usage_percent.map((character, i)=>(
+                        <a key={this.state.playerData.name+i} style={{textAlign: "center", display: "flex",
+                        flexDirection: "column", alignItems: "center", placeContent: "center"}}
+                        data-toggle="tooltip" data-placement="top">
+                          <div class="" style={{
+                            backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_2_${CHARACTERS[CHARACTERS_GG_TO_BRAACKET[character[0]]]+"_00"}.png)`,
+                            width: "24px", height: "24px", backgroundPosition: "center", backgroundSize: "cover",
+                            flexGrow: 0, display: "flex", flexShrink: 1, margin: "0 20px 0 20px"
+                          }}></div>
+                          <small>{(100*character[1]).toFixed(2)}%</small>
+                        </a>
+                      ))}
+                    </div>
+                  </row>
+                  :
+                  null
+                }
+
+                {this.state.matches ?
+                  <row style={{display: "block", padding: "12px"}}>
+                    <h5>{"Sets played"}</h5>
+                    <table class="table table-striped table-sm" style={{color: "white"}}>
+                      <thead>
+                        <tr>
+                          <th></th>
+                          <th></th>
+                          <th scope="col">Opponent</th>
+                          <th scope="col">Tournament</th>
+                          <th scope="col">{i18n.t("Date")}</th>
+                          <th scope="col" style={{textAlign: "center"}}>Score</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {
+                          this.state.matches.map((match, i)=>(
+                            <tr id={i>=5? "collapse2" : ""} class={i>=5? "collapse" : ""}>
+                              <td>
+                                {match.won ?
+                                  "W" : "L"
+                                }
+                              </td>
+                              <td>
+                                {match.state == "wifi" ?
+                                  <span><FontAwesomeIcon icon={faWifi} /></span>
+                                  :
+                                  null
+                                }
+                              </td>
+                              <td>{match.opponent.org ? match.opponent.org+" " : ""}{match.opponent.name}</td>
+                              <td><a target="_blank" href={`https://braacket.com/tournament/${match.tournamentId}`}>{match.tournamentName}</a></td>
+                              <td>{moment.unix(match.tournamentTime).add(1, "day").format("DD/MM/YY")}</td>
+                              <td style={{textAlign: "center"}}>{match.scoreMe} - {match.scoreOther}</td>
+                            </tr>
+                          ))
+                        }
+                        <tr data-toggle="collapse" href="#collapse2" style={{
+                          borderBottom: "1px white solid", textAlign: "center", cursor: "pointer"
+                        }}>
+                        </tr>
+                        <tr data-toggle="collapse" href="#collapse2" style={{
+                          borderBottom: "1px white solid", textAlign: "center", cursor: "pointer"
+                        }}>
+                          <td colSpan="99">{i18n.t("View-all")} ({this.state.matches.length})</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </row>
+                  :
+                  null
+                }
+
+                {this.state.tournaments ?
+                  <row style={{display: "block", padding: "12px"}}>
+                    <h5>{i18n.t("Tournaments")}</h5>
+                    <table class="table table-striped table-sm" style={{color: "white"}}>
+                      <thead>
+                        <tr>
+                          <th scope="col"></th>
+                          <th scope="col"></th>
+                          <th scope="col">{i18n.t("Name")}</th>
+                          <th scope="col">{i18n.t("Date")}</th>
+                          <th scope="col" style={{textAlign: "center"}}>{i18n.t("Placing")}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {
+                          this.state.tournaments.sort((a, b) => b.time - a.time).map((tournament, i)=>(
+                            <tr id={i>=5? "collapse1" : ""} class={i>=5? "collapse" : ""}>
+                              <td>
+                                {tournament.ranking == 1 ?
+                                  <span>🥇</span>
+                                  :
+                                  null
+                                }
+                                {tournament.ranking == 2 ?
+                                  <span>🥈</span>
+                                  :
+                                  null
+                                }
+                                {tournament.ranking == 3 ?
+                                  <span>🥉</span>
+                                  :
+                                  null
+                                }
+                              </td>
+                              <td>
+                                {tournament.state == "wifi" ?
+                                  <span><FontAwesomeIcon icon={faWifi} /></span>
+                                  :
+                                  <span>{tournament.state}</span>
+                                }
+                              </td>
+                              <td><a target="_blank" href={`https://braacket.com/tournament/${tournament.id}`}>{tournament.name}</a></td>
+                              <td>{moment.unix(tournament.time).add(1, "day").format("DD/MM/YY")}</td>
+                              <td style={{textAlign: "center"}}>{tournament.ranking}<small>/{tournament.player_number}</small></td>
+                            </tr>
+                          ))
+                        }
+                        <tr data-toggle="collapse" href="#collapse1" style={{
+                          borderBottom: "1px white solid", textAlign: "center", cursor: "pointer"
+                        }}>
+                          <td colSpan="99">{i18n.t("View-all")} ({this.state.tournaments.length})</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </row>
+                  :
+                  null
+                }
+
+                {this.state.playerData.tournaments ?
+                  <row style={{display: "block", padding: "12px"}}>
+                    <h5>Ranking Brasileiro</h5>
+                    <table class="table table-striped table-sm" style={{color: "white"}}>
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Nome</th>
+                          <th scope="col">Tier</th>
+                          <th scope="col">Colocação</th>
+                          <th scope="col">Pontuação</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {
+                          this.state.playerData.tournaments.sort((a, b) => Number(b.name) - Number(a.name)).sort((a, b) => Number(b.points) - Number(a.points)).map((tournament, i)=>(
+                            <tr class={i<10? "" : "text-muted"}>
+                              <th scope="row">{i+1}</th>
+                              <td>{tournament.name}</td>
+                              <td>{tournament.rank}</td>
+                              <td>{tournament.placing}</td>
+                              {i<10?
+                                <td><b>{tournament.points}</b></td>
+                                :
+                                <td>{tournament.points}</td>
+                              }
+                            </tr>
+                          ))
+                        }
+                      </tbody>
+                    </table>
+                  </row>
+                  :
+                  null
+                }
+              </div>
+            :
+            <div class="loader"></div>
+          }
+        </DialogContent>
+      </Dialog>
     )
   }
 };
 
-export default withRouter(PlayerModal)
+export default PlayerModal

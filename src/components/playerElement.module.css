@@ -1,0 +1,50 @@
+.userNick {
+    line-height: normal !important;
+}
+
+.containerOuter {
+    content-visibility: auto !important;
+    contain-intrinsic-size: 52px !important;
+    height: 52px !important;
+    padding: 2px !important;
+    width: 100% !important;
+}
+
+.container {
+    contain-intrinsic-size: 48px !important;
+    height: 48px !important;
+}
+
+.playerRanking {
+  font-size: 1.2rem !important;
+  width: 45px !important;
+  text-align: center !important;
+  flex-shrink: 0 !important;
+  line-height: initial !important;
+  place-self: center !important;
+}
+
+@media (max-width: 768px) {
+    .userNick {
+        font-size: 12px !important;
+    }
+
+    .userName {
+        font-size: 10px !important;
+    }
+
+    .containerOuter {
+        height: 36px !important;
+        contain-intrinsic-size: 36px !important;
+    }
+
+    .container {
+        height: 32px !important;
+        contain-intrinsic-size: 32px !important;
+    }
+
+    .playerRanking {
+        font-size: .8rem !important;
+        width: 32px !important;
+    }
+}

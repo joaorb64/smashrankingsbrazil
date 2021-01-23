@@ -10,6 +10,7 @@ import { withRouter } from 'react-router-dom'
 
 import CHARACTERS from '../globals'
 import { parse } from '@fortawesome/fontawesome-svg-core';
+import { Box } from '@material-ui/core';
 
 Math.getDistance = function( x1, y1, x2, y2 ) {
 	var xs = x2 - x1, ys = y2 - y1;		
@@ -302,11 +303,8 @@ class Mapa extends Component {
 
   render (){
     return(
-      <div class="slide-fade list-group-item" style={{
-        backgroundColor: "#f0f0f0", borderRadius: "10px", border: 0, marginBottom: "5px", width: "100%",
-        padding: "10px", alignSelf: "center"
-      }}>
-        <div id="mapid" style={{height: "calc(80vh - 32px)"}}>
+      <Box>
+        <Box id="mapid" style={{height: "calc(80vh - 32px)"}} xs>
           <div class="btn-group btn-group-toggle" style={{zIndex: 9999, position: "absolute", right: 10, top: 10}} data-toggle="buttons">
             <label onClick={(e)=>{e.preventDefault(); this.updateData()}} class="btn btn-primary active">
               <input type="radio" name="options" id="option1" autocomplete="off" checked />
@@ -327,8 +325,8 @@ class Mapa extends Component {
             :
             null
           }
-        </div>
-      </div>
+        </Box>
+      </Box>
     )
   }
 };

@@ -43,10 +43,7 @@ class About extends Component {
 
   render (){
     return(
-      <div class="slide-fade list-group-item" style={{
-        backgroundColor: "#f0f0f0", borderRadius: "10px", border: 0, marginBottom: "5px", width: "100%",
-        padding: "30px", alignSelf: "center"
-      }}>
+      <div>
         <h2>
           {i18n.t("about")}
         </h2>

@@ -5,6 +5,45 @@ import { faCalendar, faEdit, faMapMarkerAlt, faUser, faWifi } from '@fortawesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import i18n from '../locales/i18n';
 import HelpButton from './HelpButton';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import { Avatar, Box, CardHeader, Chip, Grid, LinearProgress, Link, MenuItem, ListSubheader, Select, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
+
+let useStyles = (props) => ({
+  root: {
+    maxWidth: 345,
+  },
+  media: {
+    height: 140,
+  },
+  barRoot: {
+    height: 10,
+    borderRadius: 5,
+  },
+  barIncomplete: {
+    borderRadius: 5,
+  },
+  barComplete: {
+    borderRadius: 5,
+    backgroundColor: "green"
+  },
+  couponChip: {
+    margin: 6
+  },
+  select: {
+    fontSize: '1.4rem',
+    marginBottom: '1rem'
+  },
+  cardHeader: {
+    overflow: "hidden"
+  }
+});
 
 class NextTournaments extends Component {
   state = {
@@ -87,29 +126,25 @@ class NextTournaments extends Component {
   }
 
   render (){
+    const { classes } = this.props;
+
     return(
-      <div class="slide-fade list-group-item" style={{
-        backgroundColor: "#f0f0f000", borderRadius: "10px", border: 0, marginBottom: "5px", width: "100%",
-        padding: "10px", paddingTop: 0, alignSelf: "center"
-      }}>
-        <div class="row" style={{marginLeft: -8, marginRight: -8}}>
+      <Box>
+        <Box>
           <h2 style={{color: "white"}}>
             {i18n.t("next-tournaments")} <HelpButton content="To have your tournaments listed on this page, set their location to your country, even for online tournaments." />
           </h2>
-          <select value={this.state.selectedCountry} class="form-control form-control-lg" onChange={(e)=>this.selectCountry(e)}>
-            <option value="all">{i18n.t("all")}</option>
+          <Select className={classes.select} fullWidth value={this.state.selectedCountry} onChange={(e)=>this.selectCountry(e)}>
+            <MenuItem value="all">{i18n.t("all")}</MenuItem>
             {Object.keys(this.state.selections).map((region) => (
-              <>
-                <optgroup label={i18n.t("region-"+region.toLowerCase())}>
-                  <option value={"region_"+region.toLowerCase()}>{i18n.t("all")} ({i18n.t("region-"+region.toLowerCase())})</option>
-                  {this.state.selections[region].map((country) => (
-                    <option value={country.toLowerCase()}>{country+" ("+this.state.alltournaments[country].events.length+")"}</option>
-                  ))}
-                </optgroup>
-              </>
+              [<ListSubheader>{i18n.t("region-"+region.toLowerCase())}</ListSubheader>,
+              <MenuItem value={"region_"+region.toLowerCase()}>{i18n.t("all")} ({i18n.t("region-"+region.toLowerCase())})</MenuItem>,
+              this.state.selections[region].map((country) => (
+                <MenuItem value={country.toLowerCase()}>{country+" ("+this.state.alltournaments[country].events.length+")"}</MenuItem>
+              ))]
             ))}
-          </select>
-          {this.state.selectedCountry == "BR" ? 
+          </Select>
+          {this.state.selectedCountry == "br" ? 
             <a href="https://twitter.com/smash_bot_br" class="col-12" style={{backgroundColor: "white", minHeight: "64px", display: "flex", alignItems: "center", marginTop: 8}}>
               <img src="/images/bot.png" style={{height: 48, width: 48, borderRadius: 8}} />
               <div style={{padding: 8, color: "black"}}>Siga o @smash_bot_br para ser notificado de próximos eventos e resultados de torneios em tempo real!</div>
@@ -117,70 +152,137 @@ class NextTournaments extends Component {
             :
             null
           }          
-        </div>
-        <div class="row">
+        </Box>
+        <Box>
           {
             this.state.tournaments != null ?
-              this.state.tournaments.filter(t=>{return t.url != null}).map((tournament)=>(
-                <div class="col-md-6 col-xl-4" style={{padding: 2}}>
-                  <a href={tournament.url} target="_blank">
-                    <div className={styles.tournamentContainerHighlight} style={{cursor: "pointer"}}>
-                      <div className={styles.tournamentContainer} style={{backgroundColor: "#ff5e24", border: "4px solid black", cursor: "pointer"}}>
-                        <div style={{backgroundImage: "url("+
-                          (tournament.images ? ((tournament.images.find(img => img["type"]=="banner") || tournament.images[tournament.images.length-1])?.url || "") : "") +
-                          ")", height: 140, margin: "4px",
-                        backgroundSize: "cover", backgroundPosition: "center", backgroundColor: "black"}}>
-                          <div style={{position: "absolute", width: 50, height: 30, backgroundPosition: "center", backgroundSize: "cover", margin: "2px", border: "2px solid black",
-                          backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/country_flag/${tournament.country.toLowerCase()}.png)`}}></div>
-                        </div>
-
-                        <div style={{height: 48, display: "flex", flexDirection: "column", alignItems: "center", placeContent: "center",
-                        paddingLeft: "8px", paddingRight: "8px", background: "rgb(255,113,40)",
-                        background: "linear-gradient(180deg, rgba(255,113,40,1) 0%, rgba(221,87,37,1) 100%)"}}>
-                          {tournament.tournament_multievent ?
-                            <div style={{color: "white", textAlign: "center", fontSize: "12px",
-                            whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden",
-                            textShadow: "2px 2px 0px #00000070", width: "100%"}}>
-                              {tournament.tournament}
-                            </div>
-                            :
-                            null}
-                          <div style={{color: "white", textAlign: "center", fontSize: "16px",
-                          whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden",
-                          textShadow: "2px 2px 0px #00000070", width: "100%"}}>
-                            {tournament.tournament_multievent ? tournament.name : tournament.tournament}
-                          </div>
-                        </div>
-
-                        <div style={{display: "flex", color: "black", fontSize: "0.8rem", flexDirection: "column"}}>
-                          <div style={{backgroundColor: "#dedede", padding: "2px", paddingLeft: "8px", flexGrow: 1}}>
-                            {tournament.isOnline ?
-                              <span><FontAwesomeIcon icon={faWifi}/> Online</span>
-                              :
-                              <span><FontAwesomeIcon icon={faMapMarkerAlt}/> {(tournament.tournament_venueName ? tournament.tournament_venueName+" - " : "") + tournament.tournament_addrState}</span>
+              <Grid container justify="flex-start" spacing={2} width="100%">
+                {this.state.tournaments.filter(t=>{return t.url != null}).map((tournament)=>(
+                  <Grid item lg={4} md={6} sm={6} xs={12}>
+                    <Link underline="none" href={tournament.url} target="_blank">
+                      <Card fullWidth className={classes.root}>
+                        <CardActionArea>
+                          <CardHeader noWrap classes={{content: classes.cardHeader}}
+                            avatar={<Avatar src={`https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/country_flag/${tournament.country.toLowerCase()}.png`} />}
+                            title={<Typography noWrap variant="h6" component="h2">
+                              {tournament.tournament_multievent ?
+                                tournament.tournament
+                                :
+                                tournament.name
+                              }
+                            </Typography>}
+                            subheader={
+                              tournament.tournament_multievent ?
+                                tournament.name
+                                :
+                                null
                             }
-                          </div>
+                          />
+                          <CardMedia
+                            className={classes.media}
+                            image={(tournament.images ? ((tournament.images.find(img => img["type"]=="banner") || tournament.images[tournament.images.length-1])?.url || "") : "")}
+                            title={tournament.title}>
+                            {tournament.coupon ?
+                              <Link underline="none" href="#">
+                                <Chip
+                                  className={classes.couponChip}
+                                  label={"Coupon: "+tournament.coupon}
+                                  color="primary"
+                                  clickable
+                                  onClick={(event)=>{}}
+                                />
+                              </Link>
+                              :
+                              null
+                            }
+                          </CardMedia>
+                          <CardContent>
+                            {tournament.isOnline ?
+                              <ListItem dense disableGutters alignItems="flex-start">
+                                <ListItemIcon style={{minWidth: 32}}><FontAwesomeIcon icon={faWifi}/></ListItemIcon>
+                                <ListItemText primary="Online" />
+                              </ListItem>
+                              :
+                              <ListItem dense disableGutters alignItems="flex-start">
+                                <ListItemIcon style={{minWidth: 32}}><FontAwesomeIcon icon={faMapMarkerAlt}/></ListItemIcon>
+                                <ListItemText primary={(tournament.tournament_venueName ? tournament.tournament_venueName+" - " : "") + tournament.tournament_addrState} />
+                              </ListItem>
+                            }
 
-                          <div style={{backgroundColor: "#dedede", padding: "2px", paddingRight: "8px", paddingLeft: "8px", flexGrow: 1, textAlign: "left"}}>
-                            <FontAwesomeIcon icon={faCalendar}/> {i18n.t("starts-time")}: {i18n.t("weekday-"+moment(tournament.startAt * 1000).format("ddd").toLowerCase())} {i18n.t("date_format", {date: moment.unix(tournament.startAt).toDate()})} {moment(tournament.startAt * 1000).format("HH:mm")} GMT{moment(tournament.startAt * 1000).format("Z")}
-                          </div>
-                          
-                          <div style={{backgroundColor: "#dedede", padding: "2px", paddingRight: "8px", paddingLeft: "8px", flexGrow: 1, textAlign: "left"}}>
-                            <FontAwesomeIcon icon={faEdit}/> {i18n.t("register-due")}: {i18n.t("weekday-"+moment(tournament.tournament_registrationClosesAt * 1000).format("ddd").toLowerCase())} {i18n.t("date_format", {date: moment.unix(tournament.tournament_registrationClosesAt).toDate()})} {moment(tournament.tournament_registrationClosesAt * 1000).format("HH:mm")} GMT{moment(tournament.tournament_registrationClosesAt * 1000).format("Z")}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-                </div>
-              ))
+                            <ListItem dense disableGutters alignItems="flex-start">
+                              <ListItemIcon style={{minWidth: 32}}><FontAwesomeIcon icon={faCalendar}/></ListItemIcon>
+                              <ListItemText primary={i18n.t("weekday-"+moment(tournament.startAt * 1000).format("ddd").toLowerCase())+" "+i18n.t("date_format", {date: moment.unix(tournament.startAt).toDate()})+" "+moment(tournament.startAt * 1000).format("HH:mm")+" GMT"+moment(tournament.startAt * 1000).format("Z")} />
+                            </ListItem>
+
+                            <ListItem dense disableGutters alignItems="flex-start">
+                              <ListItemIcon style={{minWidth: 32}}><FontAwesomeIcon icon={faEdit}/></ListItemIcon>
+                              <ListItemText primary={i18n.t("weekday-"+moment(tournament.tournament_registrationClosesAt * 1000).format("ddd").toLowerCase())+" "+i18n.t("date_format", {date: moment.unix(tournament.tournament_registrationClosesAt).toDate()})+" "+moment(tournament.tournament_registrationClosesAt * 1000).format("HH:mm")+" GMT"+moment(tournament.tournament_registrationClosesAt * 1000).format("Z")} />
+                            </ListItem>
+                          </CardContent>
+                        </CardActionArea>
+                      </Card>
+                    </Link>
+                  </Grid>
+                  // <div class="col-md-6 col-xl-4" style={{padding: 2}}>
+                  //   <a href={tournament.url} target="_blank">
+                  //     <div className={styles.tournamentContainerHighlight} style={{cursor: "pointer"}}>
+                  //       <div className={styles.tournamentContainer} style={{backgroundColor: "#ff5e24", border: "4px solid black", cursor: "pointer"}}>
+                  //         <div style={{backgroundImage: "url("+
+                  //           (tournament.images ? ((tournament.images.find(img => img["type"]=="banner") || tournament.images[tournament.images.length-1])?.url || "") : "") +
+                  //           ")", height: 140, margin: "4px",
+                  //         backgroundSize: "cover", backgroundPosition: "center", backgroundColor: "black"}}>
+                  //           <div style={{position: "absolute", width: 50, height: 30, backgroundPosition: "center", backgroundSize: "cover", margin: "2px", border: "2px solid black",
+                  //           backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/country_flag/${tournament.country.toLowerCase()}.png)`}}></div>
+                  //         </div>
+
+                  //         <div style={{height: 48, display: "flex", flexDirection: "column", alignItems: "center", placeContent: "center",
+                  //         paddingLeft: "8px", paddingRight: "8px", background: "rgb(255,113,40)",
+                  //         background: "linear-gradient(180deg, rgba(255,113,40,1) 0%, rgba(221,87,37,1) 100%)"}}>
+                  //           {tournament.tournament_multievent ?
+                  //             <div style={{color: "white", textAlign: "center", fontSize: "12px",
+                  //             whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden",
+                  //             textShadow: "2px 2px 0px #00000070", width: "100%"}}>
+                  //               {tournament.tournament}
+                  //             </div>
+                  //             :
+                  //             null}
+                  //           <div style={{color: "white", textAlign: "center", fontSize: "16px",
+                  //           whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden",
+                  //           textShadow: "2px 2px 0px #00000070", width: "100%"}}>
+                  //             {tournament.tournament_multievent ? tournament.name : tournament.tournament}
+                  //           </div>
+                  //         </div>
+
+                  //         <div style={{display: "flex", color: "black", fontSize: "0.8rem", flexDirection: "column"}}>
+                  //           <div style={{backgroundColor: "#dedede", padding: "2px", paddingLeft: "8px", flexGrow: 1}}>
+                  //             {tournament.isOnline ?
+                  //               <span><FontAwesomeIcon icon={faWifi}/> Online</span>
+                  //               :
+                  //               <span><FontAwesomeIcon icon={faMapMarkerAlt}/> {(tournament.tournament_venueName ? tournament.tournament_venueName+" - " : "") + tournament.tournament_addrState}</span>
+                  //             }
+                  //           </div>
+
+                  //           <div style={{backgroundColor: "#dedede", padding: "2px", paddingRight: "8px", paddingLeft: "8px", flexGrow: 1, textAlign: "left"}}>
+                  //             <FontAwesomeIcon icon={faCalendar}/> {i18n.t("starts-time")}: {i18n.t("weekday-"+moment(tournament.startAt * 1000).format("ddd").toLowerCase())} {i18n.t("date_format", {date: moment.unix(tournament.startAt).toDate()})} {moment(tournament.startAt * 1000).format("HH:mm")} GMT{moment(tournament.startAt * 1000).format("Z")}
+                  //           </div>
+                            
+                  //           <div style={{backgroundColor: "#dedede", padding: "2px", paddingRight: "8px", paddingLeft: "8px", flexGrow: 1, textAlign: "left"}}>
+                  //             <FontAwesomeIcon icon={faEdit}/> {i18n.t("register-due")}: {i18n.t("weekday-"+moment(tournament.tournament_registrationClosesAt * 1000).format("ddd").toLowerCase())} {i18n.t("date_format", {date: moment.unix(tournament.tournament_registrationClosesAt).toDate()})} {moment(tournament.tournament_registrationClosesAt * 1000).format("HH:mm")} GMT{moment(tournament.tournament_registrationClosesAt * 1000).format("Z")}
+                  //           </div>
+                  //         </div>
+                  //       </div>
+                  //     </div>
+                  //   </a>
+                  // </div>
+                ))}
+              </Grid>
               :
               null
           }
-        </div>
-      </div>
+        </Box>
+      </Box>
     )
   }
 };
 
-export default NextTournaments
+export default withStyles(useStyles)(NextTournaments)

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, PureComponent } from 'react'
 import styles from './contacts.module.css'
 import { Link, useParams, useLocation } from 'react-router-dom';
 import LeagueSelector from './leagueselector';
@@ -12,8 +12,23 @@ import i18n from '../locales/i18n';
 import Players from './players';
 import { browserHistory } from 'react-router';
 import { withRouter } from 'react-router-dom'
+import { Tabs, Tab, AppBar, Box, Hidden, BottomNavigation, BottomNavigationAction, Icon,
+  withStyles, withTheme, Paper, Typography } from '@material-ui/core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faListOl, faTrophy, faUsers, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faChartBar } from '@fortawesome/free-regular-svg-icons';
+import ScrollTop from './ScrollTop';
 
-class Contacts extends Component {
+let useStyles = (props) => ({
+  bottomNav: {
+    backgroundColor: props.palette.primary.main
+  },
+  bottomNavSelected: {
+    color: props.palette.text.primary + " !important"
+  }
+})
+
+class Contacts extends PureComponent {
   state = {
     selectedLeague: -1,
     selectedTab: "ranking",
@@ -87,7 +102,7 @@ class Contacts extends Component {
         this.handleTabChange(this.props.match.params["tab"]);
       } else {
         this.props.history.push(
-          '/leagues/smash/'+leagueId+'/ranking'
+          '/leagues/smash/'+leagueId+'/ranking/'
         );
       }
     }
@@ -169,20 +184,6 @@ class Contacts extends Component {
               rankingAlltimes: data.ranking["alltimes"],
               rankingStartTime: data.ranking["timeStart"],
               rankingEndTime: data.ranking["timeEnd"]
-            }, ()=>{
-              if(this.props.match.params["player_id"]){
-                console.log(this.props.match.params["player_id"])
-
-                setTimeout(()=>{
-                  let div = document.getElementById("ranking_player_"+players.findIndex((p)=>p.league_id == this.props.match.params["player_id"]));
-                  console.log(div)
-
-                  if(div)
-                    window.scrollTo({behavior: "smooth", top: div.offsetTop})
-
-                  this.openPlayerModal(players.find((p)=>p.league_id == this.props.match.params["player_id"]));
-                }, 500);
-              }
             })
           }
         })
@@ -236,79 +237,53 @@ class Contacts extends Component {
     return name.normalize("NFKD").replace(/ /g, '_').replace(/@/g, "_At_").replace(/~/g, "_Tilde_").replace(RegExp('[^0-9a-zA-Z_-]'), '').replace("|", "")
   }
 
-  openPlayerModal(player){
-    if(window.playerModal){
-      window.playerModal.player = player;
-      window.playerModal.fetchPlayer();
-      this.props.history.push(
-        '/leagues/smash/'+this.props.match.params["id"]+'/'+
-        this.props.match.params["tab"]+"/"+player.league_id
-      );
-      window.playerModal.open();
-    }
-  }
-
   handleTabChange(value){
     if(this.state.selectedTab != value){
       this.props.history.push(
-        '/leagues/smash/'+this.props.match.params["id"]+'/'+value
+        '/leagues/smash/'+this.props.match.params["id"]+'/'+value+'/'
       );
       this.setState({selectedTab: value});
     }
   }
 
   render (){
+    const { classes } = this.props;
+
     return(
-      <div style={{textAlign: "center", fontFamily: "SmashFont", marginLeft: "-10px", marginRight: "-10px"}}>
+      <div>
         <LeagueSelector
           leagues={this.props.contacts}
           selectLeague={this.selectLeague.bind(this)}
           selectedLeague={this.state.selectedLeague}
+          selectedTab={this.state.selectedTab}
+          handleTabChange={this.handleTabChange.bind(this)}
         />
-
-        {this.state.rankingName ?
-          <div className="teste btn-group btn-group-toggle col-12" style={{padding: "5px 10px 0px 10px"}}>
-            <button className={styles_selector.teste+" btn col-12"}>
-              {this.state.rankingName}
-              {this.state.rankingType ? " ("+this.state.rankingType+")" : ""}
-              <br/>
-              {this.state.alltimes || this.state.rankingStartTime == null ?
-                <>{"All times"}</>
-                :
-                <>{i18n.t("dateFrom") + " " + i18n.t("date_format", {date: moment.unix(this.state.rankingStartTime).toDate()}) + " " + i18n.t("dateFromAfter") + " " + i18n.t("dateTo") + " " + i18n.t("date_format", {date: moment.unix(this.state.rankingEndTime).toDate()}) + " " + i18n.t("dateToAfter")}</>
-              }
-            </button>
-          </div>
-          :
-          null
-        }
-
-        <div className="teste btn-group btn-group-toggle col-12" style={{padding: "5px 8px 0px 10px", marginBottom: "-5px"}}>
-          <button className={"tab " + styles_selector.teste+" "+styles_selector.aria+" btn col-3"} value="ranking" aria-expanded={this.state.selectedTab == "ranking"} onClick={(event)=>this.handleTabChange(event.target.value)}>
-            {i18n.t("Ranking")}
-          </button>
-          <button className={"tab " + styles_selector.teste+" "+styles_selector.aria+" btn col-3"} value="players" aria-expanded={this.state.selectedTab == "players"} onClick={(event)=>this.handleTabChange(event.target.value)}>
-            {i18n.t("players")}
-          </button>
-          <button className={"tab " + styles_selector.teste+" "+styles_selector.aria+" btn col-3"} value="tournaments" aria-expanded={this.state.selectedTab == "tournaments"} onClick={(event)=>this.handleTabChange(event.target.value)}>
-            {i18n.t("Tournaments")}
-          </button>
-          <button className={"tab " + styles_selector.teste+" "+styles_selector.aria+" btn col-3"} value="statistics" aria-expanded={this.state.selectedTab == "statistics"} onClick={(event)=>this.handleTabChange(event.target.value)}>
-            {i18n.t("Statistics")}
-          </button>
-          <button className={"tab " + styles_selector.teste+" "+styles_selector.aria+" btn col-3"} value="info" aria-expanded={this.state.selectedTab == "info"} onClick={(event)=>this.handleTabChange(event.target.value)}>
-            {i18n.t("Info")}
-          </button>
-        </div>
 
         {
           this.state.selectedTab == "ranking" && this.state.players ?
-            <PlayerRanking contacts={this.props.contacts} allplayers={this.state.players} ranking={this.state.players} updateTime={this.state.updateTime} history={this.props.history} match={this.props.match} />
+            <>
+              {this.state.rankingName ?
+                <Paper style={{padding: 8, margin: 2}}>
+                  <Typography variant="body2" color="textSecondary" align="center">
+                    {this.state.rankingName}
+                    {this.state.rankingType ? " ("+this.state.rankingType+")" : ""}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary" align="center">
+                    {this.state.alltimes || this.state.rankingStartTime == null ?
+                      <>{"All times"}</>
+                      :
+                      <>{i18n.t("dateFrom") + " " + i18n.t("date_format", {date: moment.unix(this.state.rankingStartTime).toDate()}) + " " + i18n.t("dateFromAfter") + " " + i18n.t("dateTo") + " " + i18n.t("date_format", {date: moment.unix(this.state.rankingEndTime).toDate()}) + " " + i18n.t("dateToAfter")}</>
+                    }
+                  </Typography>
+                </Paper>
+                :
+                null
+              }
+              <PlayerRanking contacts={this.props.contacts} allplayers={this.props.allplayers} alltournaments={this.props.alltournaments} ranking={this.state.players} updateTime={this.state.updateTime} history={this.props.history} match={this.props.match} />
+            </>
             :
             this.state.selectedTab == "players" ?
-              <div style={{padding: "10px"}}>
-                <Players leagues={this.props.contacts} alltournaments={this.state.tournaments} allplayers={{"players": this.state.league_players}} history={this.props.history} match={this.props.match} />
-              </div>
+              <Players leagues={this.props.contacts} alltournaments={this.props.alltournaments} allplayers={this.props.allplayers} players={this.state.players} history={this.props.history} match={this.props.match} />
               :
               this.state.selectedTab == "tournaments" ?
                 <TournamentList tournaments={this.state.tournaments} />
@@ -324,9 +299,27 @@ class Contacts extends Component {
                     :
                     null
         }
+
+        <ScrollTop />
+
+        <Hidden smUp>
+          <BottomNavigation
+            value={this.state.selectedTab}
+            onChange={(event, value) => {this.handleTabChange(value)}}
+            showLabels
+            className={classes.bottomNav}
+            style={{position: "fixed", bottom: 0, left: 0, right: 0}}
+          >
+            <BottomNavigationAction classes={{selected: classes.bottomNavSelected}} style={{minWidth: 20}} value="ranking" label={<span style={{fontSize: "0.6rem"}}>{i18n.t("Ranking")}</span>} icon={<Icon style={{width: "100%", height: "100%"}}><FontAwesomeIcon icon={faListOl}/></Icon>} />
+            <BottomNavigationAction classes={{selected: classes.bottomNavSelected}} style={{minWidth: 20}} value="players" label={<span style={{fontSize: "0.6rem"}}>{i18n.t("players")}</span>} icon={<Icon style={{width: "100%", height: "100%"}}><FontAwesomeIcon icon={faUsers}/></Icon>} />
+            <BottomNavigationAction classes={{selected: classes.bottomNavSelected}} style={{minWidth: 20}} value="tournaments" label={<span style={{fontSize: "0.6rem"}}>{i18n.t("Tournaments")}</span>} icon={<Icon style={{width: "100%", height: "100%"}}><FontAwesomeIcon icon={faTrophy}/></Icon>} />
+            <BottomNavigationAction classes={{selected: classes.bottomNavSelected}} style={{minWidth: 20}} value="statistics" label={<span style={{fontSize: "0.6rem"}}>{i18n.t("Statistics")}</span>} icon={<Icon style={{width: "100%", height: "100%"}}><FontAwesomeIcon icon={faChartBar}/></Icon>} />
+            <BottomNavigationAction classes={{selected: classes.bottomNavSelected}} style={{minWidth: 20}} value="info" label={<span style={{fontSize: "0.6rem"}}>{i18n.t("Info")}</span>} icon={<Icon style={{width: "100%", height: "100%"}}><FontAwesomeIcon icon={faInfoCircle}/></Icon>} />
+          </BottomNavigation>
+        </Hidden>
       </div>
     )
   }
 };
 
-export default withRouter(Contacts)
+export default withRouter(withTheme(withStyles(useStyles)(Contacts)))

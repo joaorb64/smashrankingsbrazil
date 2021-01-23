@@ -4,6 +4,20 @@ import { Link } from 'react-router-dom'
 import i18n from '../locales/i18n';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons';
+import { Box, Button, Dialog, DialogContent, DialogTitle, List, Modal, Collapse,
+ListItem, ListItemIcon, ListItemText, TextField, Typography, Icon, AppBar,
+Toolbar, withStyles, Hidden, Tabs, Tab } from '@material-ui/core';
+import { StarBorder, ExpandLess, ExpandMore, Public, Wifi } from '@material-ui/icons'
+import HideOnScroll from './HideOnScroll';
+
+const useStyles = (props) => ({
+  leagueSelectorTopbar: {
+    [props.breakpoints.down("sm")]: {
+      top: 48,
+      zIndex: 1
+    }
+  }
+})
 
 class LeagueSelector extends Component {
   state = {
@@ -12,7 +26,9 @@ class LeagueSelector extends Component {
       leagues: [],
       subleagues: {},
       icon: null
-    }
+    },
+    modalOpened: false,
+    searchText: ""
   }
 
   componentDidUpdate(nextProps) {
@@ -39,6 +55,7 @@ class LeagueSelector extends Component {
             this.state.league_tree["subleagues"][league.region] = {
               leagues: [],
               subleagues: {},
+              open: false,
               name: i18n.t("region-"+league.region.toLowerCase())
             };
           }
@@ -51,6 +68,7 @@ class LeagueSelector extends Component {
               this.state.league_tree["subleagues"][league.region]["subleagues"][league.country] = {
                 leagues: [],
                 subleagues: {},
+                open: false,
                 icon: `https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/country_flag/${league.country.toLowerCase()}.png`,
                 show_count: true
               };
@@ -65,8 +83,46 @@ class LeagueSelector extends Component {
     }
   }
 
+  filterLeagues(text){
+    this.state.searchText = text;
+    this.setState({searchText: text});
+  }
+
+  openModal(){
+    this.setState({modalOpened: true});
+  }
+
   closeModal(){
     window.jQuery("#leagueSelectModal").modal("toggle");
+  }
+
+  renderSearch(){
+    return(
+      Object.values(this.props.leagues).filter((a)=>{
+        return(
+          a.name.toLowerCase().includes(this.state.searchText.toLowerCase()) ||
+          (a.state != null && a.state.toLowerCase().includes(this.state.searchText.toLowerCase())) ||
+          (a.country != null && a.country.toLowerCase().includes(this.state.searchText.toLowerCase()))
+        )
+      }).map((contact)=>(
+        <ListItem button onClick={()=>{}}>
+          <ListItemIcon>
+            <div style={{
+              width: "32px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
+              backgroundPosition: "center", verticalAlign: "inherit", backgroundColor: "white", borderRadius: "6px", marginRight: "10px",
+              backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/league_icon/${contact.id}.png)`,
+              display: "flex", flexShrink: 0
+            }}></div>
+          </ListItemIcon>
+          <ListItemText primary={contact.name} />
+          <Typography>{contact.state}</Typography>
+          {contact.wifi?
+            <Wifi />
+            :
+            null}
+        </ListItem>
+      ))
+    )
   }
 
   renderTree(head, recursion=0){
@@ -77,53 +133,88 @@ class LeagueSelector extends Component {
     return(
       <>
         {head.leagues.map((contact, i)=>(
-          <Link class={"dropdown-item " + styles.teste} to={`/leagues/smash/${contact.id}`} href={`/leagues/smash/${contact.id}`} onClick={()=>{this.props.selectLeague(this.props.leagues.indexOf(contact)); this.closeModal()}} style={{
-            display: "flex", lineHeight: "32px", paddingLeft: (24*(Math.max(recursion-1, 0))+32)+"px"
-          }} key={"league_"+contact.name}>
-            <div style={{
-              width: "32px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
-              backgroundPosition: "center", verticalAlign: "inherit", backgroundColor: "white", borderRadius: "6px", marginRight: "10px",
-              backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/league_icon/${contact.id}.png)`,
-              display: "flex", flexShrink: 0
-            }}></div>
-            <div style={{
-              flexShrink: 1, flexGrow: 1, textOverflow: "ellipsis", overflow: "hidden",
-              textAlign: "left"
-            }}>{contact.name}</div>
-            {contact.state?
+          <ListItem button onClick={()=>{}}>
+            <ListItemIcon>
               <div style={{
-                width: "32px", height: "32px", display: "inline-block",
-                backgroundPosition: "center", verticalAlign: "inherit",
+                width: "32px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
+                backgroundPosition: "center", verticalAlign: "inherit", backgroundColor: "white", borderRadius: "6px", marginRight: "10px",
+                backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/league_icon/${contact.id}.png)`,
                 display: "flex", flexShrink: 0
-              }}>
-                {contact.state}
-              </div>
+              }}></div>
+            </ListItemIcon>
+            <ListItemText primary={contact.name} />
+            <Typography>{contact.state}</Typography>
+            {contact.wifi?
+              <Wifi />
               :
-              null
-            }
-            {
-              contact.wifi ? 
-                <div style={{
-                  width: "24px", height: "24px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
-                  backgroundPosition: "center", verticalAlign: "inherit", borderRadius: "100%",
-                  backgroundColor: "white", marginTop: "2px", marginRight: "4px",
-                  display: "flex", flexShrink: 0
-                }}>
-                  <div style={{
-                    width: "16px", height: "16px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
-                    backgroundPosition: "center", verticalAlign: "inherit",
-                    backgroundImage: `url(${process.env.PUBLIC_URL}/icons/wifi.svg)`,
-                    position: "relative", top: "4px", left: "4px"
-                  }}></div>
-                </div>
-              :
-                null
-            }
-          </Link>
+              null}
+          </ListItem>
+          // <Link class={"dropdown-item " + styles.teste} to={`/leagues/smash/${contact.id}`} href={`/leagues/smash/${contact.id}`} onClick={()=>{this.props.selectLeague(this.props.leagues.indexOf(contact)); this.closeModal()}} style={{
+          //   display: "flex", lineHeight: "32px", paddingLeft: (24*(Math.max(recursion-1, 0))+32)+"px"
+          // }} key={"league_"+contact.name}>
+          //   <div style={{
+          //     width: "32px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
+          //     backgroundPosition: "center", verticalAlign: "inherit", backgroundColor: "white", borderRadius: "6px", marginRight: "10px",
+          //     backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/league_icon/${contact.id}.png)`,
+          //     display: "flex", flexShrink: 0
+          //   }}></div>
+          //   <div style={{
+          //     flexShrink: 1, flexGrow: 1, textOverflow: "ellipsis", overflow: "hidden",
+          //     textAlign: "left"
+          //   }}>{contact.name}</div>
+          //   {contact.state?
+          //     <div style={{
+          //       width: "32px", height: "32px", display: "inline-block",
+          //       backgroundPosition: "center", verticalAlign: "inherit",
+          //       display: "flex", flexShrink: 0
+          //     }}>
+          //       {contact.state}
+          //     </div>
+          //     :
+          //     null
+          //   }
+          //   {
+          //     contact.wifi ? 
+          //       <div style={{
+          //         width: "24px", height: "24px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
+          //         backgroundPosition: "center", verticalAlign: "inherit", borderRadius: "100%",
+          //         backgroundColor: "white", marginTop: "2px", marginRight: "4px",
+          //         display: "flex", flexShrink: 0
+          //       }}>
+          //         <div style={{
+          //           width: "16px", height: "16px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
+          //           backgroundPosition: "center", verticalAlign: "inherit",
+          //           backgroundImage: `url(${process.env.PUBLIC_URL}/icons/wifi.svg)`,
+          //           position: "relative", top: "4px", left: "4px"
+          //         }}></div>
+          //       </div>
+          //     :
+          //       null
+          //   }
+          // </Link>
         ))}
         {Object.entries(head.subleagues).map((league, i) => (
           <>
-            <div class={"dropdown-item " + styles.teste} 
+            <ListItem button onClick={()=>{head.subleagues[league[0]].open = !head.subleagues[league[0]].open; this.setState(this.state);}}>
+              <ListItemIcon>
+                {league[1].icon?
+                  <div style={{
+                    width: "32px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center", verticalAlign: "inherit", backgroundColor: "white", borderRadius: "6px", marginRight: "10px",
+                    backgroundImage: `url(${league[1].icon})`,
+                    display: "flex", flexShrink: 0
+                  }}></div>
+                  :
+                  <Public />
+                }
+              </ListItemIcon>
+              <ListItemText primary={league[1].name ? league[1].name : league[0]} />
+              {head.subleagues[league[0]].open ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            <Collapse style={{paddingLeft: "32px"}} in={head.subleagues[league[0]].open} timeout="auto" unmountOnExit>
+              {this.renderTree(league[1], recursion+1)}
+            </Collapse>
+            {/* <div class={"dropdown-item " + styles.teste} 
             data-toggle={recursion == 0 ? "" : "collapse"} data-target={"#collapse_"+league[0]+"_"+recursion+"_"+i} aria-controls={recursion == 0 ? "true" : "#collapse_"+league[0]+"_"+recursion+"_"+i}
             style={{
               display: "flex", lineHeight: "32px", paddingLeft: (24*(Math.max(recursion-1, 0))+32)+"px"
@@ -165,7 +256,7 @@ class LeagueSelector extends Component {
             </div>
             <div class={recursion == 0 ? "" : "collapse"} id={"collapse_"+league[0]+"_"+recursion+"_"+i}>
               {this.renderTree(league[1], recursion+1)}
-            </div>
+            </div> */}
           </>
         ))}
       </>
@@ -173,81 +264,93 @@ class LeagueSelector extends Component {
   }
 
   render(){
-    return(
-      <div>
-        <div class="col-12" style={{padding: "0 10px"}}>
-          <button class={styles.teste + " btn btn-secondary col-12 dropdown-toggle"} type="button" id="dropdownMenuButton"
-            data-toggle="modal" data-target="#leagueSelectModal" aria-haspopup="true" aria-expanded="false">
-            {this.state.leagues && this.state.leagues.length > 0 && this.props.selectedLeague != -1 ?
-              <div class={styles.title} style={{display: "flex", lineHeight: "32px"}}>
-                <div style={{
-                  width: "32px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
-                  backgroundPosition: "center", verticalAlign: "inherit", backgroundColor: "white", borderRadius: "6px", marginRight: "10px",
-                  backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/league_icon/${this.props.leagues[this.props.selectedLeague].id}.png)`,
-                  display: "flex", flexShrink: 0
-                }}></div>
-                <div style={{
-                  flexShrink: 1, flexGrow: 1, textOverflow: "ellipsis", overflow: "hidden"
-                }}>{this.state.leagues[this.props.selectedLeague].name}</div>
-                {this.state.leagues[this.props.selectedLeague].state ?
-                  <div style={{
-                    width: "32px", height: "32px", display: "inline-block",
-                    backgroundPosition: "center", verticalAlign: "inherit",
-                    display: "flex", flexShrink: 0
-                  }}>{this.state.leagues[this.props.selectedLeague].state}</div>
-                  :
-                  null
-                }
-                {
-                  this.state.leagues[this.props.selectedLeague].wifi ? 
-                    <div style={{
-                      width: "24px", height: "24px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
-                      backgroundPosition: "center", verticalAlign: "inherit", borderRadius: "100%",
-                      backgroundColor: "white", marginTop: "2px", marginRight: "4px",
-                      display: "flex", flexShrink: 0
-                    }}>
-                      <div style={{
-                        width: "16px", height: "16px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
-                        backgroundPosition: "center", verticalAlign: "inherit",
-                        backgroundImage: `url(${process.env.PUBLIC_URL}/icons/wifi.svg)`,
-                        position: "relative", top: "4px", left: "4px"
-                      }}></div>
-                    </div>
-                  :
-                    null
-                }
-              </div>
-              :
-              "Loading..."
-            }
-          </button>
-        </div>
+    const { classes } = this.props;
 
-        <div class="modal fade" id="leagueSelectModal" tabindex="-1" role="dialog" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content">
-              <div class="modal-header" style={{backgroundColor: "#be2018",
-              borderBottom: "1px solid #801e19", color: "white"}}>
-                <h5 class="modal-title" id="exampleModalLongTitle">{i18n.t("select-league")}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true" style={{color: "white"}}>&times;</span>
-                </button>
-              </div>
-              <div class="modal-body" style={{padding: 0, backgroundColor: "#be2018"}}>
-                {/*<div class={"col-md-12 " + styles.teste} style={{padding: 10}}>
-                  <input class="form-control" type="text" placeholder={"Pesquisar"}
-                  value={this.state.search} />
-                </div>*/}
-                {this.renderTree(this.state.league_tree)}
-              </div>
-              <div class="modal-footer" style={{backgroundColor: "#be2018", borderTop: 0}}>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    return(
+      <HideOnScroll {...this.props}>
+        <AppBar classes={{root: classes.leagueSelectorTopbar}} elevation={0} style={{
+          position: "sticky", marginLeft: -8, marginTop: -8, width: "calc(100% + 16px)"
+        }}>
+          <Toolbar>
+            <Button fullWidth onClick={()=>{this.openModal()}}>
+              {this.state.leagues && this.state.leagues.length > 0 && this.props.selectedLeague != -1 ?
+                <div style={{display: "flex", lineHeight: "32px", justifySelf: "left", width: "100%"}}>
+                  <div style={{
+                    width: "32px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center", verticalAlign: "inherit", backgroundColor: "white", borderRadius: "6px", marginRight: "10px",
+                    backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/league_icon/${this.props.leagues[this.props.selectedLeague].id}.png)`,
+                    display: "flex", flexShrink: 0
+                  }}></div>
+                  <div style={{
+                    flexShrink: 1, flexGrow: 1, textOverflow: "ellipsis", overflow: "hidden"
+                  }}>{this.state.leagues[this.props.selectedLeague].name}</div>
+                  {this.state.leagues[this.props.selectedLeague].state ?
+                    <div style={{
+                      width: "32px", height: "32px", display: "inline-block",
+                      backgroundPosition: "center", verticalAlign: "inherit",
+                      display: "flex", flexShrink: 0
+                    }}>{this.state.leagues[this.props.selectedLeague].state}</div>
+                    :
+                    null
+                  }
+                  {
+                    this.state.leagues[this.props.selectedLeague].wifi ? 
+                      <div style={{
+                        width: "24px", height: "24px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
+                        backgroundPosition: "center", verticalAlign: "inherit", borderRadius: "100%",
+                        backgroundColor: "white", marginTop: "2px", marginRight: "4px",
+                        display: "flex", flexShrink: 0
+                      }}>
+                        <div style={{
+                          width: "16px", height: "16px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
+                          backgroundPosition: "center", verticalAlign: "inherit",
+                          backgroundImage: `url(${process.env.PUBLIC_URL}/icons/wifi.svg)`,
+                          position: "relative", top: "4px", left: "4px"
+                        }}></div>
+                      </div>
+                    :
+                      null
+                  }
+                  <div style={{
+                    width: "24px", height: "24px", display: "inline-block",
+                    display: "flex", flexShrink: 0, alignSelf: "center"
+                  }}>
+                    <Icon><ExpandMore /></Icon>
+                  </div>
+                </div>
+                :
+                "Loading..."
+              }
+            </Button>
+          </Toolbar>
+
+          <Hidden smDown>
+            <Tabs value={this.props.selectedTab} onChange={(event, value)=>this.props.handleTabChange(value)} centered>
+              <Tab value="ranking" label={i18n.t("Ranking")} />
+              <Tab value="players" label={i18n.t("players")} />
+              <Tab value="tournaments" label={i18n.t("Tournaments")} />
+              <Tab value="statistics" label={i18n.t("Statistics")} />
+              <Tab value="info" label={i18n.t("Info")} />
+            </Tabs>
+          </Hidden>
+
+          <Dialog open={this.state.modalOpened} onClose={()=>{this.setState({modalOpened: false})}}>
+            <DialogTitle id="simple-dialog-title">{i18n.t("select-league")}</DialogTitle>
+            <DialogContent dividers>
+              <TextField autoComplete={false} fullWidth label="Search" onChange={(event)=>{this.filterLeagues(event.target.value)}} />
+              <List>
+                {this.state.searchText <= 0 ?
+                  this.renderTree(this.state.league_tree)
+                  :
+                  this.renderSearch()
+                }
+              </List>
+            </DialogContent>
+          </Dialog>
+        </AppBar>
+      </HideOnScroll>
     )
   }
 };
 
-export default LeagueSelector
+export default withStyles(useStyles)(LeagueSelector)

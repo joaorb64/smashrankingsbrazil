@@ -2,6 +2,42 @@ import React, { Component } from 'react';
 import moment from "../../node_modules/moment-timezone/moment-timezone";
 import HelpButton from './HelpButton';
 import styles from "./nextTournaments.module.css"
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import { Avatar, Box, CardHeader, Chip, Grid, LinearProgress, Link, MenuItem, Select } from '@material-ui/core';
+
+let useStyles = (props) => ({
+  root: {
+    maxWidth: 345,
+  },
+  media: {
+    height: 140,
+  },
+  barRoot: {
+    height: 10,
+    borderRadius: 5,
+  },
+  barIncomplete: {
+    borderRadius: 5,
+  },
+  barComplete: {
+    borderRadius: 5,
+    backgroundColor: "green"
+  },
+  couponChip: {
+    margin: 6
+  },
+  select: {
+    fontSize: '1.4rem',
+    marginBottom: '1rem'
+  }
+});
 
 class Matcherino extends Component {
   state = {
@@ -120,99 +156,95 @@ class Matcherino extends Component {
   }
 
   render(){
+    const { classes } = this.props;
+
     return(
-      <div class="slide-fade list-group-item" style={{
-        backgroundColor: "#f0f0f000", borderRadius: "10px", border: 0, marginBottom: "5px", width: "100%",
-        padding: "10px", paddingTop: 0, alignSelf: "center"
-      }}>
-        <div class="row" style={{marginLeft: -8, marginRight: -8}}>
-          <h2 style={{color: "white"}}>
-            Campanhas ativas no Matcherino <HelpButton content="To have your Matcherino campains listed on this page, contact @joao_shino on twitter" />
-          </h2>
-        </div>
-        <select value={this.state.selected} class="form-control form-control-lg" onChange={(e)=>this.selectCountry(e)}>
-          {Object.keys(this.state.matcherinos).map((country) => (
-            <>
-              <option value={country}>{country}</option>
-            </>
-          ))}
-        </select>
-        <div class="row">
-          {
-            this.state.tournaments[this.state.selected] != null ?
-              this.state.tournaments[this.state.selected].map((tournament)=>(
-                <div class="col-md-6 col-lg-4" style={{padding: 2}}>
-                  <a href={"https://matcherino.com/tournaments/"+tournament.id} target="_blank">
-                    <div className={styles.tournamentContainerHighlight} style={{cursor: "pointer"}}>
-                      <div className={styles.tournamentContainer} style={{backgroundColor: "#ff5e24", border: "4px solid black", cursor: "pointer"}}>
-                        <div style={{backgroundImage: "url("+tournament.meta.backgroundImg+")", height: 140, margin: "4px",
-                        backgroundSize: "cover", backgroundPosition: "center", backgroundColor: "black"}}>
-                          { tournament.coupon ?
-                            <div style={{background: "linear-gradient(180deg, rgba(255,113,40,1) 0%, rgba(221,87,37,1) 100%)",
-                            color: "white", width: "fit-content", borderBottomRightRadius: "16px", padding: "5px 10px 5px 5px"}}>
-                              Cupom: {tournament.coupon}
-                            </div>
-                            :
-                            null
-                          }
-                        </div>
-
-                        <div style={{height: 40, display: "flex", flexDirection: "column", alignItems: "center", placeContent: "center",
-                        paddingLeft: "8px", paddingRight: "8px", background: "rgb(255,113,40)",
-                        background: "linear-gradient(180deg, rgba(255,113,40,1) 0%, rgba(221,87,37,1) 100%)"}}>
-                          <div style={{color: "white", textAlign: "center", fontSize: "18px",
-                          whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden",
-                          textShadow: "2px 2px 0px #00000070", width: "100%"}}>
-                            {tournament.title}
-                          </div>
-                        </div>
-
-                        <div style={{display: "flex", color: "black", backgroundColor: "#dedede"}}>
-                          <div style={{backgroundColor: "#dedede", padding: "4px", paddingLeft: "8px",
-                          flex: "1 1 0", display: "flex", placeItems: "center"}}>
-                            <div style={{
-                              width: 32, height: 32, backgroundRepeat: "no-repeat",
-                              backgroundPosition: "center", backgroundSize: "cover",
-                              backgroundImage: `url(${tournament.creator.avatar})`,
-                              borderRadius: "100%"
-                            }}></div>
-                            <div style={{marginLeft: 8}}>{tournament.creator.displayName}</div>
-                          </div>
-                        </div>
-
-                        <div style={{display: "flex", color: "black", backgroundColor: "#dedede"}}>
-                          <div style={{backgroundColor: "#dedede", padding: "4px", paddingLeft: "8px", flex: "1 1 0"}}>
-                            Cupons utilizados: {tournament.usedCoupons}/50
-                          </div>
-                        </div>
-
-                        <div style={{display: "flex", color: "black", backgroundColor: "#dedede"}}>
-                          <div style={{backgroundColor: "#dedede", padding: "4px", paddingRight: "8px", flex: "1 1 0", alignSelf: "center"}}>
-                            <div class="progress position-relative" style={{backgroundColor: "black"}}>
-                              <div className={"progress-bar" + (tournament.balance/100/50 >= 1 ? " bg-success" : "")} role="progressbar"
-                              style={{width: Math.min(tournament.balance/100/50*100, 100)+"%"}}>
-                              </div>
-                              <div class="justify-content-center d-flex position-absolute w-100" style={{color: "white"}}>${tournament.balance/100}</div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-                </div>
-              ))
-              :
-              null
-          }
-        </div>
+      <Box>
+        <Box gutterBottom>
+          <div>
+            <h2 style={{color: "white"}}>
+              Campanhas ativas no Matcherino <HelpButton content="To have your Matcherino campains listed on this page, contact @joao_shino on twitter" />
+            </h2>
+          </div>
+          <Select className={classes.select} fullWidth value={this.state.selected} onChange={(e)=>this.selectCountry(e)}>
+            {Object.keys(this.state.matcherinos).map((country) => (
+              <MenuItem value={country}>{country}</MenuItem>
+            ))}
+          </Select>
+        </Box>
+        <Box>
+          <Grid container justify="flex-start" spacing={2} width="100%">
+            {
+              this.state.tournaments[this.state.selected] != null ?
+                this.state.tournaments[this.state.selected].map((tournament)=>(
+                  <Grid item lg={4} md={6} sm={6} xs={12}>
+                    <Link underline="none" href={"https://matcherino.com/tournaments/"+tournament.id} target="_blank">
+                      <Card fullWidth className={classes.root}>
+                        <CardActionArea>
+                          <CardHeader
+                            avatar={<Avatar src={tournament.creator.avatar} />}
+                            title={tournament.creator.displayName}
+                          />
+                          <CardMedia
+                            className={classes.media}
+                            image={tournament.meta.backgroundImg}
+                            title={tournament.title}>
+                            {tournament.coupon ?
+                              <Link underline="none" href="#">
+                                <Chip
+                                  className={classes.couponChip}
+                                  label={"Coupon: "+tournament.coupon}
+                                  color="primary"
+                                  clickable
+                                  onClick={(event)=>{}}
+                                />
+                              </Link>
+                              :
+                              null
+                            }
+                          </CardMedia>
+                          <CardContent>
+                            <Typography noWrap gutterBottom variant="h6" component="h2">
+                              {tournament.title}
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary" component="p">
+                              {tournament.name}
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary">
+                              Utilized coupons: {tournament.usedCoupons}/50
+                            </Typography>
+                            <Box display="flex" alignItems="center">
+                              <Box width="100%" mr={1}>
+                                <LinearProgress variant="determinate"
+                                classes={{
+                                  root: classes.barRoot,
+                                  barColorPrimary: tournament.balance/100/50 >= 1 ? classes.barComplete : classes.barIncomplete
+                                }}
+                                value={Math.min(tournament.balance/100/50*100, 100)} />
+                              </Box>
+                              <Box minWidth={35}>
+                                <Typography variant="body2" color="textSecondary">{`${"$"+Math.round(tournament.balance/100)}`}</Typography>
+                              </Box>
+                            </Box>
+                          </CardContent>
+                        </CardActionArea>
+                      </Card>
+                    </Link>
+                  </Grid>
+                ))
+                :
+                null
+            }
+          </Grid>
+        </Box>
         {this.state.loading ?
           <div class="loader"></div>
           :
           null
         }
-      </div>
+      </Box>
     )
   }
 };
 
-export default Matcherino
+export default withStyles(useStyles)(Matcherino)
