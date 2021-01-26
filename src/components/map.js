@@ -7,10 +7,12 @@ import LeafletAjax, { resolve } from '../../node_modules/leaflet-ajax/dist/leafl
 
 import styles from './map.module.css'
 import { withRouter } from 'react-router-dom'
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 
 import CHARACTERS from '../globals'
 import { parse } from '@fortawesome/fontawesome-svg-core';
-import { Box } from '@material-ui/core';
+import { Box, withTheme, withStyles, ButtonGroup, Button, Select, MenuItem } from '@material-ui/core';
 
 Math.getDistance = function( x1, y1, x2, y2 ) {
 	var xs = x2 - x1, ys = y2 - y1;		
@@ -75,13 +77,16 @@ class Mapa extends Component {
   state = {
     leagues: null,
     allplayers : null,
-    loading: false
+    loading: false,
+    selection: 0
   }
 
   mymap = null;
   estados = null;
   markers = [];
   circles = [];
+
+  topbarSize = 0;
 
   componentDidUpdate(nextProps) {
     if(this.props !== nextProps){
@@ -251,17 +256,27 @@ class Mapa extends Component {
     return name.toLowerCase().replace(/ /g, "");
   }
 
-  componentDidMount() {
-    if(!this.props.leagues) return;
-    if(!this.props.allplayers) return;
+  componentDidMount(){
+    this.firstUpdate();
+  }
 
-    this.state.leagues = this.props.leagues;
-    this.state.allplayers = this.props.allplayers;
+  componentDidUpdate(prevProps) {
+    this.firstUpdate();
+  }
 
-    this.setState(this.state);
-
-    this.setupMap();
-    this.updateData();
+  firstUpdate(){
+    if(!this.state.leagues){
+      if(!this.props.leagues) return;
+      if(!this.props.allplayers) return;
+  
+      this.state.leagues = this.props.leagues;
+      this.state.allplayers = this.props.allplayers;
+  
+      this.setState(this.state);
+  
+      this.setupMap();
+      this.updateData();
+    }
   }
 
   setupMap(){
@@ -291,6 +306,16 @@ class Mapa extends Component {
     this.mymap = L.map('mapid', mapOptions);
     baseMap.addTo(this.mymap);
 
+    this.topbarSize = 0;
+    
+    this.listener = window.addEventListener("resize", ()=>{
+      let topbar = document.getElementById("topbar");
+      this.topbarSize = 0;
+      if(topbar){
+        this.topbarSize = topbar.clientHeight;
+      }
+    })
+
     this.mymap.setZoom(2);
     this.mymap.panTo(new L.LatLng(0,0))
   }
@@ -302,22 +327,26 @@ class Mapa extends Component {
   }
 
   render (){
+    let { theme } = this.props;
+
     return(
       <Box>
-        <Box id="mapid" style={{height: "calc(80vh - 32px)"}} xs>
-          <div class="btn-group btn-group-toggle" style={{zIndex: 9999, position: "absolute", right: 10, top: 10}} data-toggle="buttons">
-            <label onClick={(e)=>{e.preventDefault(); this.updateData()}} class="btn btn-primary active">
-              <input type="radio" name="options" id="option1" autocomplete="off" checked />
+        <Box id="mapid" style={{height: "calc(100vh - "+this.topbarSize+"px)", margin: "-8px"}} xs>
+          <Select
+            style={{zIndex: 999, position: "absolute", right: 10, top: 10}}
+            value={this.state.selection}
+            onChange={(e)=>{this.setState({selection: e.target.value})}}
+          >
+            <MenuItem value={0} onClick={(e)=>{this.updateData()}}>
               Offline
-            </label>
-            <label onClick={(e)=>{e.preventDefault(); this.updateData(true)}} class="btn btn-primary">
-              <input type="radio" name="options" id="option2" autocomplete="off" />
+            </MenuItem>
+            <MenuItem value={1} onClick={(e)=>{this.updateData(true)}}>
               Online
-            </label>
-          </div>
+            </MenuItem>
+          </Select>
           {this.state.loading ?
             <div style={{
-              zIndex: 9999, position: "absolute", left: 0, right: 0, top:0, bottom: 0,
+              zIndex: 999, position: "absolute", left: 0, right: 0, top:0, bottom: 0,
               backgroundColor: "#00000088", display: "flex", alignItems: "center"
             }}>
               <div class="loader"></div>
@@ -331,4 +360,4 @@ class Mapa extends Component {
   }
 };
 
-export default withRouter(Mapa)
+export default withRouter(withStyles(null, { withTheme: true })(Mapa))

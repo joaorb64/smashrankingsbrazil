@@ -9,9 +9,17 @@ import i18n from '../locales/i18n';
 import { browserHistory } from 'react-router';
 import { withRouter } from 'react-router-dom'
 import numeral from 'numeral';
-import { Dialog, DialogTitle, DialogContent, IconButton } from '@material-ui/core';
+import { Dialog, DialogTitle, DialogContent, IconButton, withStyles,
+  Box, Typography, Grid } from '@material-ui/core';
 import { CloseIcon } from '@material-ui/icons/Close';
 import { ArrowBack } from '@material-ui/icons/ArrowBack'
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
 
 class PlayerModal extends Component {
   state = {
@@ -456,21 +464,24 @@ class PlayerModal extends Component {
   }
 
   render (){
+    const { theme } = this.props;
+
     return(
       <Dialog
         fullWidth={true}
         maxWidth={"md"}
         keepMounted={true}
         open={this.state.open}
-        onClose={()=>{this.setState({open: false}); this.props.closeModal()}} style={{overflow: "scroll"}}
+        scroll="body"
+        onClose={()=>{this.setState({open: false}); this.props.closeModal()}}
       >
-        <DialogTitle>a</DialogTitle>
-        <DialogContent>
+        <DialogTitle></DialogTitle>
+        <DialogContent style={{padding: 0}}>
           {this.state.playerData ?
-              <div>
-                <div style={{
-                  minHeight: "128px", background: "black", display: "flex", alignItems: "center", position: "relative",overflow: "hidden",
-                  borderBottom: "1px solid #3d5466", paddingTop: 10, paddingBottom: 10
+              <Box>
+                <Box style={{
+                  minHeight: "128px", display: "flex", alignItems: "center", position: "relative",overflow: "hidden",
+                  paddingTop: 10, paddingBottom: 10
                 }}>
                   <div style={{backgroundImage: `url(${process.env.PUBLIC_URL}/images/bg_diagonal.webp)`, overflow: "hidden",
                   position: "absolute", width: "100%", height: "100%", backgroundSize: "6px 6px"}}></div>
@@ -589,7 +600,8 @@ class PlayerModal extends Component {
                   <div className={styles.characterMain} style={{
                     marginRight: "12px", marginTop: "-10px", marginBottom: "-10px",
                     backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_1_${this.getCharCodename(this.state.playerData, 0)}.png)`,
-                    right: 0, flexGrow: 0, flexShrink: 0, height: "auto", alignSelf: "normal"
+                    right: 0, flexGrow: 0, flexShrink: 0, height: "auto", alignSelf: "normal",
+                    backgroundColor: theme.palette.background.default
                   }}>
                   </div>
                   <div style={{
@@ -604,120 +616,153 @@ class PlayerModal extends Component {
                         }}></div>
                       ))}
                   </div>
-                </div>
+                </Box>
 
                 {this.state.achievements && this.state.achievements.length > 0 ?
-                  <div class="row" style={{padding: "10px", margin: 0, backgroundColor: "black", borderBottom: "1px solid #3d5466", display: "flex", justifyContent: "center"}}>
-                    {this.state.achievements.map((achievement, i)=>(
-                      <a key={this.state.playerData.name+i} style={{width: 72, textAlign: "center", display: "flex",
-                      flexDirection: "column", alignItems: "center", placeContent: "center"}}
-                      data-toggle="tooltip" data-placement="top" title={achievement.description}>
-                        <div style={{
-                          width: 42, height: 42, backgroundSize: "cover", backgroundRepeat: "none",
-                          marginLeft: 6, marginRight: 6,
-                          backgroundImage: `url(${process.env.PUBLIC_URL}/icons/achievements/${achievement.icon})`,
-                          display: "flex", alignItems: "center", justifyContent: "center"
-                        }}>
-                          {achievement.icon_middle ?
-                            <div style={{
-                              width: 24, height: 24, backgroundSize: "contain",
-                              backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_2_${achievement.icon_middle}.png)`,
-                              filter: "grayscale(100%) brightness(80%) sepia(100%) hue-rotate(5deg) saturate(500%) contrast(.9)"
-                            }}></div>
-                            :
-                            null
-                          }
-                        </div>
-                        <small style={{textAlign: "center"}}>{achievement.name}</small>
-                      </a>
-                    ))}
-                  </div>
+                  <Box>
+                    <Typography style={{padding: 12}} variant="h6" component="h3">
+                      Achievements
+                    </Typography>
+                    <Box
+                      style={{
+                        padding: "12px", margin: 0, display: "flex",
+                        justifyContent: "center", backgroundColor: theme.palette.background.default
+                      }}
+                    >
+                      {this.state.achievements.map((achievement, i)=>(
+                        <a key={this.state.playerData.name+i} style={{width: 72, textAlign: "center", display: "flex",
+                        flexDirection: "column", alignItems: "center", placeContent: "center"}}
+                        data-toggle="tooltip" data-placement="top" title={achievement.description}>
+                          <div style={{
+                            width: 42, height: 42, backgroundSize: "cover", backgroundRepeat: "none",
+                            marginLeft: 6, marginRight: 6,
+                            backgroundImage: `url(${process.env.PUBLIC_URL}/icons/achievements/${achievement.icon})`,
+                            display: "flex", alignItems: "center", justifyContent: "center"
+                          }}>
+                            {achievement.icon_middle ?
+                              <div style={{
+                                width: 24, height: 24, backgroundSize: "contain",
+                                backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_2_${achievement.icon_middle}.png)`,
+                                filter: "grayscale(100%) brightness(80%) sepia(100%) hue-rotate(5deg) saturate(500%) contrast(.9)"
+                              }}></div>
+                              :
+                              null
+                            }
+                          </div>
+                          <small style={{textAlign: "center"}}>{achievement.name}</small>
+                        </a>
+                      ))}
+                    </Box>
+                  </Box>
                   :
                   null
                 }
               
-                {this.state.playerData.rank ?
-                  <div class="row" style={{padding: "10px", margin: 0, backgroundColor: "black", borderBottom: "1px solid #3d5466"}}>
-                    {Object.entries(this.state.playerData.rank).sort((a, b)=>{return a[1].rank-b[1].rank}).map((rank, i)=>(
-                      <div class="col-lg-4 col-md-6" style={{padding: "2px"}} id={i}>
-                        {this.props.leagues ?
-                          <Link 
-                            to={`/leagues/smash/${rank[0]}`}
-                            onClick={()=>this.closeModal()}
-                            style={{display: "flex"}}>
-                              <div style={{width: "42px", textAlign: "center", fontSize: "1.5rem",
-                              backgroundColor: "lightgray", display: "flex", flexShrink: 0, color: "black"}}>
-                                <div style={{alignSelf: "center", width: "100%"}}>
-                                  {rank[1].rank}
+                {this.state.playerData.rank && Object.keys(this.state.playerData.rank).length > 0 ?
+                  <Box>
+                    <Typography style={{padding: 12}} variant="h6" component="h3">
+                      Leagues
+                    </Typography>
+                    <Grid container style={{padding: 12, backgroundColor: theme.palette.background.default}}>
+                      {Object.entries(this.state.playerData.rank).sort((a, b)=>{return a[1].rank-b[1].rank}).map((rank, i)=>(
+                        <Grid item xs lg={4} md={6} style={{padding: "2px"}} id={i}>
+                          {this.props.leagues ?
+                            <Link 
+                              to={`/leagues/smash/${rank[0]}`}
+                              onClick={()=>this.closeModal()}
+                              style={{display: "flex"}}>
+                                <div style={{width: "42px", textAlign: "center", fontSize: "1.5rem",
+                                backgroundColor: "lightgray", display: "flex", flexShrink: 0, color: "black"}}>
+                                  <div style={{alignSelf: "center", width: "100%"}}>
+                                    {rank[1].rank}
+                                  </div>
                                 </div>
-                              </div>
-                              <div style={{
-                                width: "48px", height: "48px", display: "inline-block", backgroundSize: "cover", backgroundPosition: "center",
-                                flexShrink: 0,
-                                backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/league_icon/${rank[0]}.png)`}}></div>
-                              <div style={{display: "flex", flexDirection: "column", overflow: "hidden", width: "100%", backgroundColor: "lightgray"}}>
-                                <div style={{paddingLeft: "5px", textOverflow: "ellipsis", fontSize: "0.8rem", 
-                                whiteSpace: "nowrap", overflow: "hidden", backgroundColor: "gray", color: "white"}}>
-                                  {this.props.leagues.find(element => element.id == rank[0]).name}
+                                <div style={{
+                                  width: "48px", height: "48px", display: "inline-block", backgroundSize: "cover", backgroundPosition: "center",
+                                  flexShrink: 0,
+                                  backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/league_icon/${rank[0]}.png)`}}></div>
+                                <div style={{display: "flex", flexDirection: "column", overflow: "hidden", width: "100%", backgroundColor: "lightgray"}}>
+                                  <div style={{paddingLeft: "5px", textOverflow: "ellipsis", fontSize: "0.8rem", 
+                                  whiteSpace: "nowrap", overflow: "hidden", backgroundColor: "gray", color: "white"}}>
+                                    {this.props.leagues.find(element => element.id == rank[0]).name}
+                                  </div>
+                                  <div style={{paddingLeft: "5px", color: "black", flexGrow: 1, fontSize: "1.2rem"}}>
+                                    {rank[1].score} pts.
+                                  </div>
                                 </div>
-                                <div style={{paddingLeft: "5px", color: "black", flexGrow: 1, fontSize: "1.2rem"}}>
-                                  {rank[1].score} pts.
-                                </div>
-                              </div>
-                          </Link>
-                        :
-                          <div>{Object.keys(this.state.playerData.rank)[i]}</div>
-                        }
-                      </div>
-                    ))}
-                  </div>
+                            </Link>
+                          :
+                            <div>{Object.keys(this.state.playerData.rank)[i]}</div>
+                          }
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </Box>
                   :
-                  <div style={{padding: "10px"}}>Player not found in any league's ranking.</div>
+                  null
                 }
 
                 {this.state.stats && this.state.stats.length > 0 ?
-                  <div class="row" style={{padding: "10px", margin: 0, backgroundColor: "black", borderBottom: "1px solid #3d5466"}}>
-                    {this.state.stats.map(stat => (
-                      <div class="col-12" style={{
-                        display: "flex", backgroundColor: "white", borderRadius: "20px",
-                        padding: 0, overflow: "hidden", marginTop: "3px", marginBottom: "3px",
-                        height: "40px", whiteSpace: "nowrap"
-                      }}>
-                        <div style={{
-                          flexGrow: 1, padding: "8px 16px", color: "white", textOverflow: "ellipsis",
-                          backgroundColor: "gray", flexShrink: 1, overflow: "hidden", display: "flex"
+                  <Box>
+                    <Typography style={{padding: 12}} variant="h6" component="h3">
+                      Stats
+                    </Typography>
+                    <Box
+                      style={{
+                        padding: "12px", margin: 0, justifyContent: "center",
+                        backgroundColor: theme.palette.background.default
+                      }}
+                    >
+                      {this.state.stats.map(stat => (
+                        <Box style={{
+                          display: "flex", backgroundColor: "white", borderRadius: "20px",
+                          padding: 0, overflow: "hidden", marginTop: "3px", marginBottom: "3px",
+                          height: "40px", whiteSpace: "nowrap"
                         }}>
-                          <div class={styles["stats-text"]} style={{overflow: "hidden", textOverflow: "ellipsis", alignSelf: "center"}}>
-                            {stat.text}
+                          <div style={{
+                            flexGrow: 1, padding: "8px 16px", color: "white", textOverflow: "ellipsis",
+                            backgroundColor: "gray", flexShrink: 1, overflow: "hidden", display: "flex"
+                          }}>
+                            <div class={styles["stats-text"]} style={{overflow: "hidden", textOverflow: "ellipsis", alignSelf: "center"}}>
+                              {stat.text}
+                            </div>
                           </div>
-                        </div>
-                        <div style={{
-                          width: "16px", backgroundColor: "gray",
-                          clipPath: "polygon(0 0, 100% 0, 0% 100%, 0% 100%)",
-                          flexShrink: 0
-                        }}></div>
-                        <div class={styles["stats-text"]} style={{
-                          padding: "8px 16px", backgroundColor: "white",
-                          color: "black", textAlign: "right", width: "40%",
-                          overflow: "hidden", textOverflow: "ellipsis", display: "flex",
-                          justifyContent: "flex-end"
-                        }}>
-                          <div class={styles["stats-text"]} style={{overflow: "hidden", textOverflow: "ellipsis", alignSelf: "center"}}>
-                            {stat.value}
+                          <div style={{
+                            width: "16px", backgroundColor: "gray",
+                            clipPath: "polygon(0 0, 100% 0, 0% 100%, 0% 100%)",
+                            flexShrink: 0,
+                            marginLeft: -1, marginTop: -1
+                          }}></div>
+                          <div class={styles["stats-text"]} style={{
+                            padding: "8px 16px", backgroundColor: "white",
+                            color: "black", textAlign: "right", width: "40%",
+                            overflow: "hidden", textOverflow: "ellipsis", display: "flex",
+                            justifyContent: "flex-end"
+                          }}>
+                            <div class={styles["stats-text"]} style={{overflow: "hidden", textOverflow: "ellipsis", alignSelf: "center"}}>
+                              {stat.value}
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                        </Box>
+                      ))}
+                    </Box>
+                  </Box>
                   :
                   null
                 }
 
                 {this.state.playerData.character_usage_percent &&
                 this.state.playerData.character_usage_percent.length > 0 ?
-                  <row style={{display: "block", padding: "12px"}}>
-                    <h5>{i18n.t("char-usage-latest-30-sets")}</h5>
-                    <div class="row" style={{padding: "10px", margin: 0, backgroundColor: "black", borderBottom: "1px solid #3d5466", justifyContent: "center"}}>
+                  <Box>
+                    <Typography style={{padding: 12}} variant="h6" component="h3">
+                      {i18n.t("char-usage-latest-30-sets")}
+                    </Typography>
+                    <Box
+                      style={{
+                        padding: "12px", margin: 0, display: "flex", overflowX: "scroll",
+                        backgroundColor: theme.palette.background.default
+                      }}
+                    >
                       {this.state.playerData.character_usage_percent.map((character, i)=>(
                         <a key={this.state.playerData.name+i} style={{textAlign: "center", display: "flex",
                         flexDirection: "column", alignItems: "center", placeContent: "center"}}
@@ -730,61 +775,65 @@ class PlayerModal extends Component {
                           <small>{(100*character[1]).toFixed(2)}%</small>
                         </a>
                       ))}
-                    </div>
-                  </row>
+                    </Box>
+                  </Box>
                   :
                   null
                 }
 
                 {this.state.matches ?
-                  <row style={{display: "block", padding: "12px"}}>
-                    <h5>{"Sets played"}</h5>
-                    <table class="table table-striped table-sm" style={{color: "white"}}>
-                      <thead>
-                        <tr>
-                          <th></th>
-                          <th></th>
-                          <th scope="col">Opponent</th>
-                          <th scope="col">Tournament</th>
-                          <th scope="col">{i18n.t("Date")}</th>
-                          <th scope="col" style={{textAlign: "center"}}>Score</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {
-                          this.state.matches.map((match, i)=>(
-                            <tr id={i>=5? "collapse2" : ""} class={i>=5? "collapse" : ""}>
-                              <td>
-                                {match.won ?
-                                  "W" : "L"
-                                }
-                              </td>
-                              <td>
-                                {match.state == "wifi" ?
-                                  <span><FontAwesomeIcon icon={faWifi} /></span>
-                                  :
-                                  null
-                                }
-                              </td>
-                              <td>{match.opponent.org ? match.opponent.org+" " : ""}{match.opponent.name}</td>
-                              <td><a target="_blank" href={`https://braacket.com/tournament/${match.tournamentId}`}>{match.tournamentName}</a></td>
-                              <td>{moment.unix(match.tournamentTime).add(1, "day").format("DD/MM/YY")}</td>
-                              <td style={{textAlign: "center"}}>{match.scoreMe} - {match.scoreOther}</td>
-                            </tr>
-                          ))
-                        }
-                        <tr data-toggle="collapse" href="#collapse2" style={{
-                          borderBottom: "1px white solid", textAlign: "center", cursor: "pointer"
-                        }}>
-                        </tr>
-                        <tr data-toggle="collapse" href="#collapse2" style={{
-                          borderBottom: "1px white solid", textAlign: "center", cursor: "pointer"
-                        }}>
-                          <td colSpan="99">{i18n.t("View-all")} ({this.state.matches.length})</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </row>
+                  <Box>
+                    <Typography style={{padding: 12}} variant="h6" component="h3">
+                      {"Sets played"}
+                    </Typography>
+                    <TableContainer>
+                      <Table>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell scope="col">Opponent</TableCell>
+                            <TableCell scope="col">Tournament</TableCell>
+                            <TableCell scope="col">{i18n.t("Date")}</TableCell>
+                            <TableCell scope="col" style={{textAlign: "center"}}>Score</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {
+                            this.state.matches.map((match, i)=>(
+                              <tr id={i>=5? "collapse2" : ""} class={i>=5? "collapse" : ""}>
+                                <td>
+                                  {match.won ?
+                                    "W" : "L"
+                                  }
+                                </td>
+                                <td>
+                                  {match.state == "wifi" ?
+                                    <span><FontAwesomeIcon icon={faWifi} /></span>
+                                    :
+                                    null
+                                  }
+                                </td>
+                                <td>{match.opponent.org ? match.opponent.org+" " : ""}{match.opponent.name}</td>
+                                <td><a target="_blank" href={`https://braacket.com/tournament/${match.tournamentId}`}>{match.tournamentName}</a></td>
+                                <td>{moment.unix(match.tournamentTime).add(1, "day").format("DD/MM/YY")}</td>
+                                <td style={{textAlign: "center"}}>{match.scoreMe} - {match.scoreOther}</td>
+                              </tr>
+                            ))
+                          }
+                          <tr data-toggle="collapse" href="#collapse2" style={{
+                            textAlign: "center", cursor: "pointer"
+                          }}>
+                          </tr>
+                          <tr data-toggle="collapse" href="#collapse2" style={{
+                            textAlign: "center", cursor: "pointer"
+                          }}>
+                            <td colSpan="99">{i18n.t("View-all")} ({this.state.matches.length})</td>
+                          </tr>
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </Box>
                   :
                   null
                 }
@@ -837,7 +886,7 @@ class PlayerModal extends Component {
                           ))
                         }
                         <tr data-toggle="collapse" href="#collapse1" style={{
-                          borderBottom: "1px white solid", textAlign: "center", cursor: "pointer"
+                          textAlign: "center", cursor: "pointer"
                         }}>
                           <td colSpan="99">{i18n.t("View-all")} ({this.state.tournaments.length})</td>
                         </tr>
@@ -883,7 +932,7 @@ class PlayerModal extends Component {
                   :
                   null
                 }
-              </div>
+              </Box>
             :
             <div class="loader"></div>
           }
@@ -893,4 +942,4 @@ class PlayerModal extends Component {
   }
 };
 
-export default PlayerModal
+export default withStyles(null, {withTheme: true})(PlayerModal)

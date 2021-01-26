@@ -177,59 +177,59 @@ class Matcherino extends Component {
             {
               this.state.tournaments[this.state.selected] != null ?
                 this.state.tournaments[this.state.selected].map((tournament)=>(
-                  <Grid item lg={4} md={6} sm={6} xs={12}>
-                    <Link underline="none" href={"https://matcherino.com/tournaments/"+tournament.id} target="_blank">
-                      <Card fullWidth className={classes.root}>
-                        <CardActionArea>
-                          <CardHeader
-                            avatar={<Avatar src={tournament.creator.avatar} />}
-                            title={tournament.creator.displayName}
-                          />
-                          <CardMedia
-                            className={classes.media}
-                            image={tournament.meta.backgroundImg}
-                            title={tournament.title}>
-                            {tournament.coupon ?
-                              <Link underline="none" href="#">
-                                <Chip
-                                  className={classes.couponChip}
-                                  label={"Coupon: "+tournament.coupon}
-                                  color="primary"
-                                  clickable
-                                  onClick={(event)=>{}}
-                                />
-                              </Link>
-                              :
-                              null
-                            }
-                          </CardMedia>
-                          <CardContent>
-                            <Typography noWrap gutterBottom variant="h6" component="h2">
-                              {tournament.title}
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary" component="p">
-                              {tournament.name}
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary">
-                              Utilized coupons: {tournament.usedCoupons}/50
-                            </Typography>
-                            <Box display="flex" alignItems="center">
-                              <Box width="100%" mr={1}>
-                                <LinearProgress variant="determinate"
-                                classes={{
-                                  root: classes.barRoot,
-                                  barColorPrimary: tournament.balance/100/50 >= 1 ? classes.barComplete : classes.barIncomplete
-                                }}
-                                value={Math.min(tournament.balance/100/50*100, 100)} />
-                              </Box>
-                              <Box minWidth={35}>
-                                <Typography variant="body2" color="textSecondary">{`${"$"+Math.round(tournament.balance/100)}`}</Typography>
-                              </Box>
+                  <Grid item component={Link} lg={4} md={6} sm={6} xs={12}
+                  underline="none" href={"https://matcherino.com/tournaments/"+tournament.id} target="_blank"
+                  style={{display: "flex", justifyContent: "center"}}>
+                    <Card fullWidth className={classes.root} style={{width: "100%"}}>
+                      <CardActionArea>
+                        <CardHeader
+                          avatar={<Avatar src={tournament.creator.avatar} />}
+                          title={tournament.creator.displayName}
+                        />
+                        <CardMedia
+                          className={classes.media}
+                          image={tournament.meta.backgroundImg}
+                          title={tournament.title}>
+                          {tournament.coupon ?
+                            <Link underline="none" href="#">
+                              <Chip
+                                className={classes.couponChip}
+                                label={"Coupon: "+tournament.coupon}
+                                color="primary"
+                                clickable
+                                onClick={(event)=>{}}
+                              />
+                            </Link>
+                            :
+                            null
+                          }
+                        </CardMedia>
+                        <CardContent>
+                          <Typography noWrap gutterBottom variant="h6" component="h2">
+                            {tournament.title}
+                          </Typography>
+                          <Typography variant="body2" color="textSecondary" component="p">
+                            {tournament.name}
+                          </Typography>
+                          <Typography variant="body2" color="textSecondary">
+                            Utilized coupons: {tournament.usedCoupons}/50
+                          </Typography>
+                          <Box display="flex" alignItems="center">
+                            <Box width="100%" mr={1}>
+                              <LinearProgress variant="determinate"
+                              classes={{
+                                root: classes.barRoot,
+                                barColorPrimary: tournament.balance/100.0/50.0 >= 1.0 ? classes.barComplete : classes.barIncomplete
+                              }}
+                              value={Math.min(tournament.balance/100.0/50.0*100.0, 100)} />
                             </Box>
-                          </CardContent>
-                        </CardActionArea>
-                      </Card>
-                    </Link>
+                            <Box minWidth={35}>
+                              <Typography variant="body2" color="textSecondary">{`${"$"+(tournament.balance/100.0).toFixed(2)}`}</Typography>
+                            </Box>
+                          </Box>
+                        </CardContent>
+                      </CardActionArea>
+                    </Card>
                   </Grid>
                 ))
                 :

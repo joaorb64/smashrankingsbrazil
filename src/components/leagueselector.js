@@ -6,16 +6,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons';
 import { Box, Button, Dialog, DialogContent, DialogTitle, List, Modal, Collapse,
 ListItem, ListItemIcon, ListItemText, TextField, Typography, Icon, AppBar,
-Toolbar, withStyles, Hidden, Tabs, Tab } from '@material-ui/core';
+Toolbar, withStyles, Hidden, Tabs, Tab, Divider } from '@material-ui/core';
 import { StarBorder, ExpandLess, ExpandMore, Public, Wifi } from '@material-ui/icons'
 import HideOnScroll from './HideOnScroll';
 
 const useStyles = (props) => ({
   leagueSelectorTopbar: {
+    marginBottom: props.spacing(1),
     [props.breakpoints.down("sm")]: {
       top: 48,
       zIndex: 1
     }
+  },
+  topTabs: {
+    minWidth: 130
   }
 })
 
@@ -93,7 +97,7 @@ class LeagueSelector extends Component {
   }
 
   closeModal(){
-    window.jQuery("#leagueSelectModal").modal("toggle");
+    this.setState({modalOpened: false});
   }
 
   renderSearch(){
@@ -105,34 +109,13 @@ class LeagueSelector extends Component {
           (a.country != null && a.country.toLowerCase().includes(this.state.searchText.toLowerCase()))
         )
       }).map((contact)=>(
-        <ListItem button onClick={()=>{}}>
-          <ListItemIcon>
-            <div style={{
-              width: "32px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
-              backgroundPosition: "center", verticalAlign: "inherit", backgroundColor: "white", borderRadius: "6px", marginRight: "10px",
-              backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/league_icon/${contact.id}.png)`,
-              display: "flex", flexShrink: 0
-            }}></div>
-          </ListItemIcon>
-          <ListItemText primary={contact.name} />
-          <Typography>{contact.state}</Typography>
-          {contact.wifi?
-            <Wifi />
-            :
-            null}
-        </ListItem>
-      ))
-    )
-  }
-
-  renderTree(head, recursion=0){
-    //console.log(head)
-    if(head.leagues == null || head.subleagues == null){
-      return;
-    }
-    return(
-      <>
-        {head.leagues.map((contact, i)=>(
+        <Link
+          to={`/leagues/smash/${contact.id}`}
+          href={`/leagues/smash/${contact.id}`}
+          onClick={()=>{this.props.selectLeague(this.props.leagues.indexOf(contact)); this.closeModal()}}
+          key={"league_"+contact.name}
+          style={{color: "white", textDecoration: "none"}}
+        >
           <ListItem button onClick={()=>{}}>
             <ListItemIcon>
               <div style={{
@@ -149,49 +132,45 @@ class LeagueSelector extends Component {
               :
               null}
           </ListItem>
-          // <Link class={"dropdown-item " + styles.teste} to={`/leagues/smash/${contact.id}`} href={`/leagues/smash/${contact.id}`} onClick={()=>{this.props.selectLeague(this.props.leagues.indexOf(contact)); this.closeModal()}} style={{
-          //   display: "flex", lineHeight: "32px", paddingLeft: (24*(Math.max(recursion-1, 0))+32)+"px"
-          // }} key={"league_"+contact.name}>
-          //   <div style={{
-          //     width: "32px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
-          //     backgroundPosition: "center", verticalAlign: "inherit", backgroundColor: "white", borderRadius: "6px", marginRight: "10px",
-          //     backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/league_icon/${contact.id}.png)`,
-          //     display: "flex", flexShrink: 0
-          //   }}></div>
-          //   <div style={{
-          //     flexShrink: 1, flexGrow: 1, textOverflow: "ellipsis", overflow: "hidden",
-          //     textAlign: "left"
-          //   }}>{contact.name}</div>
-          //   {contact.state?
-          //     <div style={{
-          //       width: "32px", height: "32px", display: "inline-block",
-          //       backgroundPosition: "center", verticalAlign: "inherit",
-          //       display: "flex", flexShrink: 0
-          //     }}>
-          //       {contact.state}
-          //     </div>
-          //     :
-          //     null
-          //   }
-          //   {
-          //     contact.wifi ? 
-          //       <div style={{
-          //         width: "24px", height: "24px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
-          //         backgroundPosition: "center", verticalAlign: "inherit", borderRadius: "100%",
-          //         backgroundColor: "white", marginTop: "2px", marginRight: "4px",
-          //         display: "flex", flexShrink: 0
-          //       }}>
-          //         <div style={{
-          //           width: "16px", height: "16px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
-          //           backgroundPosition: "center", verticalAlign: "inherit",
-          //           backgroundImage: `url(${process.env.PUBLIC_URL}/icons/wifi.svg)`,
-          //           position: "relative", top: "4px", left: "4px"
-          //         }}></div>
-          //       </div>
-          //     :
-          //       null
-          //   }
-          // </Link>
+          <Divider variant="inset" />
+        </Link>
+      ))
+    )
+  }
+
+  renderTree(head, recursion=0){
+    //console.log(head)
+    if(head.leagues == null || head.subleagues == null){
+      return;
+    }
+    return(
+      <>
+        {head.leagues.map((contact, i)=>(
+          <Link
+            to={`/leagues/smash/${contact.id}`}
+            href={`/leagues/smash/${contact.id}`}
+            onClick={()=>{this.props.selectLeague(this.props.leagues.indexOf(contact)); this.closeModal()}}
+            key={"league_"+contact.name}
+            style={{color: "white", textDecoration: "none"}}
+          >
+            <ListItem button onClick={()=>{}}>
+              <ListItemIcon>
+                <div style={{
+                  width: "32px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
+                  backgroundPosition: "center", verticalAlign: "inherit", backgroundColor: "white", borderRadius: "6px", marginRight: "10px",
+                  backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/league_icon/${contact.id}.png)`,
+                  display: "flex", flexShrink: 0
+                }}></div>
+              </ListItemIcon>
+              <ListItemText primary={contact.name} />
+              <Typography>{contact.state}</Typography>
+              {contact.wifi?
+                <Wifi />
+                :
+                null}
+            </ListItem>
+            <Divider variant="inset" component="li" />
+          </Link>
         ))}
         {Object.entries(head.subleagues).map((league, i) => (
           <>
@@ -211,52 +190,10 @@ class LeagueSelector extends Component {
               <ListItemText primary={league[1].name ? league[1].name : league[0]} />
               {head.subleagues[league[0]].open ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
+            <Divider variant="inset" component="li" />
             <Collapse style={{paddingLeft: "32px"}} in={head.subleagues[league[0]].open} timeout="auto" unmountOnExit>
               {this.renderTree(league[1], recursion+1)}
             </Collapse>
-            {/* <div class={"dropdown-item " + styles.teste} 
-            data-toggle={recursion == 0 ? "" : "collapse"} data-target={"#collapse_"+league[0]+"_"+recursion+"_"+i} aria-controls={recursion == 0 ? "true" : "#collapse_"+league[0]+"_"+recursion+"_"+i}
-            style={{
-              display: "flex", lineHeight: "32px", paddingLeft: (24*(Math.max(recursion-1, 0))+32)+"px"
-            }}>
-              <div class={styles["folder-icon"]}>
-                <FontAwesomeIcon icon={faCaretRight} />
-              </div>
-              {league[1].icon?
-                <div style={{
-                  width: "32px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
-                  backgroundPosition: "center", verticalAlign: "inherit", backgroundColor: "white", borderRadius: "6px", marginRight: "10px",
-                  backgroundImage: `url(${league[1].icon})`,
-                  display: "flex", flexShrink: 0
-                }}></div>
-                :
-                null
-              }
-              <div style={{
-                flexShrink: 1, flexGrow: 1, textOverflow: "ellipsis", overflow: "hidden",
-                textAlign: "left"
-              }}>
-                {league[1].name ?
-                  league[1].name
-                :
-                  league[0]
-                }
-              </div>
-              {league[1].show_count ?
-                <div style={{
-                  width: "32px", height: "32px", display: "inline-block",
-                  backgroundPosition: "center", verticalAlign: "inherit",
-                  display: "flex", flexShrink: 0, placeContent: "center"
-                }}>
-                  {Object.keys(league[1].leagues).length}
-                </div>
-                :
-                null
-              }
-            </div>
-            <div class={recursion == 0 ? "" : "collapse"} id={"collapse_"+league[0]+"_"+recursion+"_"+i}>
-              {this.renderTree(league[1], recursion+1)}
-            </div> */}
           </>
         ))}
       </>
@@ -324,18 +261,22 @@ class LeagueSelector extends Component {
             </Button>
           </Toolbar>
 
-          <Hidden smDown>
-            <Tabs value={this.props.selectedTab} onChange={(event, value)=>this.props.handleTabChange(value)} centered>
-              <Tab value="ranking" label={i18n.t("Ranking")} />
-              <Tab value="players" label={i18n.t("players")} />
-              <Tab value="tournaments" label={i18n.t("Tournaments")} />
-              <Tab value="statistics" label={i18n.t("Statistics")} />
-              <Tab value="info" label={i18n.t("Info")} />
+          <Hidden xsDown>
+            <Tabs
+              value={this.props.selectedTab}
+              onChange={(event, value)=>this.props.handleTabChange(value)}
+              centered
+            >
+              <Tab classes={{root: classes.topTabs}} value="ranking" label={i18n.t("Ranking")} />
+              <Tab classes={{root: classes.topTabs}} value="players" label={i18n.t("players")} />
+              <Tab classes={{root: classes.topTabs}} value="tournaments" label={i18n.t("Tournaments")} />
+              <Tab classes={{root: classes.topTabs}} value="statistics" label={i18n.t("Statistics")} />
+              <Tab classes={{root: classes.topTabs}} value="info" label={i18n.t("Info")} />
             </Tabs>
           </Hidden>
 
           <Dialog open={this.state.modalOpened} onClose={()=>{this.setState({modalOpened: false})}}>
-            <DialogTitle id="simple-dialog-title">{i18n.t("select-league")}</DialogTitle>
+            <DialogTitle>{i18n.t("select-league")}</DialogTitle>
             <DialogContent dividers>
               <TextField autoComplete={false} fullWidth label="Search" onChange={(event)=>{this.filterLeagues(event.target.value)}} />
               <List>

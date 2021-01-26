@@ -5,7 +5,8 @@ import LeagueSelector from './leagueselector';
 import moment from "../../node_modules/moment-timezone/moment-timezone";
 import {CHARACTERS, CHARACTER_EYE_HEIGHT_PERCENTAGE} from "../globals";
 import LazyLoad from 'react-lazyload';
-import { Grid, Paper, Box, Card, CardActionArea, Typography, BottomNavigation, BottomNavigationAction } from '@material-ui/core';
+import { Grid, Paper, Box, Card, CardActionArea, Typography, BottomNavigation,
+  BottomNavigationAction, Container } from '@material-ui/core';
 import PlayerElement from './playerElement';
 import { useTheme, withStyles, withTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from "@material-ui/styles";
@@ -23,6 +24,18 @@ let useStyles = (props) => ({
       [props.breakpoints.down("sm")]: {
           fontSize: 10
       }
+  },
+  top3Outer: {
+    height: 240,
+    [props.breakpoints.down("sm")]: {
+      height: 220
+    },
+    [props.breakpoints.up("lg")]: {
+      height: 260
+    },
+    [props.breakpoints.up("xl")]: {
+      height: 340
+    }
   }
 });
 
@@ -133,10 +146,10 @@ class PlayerRanking extends PureComponent {
     return(
       <div>
         {this.state.players && this.state.players.length > 0 ?
-          <div>
+          <Container maxWidth="lg" disableGutters>
             <Grid container>
               {this.state.players.slice(0,3).map((player, i) => (
-                <Grid item lg={4} md={4} sm={12} xs={12} style={{padding: "2px", overflow: "hidden"}}>
+                <Grid item lg={4} md={4} sm={4} xs={12} style={{padding: "2px", overflow: "hidden"}}>
                   <Card style={{
                     position: "relative", overflow: "hidden", backgroundColor: this.state.top3Colors[i]
                   }}>
@@ -146,8 +159,9 @@ class PlayerRanking extends PureComponent {
                       data-target="#playerModal"
                       key={this.state.selectedLeague+'_'+i}
                       id={"ranking_player_"+i}
+                      className={classes.top3Outer}
                       style={{
-                        position: "relative", overflow: "hidden", height: "260px", textAlign: "center"
+                        position: "relative", overflow: "hidden", textAlign: "center"
                       }}>
                       <div style={{
                         backgroundColor: this.state.top3Colors2[i], position: "absolute",
@@ -260,17 +274,9 @@ class PlayerRanking extends PureComponent {
                         <div style={{
                           backgroundImage: "url("+player.avatars.join("), url(")+")",
                           width: "80px", height: "80px", backgroundSize: "cover", backgroundPosition: "center",
-                          borderRadius: "100%", position: "absolute", right: 10, top: 10, border: "5px #f0f0f0 solid",
+                          borderRadius: "100%", position: "absolute", right: 10, top: 10, border: "2px #f0f0f0 solid",
                           backgroundColor: "gray"
                         }}>
-                          {player.twitter ? 
-                            <div style={{width: "100%", height: "100%", display: "flex", alignItems: "flex-end", justifyContent: "flex-end", margin: "5px"}}>
-                              <div style={{
-                                backgroundImage: "url(/icons/twitter.svg)", width: 32, height: 32, bottom: 0, right: 0
-                              }}></div>
-                            </div>
-                            :
-                            null}
                         </div>
                       :
                         null
@@ -293,7 +299,7 @@ class PlayerRanking extends PureComponent {
                 Dados atualizados em: {moment(this.state.updateTime).subtract(3, "hours").format("DD/MM/YY HH:mm") + " (GMT-3)"}
               </div>
             </div>
-          </div>
+          </Container>
           :
             this.state.updateTime ?
               <div class={"col-12"} style={{paddingTop: 10}}>

@@ -2,6 +2,15 @@ import React, { Component } from 'react'
 import styles from './statistics.module.css'
 import moment from "../../node_modules/moment-timezone/moment-timezone";
 import i18n from '../locales/i18n';
+import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
 
 class TournamentList extends Component {
   state = {
@@ -12,34 +21,31 @@ class TournamentList extends Component {
 
   render (){
     return(
-      <div class="slide-fade list-group-item" style={{
-        backgroundColor: "#f0f0f0", borderRadius: "10px", border: 0, marginBottom: "5px", margin: "10px",
-        padding: "30px", alignSelf: "center", textAlign: "left", fontFamily: "Roboto, sans-serif"
-      }}>
+      <div>
         {this.props.tournaments ?
-          <div>
-            <table class="table table-striped table-sm">
-              <thead>
-                <tr>
-                  <th scope="col">{i18n.t("Name")}</th>
-                  <th scope="col">{i18n.t("Date")}</th>
-                  <th scope="col">{i18n.t("Participants")}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  Object.values(this.props.tournaments).sort((a,b)=>{return b.time - a.time}).map((tournament)=>(
-                    <tr>
-                      <td><a target="_blank" href={`https://braacket.com/tournament/${tournament.id}`}>{tournament.name}</a></td>
-                      <td>{moment.unix(tournament.time).add(1, "day").format("DD/MM/YY")}</td>
-                      <td>{tournament.player_number}</td>
-                    </tr>
-                  ))
-                }
-              </tbody>
-            </table>
-          </div>
-        :
+          <Paper>
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>{i18n.t("Name")}</TableCell>
+                    <TableCell>{i18n.t("Date")}</TableCell>
+                    <TableCell align="right">{i18n.t("Participants")}</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {Object.values(this.props.tournaments).sort((a,b)=>{return b.time - a.time}).map((tournament)=>(
+                    <TableRow component="a" hover role="checkbox" style={{textDecoration: "none", color: "white"}} target="_blank" href={`https://braacket.com/tournament/${tournament.id}`}>
+                      <TableCell>{tournament.name}</TableCell>
+                      <TableCell>{moment.unix(tournament.time).add(1, "day").format("DD/MM/YY")}</TableCell>
+                      <TableCell align="right">{tournament.player_number}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
+          :
           null
         }
       </div>

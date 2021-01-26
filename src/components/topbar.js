@@ -40,20 +40,20 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex'
   },
   drawer: {
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       width: drawerWidth,
       flexShrink: 0,
     },
   },
   appBar: {
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       width: `calc(100% - ${drawerWidth}px)`,
       marginLeft: drawerWidth,
     },
   },
   menuButton: {
     marginRight: theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       display: 'none',
     },
   },
@@ -61,6 +61,7 @@ const useStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
     width: drawerWidth,
+    zIndex: 999
   },
   content: {
     flexGrow: 1,
@@ -142,8 +143,8 @@ function TopBar(props) {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <Hidden smUp>
-        <AppBar position="fixed" className={classes.appBar} elevation={0}>
+      <Hidden mdUp>
+        <AppBar id="topbar" position="fixed" className={classes.appBar} elevation={0}>
           <Toolbar>
             <IconButton
               color="inherit"
@@ -162,7 +163,7 @@ function TopBar(props) {
       </Hidden>
       <nav className={classes.drawer}>
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-        <Hidden smUp implementation="css">
+        <Hidden mdUp implementation="css">
           <SwipeableDrawer
             container={container}
             variant="temporary"
@@ -180,7 +181,7 @@ function TopBar(props) {
             {drawer}
           </SwipeableDrawer>
         </Hidden>
-        <Hidden xsDown implementation="css">
+        <Hidden smDown implementation="css">
           <Drawer
             classes={{
               paper: classes.drawerPaper,
@@ -193,7 +194,7 @@ function TopBar(props) {
         </Hidden>
       </nav>
       <main className={classes.content}>
-        <Hidden smUp>
+        <Hidden mdUp>
           <div className={classes.toolbar} />
         </Hidden>
         <Switch>

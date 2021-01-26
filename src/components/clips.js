@@ -131,35 +131,35 @@ class Clips extends Component {
             {
               this.state.clipsFiltered != null ?
                 this.state.clipsFiltered.slice(0,50).map((clip)=>(
-                  <Grid item lg={4} md={6} sm={6} xs={12}>
-                    <Link underline="none" href={clip.url} target="_blank">
-                      <Card className={classes.root}>
-                        <CardActionArea>
-                          <CardMedia
-                            className={classes.media}
-                            image={clip.thumbnail_url || ""}
-                            title={clip.title}>
-                              <Box style={{position: "relative", width: "100%", height: "100%"}}>
-                                <Chip
-                                  className={classes.couponChip}
-                                  label={clip.view_count + " views"}
-                                />
-                              </Box>
-                          </CardMedia>
-                          <CardContent>
-                            <Typography noWrap gutterBottom variant="h6" component="h2">
-                              {clip.title}
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary">
-                              {clip.broadcaster_name}
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary">
-                              Clip by {clip.creator_name}
-                            </Typography>
-                          </CardContent>
-                        </CardActionArea>
-                      </Card>
-                    </Link>
+                  <Grid item component={Link} lg={4} md={6} sm={6} xs={12}
+                  underline="none" href={clip.url} target="_blank"
+                  style={{display: "flex", justifyContent: "center"}}>
+                    <Card className={classes.root} style={{width: "100%"}}>
+                      <CardActionArea>
+                        <CardMedia
+                          className={classes.media}
+                          image={clip.thumbnail_url || ""}
+                          title={clip.title}>
+                            <Box style={{position: "relative", width: "100%", height: "100%"}}>
+                              <Chip
+                                className={classes.couponChip}
+                                label={clip.view_count + " views"}
+                              />
+                            </Box>
+                        </CardMedia>
+                        <CardContent>
+                          <Typography noWrap gutterBottom variant="h6" component="h2">
+                            {clip.title}
+                          </Typography>
+                          <Typography variant="body2" color="textSecondary">
+                            {clip.broadcaster_name}
+                          </Typography>
+                          <Typography variant="body2" color="textSecondary">
+                            Clip by {clip.creator_name}
+                          </Typography>
+                        </CardContent>
+                      </CardActionArea>
+                    </Card>
                   </Grid>
                 ))
                 :

@@ -158,70 +158,66 @@ class NextTournaments extends Component {
             this.state.tournaments != null ?
               <Grid container justify="flex-start" spacing={2} width="100%">
                 {this.state.tournaments.filter(t=>{return t.url != null}).map((tournament)=>(
-                  <Grid item lg={4} md={6} sm={6} xs={12}>
-                    <Link underline="none" href={tournament.url} target="_blank">
-                      <Card fullWidth className={classes.root}>
-                        <CardActionArea>
-                          <CardHeader noWrap classes={{content: classes.cardHeader}}
-                            avatar={<Avatar src={`https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/country_flag/${tournament.country.toLowerCase()}.png`} />}
-                            title={<Typography noWrap variant="h6" component="h2">
-                              {tournament.tournament_multievent ?
-                                tournament.tournament
-                                :
-                                tournament.name
-                              }
-                            </Typography>}
-                            subheader={
-                              tournament.tournament_multievent ?
-                                tournament.name
-                                :
-                                null
-                            }
-                          />
-                          <CardMedia
-                            className={classes.media}
-                            image={(tournament.images ? ((tournament.images.find(img => img["type"]=="banner") || tournament.images[tournament.images.length-1])?.url || "") : "")}
-                            title={tournament.title}>
-                            {tournament.coupon ?
-                              <Link underline="none" href="#">
-                                <Chip
-                                  className={classes.couponChip}
-                                  label={"Coupon: "+tournament.coupon}
-                                  color="primary"
-                                  clickable
-                                  onClick={(event)=>{}}
-                                />
-                              </Link>
+                  <Grid item component={Link} lg={4} md={6} sm={6} xs={12}
+                  underline="none" href={tournament.url} target="_blank"
+                  style={{display: "flex", justifyContent: "center"}}>
+                    <Card fullWidth className={classes.root} style={{width: "100%"}}>
+                      <CardActionArea>
+                        <CardHeader noWrap classes={{content: classes.cardHeader}}
+                          avatar={<Avatar src={`https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/country_flag/${tournament.country.toLowerCase()}.png`} />}
+                          title={<Typography noWrap variant="h6" component="h2">
+                            {tournament.tournament}
+                          </Typography>}
+                          subheader={
+                            tournament.tournament_multievent ?
+                              tournament.name
                               :
                               null
-                            }
-                          </CardMedia>
-                          <CardContent>
-                            {tournament.isOnline ?
-                              <ListItem dense disableGutters alignItems="flex-start">
-                                <ListItemIcon style={{minWidth: 32}}><FontAwesomeIcon icon={faWifi}/></ListItemIcon>
-                                <ListItemText primary="Online" />
-                              </ListItem>
-                              :
-                              <ListItem dense disableGutters alignItems="flex-start">
-                                <ListItemIcon style={{minWidth: 32}}><FontAwesomeIcon icon={faMapMarkerAlt}/></ListItemIcon>
-                                <ListItemText primary={(tournament.tournament_venueName ? tournament.tournament_venueName+" - " : "") + tournament.tournament_addrState} />
-                              </ListItem>
-                            }
-
+                          }
+                        />
+                        <CardMedia
+                          className={classes.media}
+                          image={(tournament.images ? ((tournament.images.find(img => img["type"]=="banner") || tournament.images[tournament.images.length-1])?.url || "") : "")}
+                          title={tournament.title}>
+                          {tournament.coupon ?
+                            <Link underline="none" href="#">
+                              <Chip
+                                className={classes.couponChip}
+                                label={"Coupon: "+tournament.coupon}
+                                color="primary"
+                                clickable
+                                onClick={(event)=>{}}
+                              />
+                            </Link>
+                            :
+                            null
+                          }
+                        </CardMedia>
+                        <CardContent>
+                          {tournament.isOnline ?
                             <ListItem dense disableGutters alignItems="flex-start">
-                              <ListItemIcon style={{minWidth: 32}}><FontAwesomeIcon icon={faCalendar}/></ListItemIcon>
-                              <ListItemText primary={i18n.t("weekday-"+moment(tournament.startAt * 1000).format("ddd").toLowerCase())+" "+i18n.t("date_format", {date: moment.unix(tournament.startAt).toDate()})+" "+moment(tournament.startAt * 1000).format("HH:mm")+" GMT"+moment(tournament.startAt * 1000).format("Z")} />
+                              <ListItemIcon style={{minWidth: 32}}><FontAwesomeIcon icon={faWifi}/></ListItemIcon>
+                              <ListItemText primary="Online" />
                             </ListItem>
-
+                            :
                             <ListItem dense disableGutters alignItems="flex-start">
-                              <ListItemIcon style={{minWidth: 32}}><FontAwesomeIcon icon={faEdit}/></ListItemIcon>
-                              <ListItemText primary={i18n.t("weekday-"+moment(tournament.tournament_registrationClosesAt * 1000).format("ddd").toLowerCase())+" "+i18n.t("date_format", {date: moment.unix(tournament.tournament_registrationClosesAt).toDate()})+" "+moment(tournament.tournament_registrationClosesAt * 1000).format("HH:mm")+" GMT"+moment(tournament.tournament_registrationClosesAt * 1000).format("Z")} />
+                              <ListItemIcon style={{minWidth: 32}}><FontAwesomeIcon icon={faMapMarkerAlt}/></ListItemIcon>
+                              <ListItemText primary={(tournament.tournament_venueName ? tournament.tournament_venueName+" - " : "") + tournament.tournament_addrState} />
                             </ListItem>
-                          </CardContent>
-                        </CardActionArea>
-                      </Card>
-                    </Link>
+                          }
+
+                          <ListItem dense disableGutters alignItems="flex-start">
+                            <ListItemIcon style={{minWidth: 32}}><FontAwesomeIcon icon={faCalendar}/></ListItemIcon>
+                            <ListItemText primary={i18n.t("weekday-"+moment(tournament.startAt * 1000).format("ddd").toLowerCase())+" "+i18n.t("date_format", {date: moment.unix(tournament.startAt).toDate()})+" "+moment(tournament.startAt * 1000).format("HH:mm")+" GMT"+moment(tournament.startAt * 1000).format("Z")} />
+                          </ListItem>
+
+                          <ListItem dense disableGutters alignItems="flex-start">
+                            <ListItemIcon style={{minWidth: 32}}><FontAwesomeIcon icon={faEdit}/></ListItemIcon>
+                            <ListItemText primary={i18n.t("weekday-"+moment(tournament.tournament_registrationClosesAt * 1000).format("ddd").toLowerCase())+" "+i18n.t("date_format", {date: moment.unix(tournament.tournament_registrationClosesAt).toDate()})+" "+moment(tournament.tournament_registrationClosesAt * 1000).format("HH:mm")+" GMT"+moment(tournament.tournament_registrationClosesAt * 1000).format("Z")} />
+                          </ListItem>
+                        </CardContent>
+                      </CardActionArea>
+                    </Card>
                   </Grid>
                   // <div class="col-md-6 col-xl-4" style={{padding: 2}}>
                   //   <a href={tournament.url} target="_blank">

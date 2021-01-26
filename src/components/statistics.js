@@ -10,6 +10,21 @@ import i18n from '../locales/i18n';
 
 import CHARACTERS from '../globals'
 
+import { Paper, Box, Typography, withStyles, Divider, makeStyles, Icon } from '@material-ui/core'
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
+
+let useStyles = (theme) => ({
+  root: {
+    padding: theme.spacing(3, 2),
+  },
+});
+
 class Statistics extends Component {
   state = {
     statistics: null
@@ -458,103 +473,110 @@ class Statistics extends Component {
   }
 
   render (){
+    const {classes} = this.props;
+    const {theme} = this.props;
+
     return(
-      <div class="slide-fade list-group-item" style={{
-        backgroundColor: "#f0f0f0", borderRadius: "10px", border: 0, marginBottom: "5px", margin: "10px",
-        padding: "30px", alignSelf: "center", textAlign: "left", fontFamily: "Roboto, sans-serif"
-      }}>
+      <Paper className={classes.root}>
         {this.state.statistics ?
-          <div>
+          <Box>
             {"players_per_country" in this.state.statistics ?
-              <div class="row mb-3 mt-3">
-                <div class="col">
-                  <h5>{i18n.t("players-per-country")}</h5>
-                  <div style={{width: "100%", overflowX: "scroll", backgroundColor: "#e4e4e4"}}>
-                    <div style={{width: 800, height:300}}>
-                      <canvas style={{width: 800, height: 300}} ref={this.chartCountriesRef} id="myChartCountries" />
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <Box display="grid" xs={12} mb={theme.spacing(0.5)}>
+                <Typography gutterBottom variant="h5" component="h3">
+                  {i18n.t("players-per-country")}
+                </Typography>
+                <Box style={{overflowX: "scroll", backgroundColor: "#e4e4e4"}}>
+                  <Box style={{width: 800, height:300}}>
+                    <canvas style={{width: 800, height: 300}} ref={this.chartCountriesRef} id="myChartCountries" />
+                  </Box>
+                </Box>
+              </Box>
               :
               null
             }
 
             {"players_per_state" in this.state.statistics ?
-              <div class="row mb-3 mt-3">
-                <div class="col">
-                  <h5>{i18n.t("players-per-state")}</h5>
-                  <div style={{width: "100%", overflowX: "scroll", backgroundColor: "#e4e4e4"}}>
-                    <div style={{width: 800, height:300}}>
-                      <canvas style={{width: 800, height: 300}} ref={this.chartStatesRef} id="myChartStates" />
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <Box display="grid" xs={12} mb={theme.spacing(0.5)}>
+                <Typography gutterBottom variant="h5" component="h3">
+                  {i18n.t("players-per-state")}
+                </Typography>
+                <Box style={{overflowX: "scroll", backgroundColor: "#e4e4e4"}}>
+                  <Box style={{width: 800, height:300}}>
+                    <canvas style={{width: 800, height: 300}} ref={this.chartStatesRef} id="myChartStates" />
+                  </Box>
+                </Box>
+              </Box>
               :
               null
             }
             
-            <div class="row mb-3 mt-3">
-              <div class="col">
-                <h5>{i18n.t("character-usage")}</h5>
-                <div style={{width: "100%", overflowX: "scroll", backgroundColor: "#e4e4e4"}}>
-                  <div style={{width: 2000, height:300}}>
-                    <canvas style={{width: 2000, height: 300}} ref={this.chartRef} id="myChart" />
-                  </div>
-                </div>
-              </div>
-            </div>
+            <Box display="grid" xs={12} mb={theme.spacing(0.5)}>
+              <Typography gutterBottom variant="h5" component="h3">
+                {i18n.t("character-usage")}
+              </Typography>
+              <Box style={{overflowX: "scroll", backgroundColor: "#e4e4e4"}}>
+                <Box style={{width: 2000, height:300}}>
+                  <canvas style={{width: 2000, height: 300}} ref={this.chartRef} id="myChart" />
+                </Box>
+              </Box>
+            </Box>
 
-            <div class="row mb-3 mt-3">
-              <div class="col">
-                <h5>{i18n.t("character-usage-secondary")}</h5>
-                <div style={{width: "100%", overflowX: "scroll", backgroundColor: "#e4e4e4"}}>
-                  <div style={{width: 2000, height:300}}>
-                    <canvas style={{width: 2000, height: 300}} ref={this.chartSecondaryRef} id="mySecondaryChart" />
-                  </div>
-                </div>
-              </div>
-            </div>
+            <Box display="grid" xs={12} mb={theme.spacing(0.5)}>
+              <Typography gutterBottom variant="h5" component="h3">
+                {i18n.t("character-usage-secondary")}
+              </Typography>
+              <Box style={{overflowX: "scroll", backgroundColor: "#e4e4e4"}}>
+                <Box style={{width: 2000, height:300}}>
+                  <canvas style={{width: 2000, height: 300}} ref={this.chartSecondaryRef} id="mySecondaryChart" />
+                </Box>
+              </Box>
+            </Box>
 
             {"best_player_character" in this.state.statistics && this.props.league ?
-              <div class="row mb-3 mt-3">
-                <div class="col">
-                  <h5>{i18n.t("best-player-ranked-character")}</h5>
-                  <table class="table table-striped table-sm">
-                    <thead>
-                      <tr>
-                        <th scope="col">{i18n.t("Character")}</th>
-                        <th scope="col">{i18n.t("Player")}</th>
-                        <th scope="col">{i18n.t("Placing")}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
+              <Box display="grid" xs={12} mb={theme.spacing(0.5)}>
+                <Typography gutterBottom variant="h5" component="h3">
+                  {i18n.t("best-player-ranked-character")}
+                </Typography>
+                <TableContainer>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>{i18n.t("Character")}</TableCell>
+                        <TableCell>{i18n.t("Player")}</TableCell>
+                        <TableCell>{i18n.t("Placing")}</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
                       {
                         Object.entries(this.state.statistics.best_player_character).sort((a, b) => {return a[1].rank - b[1].rank}).map((line)=>(
-                          <tr>
-                            <td><img src={`${process.env.PUBLIC_URL}/portraits/ssbu/chara_2_${CHARACTERS[line[1].mains[0]]}_00.png`}
-                              style={{width: 32, height: 32}} /> {line[0]}</td>
-                            <td>{line[1].org} {line[1].name}</td>
-                            <td>{line[1].rank}</td>
-                          </tr>
+                          <TableRow>
+                            <TableCell>
+                              <div style={{display: "flex", alignItems: "center"}}>
+                                <Box xs mr={1}><img src={`${process.env.PUBLIC_URL}/portraits/ssbu/chara_2_${CHARACTERS[line[1].mains[0]]}_00.png`}
+                                style={{width: "24px", height: "24px"}} /></Box>
+                                <Box xs>{line[0]}</Box>
+                              </div>
+                            </TableCell>
+                            <TableCell>{line[1].org} {line[1].name}</TableCell>
+                            <TableCell>{line[1].rank}</TableCell>
+                          </TableRow>
                         ))
                       }
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Box>
               :
               null
             }
-          </div>
+          </Box>
         :
           <div>Loading...</div>
         }
         <div id="pics" style={{display: "none"}}></div>
-      </div>
+      </Paper>
     )
   }
 };
 
-export default Statistics
+export default withStyles(useStyles, { withTheme: true })(Statistics)

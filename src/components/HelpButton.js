@@ -1,10 +1,12 @@
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Dialog, DialogContent, DialogTitle } from '@material-ui/core';
 import React, { Component } from 'react'
 import i18n from '../locales/i18n';
 
 class HelpButton extends Component {
   state = {
+    opened: false
   }
 
   componentDidUpdate(prevProps) {
@@ -15,7 +17,7 @@ class HelpButton extends Component {
   }
 
   openModal(){
-    window.jQuery(this.modalRef.current).appendTo("body").modal('show');
+    this.setState({opened: true})
   }
 
   componentWillUnmount(){
@@ -30,22 +32,14 @@ class HelpButton extends Component {
           <FontAwesomeIcon icon={faQuestionCircle} />
         </div>
 
-        <div class="modal fade" ref={this.modalRef} id="helpModal" tabindex="-1" role="dialog" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" style={{color: "white"}}>Help</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body" style={{padding: 20}}>{this.props.content ? this.props.content : ""}
-              </div>
-              <div class="modal-footer">
-              </div>
-            </div>
-          </div>
-        </div>
+        <Dialog open={this.state.opened} onClose={()=>{this.setState({opened: false})}}>
+          <DialogTitle>
+            Help
+          </DialogTitle>
+          <DialogContent>
+            {this.props.content ? this.props.content : ""}
+          </DialogContent>
+        </Dialog>
       </div>
     )
   }

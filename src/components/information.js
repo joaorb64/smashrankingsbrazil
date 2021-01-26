@@ -1,8 +1,17 @@
 import { faFacebook, faTwitch, faTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons'
 import { faExternalLinkSquareAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Paper } from '@material-ui/core'
 import React, { Component } from 'react'
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import styles from './statistics.module.css'
+
+let useStyles = (theme) => ({
+  root: {
+    padding: theme.spacing(3, 2),
+  },
+});
 
 class Information extends Component {
   state = {
@@ -14,43 +23,65 @@ class Information extends Component {
   }
 
   render (){
+    const { classes } = this.props;
+
     return(
-      <div class="slide-fade list-group-item" style={{
-        backgroundColor: "#f0f0f0", borderRadius: "10px", border: 0, marginBottom: "5px", margin: "10px",
-        padding: "30px", alignSelf: "center", textAlign: "left", fontFamily: "Roboto, sans-serif"
-      }}>
+      <Paper className={classes.root}>
         {this.props.info ?
-          <p>
-            <FontAwesomeIcon icon={faExternalLinkSquareAlt} /> <a href={"https://braacket.com/league/" + this.props.info.id}>
-              Braacket
-            </a><br/>
+          <>
+            <Typography noWrap gutterBottom variant="body1" component="h2">
+              <a href={"https://braacket.com/league/" + this.props.info.id} style={{color: "white", textDecoration: "none"}}>
+                <FontAwesomeIcon icon={faExternalLinkSquareAlt} />&nbsp;
+                Braacket
+              </a>
+            </Typography>
             {this.props.info.twitter ?
-              <span><FontAwesomeIcon icon={faTwitter} /> <a href={this.props.info.twitter}>{this.props.info.twitter}</a><br/></span>
+              <Typography noWrap gutterBottom variant="body1" component="h2">
+                <a href={this.props.info.twitter} style={{color: "white", textDecoration: "none"}}>
+                  <FontAwesomeIcon icon={faTwitter} />&nbsp;
+                  {this.props.info.twitter}
+                </a>
+              </Typography>
               :
               null
             }
             {this.props.info.facebook ?
-              <span><FontAwesomeIcon icon={faFacebook} /> <a href={this.props.info.facebook}>{this.props.info.facebook}</a><br/></span>
+              <Typography noWrap gutterBottom variant="body1" component="h2">
+                <a href={this.props.info.facebook} style={{color: "white", textDecoration: "none"}}>
+                  <FontAwesomeIcon icon={faFacebook} />&nbsp;
+                  {this.props.info.facebook}
+                </a>
+              </Typography>
               :
               null
             }
             {this.props.info.twitch ?
-              <span><FontAwesomeIcon icon={faTwitch} /> <a href={this.props.info.twitch}>{this.props.info.twitch}</a><br/></span>
+              <Typography noWrap gutterBottom variant="body1" component="h2">
+                <a href={this.props.info.twitch} style={{color: "white", textDecoration: "none"}}>
+                  <FontAwesomeIcon icon={faTwitch} />&nbsp;
+                  {this.props.info.twitch}
+                </a>
+              </Typography>
               :
               null
             }
             {this.props.info.youtube ?
-              <span><FontAwesomeIcon icon={faYoutube} /> <a href={this.props.info.youtube}>{this.props.info.youtube}</a><br/></span>
+              <Typography noWrap gutterBottom variant="body1" component="h2">
+                <a href={this.props.info.youtube} style={{color: "white", textDecoration: "none"}}>
+                  <FontAwesomeIcon icon={faYoutube} />&nbsp;
+                  {this.props.info.youtube}
+                </a>
+              </Typography>
               :
               null
             }
-          </p>
+          </>
         :
           null
         }
-      </div>
+      </Paper>
     )
   }
 };
 
-export default Information
+export default withStyles(useStyles)(Information)

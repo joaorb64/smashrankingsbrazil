@@ -31,20 +31,16 @@ class PlayerElement extends Component {
                                     null
                                 }
                                 <Grid item style={{alignSelf: "stretch", maxHeight: "100%", width: "64px"}}>
-                                    <div class="player-avatar" style={{
-                                        backgroundImage: "url("+player.avatars.join("), url(")+")",
-                                        width: "64px", height: "100%", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
-                                        backgroundPosition: "center", backgroundColor: "white",
-                                    }}>
-                                        {player.twitter ? 
-                                            <div style={{width: "100%", height: "100%", display: "flex", alignItems: "flex-end", justifyContent: "flex-end"}}>
-                                                <div style={{
-                                                    backgroundImage: "url(/icons/twitter.svg)", width: 16, height: 16, bottom: 0, right: 0, margin: "2px"
-                                                }}></div>
-                                            </div>
+                                    {player.avatars && player.avatars.length > 0 ?
+                                        <div class="player-avatar" style={{
+                                            backgroundImage: "url("+player.avatars.join("), url(")+")",
+                                            width: "64px", height: "100%", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
+                                            backgroundPosition: "center", backgroundColor: "gray",
+                                        }}>
+                                        </div>
                                         :
-                                        null}
-                                    </div>
+                                        null
+                                    }
                                 </Grid>
                                 <Grid item>
                                     <div class="flags-container">
