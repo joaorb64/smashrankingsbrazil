@@ -744,7 +744,7 @@ class PlayerModal extends Component {
                 {this.state.playerData.rank && Object.keys(this.state.playerData.rank).length > 0 ?
                   <Box>
                     <Typography style={{padding: 12}} variant="h6" component="h3">
-                      Leagues
+                      {i18n.t("leagues")}
                     </Typography>
                     <Grid container style={{padding: 12, backgroundColor: theme.palette.background.default}}>
                       {Object.entries(this.state.playerData.rank).sort((a, b)=>{return a[1].rank-b[1].rank}).map((rank, i)=>(
@@ -752,7 +752,7 @@ class PlayerModal extends Component {
                           {this.props.leagues ?
                             <Link 
                               to={`/leagues/smash/${rank[0]}`}
-                              onClick={()=>this.closeModal()}
+                              onClick={()=>{this.setState({open: false}); this.props.closeModal()}}
                               style={{display: "flex"}}>
                                 <div style={{width: "42px", textAlign: "center", fontSize: "1.5rem",
                                 backgroundColor: "lightgray", display: "flex", flexShrink: 0, color: "black"}}>
