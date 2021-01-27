@@ -187,7 +187,7 @@ class PlayerRanking extends PureComponent {
                       }}>
                         <Box display="flex" justifyContent="center" noWrap>
                           {player.org ?
-                            <Typography noWrap variant="h6" color="secondary" className={classes.userNick}>{player.org}</Typography>
+                            <Typography noWrap variant="h6" color="secondary" className={classes.userNick}>{player.org}&nbsp;</Typography>
                             :
                             null
                           }

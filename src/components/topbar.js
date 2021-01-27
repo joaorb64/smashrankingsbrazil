@@ -5,7 +5,7 @@ import i18n from '../locales/i18n';
 import { faHome, faUsers, faMap, faCalendar, faCoins, faInfoCircle, faInfo, faChartLine, faTrophy } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTwitch } from '@fortawesome/free-brands-svg-icons';
-import { Drawer, makeStyles, useTheme, withStyles, SwipeableDrawer } from '@material-ui/core';
+import { Drawer, makeStyles, useTheme, withStyles, SwipeableDrawer, Box } from '@material-ui/core';
 
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
@@ -96,8 +96,15 @@ function TopBar(props) {
   }
 
   const drawer = (
-    <div>
-      <div className={classes.toolbar} />
+    <div style={{height: "100%"}}>
+      <div className={classes.toolbar} style={{display: "flex", padding: 8}}>
+        <Box style={{alignSelf: "center"}}>
+          <Typography variant="h6" noWrap style={{display: "flex"}}>
+            <img src="/favicon.svg" style={{height: "26px", marginRight: "8px"}}></img>
+            PowerRankings
+          </Typography>
+        </Box>
+      </div>
       <Divider />
       <List>
         <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to="/leagues/smash/">
@@ -135,6 +142,22 @@ function TopBar(props) {
           <ListItemText primary={i18n.t("about")} />
         </ListItem>
       </List>
+
+      <Box style={{position: "absolute", bottom: 0, padding: 8, display: "flex", flexWrap: "wrap"}}>
+        <div style={{flexGrow: 1, margin: 2}}>
+          By João "Shino" (joaorb64@gmail.com, <a style={{color: "white"}} href="https://twitter.com/joao_shino">@joao_shino</a>) <br/>
+        </div>
+        <div style={{flexGrow: 0, margin: 2}}>
+          <a href='https://ko-fi.com/W7W22YK26' target='_blank'>
+            <img style={{border: 0, height: 32}} src='https://cdn.ko-fi.com/cdn/kofi1.png?v=2' border='0' alt='Buy Me a Coffee at ko-fi.com'></img>
+          </a>
+        </div>
+        <div style={{flexGrow: 0, margin: 2}}>
+          <a href="https://picpay.me/joaorb64">
+            <img src="/images/donate_picpay.png" style={{height: 32, borderRadius: 5}}></img>
+          </a>
+        </div>
+      </Box>
     </div>
   );
 
@@ -155,6 +178,7 @@ function TopBar(props) {
             >
               <MenuIcon />
             </IconButton>
+            <img src="/favicon.svg" style={{height: "26px", marginRight: "8px"}}></img>
             <Typography variant="h6" noWrap>
               PowerRankings
             </Typography>

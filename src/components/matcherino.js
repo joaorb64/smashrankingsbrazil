@@ -25,6 +25,7 @@ let useStyles = (props) => ({
   },
   barIncomplete: {
     borderRadius: 5,
+    backgroundColor: "blue"
   },
   barComplete: {
     borderRadius: 5,
@@ -195,7 +196,7 @@ class Matcherino extends Component {
                               <Chip
                                 className={classes.couponChip}
                                 label={"Coupon: "+tournament.coupon}
-                                color="primary"
+                                color="secondary"
                                 clickable
                                 onClick={(event)=>{}}
                               />

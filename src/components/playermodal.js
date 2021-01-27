@@ -4,13 +4,13 @@ import styles from './playermodal.module.css';
 import { CHARACTERS, CHARACTERS_GG_TO_BRAACKET } from "../globals";
 import moment from "../../node_modules/moment-timezone/moment-timezone";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faWifi } from '@fortawesome/free-solid-svg-icons';
+import { faWifi, faWindowClose } from '@fortawesome/free-solid-svg-icons';
 import i18n from '../locales/i18n';
 import { browserHistory } from 'react-router';
 import { withRouter } from 'react-router-dom'
 import numeral from 'numeral';
 import { Dialog, DialogTitle, DialogContent, IconButton, withStyles,
-  Box, Typography, Grid } from '@material-ui/core';
+  Box, Typography, Grid, makeStyles, useTheme, TableFooter, Icon } from '@material-ui/core';
 import { CloseIcon } from '@material-ui/icons/Close';
 import { ArrowBack } from '@material-ui/icons/ArrowBack'
 import Table from '@material-ui/core/Table';
@@ -20,6 +20,79 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import FirstPageIcon from '@material-ui/icons/FirstPage';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import LastPageIcon from '@material-ui/icons/LastPage';
+
+const useStyles1 = makeStyles((theme) => ({
+  root: {
+    flexShrink: 0,
+    marginLeft: theme.spacing(2.5),
+  },
+}));
+
+function TablePaginationActions(props) {
+  const classes = useStyles1();
+  const theme = useTheme();
+  const { count, page, rowsPerPage, onChangePage } = props;
+
+  const handleFirstPageButtonClick = (event) => {
+    onChangePage(event, 0);
+  };
+
+  const handleBackButtonClick = (event) => {
+    onChangePage(event, page - 1);
+  };
+
+  const handleNextButtonClick = (event) => {
+    onChangePage(event, page + 1);
+  };
+
+  const handleLastPageButtonClick = (event) => {
+    onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+  };
+
+  return (
+    <div className={classes.root}>
+      <IconButton
+        onClick={handleFirstPageButtonClick}
+        disabled={page === 0}
+        aria-label="first page"
+      >
+        {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+      </IconButton>
+      <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
+        {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+      </IconButton>
+      <IconButton
+        onClick={handleNextButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="next page"
+      >
+        {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+      </IconButton>
+      <IconButton
+        onClick={handleLastPageButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="last page"
+      >
+        {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+      </IconButton>
+    </div>
+  );
+}
+
+const useStyles = (theme) => ({
+  dialogRoot: {
+    [theme.breakpoints.down('xs')]: {
+      margin: 0,
+      maxWidth: "100% !important",
+      width: "100%"
+    }
+  },
+});
 
 class PlayerModal extends Component {
   state = {
@@ -28,7 +101,11 @@ class PlayerModal extends Component {
     tournaments: {},
     achievements: {},
     open: false,
-    player: null
+    player: null,
+    setsRowsPerPage: 5,
+    setsPage: 0,
+    tournamentsRowsPerPage: 5,
+    tournamentsPage: 0
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -426,7 +503,7 @@ class PlayerModal extends Component {
     //stats.push({text: "Player Level", value: level.toLocaleString(i18n.language)})
 
     this.state.playerData = this.player;
-    this.state.tournaments = tournamentsWent;
+    this.state.tournaments = tournamentsWent.sort((a, b) => b.time - a.time);
     this.state.matches = matchesPlayed;
     this.state.stats = stats;
     this.state.achievements = achievements;
@@ -465,6 +542,7 @@ class PlayerModal extends Component {
 
   render (){
     const { theme } = this.props;
+    const { classes } = this.props;
 
     return(
       <Dialog
@@ -473,9 +551,14 @@ class PlayerModal extends Component {
         keepMounted={true}
         open={this.state.open}
         scroll="body"
+        classes={{paper: classes.dialogRoot}}
         onClose={()=>{this.setState({open: false}); this.props.closeModal()}}
       >
-        <DialogTitle></DialogTitle>
+        <DialogTitle style={{padding: 8, textAlign: "right"}}>
+          <IconButton style={{width: "50px"}} onClick={()=>{this.setState({open: false}); this.props.closeModal()}}>
+            ✕
+          </IconButton>
+        </DialogTitle>
         <DialogContent style={{padding: 0}}>
           {this.state.playerData ?
               <Box>
@@ -484,7 +567,7 @@ class PlayerModal extends Component {
                   paddingTop: 10, paddingBottom: 10
                 }}>
                   <div style={{backgroundImage: `url(${process.env.PUBLIC_URL}/images/bg_diagonal.webp)`, overflow: "hidden",
-                  position: "absolute", width: "100%", height: "100%", backgroundSize: "6px 6px"}}></div>
+                  position: "absolute", width: "100%", height: "100%", backgroundSize: "6px 6px", opacity: ".6"}}></div>
 
                   {
                     this.state.playerData.avatars && this.state.playerData.avatars.length > 0 ?
@@ -498,7 +581,7 @@ class PlayerModal extends Component {
 
                   <div style={{zIndex: 1, flexGrow: 1, marginLeft: "10px"}}>
                     <h3 className={styles.playerTag} style={{color: "white"}}>
-                      <b style={{color: "#bb0000"}}>{this.state.playerData.org} </b>
+                      <b style={{color: theme.palette.secondary.main}}>{this.state.playerData.org} </b>
 
                       {this.state.playerData.name}
 
@@ -625,7 +708,7 @@ class PlayerModal extends Component {
                     </Typography>
                     <Box
                       style={{
-                        padding: "12px", margin: 0, display: "flex",
+                        padding: "12px", margin: 0, display: "flex", flexWrap: "wrap",
                         justifyContent: "center", backgroundColor: theme.palette.background.default
                       }}
                     >
@@ -759,8 +842,9 @@ class PlayerModal extends Component {
                     </Typography>
                     <Box
                       style={{
-                        padding: "12px", margin: 0, display: "flex", overflowX: "scroll",
-                        backgroundColor: theme.palette.background.default
+                        padding: "12px", margin: 0, display: "flex",
+                        backgroundColor: theme.palette.background.default, flexWrap: "wrap",
+                        justifyContent: "center"
                       }}
                     >
                       {this.state.playerData.character_usage_percent.map((character, i)=>(
@@ -787,7 +871,7 @@ class PlayerModal extends Component {
                       {"Sets played"}
                     </Typography>
                     <TableContainer>
-                      <Table>
+                      <Table style={{backgroundColor: theme.palette.background.default}}>
                         <TableHead>
                           <TableRow>
                             <TableCell></TableCell>
@@ -800,37 +884,58 @@ class PlayerModal extends Component {
                         </TableHead>
                         <TableBody>
                           {
-                            this.state.matches.map((match, i)=>(
-                              <tr id={i>=5? "collapse2" : ""} class={i>=5? "collapse" : ""}>
-                                <td>
-                                  {match.won ?
-                                    "W" : "L"
-                                  }
-                                </td>
-                                <td>
-                                  {match.state == "wifi" ?
+                            (this.state.setsRowsPerPage > 0 ?
+                              this.state.matches.slice(
+                                this.state.setsPage * this.state.setsRowsPerPage,
+                                this.state.setsPage * this.state.setsRowsPerPage + this.state.setsRowsPerPage,
+                              )
+                              :
+                              this.state.matches
+                            ).map((match, i)=>(
+                              <TableRow id={i>=5? "collapse2" : ""} class={i>=5? "collapse" : ""}>
+                                <TableCell>
+                                  <b>
+                                    {match.won ?
+                                      "W" : "L"
+                                    }
+                                  </b>
+                                </TableCell>
+                                <TableCell>
+                                  {match.wifi ?
                                     <span><FontAwesomeIcon icon={faWifi} /></span>
                                     :
                                     null
                                   }
-                                </td>
-                                <td>{match.opponent.org ? match.opponent.org+" " : ""}{match.opponent.name}</td>
-                                <td><a target="_blank" href={`https://braacket.com/tournament/${match.tournamentId}`}>{match.tournamentName}</a></td>
-                                <td>{moment.unix(match.tournamentTime).add(1, "day").format("DD/MM/YY")}</td>
-                                <td style={{textAlign: "center"}}>{match.scoreMe} - {match.scoreOther}</td>
-                              </tr>
+                                </TableCell>
+                                <TableCell>{match.opponent.org ? match.opponent.org+" " : ""}{match.opponent.name}</TableCell>
+                                <TableCell>
+                                  <a target="_blank" href={`https://braacket.com/tournament/${match.tournamentId}`} style={{color: "white", textDecoration: "none"}}>
+                                    {match.tournamentName}
+                                  </a>
+                                </TableCell>
+                                <TableCell>{i18n.t("date_format", {date: moment.unix(match.tournamentTime).toDate()})}</TableCell>
+                                <TableCell style={{textAlign: "center"}}>{match.scoreMe} - {match.scoreOther}</TableCell>
+                              </TableRow>
                             ))
                           }
-                          <tr data-toggle="collapse" href="#collapse2" style={{
-                            textAlign: "center", cursor: "pointer"
-                          }}>
-                          </tr>
-                          <tr data-toggle="collapse" href="#collapse2" style={{
-                            textAlign: "center", cursor: "pointer"
-                          }}>
-                            <td colSpan="99">{i18n.t("View-all")} ({this.state.matches.length})</td>
-                          </tr>
                         </TableBody>
+                        <TableFooter>
+                          <TableRow>
+                            <TablePagination
+                              rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                              colSpan={9999}
+                              count={this.state.matches.length}
+                              rowsPerPage={this.state.setsRowsPerPage}
+                              page={this.state.setsPage}
+                              SelectProps={{
+                                inputProps: { 'aria-label': 'rows per page' }
+                              }}
+                              onChangePage={(event, page)=>{this.setState({setsPage: page})}}
+                              onChangeRowsPerPage={(event)=>{this.setState({setsRowsPerPage: parseInt(event.target.value, 10)})}}
+                              ActionsComponent={TablePaginationActions}
+                            />
+                          </TableRow>
+                        </TableFooter>
                       </Table>
                     </TableContainer>
                   </Box>
@@ -839,60 +944,86 @@ class PlayerModal extends Component {
                 }
 
                 {this.state.tournaments ?
-                  <row style={{display: "block", padding: "12px"}}>
-                    <h5>{i18n.t("Tournaments")}</h5>
-                    <table class="table table-striped table-sm" style={{color: "white"}}>
-                      <thead>
-                        <tr>
-                          <th scope="col"></th>
-                          <th scope="col"></th>
-                          <th scope="col">{i18n.t("Name")}</th>
-                          <th scope="col">{i18n.t("Date")}</th>
-                          <th scope="col" style={{textAlign: "center"}}>{i18n.t("Placing")}</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {
-                          this.state.tournaments.sort((a, b) => b.time - a.time).map((tournament, i)=>(
-                            <tr id={i>=5? "collapse1" : ""} class={i>=5? "collapse" : ""}>
-                              <td>
-                                {tournament.ranking == 1 ?
-                                  <span>🥇</span>
-                                  :
-                                  null
-                                }
-                                {tournament.ranking == 2 ?
-                                  <span>🥈</span>
-                                  :
-                                  null
-                                }
-                                {tournament.ranking == 3 ?
-                                  <span>🥉</span>
-                                  :
-                                  null
-                                }
-                              </td>
-                              <td>
-                                {tournament.state == "wifi" ?
-                                  <span><FontAwesomeIcon icon={faWifi} /></span>
-                                  :
-                                  <span>{tournament.state}</span>
-                                }
-                              </td>
-                              <td><a target="_blank" href={`https://braacket.com/tournament/${tournament.id}`}>{tournament.name}</a></td>
-                              <td>{moment.unix(tournament.time).add(1, "day").format("DD/MM/YY")}</td>
-                              <td style={{textAlign: "center"}}>{tournament.ranking}<small>/{tournament.player_number}</small></td>
-                            </tr>
-                          ))
-                        }
-                        <tr data-toggle="collapse" href="#collapse1" style={{
-                          textAlign: "center", cursor: "pointer"
-                        }}>
-                          <td colSpan="99">{i18n.t("View-all")} ({this.state.tournaments.length})</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </row>
+                  <Box>
+                    <Typography style={{padding: 12}} variant="h6" component="h3">
+                      {i18n.t("Tournaments")}
+                    </Typography>
+                    <TableContainer>
+                      <Table style={{backgroundColor: theme.palette.background.default}}>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell>{i18n.t("Name")}</TableCell>
+                            <TableCell>{i18n.t("Date")}</TableCell>
+                            <TableCell align="center">{i18n.t("Placing")}</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {
+                            (this.state.tournamentsRowsPerPage > 0 ?
+                              this.state.tournaments.slice(
+                                this.state.tournamentsPage * this.state.tournamentsRowsPerPage,
+                                this.state.tournamentsPage * this.state.tournamentsRowsPerPage + this.state.tournamentsRowsPerPage,
+                              )
+                              :
+                              this.state.tournaments
+                            )
+                            .map((tournament, i)=>(
+                              <TableRow id={i>=5? "collapse1" : ""} class={i>=5? "collapse" : ""}>
+                                <TableCell>
+                                  {tournament.ranking == 1 ?
+                                    <span>🥇</span>
+                                    :
+                                    null
+                                  }
+                                  {tournament.ranking == 2 ?
+                                    <span>🥈</span>
+                                    :
+                                    null
+                                  }
+                                  {tournament.ranking == 3 ?
+                                    <span>🥉</span>
+                                    :
+                                    null
+                                  }
+                                </TableCell>
+                                <TableCell>
+                                  {tournament.state == "wifi" ?
+                                    <span><FontAwesomeIcon icon={faWifi} /></span>
+                                    :
+                                    <span>{tournament.state}</span>
+                                  }
+                                </TableCell>
+                                <TableCell><a target="_blank" href={`https://braacket.com/tournament/${tournament.id}`} style={{color: "white", textDecoration: "none"}}>
+                                  {tournament.name}</a>
+                                </TableCell>
+                                <TableCell>{i18n.t("date_format", {date: moment.unix(tournament.time).toDate()})}</TableCell>
+                                <TableCell align="center">{tournament.ranking}<small>/{tournament.player_number}</small></TableCell>
+                              </TableRow>
+                            ))
+                          }
+                        </TableBody>
+                        <TableFooter>
+                          <TableRow>
+                            <TablePagination
+                              rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                              colSpan={9999}
+                              count={this.state.tournaments.length}
+                              rowsPerPage={this.state.tournamentsRowsPerPage}
+                              page={this.state.tournamentsPage}
+                              SelectProps={{
+                                inputProps: { 'aria-label': 'rows per page' }
+                              }}
+                              onChangePage={(event, page)=>{this.setState({tournamentsPage: page})}}
+                              onChangeRowsPerPage={(event)=>{this.setState({tournamentsRowsPerPage: parseInt(event.target.value, 10)})}}
+                              ActionsComponent={TablePaginationActions}
+                            />
+                          </TableRow>
+                        </TableFooter>
+                      </Table>
+                    </TableContainer>
+                  </Box>
                   :
                   null
                 }
@@ -942,4 +1073,4 @@ class PlayerModal extends Component {
   }
 };
 
-export default withStyles(null, {withTheme: true})(PlayerModal)
+export default withStyles(useStyles, {withTheme: true})(PlayerModal)

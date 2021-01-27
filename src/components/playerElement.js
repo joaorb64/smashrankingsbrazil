@@ -72,7 +72,7 @@ class PlayerElement extends Component {
                                 <Grid item xs justifyContent="center" style={{overflow: "hidden"}}>
                                     <Box display="flex" justifyContent="center" noWrap>
                                         {player.org ?
-                                            <Typography noWrap variant="h6" color="secondary" className={styles.userNick}>{player.org}</Typography>
+                                            <Typography noWrap variant="h6" color="secondary" className={styles.userNick}>{player.org}&nbsp;</Typography>
                                             :
                                             null
                                         }
