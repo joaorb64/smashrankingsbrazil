@@ -173,67 +173,70 @@ class PlayerModal extends Component {
 
                 let tournamentEntry = {};
                 Object.assign(tournamentEntry, tournament);
-                tournamentEntry["ranking"] = tournament.ranking[playerIdInTournament].rank;
-                tournamentEntry["league"] = linkLeague;
-                
-                let leagueObj = this.props.leagues.find(element => element.id == linkLeague);
-  
-                if(leagueObj.wifi){
-                  tournamentEntry["state"] = "wifi"
-                } else {
-                  tournamentEntry["state"] = leagueObj.state;
-                }
 
-                if(!tournament.name.includes("[MATCHMAKING]")){
-                  let found = tournamentsWent.find(element =>
-                    element.name == tournamentEntry.name ||
-                    element.id == tournamentEntry.id ||
-                    (element.link != null && element.link == tournamentEntry.link)
-                  );
+                if(tournament.ranking[playerIdInTournament]){
+                  tournamentEntry["ranking"] = tournament.ranking[playerIdInTournament].rank;
+                  tournamentEntry["league"] = linkLeague;
+
+                  let leagueObj = this.props.leagues.find(element => element.id == linkLeague);
     
-                  if(!found){
-                    tournamentsWent.push(tournamentEntry);
+                  if(leagueObj.wifi){
+                    tournamentEntry["state"] = "wifi"
                   } else {
-                    if(found.state == "BR" && tournamentEntry["state"] != "BR"){
-                      found.state = tournamentEntry["state"];
+                    tournamentEntry["state"] = leagueObj.state;
+                  }
+  
+                  if(!tournament.name.includes("[MATCHMAKING]")){
+                    let found = tournamentsWent.find(element =>
+                      element.name == tournamentEntry.name ||
+                      element.id == tournamentEntry.id ||
+                      (element.link != null && element.link == tournamentEntry.link)
+                    );
+      
+                    if(!found){
+                      tournamentsWent.push(tournamentEntry);
+                    } else {
+                      if(found.state == "BR" && tournamentEntry["state"] != "BR"){
+                        found.state = tournamentEntry["state"];
+                      }
                     }
                   }
-                }
-
-                if(tournament.matches){
-                  tournament.matches.forEach(match => {
-                    if(match.participants.hasOwnProperty(playerIdInTournament)){
-                      let matchEntry = {}
-                      matchEntry.tournamentName = tournament.name;
-                      matchEntry.tournamentTime = tournament.time;
-                      matchEntry.participants = match.participants;
-                      matchEntry.tournamentId = tournament.id;
-                      if(leagueObj.wifi){
-                        matchEntry.wifi = true;
-                      }
-                      matchEntry.participantsLeague = {};
-                      Object.keys(match.participants).forEach(tournamentId => {
-                        let participantPlayer = Object.entries(tournament.linkage).find(i => i[1] == tournamentId);
-                        if(participantPlayer){
-                          let participantPlayerGlobalId = this.props.allplayers["mapping"][linkLeague+":"+participantPlayer[0]];
-                          matchEntry.participantsLeague[tournamentId] = this.props.allplayers["players"][participantPlayerGlobalId];
-                          if(participantPlayer[1] != playerIdInTournament){
-                            matchEntry.opponent = matchEntry.participantsLeague[tournamentId];
-                            matchEntry.scoreOther = match.participants[tournamentId];
-                          } else {
-                            matchEntry.scoreMe = match.participants[tournamentId];
-                          }
+  
+                  if(tournament.matches){
+                    tournament.matches.forEach(match => {
+                      if(match.participants.hasOwnProperty(playerIdInTournament)){
+                        let matchEntry = {}
+                        matchEntry.tournamentName = tournament.name;
+                        matchEntry.tournamentTime = tournament.time;
+                        matchEntry.participants = match.participants;
+                        matchEntry.tournamentId = tournament.id;
+                        if(leagueObj.wifi){
+                          matchEntry.wifi = true;
                         }
-                      })
-                      if(match.winner == playerIdInTournament){
-                        matchEntry.won = true;
+                        matchEntry.participantsLeague = {};
+                        Object.keys(match.participants).forEach(tournamentId => {
+                          let participantPlayer = Object.entries(tournament.linkage).find(i => i[1] == tournamentId);
+                          if(participantPlayer){
+                            let participantPlayerGlobalId = this.props.allplayers["mapping"][linkLeague+":"+participantPlayer[0]];
+                            matchEntry.participantsLeague[tournamentId] = this.props.allplayers["players"][participantPlayerGlobalId];
+                            if(participantPlayer[1] != playerIdInTournament){
+                              matchEntry.opponent = matchEntry.participantsLeague[tournamentId];
+                              matchEntry.scoreOther = match.participants[tournamentId];
+                            } else {
+                              matchEntry.scoreMe = match.participants[tournamentId];
+                            }
+                          }
+                        })
+                        if(match.winner == playerIdInTournament){
+                          matchEntry.won = true;
+                        }
+                        if(Object.keys(matchEntry.participantsLeague).length == 2 && matchEntry.opponent &&
+                        matchEntry.scoreMe != -1 && matchEntry.scoreOther != -1){
+                          matchesPlayed.push(matchEntry);
+                        }
                       }
-                      if(Object.keys(matchEntry.participantsLeague).length == 2 && matchEntry.opponent &&
-                      matchEntry.scoreMe != -1 && matchEntry.scoreOther != -1){
-                        matchesPlayed.push(matchEntry);
-                      }
-                    }
-                  });
+                    });
+                  }
                 }
               }
             })

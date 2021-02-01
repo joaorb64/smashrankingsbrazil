@@ -32,6 +32,7 @@ import Players from './players';
 import NextTournaments from './nextTournaments';
 import Matcherino from './matcherino';
 import Clips from './clips';
+import HeadToHead from './HeadToHead';
 
 const drawerWidth = 240;
 
@@ -232,6 +233,12 @@ function TopBar(props) {
             (history) => 
               <>
                 <Players leagues={props.leagues} alltournaments={props.alltournaments} allplayers={props.allplayers} match={history.match} history={history.history} />
+              </>
+          } />
+          <Route path="/headtohead/:player_id?" exact render={
+            (history) => 
+              <>
+                <HeadToHead leagues={props.leagues} alltournaments={props.alltournaments} allplayers={props.allplayers} match={history.match} history={history.history} />
               </>
           } />
           <Route path="/leagues/granblue/" exact render={(history) => <Granblue />} />
