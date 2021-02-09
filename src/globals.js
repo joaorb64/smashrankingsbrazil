@@ -174,7 +174,7 @@ const CHARACTER_EYE_HEIGHT_PERCENTAGE = {
 
 export function GetCharacterEyeHeight(char, skins={}){
     if(skins[char]){
-        if(skins[char][skins[char]]){
+        if(CHARACTER_EYE_HEIGHT_PERCENTAGE[char][skins[char]]){
             return CHARACTER_EYE_HEIGHT_PERCENTAGE[char][skins[char]];
         }
     }
