@@ -10,6 +10,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import ScrollTop from './ScrollTop';
 import { Avatar, Box, CardHeader, Chip, Grid, LinearProgress, Link, MenuItem, Select } from '@material-ui/core';
 
 let useStyles = (props) => ({
@@ -161,6 +162,8 @@ class Matcherino extends Component {
 
     return(
       <Box>
+        <ScrollTop />
+
         <Box gutterBottom>
           <div>
             <h2 style={{color: "white"}}>

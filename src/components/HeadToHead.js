@@ -1,16 +1,36 @@
 import React, { Component } from 'react'
 import styles from './contacts.module.css'
-import {CHARACTERS, CHARACTER_EYE_HEIGHT_PERCENTAGE} from "../globals";
 import LazyLoad from 'react-lazyload';
 import i18n from '../locales/i18n';
 import PlayerElement from './playerElement';
 import PlayerModal from './playermodal';
-import { Box, Grid, TextField, InputAdornment, IconButton, Select } from '@material-ui/core';
+import { Box, Grid, TextField, InputAdornment, IconButton, Select, Typography, Paper, withStyles } from '@material-ui/core';
 import SearchIcon from "@material-ui/icons/Search";
 import { PureComponent } from 'react';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import { CHARACTERS, CHARACTERS_GG_TO_BRAACKET } from "../globals";
 
 const fuzzysort = require('fuzzysort')
+
+const useStyles = (theme) => ({
+  playerContainer: {
+    padding: 8,
+    [theme.breakpoints.down('sm')]: {
+      padding: 2
+    }
+  },
+  playerTag: {
+    [theme.breakpoints.down('sm')]: {
+      fontSize: "1rem"
+    }
+  },
+  charPortrait: {
+    height: 300,
+    [theme.breakpoints.down('sm')]: {
+      height: 100
+    }
+  },
+});
 
 class HeadToHead extends Component {
   state = {
@@ -21,8 +41,8 @@ class HeadToHead extends Component {
     filtered: [],
     search: "",
     ts: null,
-    player1: null,
-    player2: null
+    playerSlots: [null, null],
+    winProbability: [null, null]
   }
 
   componentDidUpdate(prevProps) {
@@ -45,7 +65,7 @@ class HeadToHead extends Component {
   }
 
   winProbability(p1, p2, beta, mu, sigma){
-    let delta_mu = p1.mu - p2.mu;
+    let delta_mu = p1.ts - p2.ts;
     let sum_sigma = p1.sigma ** 2 + p2.sigma ** 2;
     let size = 2;
     let denom = Math.sqrt(size * (beta * beta) + sum_sigma);
@@ -58,6 +78,166 @@ class HeadToHead extends Component {
 
     let total = p1prob+p2prob;
     return [p1prob/total, p2prob/total];
+  }
+
+  selectPlayer(slotIndex, player){
+    if(!player) return;
+
+    let tournamentsWent = [];
+    let matchesPlayed = [];
+
+    if(this.props.alltournaments != null && this.props.allplayers != null){
+      player.rank = {}
+      player.matches = []
+
+      if(player.braacket_links){
+        player.braacket_links.forEach(link => {
+          let linkLeague = link.split(":")[0];
+          let linkId = link.split(":")[1];
+
+          fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/'+linkLeague+'/ranking.json')
+          .then(res => res.json())
+          .then((data) => {
+            if(data.ranking.ranking[linkId]){
+              player.rank[linkLeague] = {rank: data.ranking.ranking[linkId].rank, score: data.ranking.ranking[linkId].score};
+              this.setState(this.state);
+            }
+          }, this);
+  
+          if(Object.keys(this.props.alltournaments).includes(linkLeague)){
+            Object.values(this.props.alltournaments[linkLeague]).forEach(tournament => {
+              if(tournament.ranking && Object.keys(tournament.linkage).includes(linkId)){
+                let playerIdInTournament = tournament.linkage[linkId];
+
+                let tournamentEntry = {};
+                Object.assign(tournamentEntry, tournament);
+
+                if(tournament.ranking[playerIdInTournament]){
+                  tournamentEntry["ranking"] = tournament.ranking[playerIdInTournament].rank;
+                  tournamentEntry["league"] = linkLeague;
+
+                  let leagueObj = this.props.leagues.find(element => element.id == linkLeague);
+    
+                  if(leagueObj.wifi){
+                    tournamentEntry["state"] = "wifi"
+                  } else {
+                    tournamentEntry["state"] = leagueObj.state;
+                  }
+  
+                  if(!tournament.name.includes("[MATCHMAKING]")){
+                    let found = tournamentsWent.find(element =>
+                      element.name == tournamentEntry.name ||
+                      element.id == tournamentEntry.id ||
+                      (element.link != null && element.link == tournamentEntry.link)
+                    );
+      
+                    if(!found){
+                      tournamentsWent.push(tournamentEntry);
+                    } else {
+                      if(found.state == "BR" && tournamentEntry["state"] != "BR"){
+                        found.state = tournamentEntry["state"];
+                      }
+                    }
+                  }
+  
+                  if(tournament.matches){
+                    tournament.matches.forEach(match => {
+                      if(match.participants.hasOwnProperty(playerIdInTournament)){
+                        let matchEntry = {}
+                        matchEntry.tournamentName = tournament.name;
+                        matchEntry.tournamentTime = tournament.time;
+                        matchEntry.participants = match.participants;
+                        matchEntry.tournamentId = tournament.id;
+                        if(leagueObj.wifi){
+                          matchEntry.wifi = true;
+                        }
+                        matchEntry.participantsLeague = {};
+                        Object.keys(match.participants).forEach(tournamentId => {
+                          let participantPlayer = Object.entries(tournament.linkage).find(i => i[1] == tournamentId);
+                          if(participantPlayer){
+                            let participantPlayerGlobalId = this.props.allplayers["mapping"][linkLeague+":"+participantPlayer[0]];
+                            matchEntry.participantsLeague[tournamentId] = this.props.allplayers["players"][participantPlayerGlobalId];
+                            if(participantPlayer[1] != playerIdInTournament){
+                              matchEntry.opponent = matchEntry.participantsLeague[tournamentId];
+                              matchEntry.scoreOther = match.participants[tournamentId];
+                            } else {
+                              matchEntry.scoreMe = match.participants[tournamentId];
+                            }
+                          }
+                        })
+                        if(match.winner == playerIdInTournament){
+                          matchEntry.won = true;
+                        }
+                        if(Object.keys(matchEntry.participantsLeague).length == 2 && matchEntry.opponent &&
+                        matchEntry.scoreMe != -1 && matchEntry.scoreOther != -1){
+                          matchesPlayed.push(matchEntry);
+                        }
+                      }
+                    });
+                  }
+                }
+              }
+            })
+          }
+        });
+      }
+    }
+
+    player.tournamentsWent = tournamentsWent;
+    player.matchesPlayed = matchesPlayed;
+
+    this.state.playerSlots[slotIndex] = player;
+
+    this.updateSlots();
+  }
+
+  updateSlots(){
+    if(this.state.playerSlots[0] && this.state.playerSlots[1]){
+      this.state.playerSlots.forEach((player, slotIndex) => {
+        let otherSlot = 1;
+        if(slotIndex == 1) {otherSlot = 0;}
+    
+        player.setWins = 0;
+    
+        if(this.state.playerSlots[otherSlot] != null){
+          player.matchesPlayed.forEach((match) => {
+            if(match.opponent.apid == this.state.playerSlots[otherSlot].apid){
+              if(match.won){
+                player.setWins += 1;
+              }
+            }
+          })
+        }
+      })
+
+      this.state.winProbability = this.winProbabilityPercent(
+        this.state.playerSlots[0],
+        this.state.playerSlots[1],
+        this.state.ts.beta,
+        this.state.ts.mu,
+        this.state.ts.sigma
+      )
+    } else {
+      this.state.winProbability = [null, null];
+    }
+
+    this.setState({
+      playerSlots: this.state.playerSlots,
+      winProbability: this.state.winProbability
+    });
+  }
+
+  getCharCodename(playerData, id){
+    let skin = 0;
+
+    if(playerData.hasOwnProperty("skins")){
+      skin = playerData["skins"][playerData["mains"][id]];
+      if(skin == undefined){
+        skin = 0;
+      }
+    }
+    
+    return CHARACTERS[playerData["mains"][id]]+"_0"+skin;
   }
   
   fetchTs() {
@@ -75,7 +255,10 @@ class HeadToHead extends Component {
     let skin = 0;
 
     if(playerData.hasOwnProperty("skins")){
-      skin = playerData["skins"][id];
+      skin = playerData["skins"][playerData["mains"][id]];
+      if(skin == undefined){
+        skin = 0;
+      }
     }
     
     return CHARACTERS[playerData["mains"][id]]+"_0"+skin;
@@ -132,42 +315,68 @@ class HeadToHead extends Component {
   }
 
   render (){
+    const { theme } = this.props;
+    const { classes } = this.props;
+
     return(
       <Box>
         {this.props.allplayers && this.state.ts ?
           <>
-            <Autocomplete
-              value={this.state.player1}
-              onChange={(event, newValue) => {
-                this.setState({player1: newValue});
-              }}
-              options={this.props.allplayers.players}
-              getOptionLabel={(option) => option.org? option.org+" "+option.name : option.name}
-              style={{ width: 300 }}
-              renderInput={(params) => <TextField {...params} label="Combo box" variant="outlined"/>}
-            />
-            <Autocomplete
-              value={this.state.player2}
-              onChange={(event, newValue) => {
-                this.setState({player2: newValue});
-              }}
-              options={this.props.allplayers.players}
-              getOptionLabel={(option) => option.org? option.org+" "+option.name : option.name}
-              style={{ width: 300 }}
-              renderInput={(params) => <TextField {...params} label="Combo box" variant="outlined"/>}
-            />
-            {this.state.player1? this.state.player1.name + " (" + this.state.player1.sigma + ")" : null} <br/>
-            {this.state.player2? this.state.player2.name + " (" + this.state.player2.sigma + ")" : null} <br/>
-            {this.state.player1 && this.state.player2 ?
-              <>
-                {this.winProbabilityPercent(this.state.player1, this.state.player2, this.state.ts.beta, this.state.ts.mu, this.state.ts.sigma).map((prob) => (
-                  <Box>{prob}</Box>
-                ))}
-                <Box>{(1-this.state.player1.sigma/this.state.ts.sigma) + " " + (1-this.state.player2.sigma/this.state.ts.sigma)}</Box>
-              </>
-            :
-              null
-            }
+            <Grid container justify="space-evenly" >
+              {this.state.playerSlots.map((player, i) => (
+                <Grid item xs={6} sm={5} md={4} lg={3} xl={2} className={classes.playerContainer}>
+                  <Autocomplete
+                    value={player}
+                    onChange={(event, newValue) => {
+                      this.selectPlayer(i, newValue);
+                    }}
+                    fullWidth
+                    options={this.props.allplayers.players}
+                    getOptionLabel={(option) => option.org? option.org+" "+option.name : option.name}
+                    renderInput={(params) => <TextField {...params} label="Combo box" variant="outlined"/>}
+                  />
+                  {player ?
+                    <Paper>
+                      <Box p={1} noWrap>
+                        <Box display="flex" noWrap>
+                          {player.org ?
+                            <Typography className={classes.playerTag} noWrap color="secondary" variant="h6">{player.org}&nbsp;</Typography>
+                            :
+                            null
+                          }
+                          <Typography className={classes.playerTag} noWrap variant="h6">{player.name}</Typography>
+                        </Box>
+                        <Typography noWrap variant="h6" color="textSecondary">
+                          {player.full_name || ' '}
+                        </Typography>
+                      </Box>
+                      <Box style={{
+                        width: "100%",
+                        backgroundPosition: "center", backgroundSize: "cover",
+                        backgroundColor: theme.palette.action.disabledBackground,
+                        backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_1_${this.getCharCodename(player, 0)}.png)`
+                      }} className={classes.charPortrait}>
+                      </Box>
+                      <Box p={1}>
+                        <Typography noWrap variant="h2">
+                          {player.setWins}
+                        </Typography>
+                        <Typography noWrap variant="h4">
+                          {this.state.winProbability[i] ?
+                            (this.state.winProbability[i] * 100).toFixed(2) + "%"
+                          :
+                            "-"
+                          }
+                        </Typography>
+                      </Box>
+                    </Paper>
+                    :
+                    null
+                  }
+                  { player ? player.name + " (" + player.sigma + ")" + " (" + player.mu + ")" + " (" + player.ts + ")" : null}
+                </Grid>
+              ))}
+            </Grid>
           </>
           :
           null
@@ -177,4 +386,4 @@ class HeadToHead extends Component {
   }
 };
 
-export default HeadToHead
+export default withStyles(useStyles, {withTheme: true})(HeadToHead)

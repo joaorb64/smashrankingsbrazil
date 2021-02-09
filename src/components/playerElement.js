@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styles from './playerElement.module.css'
-import {CHARACTERS, CHARACTER_EYE_HEIGHT_PERCENTAGE} from "../globals";
+import {CHARACTERS, GetCharacterEyeHeight} from "../globals";
 import LazyLoad from 'react-lazyload';
 import i18n from '../locales/i18n';
 import { Box, Paper, Typography, withStyles, Avatar, Grid, Card, CardActionArea } from '@material-ui/core';
@@ -10,7 +10,10 @@ class PlayerElement extends Component {
         let skin = 0;
     
         if(playerData.hasOwnProperty("skins")){
-          skin = playerData["skins"][id];
+            skin = playerData["skins"][playerData["mains"][id]];
+            if(skin == undefined){
+                skin = 0;
+            }
         }
         
         return CHARACTERS[playerData["mains"][id]]+"_0"+skin;
@@ -105,7 +108,7 @@ class PlayerElement extends Component {
                                                     `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_0_${this.getCharCodename(player, 0)}.png)`
                                             ,
                                             width: "128px", height: "100%", backgroundPositionX: "center", backgroundSize: "cover", backgroundColor: "#ababab", overflow: "hidden",
-                                            backgroundPositionY: (CHARACTER_EYE_HEIGHT_PERCENTAGE[player.mains[0]]+"%" || "center")
+                                            backgroundPositionY: (GetCharacterEyeHeight(player.mains[0], player.skins)+"%" || "center")
                                         }}>
                                             <div style={{overflow: "hidden", display: "flex", height: "100%", alignItems: "flex-end", justifyContent: "flex-end"}}>
                                             {player.mains.slice(1).map((main, i)=>(

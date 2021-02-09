@@ -13,6 +13,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import ScrollTop from './ScrollTop';
 import { Avatar, Box, CardHeader, Chip, Grid, LinearProgress, Link, MenuItem, ListSubheader, Select, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 
 let useStyles = (props) => ({
@@ -130,6 +131,7 @@ class NextTournaments extends Component {
 
     return(
       <Box>
+        <ScrollTop />
         <Box>
           <h2 style={{color: "white"}}>
             {i18n.t("next-tournaments")} <HelpButton content="To have your tournaments listed on this page, set their location to your country, even for online tournaments." />

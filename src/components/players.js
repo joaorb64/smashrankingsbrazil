@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styles from './contacts.module.css'
-import {CHARACTERS, CHARACTER_EYE_HEIGHT_PERCENTAGE} from "../globals";
+import {CHARACTERS, GetCharacterEyeHeight} from "../globals";
 import LazyLoad from 'react-lazyload';
 import i18n from '../locales/i18n';
 import PlayerElement from './playerElement';
@@ -92,7 +92,10 @@ class Players extends Component {
     let skin = 0;
 
     if(playerData.hasOwnProperty("skins")){
-      skin = playerData["skins"][id];
+      skin = playerData["skins"][playerData["mains"][id]];
+      if(skin == undefined){
+        skin = 0;
+      }
     }
     
     return CHARACTERS[playerData["mains"][id]]+"_0"+skin;

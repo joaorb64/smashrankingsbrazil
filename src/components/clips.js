@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import i18n from '../locales/i18n';
 import HelpButton from './HelpButton';
 import LazyLoad from 'react-lazyload';
+import ScrollTop from './ScrollTop';
 import { Box, Grid, MenuItem, Select, withStyles,
   Link, Chip, Card, CardActionArea, CardMedia, CardContent, Typography, LinearProgress } from '@material-ui/core';
 
@@ -111,6 +112,7 @@ class Clips extends Component {
 
     return(
       <Box>
+        <ScrollTop />
         <Box>
           <h2 style={{color: "white"}}>
             {"Last week's top clips"} <HelpButton content="To have your clips properly listed on this page, you must set the game and language properly on your stream settings. All info including view count are updated once a week." />

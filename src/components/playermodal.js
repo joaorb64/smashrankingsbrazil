@@ -533,7 +533,10 @@ class PlayerModal extends Component {
     let skin = 0;
 
     if(playerData.hasOwnProperty("skins")){
-      skin = playerData["skins"][id];
+      skin = playerData["skins"][playerData["mains"][id]];
+      if(skin == undefined){
+        skin = 0;
+      }
     }
     
     return CHARACTERS[playerData["mains"][id]]+"_0"+skin;

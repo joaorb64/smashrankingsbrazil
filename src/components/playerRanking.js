@@ -3,7 +3,7 @@ import styles from './contacts.module.css'
 import { Link, useParams, useLocation } from 'react-router-dom';
 import LeagueSelector from './leagueselector';
 import moment from "../../node_modules/moment-timezone/moment-timezone";
-import {CHARACTERS, CHARACTER_EYE_HEIGHT_PERCENTAGE} from "../globals";
+import {CHARACTERS, GetCharacterEyeHeight} from "../globals";
 import LazyLoad from 'react-lazyload';
 import { Grid, Paper, Box, Card, CardActionArea, Typography, BottomNavigation,
   BottomNavigationAction, Container } from '@material-ui/core';
@@ -101,7 +101,10 @@ class PlayerRanking extends PureComponent {
     let skin = 0;
 
     if(playerData.hasOwnProperty("skins")){
-      skin = playerData["skins"][id];
+      skin = playerData["skins"][playerData["mains"][id]];
+      if(skin == undefined){
+        skin = 0;
+      }
     }
     
     return CHARACTERS[playerData["mains"][id]]+"_0"+skin;
