@@ -116,10 +116,10 @@ class Matcherino extends Component {
 
           tournament.usedCoupons = used;
 
-          let coupon = tournament.description.match(/cupom:[\s][a-zA-Z|0-9]+/gi);
+          let coupon = tournament.description.match(/(cupom|coupon|cupon|cupón):[\s][a-zA-Z|0-9]+/gi);
 
           if(coupon != null){
-            coupon = coupon[0].substring(6).trim()
+            coupon = coupon[0].split(":")[1].trim()
           }
 
           tournament.coupon = coupon;
