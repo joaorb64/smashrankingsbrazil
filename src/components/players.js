@@ -8,6 +8,7 @@ import PlayerModal from './playermodal';
 import { Box, Grid, TextField, InputAdornment, IconButton } from '@material-ui/core';
 import SearchIcon from "@material-ui/icons/Search";
 import { PureComponent } from 'react';
+import {Helmet} from "react-helmet";
 
 const fuzzysort = require('fuzzysort')
 
@@ -168,6 +169,12 @@ class Players extends Component {
   render (){
     return(
       <Box>
+        <Helmet>
+          <meta property="og:title" content="Players - PowerRankings.gg" />
+          <meta property="og:image" content={process.env.PUBLIC_URL+"/favicon.svg"} />
+          <meta property="og:description" content="Search players on PowerRankings.gg!" />
+        </Helmet>
+
         {this.state.players && Object.entries(this.state.players).length > 0 ?
           <>
             <TextField

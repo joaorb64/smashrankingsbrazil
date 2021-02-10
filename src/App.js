@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect, HashRouter } from 're
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { Container, createMuiTheme } from '@material-ui/core';
 import { ThemeProvider } from "@material-ui/styles";
+import {Helmet} from "react-helmet";
 
 const theme = createMuiTheme({
   palette: {
@@ -86,6 +87,13 @@ class App extends Component {
       <ThemeProvider theme={theme}>
         <div>
           <CssBaseline />
+
+          <Helmet>
+            <meta property="og:title" content="PowerRankings.gg" />
+            <meta property="og:image" content={process.env.PUBLIC_URL+"/favicon.svg"} />
+            <meta property="og:description" content="Check out player and league information on PowerRankings.gg!" />
+            <meta name="twitter:card" content="summary" />
+          </Helmet>
 
           <Router basename={process.env.PUBLIC_URL}>
             <Route path="/" render={(props) =>

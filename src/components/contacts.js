@@ -18,6 +18,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faListOl, faTrophy, faUsers, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { faChartBar } from '@fortawesome/free-regular-svg-icons';
 import ScrollTop from './ScrollTop';
+import {Helmet} from "react-helmet";
 
 let useStyles = (props) => ({
   bottomNav: {
@@ -258,6 +259,33 @@ class Contacts extends PureComponent {
           selectedTab={this.state.selectedTab}
           handleTabChange={this.handleTabChange.bind(this)}
         />
+
+        <Helmet>
+          {this.state.selectedLeague == -1 ?
+            null
+            :
+            <meta property="og:title" content={
+              this.props.contacts[this.state.selectedLeague].name+" - PowerRankings.gg"
+            } />
+          }
+          {this.state.selectedLeague == -1 ?
+            null
+            :
+            <meta property="og:image" content={
+              `https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/league_icon/${this.props.contacts[this.state.selectedLeague].id}.png`
+            } />
+
+          }
+          {this.state.selectedLeague == -1 ?
+            null
+            :
+            <meta name="twitter:image" content={
+              `https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/league_icon/${this.props.contacts[this.state.selectedLeague].id}.png`
+            } />
+
+          }
+          <meta property="og:description" content="Check out more information about this league and its players on PowerRankings.gg!" />
+        </Helmet>
 
         {
           this.state.selectedTab == "ranking" && this.state.players ?
