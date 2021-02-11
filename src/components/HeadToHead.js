@@ -77,6 +77,15 @@ class HeadToHead extends Component {
     let p2prob = this.winProbability(p2, p1, beta, mu, sigma);
 
     let total = p1prob+p2prob;
+    
+    if(total == 0){
+      total = 1;
+    }
+
+    console.log(p1prob)
+    console.log(p2prob)
+    console.log(total)
+
     return [p1prob/total, p2prob/total];
   }
 
@@ -192,7 +201,8 @@ class HeadToHead extends Component {
   }
 
   updateSlots(){
-    if(this.state.playerSlots[0] && this.state.playerSlots[1]){
+    if(this.state.playerSlots[0] && this.state.playerSlots[1] &&
+      this.state.playerSlots[0].ts && this.state.playerSlots[1].ts){
       this.state.playerSlots.forEach((player, slotIndex) => {
         let otherSlot = 1;
         if(slotIndex == 1) {otherSlot = 0;}
@@ -333,20 +343,32 @@ class HeadToHead extends Component {
                     fullWidth
                     options={this.props.allplayers.players}
                     getOptionLabel={(option) => option.org? option.org+" "+option.name : option.name}
-                    renderInput={(params) => <TextField {...params} label="Combo box" variant="outlined"/>}
+                    renderOption={(option) =>
+                      <div style={{"contentVisibility": "auto", "containIntrinsicSize": "24px", display: "flex"}}>
+                        <div style={{
+                          backgroundSize: "cover",
+                          width: 24,
+                          height: 24,
+                          marginRight: 8,
+                          backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_2_${this.getCharCodename(option, 0)}.png)`
+                        }}></div>
+                        {option.org? option.org+" "+option.name : option.name}
+                        {option.country_code ? " ("+option.country_code+")" : null}
+                      </div>}
+                    renderInput={(params) => <TextField {...params} label={"Player "+(i+1)} variant="outlined"/>}
                   />
                   {player ?
-                    <Paper>
+                    <Paper style={{marginTop: 8}}>
                       <Box p={1} noWrap>
-                        <Box display="flex" noWrap>
+                        <Box display="flex" style={{placeContent: "center"}} noWrap>
                           {player.org ?
-                            <Typography className={classes.playerTag} noWrap color="secondary" variant="h6">{player.org}&nbsp;</Typography>
+                            <Typography align="right" className={classes.playerTag} noWrap color="secondary" variant="h6">{player.org}&nbsp;</Typography>
                             :
                             null
                           }
-                          <Typography className={classes.playerTag} noWrap variant="h6">{player.name}</Typography>
+                          <Typography align="left" className={classes.playerTag} noWrap variant="h6">{player.name}</Typography>
                         </Box>
-                        <Typography noWrap variant="h6" color="textSecondary">
+                        <Typography align="center" noWrap variant="h6" color="textSecondary">
                           {player.full_name || ' '}
                         </Typography>
                       </Box>
@@ -358,10 +380,30 @@ class HeadToHead extends Component {
                       }} className={classes.charPortrait}>
                       </Box>
                       <Box p={1}>
-                        <Typography noWrap variant="h2">
+                        <Typography align="center" noWrap variant="body2" color="textSecondary">
+                          Set wins
+                        </Typography>
+                        <Typography align="center" noWrap variant="h2">
                           {player.setWins}
                         </Typography>
-                        <Typography noWrap variant="h4">
+                        <Typography align="center" noWrap variant="body2" color="textSecondary">
+                          {player.ts ?
+                            <>
+                              Win probability <br/>
+                              Confiability: {
+                                player.sigma > 2 ? "Ultra low" :
+                                player.sigma > 1.5? "Very low" :
+                                player.sigma > 1 ? "Low" :
+                                "Ok"
+                              }
+                            </>
+                          :
+                            <>
+                              No match data
+                            </>
+                          }
+                        </Typography>
+                        <Typography align="center" noWrap variant="h4">
                           {this.state.winProbability[i] ?
                             (this.state.winProbability[i] * 100).toFixed(2) + "%"
                           :
@@ -373,7 +415,6 @@ class HeadToHead extends Component {
                     :
                     null
                   }
-                  { player ? player.name + " (" + player.sigma + ")" + " (" + player.mu + ")" + " (" + player.ts + ")" : null}
                 </Grid>
               ))}
             </Grid>

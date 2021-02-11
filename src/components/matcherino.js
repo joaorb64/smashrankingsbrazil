@@ -11,6 +11,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import ScrollTop from './ScrollTop';
+import countriesJson from '../locales/countries.json';
 import { Avatar, Box, CardHeader, Chip, Grid, LinearProgress, Link, MenuItem, Select } from '@material-ui/core';
 
 let useStyles = (props) => ({
@@ -172,7 +173,7 @@ class Matcherino extends Component {
           </div>
           <Select className={classes.select} fullWidth value={this.state.selected} onChange={(e)=>this.selectCountry(e)}>
             {Object.keys(this.state.matcherinos).map((country) => (
-              <MenuItem value={country}>{country}</MenuItem>
+              <MenuItem value={country}>{countriesJson[country].native}</MenuItem>
             ))}
           </Select>
         </Box>

@@ -2,10 +2,10 @@ import React, { Component } from 'react'
 import { Link, NavLink, Redirect, Route, Switch } from 'react-router-dom'
 import styles from './topbar.module.css'
 import i18n from '../locales/i18n';
-import { faHome, faUsers, faMap, faCalendar, faCoins, faInfoCircle, faInfo, faChartLine, faTrophy } from '@fortawesome/free-solid-svg-icons'
+import { faHome, faUsers, faMap, faCalendar, faCoins, faInfoCircle, faInfo, faChartLine, faTrophy, faExchangeAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTwitch } from '@fortawesome/free-brands-svg-icons';
-import { Drawer, makeStyles, useTheme, withStyles, SwipeableDrawer, Box } from '@material-ui/core';
+import { Drawer, makeStyles, useTheme, withStyles, SwipeableDrawer, Box, Chip } from '@material-ui/core';
 
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
@@ -74,6 +74,9 @@ const useStyles = makeStyles((theme) => ({
       color: "inherit",
       textDecoration: "none"
     }
+  },
+  ListItemIcon: {
+    minWidth: 42
   }
 }));
 
@@ -109,37 +112,43 @@ function TopBar(props) {
       <Divider />
       <List>
         <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to="/leagues/smash/">
-          <ListItemIcon><FontAwesomeIcon icon={faTrophy}/></ListItemIcon>
+          <ListItemIcon className={classes.ListItemIcon}><FontAwesomeIcon icon={faTrophy}/></ListItemIcon>
           <ListItemText primary={i18n.t("leagues")} />
         </ListItem>
 
         <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to="/players/">
-          <ListItemIcon><FontAwesomeIcon icon={faUsers}/></ListItemIcon>
+          <ListItemIcon className={classes.ListItemIcon}><FontAwesomeIcon icon={faUsers}/></ListItemIcon>
           <ListItemText primary={i18n.t("players")} />
         </ListItem>
 
+        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to="/headtohead/">
+          <ListItemIcon className={classes.ListItemIcon}><FontAwesomeIcon icon={faExchangeAlt}/></ListItemIcon>
+          <ListItemText primary={i18n.t("headtohead")} />
+          <Chip label="Beta!" size="small" color="secondary" />
+        </ListItem>
+
         <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to="/map/">
-          <ListItemIcon><FontAwesomeIcon icon={faMap}/></ListItemIcon>
+          <ListItemIcon className={classes.ListItemIcon}><FontAwesomeIcon icon={faMap}/></ListItemIcon>
           <ListItemText primary={i18n.t("map")} />
         </ListItem>
 
         <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to="/nexttournaments/">
-          <ListItemIcon><FontAwesomeIcon icon={faCalendar}/></ListItemIcon>
+          <ListItemIcon className={classes.ListItemIcon}><FontAwesomeIcon icon={faCalendar}/></ListItemIcon>
           <ListItemText primary={i18n.t("next-tournaments")} />
         </ListItem>
 
         <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to="/clips/">
-          <ListItemIcon><FontAwesomeIcon icon={faTwitch}/></ListItemIcon>
+          <ListItemIcon className={classes.ListItemIcon}><FontAwesomeIcon icon={faTwitch}/></ListItemIcon>
           <ListItemText primary={"Top Clips"} />
         </ListItem>
 
         <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to="/matcherino/">
-          <ListItemIcon><FontAwesomeIcon icon={faCoins}/></ListItemIcon>
+          <ListItemIcon className={classes.ListItemIcon}><FontAwesomeIcon icon={faCoins}/></ListItemIcon>
           <ListItemText primary={"Matcherino"} />
         </ListItem>
         
         <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to="/about/">
-          <ListItemIcon><FontAwesomeIcon icon={faInfoCircle}/></ListItemIcon>
+          <ListItemIcon className={classes.ListItemIcon}><FontAwesomeIcon icon={faInfoCircle}/></ListItemIcon>
           <ListItemText primary={i18n.t("about")} />
         </ListItem>
       </List>

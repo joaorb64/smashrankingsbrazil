@@ -45,7 +45,8 @@ class PlayerRanking extends PureComponent {
     players: [],
     top3Colors: ["#D6AF36", "#D7D7D7", "#A77044"],
     top3Colors2: ["#AF9500", "#B4B4B4", "#6A3805"],
-    top3Colors3: ["#C9B037", "#A7A7AD", "#824A02"]
+    top3Colors3: ["#C9B037", "#A7A7AD", "#824A02"],
+    pagination: 0
   }
 
   constructor() {
@@ -69,13 +70,6 @@ class PlayerRanking extends PureComponent {
     this.setState(this.state);
   }
 
-  selectLeague(i){
-    if(i != this.state.selectedLeague){
-      this.state.selectedLeague = i;
-      this.updateData();
-    }
-  }
-
   componentDidUpdate(prevProps){
     if(this.props.ranking && this.props.ranking.length > 0){
       console.log(this.props.match.params)
@@ -93,6 +87,10 @@ class PlayerRanking extends PureComponent {
 
         if(p)
           this.playerModal.current.setState({open: true, player: p});
+      }
+
+      if(this.props.ranking != prevProps.ranking){
+        this.setState({pagination: 0});
       }
     }
   }
@@ -145,6 +143,15 @@ class PlayerRanking extends PureComponent {
 
     this.state.players = this.props.ranking;
     this.state.updateTime = this.props.updateTime;
+
+    if((this.state.pagination+1)*50 <= this.state.players.length){
+      this.timeout = setTimeout(function(){
+        if(this){
+          this.setState({pagination: this.state.pagination+1});
+          this.timeout = null;
+        }
+      }.bind(this), 1000);
+    }
 
     return(
       <div>
@@ -291,7 +298,7 @@ class PlayerRanking extends PureComponent {
             </Grid>
 
             <Grid container>
-                {this.state.players.slice(3).map((player, i)=>(
+                {this.state.players.slice(3, (this.state.pagination+1) * 50).map((player, i)=>(
                   <PlayerElement player={player} onClick={()=>this.openPlayerModal(player)} />
                 ))}
             </Grid>
