@@ -3,7 +3,7 @@ import styles from './contacts.module.css'
 import { Link, useParams, useLocation } from 'react-router-dom';
 import LeagueSelector from './leagueselector';
 import moment from "../../node_modules/moment-timezone/moment-timezone";
-import {CHARACTERS, GetCharacterEyeHeight} from "../globals";
+import {GetCharacterCodename, GetCharacterEyeHeight} from "../globals";
 import LazyLoad from 'react-lazyload';
 import { Grid, Paper, Box, Card, CardActionArea, Typography, BottomNavigation,
   BottomNavigationAction, Container } from '@material-ui/core';
@@ -105,7 +105,7 @@ class PlayerRanking extends PureComponent {
       }
     }
     
-    return CHARACTERS[playerData["mains"][id]]+"_0"+skin;
+    return GetCharacterCodename(this.props.game, playerData["mains"][id])+"_0"+skin;
   }
 
   getCharName(name){
@@ -184,7 +184,7 @@ class PlayerRanking extends PureComponent {
                         clipPath: "polygon(0 60%, 0% 100%, 100% 100%)"
                       }}></div>
                       <div style={{
-                        backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_1_${this.getCharCodename(player, 0)}.png)`, display: "flex",
+                        backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_1_${this.getCharCodename(player, 0)}.png)`, display: "flex",
                         width: "calc(100% + 10px)", height: "calc(100% + 10px)", backgroundPosition: "center", backgroundSize: "cover",
                         filter: "drop-shadow(10px 10px 0px #000000AF)", marginLeft: "-10px", marginTop: "-10px"
                       }}></div>
@@ -234,7 +234,7 @@ class PlayerRanking extends PureComponent {
                           {player.mains.length > 0 ?
                             player.mains.slice(1).map((main, i)=>(
                               <div style={{
-                                backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_2_${this.getCharCodename(player, i+1)}.png)`,
+                                backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_2_${this.getCharCodename(player, i+1)}.png)`,
                                 width: "32px", height: "32px", backgroundPosition: "center", backgroundSize: "cover",
                                 flexGrow: 0, display: "inline-block"
                               }}></div>
@@ -253,7 +253,7 @@ class PlayerRanking extends PureComponent {
                               width: "48px", display: "flex", justifyContent: "center", alignItems: "center", padding: "8px", alignSelf: "flex-end"
                             }}>
                               <div class="flag" style={{
-                                backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/country_flag/${player.country_code.toLowerCase()}.png)`
+                                backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/country_flag/${player.country_code.toLowerCase()}.png)`
                               }}><span>{player.country_code}</span></div>
                             </div>
                             :
@@ -264,7 +264,7 @@ class PlayerRanking extends PureComponent {
                               width: "48px", display: "flex", justifyContent: "center", alignItems: "center", padding: "8px", alignSelf: "flex-end"
                             }}>
                               <div class="flag" style={{
-                                backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/state_flag/${player.country_code}/${player.state}.png)`
+                                backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/state_flag/${player.country_code}/${player.state}.png)`
                               }}><span>{player.state}</span></div>
                             </div>
                             :
@@ -299,7 +299,7 @@ class PlayerRanking extends PureComponent {
 
             <Grid container>
                 {this.state.players.slice(3, (this.state.pagination+1) * 50).map((player, i)=>(
-                  <PlayerElement player={player} onClick={()=>this.openPlayerModal(player)} />
+                  <PlayerElement game={this.props.game} player={player} onClick={()=>this.openPlayerModal(player)} />
                 ))}
             </Grid>
             {console.log("rerender")}
@@ -320,7 +320,7 @@ class PlayerRanking extends PureComponent {
             :
             <div class="loader"></div>
         }
-        <PlayerModal ref={this.playerModal} open={this.state.playerModalOpened} closeModal={this.closePlayerModal.bind(this)} leagues={this.props.contacts} allplayers={this.props.allplayers} alltournaments={this.props.alltournaments} history={this.props.history} />
+        <PlayerModal game={this.props.game} ref={this.playerModal} open={this.state.playerModalOpened} closeModal={this.closePlayerModal.bind(this)} leagues={this.props.contacts} allplayers={this.props.allplayers} alltournaments={this.props.alltournaments} history={this.props.history} />
       </div>
     )
   }

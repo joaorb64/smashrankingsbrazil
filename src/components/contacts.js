@@ -117,13 +117,13 @@ class Contacts extends PureComponent {
     if(!this.props.alltournaments) return
     if(!this.props.contacts[this.state.selectedLeague]) return
 
-    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/'+this.props.contacts[this.state.selectedLeague].id+'/ranking.json')
+    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/out/'+this.props.game+'/'+this.props.contacts[this.state.selectedLeague].id+'/ranking.json')
     .then(res => res.json())
     .then((data) => {
-      fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/'+this.props.contacts[this.state.selectedLeague].id+'/statistics.json')
+      fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/out/'+this.props.game+'/'+this.props.contacts[this.state.selectedLeague].id+'/statistics.json')
       .then(res => res.json())
       .then((statistics) => {
-        fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/'+this.props.contacts[this.state.selectedLeague].id+'/players.json')
+        fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/out/'+this.props.game+'/'+this.props.contacts[this.state.selectedLeague].id+'/players.json')
         .then(res => res.json())
         .then((league_players) => {
           if(data){
@@ -253,6 +253,7 @@ class Contacts extends PureComponent {
     return(
       <div>
         <LeagueSelector
+          game={this.props.game}
           leagues={this.props.contacts}
           selectLeague={this.selectLeague.bind(this)}
           selectedLeague={this.state.selectedLeague}
@@ -272,7 +273,7 @@ class Contacts extends PureComponent {
             null
             :
             <meta property="og:image" content={
-              `https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/league_icon/${this.props.contacts[this.state.selectedLeague].id}.png`
+              `https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/games/${this.props.game}/league_icon/${this.props.contacts[this.state.selectedLeague].id}.png`
             } />
 
           }
@@ -280,7 +281,7 @@ class Contacts extends PureComponent {
             null
             :
             <meta name="twitter:image" content={
-              `https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/league_icon/${this.props.contacts[this.state.selectedLeague].id}.png`
+              `https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/games/${this.props.game}/league_icon/${this.props.contacts[this.state.selectedLeague].id}.png`
             } />
 
           }
@@ -307,18 +308,18 @@ class Contacts extends PureComponent {
                 :
                 null
               }
-              <PlayerRanking contacts={this.props.contacts} allplayers={this.props.allplayers} alltournaments={this.props.alltournaments} ranking={this.state.players} updateTime={this.state.updateTime} history={this.props.history} match={this.props.match} />
+              <PlayerRanking game={this.props.game} contacts={this.props.contacts} allplayers={this.props.allplayers} alltournaments={this.props.alltournaments} ranking={this.state.players} updateTime={this.state.updateTime} history={this.props.history} match={this.props.match} />
             </>
             :
             this.state.selectedTab == "players" ?
-              <Players leagues={this.props.contacts} alltournaments={this.props.alltournaments} allplayers={this.props.allplayers} players={this.state.players} history={this.props.history} match={this.props.match} />
+              <Players game={this.props.game} leagues={this.props.contacts} alltournaments={this.props.alltournaments} allplayers={this.props.allplayers} players={this.state.players} history={this.props.history} match={this.props.match} />
               :
               this.state.selectedTab == "tournaments" ?
                 <TournamentList tournaments={this.state.tournaments} />
                 :
                 this.state.selectedTab == "statistics" ?
                   this.state.statistics ? 
-                    <Statistics league={this.props.contacts[this.state.selectedLeague].id} statistics={this.state.statistics} />
+                    <Statistics game={this.props.game} league={this.props.contacts[this.state.selectedLeague].id} statistics={this.state.statistics} />
                     :
                     null
                   :

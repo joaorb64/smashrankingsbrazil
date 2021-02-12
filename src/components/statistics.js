@@ -8,7 +8,7 @@ import Chart from '../../node_modules/chart.js/dist/Chart'
 
 import i18n from '../locales/i18n';
 
-import CHARACTERS from '../globals'
+import { GetCharacterCodename } from '../globals'
 
 import { Paper, Box, Typography, withStyles, Divider, makeStyles, Icon } from '@material-ui/core'
 import Table from '@material-ui/core/Table';
@@ -183,7 +183,7 @@ class Statistics extends Component {
         let icon = chartData.icons[i];
         var $img = window.jQuery("<img/>").attr("id", lab).attr(
           "src",
-          `${process.env.PUBLIC_URL}/portraits/ssbu/chara_2_${CHARACTERS[icon]}_00.png`
+          `${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_2_${GetCharacterCodename(this.props.game, icon)}_00.png`
         );
         $img.onload = function(){
           this.draw();
@@ -258,7 +258,7 @@ class Statistics extends Component {
         let icon = chartData.icons[i];
         var $img = window.jQuery("<img/>").attr("id", lab).attr(
           "src",
-          `${process.env.PUBLIC_URL}/portraits/ssbu/chara_2_${CHARACTERS[icon]}_00.png`
+          `${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_2_${GetCharacterCodename(this.props.game, icon)}_00.png`
         );
         $img.onload = function(){
           this.draw();
@@ -552,7 +552,7 @@ class Statistics extends Component {
                           <TableRow>
                             <TableCell>
                               <div style={{display: "flex", alignItems: "center"}}>
-                                <Box xs mr={1}><img src={`${process.env.PUBLIC_URL}/portraits/ssbu/chara_2_${CHARACTERS[line[1].mains[0]]}_00.png`}
+                                <Box xs mr={1}><img src={`${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_2_${GetCharacterCodename(this.props.game, line[1].mains[0])}_00.png`}
                                 style={{width: "24px", height: "24px"}} /></Box>
                                 <Box xs>{line[0]}</Box>
                               </div>

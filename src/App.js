@@ -32,50 +32,7 @@ class App extends Component {
   }
 
   componentWillMount() {
-    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/allleagues.json')
-    .then(res => res.json())
-    .then((data) => {
-      Object.keys(data).forEach(league => {
-        this.state.leagues.push({
-          id: league,
-          name: data[league].name,
-          region: data[league].region,
-          state: data[league].state,
-          city: data[league].city,
-          country: data[league].country,
-          wifi: data[league].wifi,
-          twitter: data[league].twitter,
-          twitch: data[league].twitch,
-          youtube: data[league].youtube,
-          facebook: data[league].facebook,
-          latlng: data[league].latlng
-        });
-      });
-
-      this.setState(this.state);
-    })
-    .catch(console.log)
-
-    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/allplayers.json')
-    .then(res => res.json())
-    .then((data) => {
-      this.setState({allplayers: data});
-    })
-    .catch(console.log)
-
-    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/alltournaments.json')
-    .then(res => res.json())
-    .then((data) => {
-      this.setState({alltournaments: data});
-    })
-    .catch(console.log)
-
-    // Get user country
-    fetch('http://get.geojs.io/v1/ip/country.json').then(res => res.json()).then((data) => {
-      if(data && data.country){
-        this.setState({userCountry: data.country});
-      }
-    }).catch(console.log())
+    
   }
 
   componentDidMount() {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styles from './contacts.module.css'
-import {CHARACTERS, GetCharacterEyeHeight} from "../globals";
+import {GetCharacterCodename, GetCharacterEyeHeight} from "../globals";
 import LazyLoad from 'react-lazyload';
 import i18n from '../locales/i18n';
 import PlayerElement from './playerElement';
@@ -99,7 +99,7 @@ class Players extends Component {
       }
     }
     
-    return CHARACTERS[playerData["mains"][id]]+"_0"+skin;
+    return GetCharacterCodename(this.props.game, playerData["mains"][id])+"_0"+skin;
   }
 
   getCharName(name){
@@ -197,14 +197,14 @@ class Players extends Component {
 
             <Grid container>
               {Object.values(this.state.filtered).slice(0, 64).map((player, i) => (
-                <PlayerElement onClick={()=>this.openPlayerModal(player)} player={player} />
+                <PlayerElement game={this.props.game} onClick={()=>this.openPlayerModal(player)} player={player} />
               ))}
             </Grid>
           </>
           :
           null
         }
-        <PlayerModal ref={this.playerModal} open={this.state.playerModalOpened} closeModal={this.closePlayerModal.bind(this)} player={this.state.playerModalPlayer} leagues={this.props.leagues} allplayers={this.props.allplayers} alltournaments={this.props.alltournaments} history={this.props.history} />
+        <PlayerModal game={this.props.game} ref={this.playerModal} open={this.state.playerModalOpened} closeModal={this.closePlayerModal.bind(this)} player={this.state.playerModalPlayer} leagues={this.props.leagues} allplayers={this.props.allplayers} alltournaments={this.props.alltournaments} history={this.props.history} />
       </Box>
     )
   }

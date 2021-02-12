@@ -10,7 +10,7 @@ import { withRouter } from 'react-router-dom'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 
-import CHARACTERS from '../globals'
+import { GetCharacterCodename } from '../globals'
 import { parse } from '@fortawesome/fontawesome-svg-core';
 import { Box, withTheme, withStyles, ButtonGroup, Button, Select, MenuItem } from '@material-ui/core';
 
@@ -123,14 +123,14 @@ class Mapa extends Component {
 
     console.log(this.state.leagues);
 
-    Object.keys(this.state.leagues).forEach(league => {
-      if(this.state.leagues[league].latlng != null && online == !!this.state.leagues[league].wifi){
+    Object.keys(this.props.leagues).forEach(league => {
+      if(this.props.leagues[league].latlng != null && online == !!this.props.leagues[league].wifi){
         promises.push(
           async() => {
-            console.log(this.state.leagues[league].id)
+            console.log(this.props.leagues[league].id)
 
-            let ranking = await fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/'+this.props.leagues[league].id+'/ranking.json').then(res => res.json())
-            let players = await fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/'+this.props.leagues[league].id+'/players.json').then(res => res.json())
+            let ranking = await fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/out/'+this.props.game+'/'+this.props.leagues[league].id+'/ranking.json').then(res => res.json())
+            let players = await fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/out/'+this.props.game+'/'+this.props.leagues[league].id+'/players.json').then(res => res.json())
 
             let player = null;
 
@@ -154,8 +154,8 @@ class Mapa extends Component {
               }
 
               if(best != null){
-                let playerId = this.state.allplayers["mapping"][this.props.leagues[league].id+":"+best];
-                player = this.state.allplayers["players"][playerId];
+                let playerId = this.props.allplayers["mapping"][this.props.leagues[league].id+":"+best];
+                player = this.props.allplayers["players"][playerId];
               }
             }
 
@@ -164,12 +164,12 @@ class Mapa extends Component {
               player.mains.push("Random");
             }
 
-            let iconUrl = process.env.PUBLIC_URL+"/portraits/ssbu/chara_2_"+(CHARACTERS[player.mains[0]] || "random")+"_00.png"
+            let iconUrl = process.env.PUBLIC_URL+"/portraits/"+this.props.game+"/chara_2_"+(GetCharacterCodename(this.props.game, player.mains[0]) || "random")+"_00.png"
 
             let iconSize = 36;
 
-            if(!online && this.state.leagues[league].state != null) iconSize = 24;
-            else if(online && this.state.leagues[league].country != null) iconSize = 24;
+            if(!online && this.props.leagues[league].state != null) iconSize = 24;
+            else if(online && this.props.leagues[league].country != null) iconSize = 24;
 
             let charIcon = L.icon({
               iconUrl: iconUrl,
@@ -180,8 +180,8 @@ class Mapa extends Component {
 
             window.routerHistory = this.props.history;
 
-            let lat = this.state.leagues[league].latlng[0];
-            let lng = this.state.leagues[league].latlng[1];
+            let lat = this.props.leagues[league].latlng[0];
+            let lng = this.props.leagues[league].latlng[1];
 
             let found = false;
             
@@ -207,7 +207,7 @@ class Mapa extends Component {
             let marker = new myMarker([lat, lng], {icon: charIcon}).addTo(this.mymap);
             marker.bindPopup('\
               <div style="display: flex; align-items: center">\
-                <div style="width: 32px; height: 32px; background-image: url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/league_icon/'+this.props.leagues[league].id+'.png); background-size: cover; background-position: center; border-radius: 8px"></div>\
+                <div style="width: 32px; height: 32px; background-image: url(https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/games/'+this.props.game+'/league_icon/'+this.props.leagues[league].id+'.png); background-size: cover; background-position: center; border-radius: 8px"></div>\
                 <div style="display: flex; align-items: left; flex-direction: column; padding-left: 10px">\
                   <a onClick="window.routerHistory.push(\'/leagues/smash/'+this.props.leagues[league].id+'\');">'+this.props.leagues[league].name+'</a>'+
                   (this.props.leagues[league].city ? this.props.leagues[league].city+", " : "")+

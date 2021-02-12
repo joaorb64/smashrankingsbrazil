@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useEffect } from 'react'
 import { Link, NavLink, Redirect, Route, Switch } from 'react-router-dom'
 import styles from './topbar.module.css'
 import i18n from '../locales/i18n';
@@ -85,6 +85,58 @@ function TopBar(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+
+  const[game, setGame] = React.useState("ssbm");
+  const[allplayers, setAllplayers] = React.useState([]);
+  const[alltournaments, setAllTournaments] = React.useState([]);
+  const[userCountry, setUserCountry] = React.useState(null);
+
+  const[leagues, setLeagues] = React.useState([]);
+
+  useEffect(() => {
+    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/out/'+game+'/allleagues.json')
+    .then(res => res.json())
+    .then((data) => {
+      Object.keys(data).forEach(league => {
+        setLeagues(leagues => [...leagues, {
+          id: league,
+          name: data[league].name,
+          region: data[league].region,
+          state: data[league].state,
+          city: data[league].city,
+          country: data[league].country,
+          wifi: data[league].wifi,
+          twitter: data[league].twitter,
+          twitch: data[league].twitch,
+          youtube: data[league].youtube,
+          facebook: data[league].facebook,
+          latlng: data[league].latlng
+        }]);
+      });
+    })
+    .catch(console.log)
+
+    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/out/'+game+'/allplayers.json')
+    .then(res => res.json())
+    .then((data) => {
+      setAllplayers(data);
+    })
+    .catch(console.log)
+
+    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/out/'+game+'/alltournaments.json')
+    .then(res => res.json())
+    .then((data) => {
+      setAllTournaments(data);
+    })
+    .catch(console.log)
+
+    // Get user country
+    fetch('http://get.geojs.io/v1/ip/country.json').then(res => res.json()).then((data) => {
+      if(data && data.country){
+        setUserCountry(data.country);
+      }
+    }).catch(console.log())
+  }, [])
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -235,26 +287,25 @@ function TopBar(props) {
           <Route path="/leagues/smash/:id?/:tab?/:player_id?" exact render={
             (history) => 
               <>
-                <Contacts contacts={props.leagues} allplayers={props.allplayers} alltournaments={props.alltournaments} usercountry={props.userCountry} match={history}></Contacts>
+                <Contacts game={game} contacts={leagues} allplayers={allplayers} alltournaments={alltournaments} usercountry={userCountry} match={history}></Contacts>
               </>
           } />
           <Route path="/players/:player_id?" exact render={
             (history) => 
               <>
-                <Players leagues={props.leagues} alltournaments={props.alltournaments} allplayers={props.allplayers} match={history.match} history={history.history} />
+                <Players game={game} leagues={leagues} alltournaments={alltournaments} allplayers={allplayers} match={history.match} history={history.history} />
               </>
           } />
           <Route path="/headtohead/:player_id?" exact render={
             (history) => 
               <>
-                <HeadToHead leagues={props.leagues} alltournaments={props.alltournaments} allplayers={props.allplayers} match={history.match} history={history.history} />
+                <HeadToHead game={game} leagues={leagues} alltournaments={alltournaments} allplayers={allplayers} match={history.match} history={history.history} />
               </>
           } />
-          <Route path="/leagues/granblue/" exact render={(history) => <Granblue />} />
-          <Route path="/map/" exact render={(history) => <Mapa allplayers={props.allplayers} leagues={props.leagues} />} />
-          <Route path="/matcherino/:country?" exact render={(history) => <Matcherino match={history.match} history={history.history} />} />
-          <Route path="/nexttournaments/:country?" exact render={(history) => <NextTournaments match={history.match} history={history.history} />} />
-          <Route path="/clips/:lang?" exact render={(history) => <Clips match={history.match} history={history.history} />} />
+          <Route path="/map/" exact render={(history) => <Mapa game={game} allplayers={allplayers} leagues={leagues} />} />
+          <Route path="/matcherino/:country?" exact render={(history) => <Matcherino game={game} match={history.match} history={history.history} />} />
+          <Route path="/nexttournaments/:country?" exact render={(history) => <NextTournaments game={game} match={history.match} history={history.history} />} />
+          <Route path="/clips/:lang?" exact render={(history) => <Clips game={game} match={history.match} history={history.history} />} />
           <Route path="/about/" exact render={(history) => <About />} />
           <Redirect to="/leagues/smash/" />
         </Switch>

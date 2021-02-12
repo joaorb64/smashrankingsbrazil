@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styles from './playerElement.module.css'
-import {CHARACTERS, GetCharacterEyeHeight} from "../globals";
+import {GetCharacterCodename, GetCharacterEyeHeight} from "../globals";
 import LazyLoad from 'react-lazyload';
 import i18n from '../locales/i18n';
 import { Box, Paper, Typography, withStyles, Avatar, Grid, Card, CardActionArea } from '@material-ui/core';
@@ -16,7 +16,7 @@ class PlayerElement extends Component {
             }
         }
         
-        return CHARACTERS[playerData["mains"][id]]+"_0"+skin;
+        return GetCharacterCodename(this.props.game, playerData["mains"][id])+"_0"+skin;
     }
 
     render(){
@@ -103,17 +103,17 @@ class PlayerElement extends Component {
                                         <div class="player-main" style={{
                                             backgroundImage: 
                                                 this.props.big ?
-                                                    `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_1_${this.getCharCodename(player, 0)}.png)`
+                                                    `url(${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_1_${this.getCharCodename(player, 0)}.png)`
                                                 :
-                                                    `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_0_${this.getCharCodename(player, 0)}.png)`
+                                                    `url(${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_0_${this.getCharCodename(player, 0)}.png)`
                                             ,
                                             width: "128px", height: "100%", backgroundPositionX: "center", backgroundSize: "cover", backgroundColor: "#ababab", overflow: "hidden",
-                                            backgroundPositionY: (GetCharacterEyeHeight(player.mains[0], player.skins)+"%" || "center")
+                                            backgroundPositionY: (GetCharacterEyeHeight(this.props.game, player.mains[0], player.skins)+"%" || "center")
                                         }}>
                                             <div style={{overflow: "hidden", display: "flex", height: "100%", alignItems: "flex-end", justifyContent: "flex-end"}}>
                                             {player.mains.slice(1).map((main, i)=>(
                                                 <div class="player-main-mini" style={{
-                                                backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_2_${this.getCharCodename(player, i+1)}.png)`,
+                                                backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_2_${this.getCharCodename(player, i+1)}.png)`,
                                                 width: "24px", height: "24px", backgroundPosition: "center", backgroundSize: "cover",
                                                 flexGrow: 0, display: "flex", flexShrink: 1
                                                 }}></div>
@@ -122,7 +122,7 @@ class PlayerElement extends Component {
                                         </div>
                                         :
                                         <div style={{
-                                            backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_0_random.png)`,
+                                            backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_0_random.png)`,
                                             width: "128px", backgroundPosition: "center", backgroundSize: "cover", backgroundColor: "#ababab"
                                         }}></div>
                                     }

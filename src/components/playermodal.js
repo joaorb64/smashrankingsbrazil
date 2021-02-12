@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
 import styles from './playermodal.module.css';
-import { CHARACTERS, CHARACTERS_GG_TO_BRAACKET } from "../globals";
+import { GetCharacterCodename, CHARACTERS_GG_TO_BRAACKET } from "../globals";
 import moment from "../../node_modules/moment-timezone/moment-timezone";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWifi, faWindowClose } from '@fortawesome/free-solid-svg-icons';
@@ -157,7 +157,7 @@ class PlayerModal extends Component {
           let linkLeague = link.split(":")[0];
           let linkId = link.split(":")[1];
 
-          fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/'+linkLeague+'/ranking.json')
+          fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/out/'+this.props.game+'/'+linkLeague+'/ranking.json')
           .then(res => res.json())
           .then((data) => {
             if(data.ranking.ranking[linkId]){
@@ -483,7 +483,7 @@ class PlayerModal extends Component {
           "name": i18n.t("achievement-specialist"),
           "description": i18n.t("achievement-specialist-desc")+" "+character[1][0]+" ("+leagues_best.join(", ")+")",
           "icon": "bestplayercharacter.svg",
-          "icon_middle": CHARACTERS[character[1][1]]+"_00"
+          "icon_middle": GetCharacterCodename(this.props.game, character[1][1])+"_00"
         });
       }
     }
@@ -539,7 +539,7 @@ class PlayerModal extends Component {
       }
     }
     
-    return CHARACTERS[playerData["mains"][id]]+"_0"+skin;
+    return GetCharacterCodename(this.props.game, playerData["mains"][id])+"_0"+skin;
   }
 
   getCharName(name){
@@ -593,7 +593,7 @@ class PlayerModal extends Component {
 
                       {this.state.playerData.country_code && this.state.playerData.country_code != "null" ?
                         <div className={styles.stateFlag + " state-flag"} style={{
-                          backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/country_flag/${this.state.playerData.country_code.toLowerCase()}.png)`,
+                          backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/country_flag/${this.state.playerData.country_code.toLowerCase()}.png)`,
                           width: "32px", height: "32px", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
                           backgroundPosition: "center", paddingTop: "22px", marginLeft: "10px", textAlign: "center", verticalAlign: "bottom"
                         }}></div>
@@ -603,7 +603,7 @@ class PlayerModal extends Component {
 
                       {this.state.playerData.state && this.state.playerData.state != "null" ?
                         <div className={styles.stateFlag + " state-flag"} style={{
-                          backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/state_flag/${this.state.playerData.country_code}/${this.state.playerData.state}.png)`,
+                          backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/state_flag/${this.state.playerData.country_code}/${this.state.playerData.state}.png)`,
                           width: "32px", height: "32px", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
                           backgroundPosition: "center", paddingTop: "22px", marginLeft: "10px", textAlign: "center", verticalAlign: "bottom"
                         }}></div>
@@ -688,7 +688,7 @@ class PlayerModal extends Component {
 
                   <div className={styles.characterMain} style={{
                     marginRight: "12px", marginTop: "-10px", marginBottom: "-10px",
-                    backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_1_${this.getCharCodename(this.state.playerData, 0)}.png)`,
+                    backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_1_${this.getCharCodename(this.state.playerData, 0)}.png)`,
                     right: 0, flexGrow: 0, flexShrink: 0, height: "auto", alignSelf: "normal",
                     backgroundColor: theme.palette.background.default
                   }}>
@@ -699,7 +699,7 @@ class PlayerModal extends Component {
                   }}>
                     {this.state.playerData.mains.slice(1).map((main, i)=>(
                         <div class="" style={{
-                          backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_2_${this.getCharCodename(this.state.playerData, i+1)}.png)`,
+                          backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_2_${this.getCharCodename(this.state.playerData, i+1)}.png)`,
                           width: "24px", height: "24px", backgroundPosition: "center", backgroundSize: "cover",
                           flexGrow: 0, display: "flex", flexShrink: 1
                         }}></div>
@@ -769,7 +769,7 @@ class PlayerModal extends Component {
                                 <div style={{
                                   width: "48px", height: "48px", display: "inline-block", backgroundSize: "cover", backgroundPosition: "center",
                                   flexShrink: 0,
-                                  backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/league_icon/${rank[0]}.png)`}}></div>
+                                  backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/games/${this.props.game}/league_icon/${rank[0]}.png)`}}></div>
                                 <div style={{display: "flex", flexDirection: "column", overflow: "hidden", width: "100%", backgroundColor: "lightgray"}}>
                                   <div style={{paddingLeft: "5px", textOverflow: "ellipsis", fontSize: "0.8rem", 
                                   whiteSpace: "nowrap", overflow: "hidden", backgroundColor: "gray", color: "white"}}>
@@ -858,7 +858,7 @@ class PlayerModal extends Component {
                         flexDirection: "column", alignItems: "center", placeContent: "center"}}
                         data-toggle="tooltip" data-placement="top">
                           <div class="" style={{
-                            backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_2_${CHARACTERS[CHARACTERS_GG_TO_BRAACKET[character[0]]]+"_00"}.png)`,
+                            backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_2_${GetCharacterCodename(this.props.game, CHARACTERS_GG_TO_BRAACKET[character[0]])+"_00"}.png)`,
                             width: "24px", height: "24px", backgroundPosition: "center", backgroundSize: "cover",
                             flexGrow: 0, display: "flex", flexShrink: 1, margin: "0 20px 0 20px"
                           }}></div>

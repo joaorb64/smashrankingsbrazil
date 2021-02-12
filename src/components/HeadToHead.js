@@ -8,7 +8,7 @@ import { Box, Grid, TextField, InputAdornment, IconButton, Select, Typography, P
 import SearchIcon from "@material-ui/icons/Search";
 import { PureComponent } from 'react';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { CHARACTERS, CHARACTERS_GG_TO_BRAACKET } from "../globals";
+import { GetCharacterCodename, CHARACTERS_GG_TO_BRAACKET } from "../globals";
 
 const fuzzysort = require('fuzzysort')
 
@@ -104,7 +104,7 @@ class HeadToHead extends Component {
           let linkLeague = link.split(":")[0];
           let linkId = link.split(":")[1];
 
-          fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/'+linkLeague+'/ranking.json')
+          fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/out/'+this.props.game+'/'+linkLeague+'/ranking.json')
           .then(res => res.json())
           .then((data) => {
             if(data.ranking.ranking[linkId]){
@@ -247,12 +247,12 @@ class HeadToHead extends Component {
       }
     }
     
-    return CHARACTERS[playerData["mains"][id]]+"_0"+skin;
+    return GetCharacterCodename(this.props.game, playerData["mains"][id])+"_0"+skin;
   }
   
   fetchTs() {
     if(this.props.allplayers && this.props.allplayers.players && Object.keys(this.props.allplayers.players).length > 0){
-      fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/ts_env.json')
+      fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/out/'+this.props.game+'/ts_env.json')
       .then(res => res.json())
       .then((data) => {
         this.setState({ts: data});
@@ -271,7 +271,7 @@ class HeadToHead extends Component {
       }
     }
     
-    return CHARACTERS[playerData["mains"][id]]+"_0"+skin;
+    return GetCharacterCodename(this.props.game, playerData["mains"][id])+"_0"+skin;
   }
 
   getCharName(name){
@@ -350,7 +350,7 @@ class HeadToHead extends Component {
                           width: 24,
                           height: 24,
                           marginRight: 8,
-                          backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_2_${this.getCharCodename(option, 0)}.png)`
+                          backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_2_${this.getCharCodename(option, 0)}.png)`
                         }}></div>
                         {option.org? option.org+" "+option.name : option.name}
                         {option.country_code ? " ("+option.country_code+")" : null}
@@ -376,7 +376,7 @@ class HeadToHead extends Component {
                         width: "100%",
                         backgroundPosition: "center", backgroundSize: "cover",
                         backgroundColor: theme.palette.action.disabledBackground,
-                        backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_1_${this.getCharCodename(player, 0)}.png)`
+                        backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_1_${this.getCharCodename(player, 0)}.png)`
                       }} className={classes.charPortrait}>
                       </Box>
                       <Box p={1}>

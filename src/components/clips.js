@@ -53,7 +53,7 @@ class Clips extends Component {
   }
 
   componentDidMount() {
-    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/twitchclips.json')
+    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/out/'+this.props.game+'/twitchclips.json')
     .then(res => res.json())
     .then((data) => {
       console.log(data);

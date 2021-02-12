@@ -73,7 +73,7 @@ class LeagueSelector extends Component {
                 leagues: [],
                 subleagues: {},
                 open: false,
-                icon: `https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/country_flag/${league.country.toLowerCase()}.png`,
+                icon: `https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/country_flag/${league.country.toLowerCase()}.png`,
                 show_count: true
               };
             }
@@ -121,7 +121,7 @@ class LeagueSelector extends Component {
               <div style={{
                 width: "32px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
                 backgroundPosition: "center", verticalAlign: "inherit", backgroundColor: "white", borderRadius: "6px", marginRight: "10px",
-                backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/league_icon/${contact.id}.png)`,
+                backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/${this.props.game}/league_icon/${contact.id}.png)`,
                 display: "flex", flexShrink: 0
               }}></div>
             </ListItemIcon>
@@ -158,7 +158,7 @@ class LeagueSelector extends Component {
                 <div style={{
                   width: "32px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
                   backgroundPosition: "center", verticalAlign: "inherit", backgroundColor: "white", borderRadius: "6px", marginRight: "10px",
-                  backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/league_icon/${contact.id}.png)`,
+                  backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/games/${this.props.game}/league_icon/${contact.id}.png)`,
                   display: "flex", flexShrink: 0
                 }}></div>
               </ListItemIcon>
@@ -215,7 +215,7 @@ class LeagueSelector extends Component {
                   <div style={{
                     width: "32px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
                     backgroundPosition: "center", verticalAlign: "inherit", backgroundColor: "white", borderRadius: "6px", marginRight: "10px",
-                    backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/league_icon/${this.props.leagues[this.props.selectedLeague].id}.png)`,
+                    backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/games/${this.props.game}/league_icon/${this.props.leagues[this.props.selectedLeague].id}.png)`,
                     display: "flex", flexShrink: 0
                   }}></div>
                   <div style={{

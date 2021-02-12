@@ -58,7 +58,7 @@ class NextTournaments extends Component {
   }
 
   componentDidMount() {
-    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/out/nexttournaments.json')
+    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/out/'+this.props.game+'/nexttournaments.json')
     .then(res => res.json())
     .then((data) => {
       console.log(data);
@@ -166,7 +166,7 @@ class NextTournaments extends Component {
                     <Card fullWidth className={classes.root} style={{width: "100%"}}>
                       <CardActionArea>
                         <CardHeader noWrap classes={{content: classes.cardHeader}}
-                          avatar={<Avatar src={`https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/country_flag/${tournament.country.toLowerCase()}.png`} />}
+                          avatar={<Avatar src={`https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/country_flag/${tournament.country.toLowerCase()}.png`} />}
                           title={<Typography noWrap variant="h6" component="h2">
                             {tournament.tournament}
                           </Typography>}
