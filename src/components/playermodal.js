@@ -757,7 +757,7 @@ class PlayerModal extends Component {
                         <Grid item xs lg={4} md={6} style={{padding: "2px"}} id={i}>
                           {this.props.leagues ?
                             <Link 
-                              to={`/leagues/smash/${rank[0]}`}
+                              to={`/${this.props.game}/leagues/${rank[0]}`}
                               onClick={()=>{this.setState({open: false}); this.props.closeModal()}}
                               style={{display: "flex"}}>
                                 <div style={{width: "42px", textAlign: "center", fontSize: "1.5rem",

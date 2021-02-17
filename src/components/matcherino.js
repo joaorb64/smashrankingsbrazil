@@ -151,7 +151,7 @@ class Matcherino extends Component {
   selectCountry(e){
     this.state.selected = e.target.value;
     this.setState({selected: e.target.value});
-    this.props.history.push('/matcherino/'+this.state.selected.toLowerCase());
+    this.props.history.push('/'+this.props.game+'/matcherino/'+this.state.selected.toLowerCase());
 
     let offset = 0;
     let perPage = 10;

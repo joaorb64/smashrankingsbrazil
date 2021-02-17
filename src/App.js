@@ -53,8 +53,9 @@ class App extends Component {
           </Helmet>
 
           <Router basename={process.env.PUBLIC_URL}>
-            <Route path="/" render={(props) =>
+            <Route path="/:game?" render={(props) =>
               <TopBar
+                game={props.match.params.game || "ssbu"}
                 leagues={this.state.leagues}
                 allplayers={this.state.allplayers}
                 alltournaments={this.state.alltournaments}

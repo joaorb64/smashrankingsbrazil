@@ -209,7 +209,7 @@ class Mapa extends Component {
               <div style="display: flex; align-items: center">\
                 <div style="width: 32px; height: 32px; background-image: url(https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/games/'+this.props.game+'/league_icon/'+this.props.leagues[league].id+'.png); background-size: cover; background-position: center; border-radius: 8px"></div>\
                 <div style="display: flex; align-items: left; flex-direction: column; padding-left: 10px">\
-                  <a onClick="window.routerHistory.push(\'/leagues/smash/'+this.props.leagues[league].id+'\');">'+this.props.leagues[league].name+'</a>'+
+                  <a onClick="window.routerHistory.push(\'/'+this.props.game+'/leagues/'+this.props.leagues[league].id+'\');">'+this.props.leagues[league].name+'</a>'+
                   (this.props.leagues[league].city ? this.props.leagues[league].city+", " : "")+
                   (this.props.leagues[league].state ? this.props.leagues[league].state+", " : "")+
                   (this.props.leagues[league].country ? this.props.leagues[league].country : "")

@@ -123,7 +123,7 @@ class NextTournaments extends Component {
 
     this.setState(this.state);
 
-    this.props.history.push('/nexttournaments/'+this.state.selectedCountry.toLowerCase());
+    this.props.history.push('/'+this.props.game+'/nexttournaments/'+this.state.selectedCountry.toLowerCase());
   }
 
   render (){

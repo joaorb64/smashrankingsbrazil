@@ -94,7 +94,7 @@ class Contacts extends PureComponent {
           console.log(selectLeague)
           console.log(this.props.contacts)
           this.selectLeague(selectLeague);
-          this.props.history.push('/leagues/smash/'+this.props.contacts[selectLeague].id);
+          this.props.history.push("/"+this.props.game+'/leagues/'+this.props.contacts[selectLeague].id);
           leagueId = this.props.contacts[selectLeague].id;
         }
       }
@@ -103,7 +103,7 @@ class Contacts extends PureComponent {
         this.handleTabChange(this.props.match.params["tab"]);
       } else {
         this.props.history.push(
-          '/leagues/smash/'+leagueId+'/ranking/'
+          "/"+this.props.game+'/leagues/'+leagueId+'/ranking/'
         );
       }
     }
@@ -241,7 +241,7 @@ class Contacts extends PureComponent {
   handleTabChange(value){
     if(this.state.selectedTab != value){
       this.props.history.push(
-        '/leagues/smash/'+this.props.match.params["id"]+'/'+value+'/'
+        "/"+this.props.game+'/leagues/'+this.props.match.params["id"]+'/'+value+'/'
       );
       this.setState({selectedTab: value});
     }

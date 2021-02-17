@@ -86,7 +86,7 @@ function TopBar(props) {
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
-  const[game, setGame] = React.useState("ssbm");
+  const[game, setGame] = React.useState(props.game);
   const[allplayers, setAllplayers] = React.useState([]);
   const[alltournaments, setAllTournaments] = React.useState([]);
   const[userCountry, setUserCountry] = React.useState(null);
@@ -163,43 +163,43 @@ function TopBar(props) {
       </div>
       <Divider />
       <List>
-        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to="/leagues/smash/">
+        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to={"/"+game+"/leagues/"}>
           <ListItemIcon className={classes.ListItemIcon}><FontAwesomeIcon icon={faTrophy}/></ListItemIcon>
           <ListItemText primary={i18n.t("leagues")} />
         </ListItem>
 
-        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to="/players/">
+        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to={"/"+game+"/players/"}>
           <ListItemIcon className={classes.ListItemIcon}><FontAwesomeIcon icon={faUsers}/></ListItemIcon>
           <ListItemText primary={i18n.t("players")} />
         </ListItem>
 
-        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to="/headtohead/">
+        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to={"/"+game+"/headtohead/"}>
           <ListItemIcon className={classes.ListItemIcon}><FontAwesomeIcon icon={faExchangeAlt}/></ListItemIcon>
           <ListItemText primary={i18n.t("headtohead")} />
           <Chip label="Beta!" size="small" color="secondary" />
         </ListItem>
 
-        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to="/map/">
+        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to={"/"+game+"/map/"}>
           <ListItemIcon className={classes.ListItemIcon}><FontAwesomeIcon icon={faMap}/></ListItemIcon>
           <ListItemText primary={i18n.t("map")} />
         </ListItem>
 
-        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to="/nexttournaments/">
+        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to={"/"+game+"/nexttournaments/"}>
           <ListItemIcon className={classes.ListItemIcon}><FontAwesomeIcon icon={faCalendar}/></ListItemIcon>
           <ListItemText primary={i18n.t("next-tournaments")} />
         </ListItem>
 
-        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to="/clips/">
+        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to={"/"+game+"/clips/"}>
           <ListItemIcon className={classes.ListItemIcon}><FontAwesomeIcon icon={faTwitch}/></ListItemIcon>
           <ListItemText primary={"Top Clips"} />
         </ListItem>
 
-        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to="/matcherino/">
+        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to={"/"+game+"/matcherino/"}>
           <ListItemIcon className={classes.ListItemIcon}><FontAwesomeIcon icon={faCoins}/></ListItemIcon>
           <ListItemText primary={"Matcherino"} />
         </ListItem>
         
-        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to="/about/">
+        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to={"/"+game+"/about/"}>
           <ListItemIcon className={classes.ListItemIcon}><FontAwesomeIcon icon={faInfoCircle}/></ListItemIcon>
           <ListItemText primary={i18n.t("about")} />
         </ListItem>
@@ -284,30 +284,30 @@ function TopBar(props) {
           <div className={classes.toolbar} />
         </Hidden>
         <Switch>
-          <Route path="/leagues/smash/:id?/:tab?/:player_id?" exact render={
+          <Route path="/:game?/leagues/:id?/:tab?/:player_id?" exact render={
             (history) => 
               <>
-                <Contacts game={game} contacts={leagues} allplayers={allplayers} alltournaments={alltournaments} usercountry={userCountry} match={history}></Contacts>
+                <Contacts game={history.match.params["game"]} contacts={leagues} allplayers={allplayers} alltournaments={alltournaments} usercountry={userCountry} match={history}></Contacts>
               </>
           } />
-          <Route path="/players/:player_id?" exact render={
+          <Route path="/:game?/players/:player_id?" exact render={
             (history) => 
               <>
-                <Players game={game} leagues={leagues} alltournaments={alltournaments} allplayers={allplayers} match={history.match} history={history.history} />
+                <Players game={history.match.params["game"]} leagues={leagues} alltournaments={alltournaments} allplayers={allplayers} match={history.match} history={history.history} />
               </>
           } />
-          <Route path="/headtohead/:player_id?" exact render={
+          <Route path="/:game?/headtohead/:player_id?" exact render={
             (history) => 
               <>
                 <HeadToHead game={game} leagues={leagues} alltournaments={alltournaments} allplayers={allplayers} match={history.match} history={history.history} />
               </>
           } />
-          <Route path="/map/" exact render={(history) => <Mapa game={game} allplayers={allplayers} leagues={leagues} />} />
-          <Route path="/matcherino/:country?" exact render={(history) => <Matcherino game={game} match={history.match} history={history.history} />} />
-          <Route path="/nexttournaments/:country?" exact render={(history) => <NextTournaments game={game} match={history.match} history={history.history} />} />
-          <Route path="/clips/:lang?" exact render={(history) => <Clips game={game} match={history.match} history={history.history} />} />
+          <Route path="/:game?/map/" exact render={(history) => <Mapa game={game} allplayers={allplayers} leagues={leagues} />} />
+          <Route path="/:game?/matcherino/:country?" exact render={(history) => <Matcherino game={game} match={history.match} history={history.history} />} />
+          <Route path="/:game?/nexttournaments/:country?" exact render={(history) => <NextTournaments game={game} match={history.match} history={history.history} />} />
+          <Route path="/:game?/clips/:lang?" exact render={(history) => <Clips game={game} match={history.match} history={history.history} />} />
           <Route path="/about/" exact render={(history) => <About />} />
-          <Redirect to="/leagues/smash/" />
+          <Redirect to="/ssbu/leagues/" />
         </Switch>
 
         <Route path="/" render={({location}) => {

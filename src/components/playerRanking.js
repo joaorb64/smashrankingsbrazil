@@ -123,7 +123,7 @@ class PlayerRanking extends PureComponent {
 
   openPlayerModal(player){
     window.history.replaceState(null, null,
-      '/leagues/smash/'+this.props.match.params["id"]+'/'+
+      '/'+this.props.game+'/leagues/'+this.props.match.params["id"]+'/'+
       this.props.match.params["tab"]+"/"+player.league_id
     );
     
@@ -132,7 +132,7 @@ class PlayerRanking extends PureComponent {
 
   closePlayerModal(){
     window.history.replaceState(null, null,
-      '/leagues/smash/'+this.props.match.params["id"]+'/'+
+      '/'+this.props.game+'/leagues/'+this.props.match.params["id"]+'/'+
       this.props.match.params["tab"]+"/"
     );
   }

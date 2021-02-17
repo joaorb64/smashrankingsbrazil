@@ -104,7 +104,7 @@ class Clips extends Component {
 
     this.setState(this.state);
 
-    this.props.history.push('/clips/'+this.state.selectedLanguage);
+    this.props.history.push('/'+this.props.game+'/clips/'+this.state.selectedLanguage);
   }
 
   render (){

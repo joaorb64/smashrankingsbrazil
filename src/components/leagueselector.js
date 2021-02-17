@@ -110,8 +110,8 @@ class LeagueSelector extends Component {
         )
       }).map((contact)=>(
         <Link
-          to={`/leagues/smash/${contact.id}`}
-          href={`/leagues/smash/${contact.id}`}
+          to={`${this.props.game}/leagues/${contact.id}`}
+          href={`${this.props.game}/leagues/${contact.id}`}
           onClick={()=>{this.props.selectLeague(this.props.leagues.indexOf(contact)); this.closeModal()}}
           key={"league_"+contact.name}
           style={{color: "white", textDecoration: "none"}}
@@ -147,8 +147,8 @@ class LeagueSelector extends Component {
       <>
         {head.leagues.map((contact, i)=>(
           <Link
-            to={`/leagues/smash/${contact.id}`}
-            href={`/leagues/smash/${contact.id}`}
+            to={`/${this.props.game}/leagues/${contact.id}`}
+            href={`/${this.props.game}/leagues/${contact.id}`}
             onClick={()=>{this.props.selectLeague(this.props.leagues.indexOf(contact)); this.closeModal()}}
             key={"league_"+contact.name}
             style={{color: "white", textDecoration: "none"}}
