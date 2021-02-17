@@ -29,7 +29,7 @@ let useStyles = (props) => ({
   }
 })
 
-class Contacts extends PureComponent {
+class Contacts extends Component {
   state = {
     selectedLeague: -1,
     selectedTab: "ranking",

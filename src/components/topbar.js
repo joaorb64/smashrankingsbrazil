@@ -307,7 +307,7 @@ function TopBar(props) {
           <Route path="/:game?/nexttournaments/:country?" exact render={(history) => <NextTournaments game={game} match={history.match} history={history.history} />} />
           <Route path="/:game?/clips/:lang?" exact render={(history) => <Clips game={game} match={history.match} history={history.history} />} />
           <Route path="/about/" exact render={(history) => <About />} />
-          <Redirect to="/ssbu/leagues/" />
+          <Redirect to={"/"+props.game+"/leagues/"} />
         </Switch>
 
         <Route path="/" render={({location}) => {

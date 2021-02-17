@@ -210,7 +210,7 @@ class LeagueSelector extends Component {
         }}>
           <Toolbar>
             <Button fullWidth onClick={()=>{this.openModal()}}>
-              {this.state.leagues && this.state.leagues.length > 0 && this.props.selectedLeague != -1 ?
+              {this.props.leagues && this.props.leagues.length > 0 && this.props.selectedLeague != -1 ?
                 <div style={{display: "flex", lineHeight: "32px", justifySelf: "left", width: "100%"}}>
                   <div style={{
                     width: "32px", height: "32px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
@@ -220,18 +220,18 @@ class LeagueSelector extends Component {
                   }}></div>
                   <div style={{
                     flexShrink: 1, flexGrow: 1, textOverflow: "ellipsis", overflow: "hidden"
-                  }}>{this.state.leagues[this.props.selectedLeague].name}</div>
-                  {this.state.leagues[this.props.selectedLeague].state ?
+                  }}>{this.props.leagues[this.props.selectedLeague].name}</div>
+                  {this.props.leagues[this.props.selectedLeague].state ?
                     <div style={{
                       width: "32px", height: "32px", display: "inline-block",
                       backgroundPosition: "center", verticalAlign: "inherit",
                       display: "flex", flexShrink: 0
-                    }}>{this.state.leagues[this.props.selectedLeague].state}</div>
+                    }}>{this.props.leagues[this.props.selectedLeague].state}</div>
                     :
                     null
                   }
                   {
-                    this.state.leagues[this.props.selectedLeague].wifi ? 
+                    this.props.leagues[this.props.selectedLeague].wifi ? 
                       <div style={{
                         width: "24px", height: "24px", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
                         backgroundPosition: "center", verticalAlign: "inherit", borderRadius: "100%",
