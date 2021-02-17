@@ -194,7 +194,10 @@ const CHARACTER_EYE_HEIGHT_PERCENTAGE = {
         "Jigglypuff": {0: 80},
         "Captain Falcon": {0: 16},
         "Peach": {0: 50},
-        "Ganondorf": {0: 20}
+        "Ganondorf": {0: 20},
+        "Mewtwo": {0: 48},
+        "Yoshi": {0: 10},
+        "Sheik": {0: 40}
     }
 
 }

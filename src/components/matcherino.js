@@ -45,6 +45,7 @@ let useStyles = (props) => ({
 class Matcherino extends Component {
   state = {
     matcherinos: {},
+    gameIds: [],
     selected: null,
     tournaments: {},
     loading: false
@@ -54,14 +55,15 @@ class Matcherino extends Component {
   }
 
   componentDidMount() {
-    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/matcherinos.json')
+    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/games/'+this.props.game+'/matcherinos.json')
     .then(res => res.json())
     .then((data) => {
       console.log(data);
 
       this.setState({
-        matcherinos: data,
-        selected: Object.keys(data)[0]
+        gameIds: data.gameIds,
+        matcherinos: data.accounts,
+        selected: Object.keys(data.accounts)[0]
       });
 
       if(this.props.match && this.props.match.params && this.props.match.params.country){
@@ -96,7 +98,7 @@ class Matcherino extends Component {
         console.log(data);
 
         data.body = data.body.filter((tournament) => {
-          if(tournament.status=="ready" && [112,115].includes(tournament.gameId)){
+          if(tournament.status=="ready" && this.state.gameIds.includes(tournament.gameId)){
             return true;
           }
           return false;

@@ -23,6 +23,17 @@ const theme = createMuiTheme({
   },
 });
 
+const invalid = [
+  "leagues",
+  "players",
+  "headtohead",
+  "map",
+  "nexttournaments",
+  "clips",
+  "matcherino",
+  "about"
+]
+
 class App extends Component {
   state = {
     leagues: [],
@@ -53,9 +64,12 @@ class App extends Component {
           </Helmet>
 
           <Router basename={process.env.PUBLIC_URL}>
-            <Route path="/:game?" render={(props) =>
+            <Route path="/:game?/" render={(props) =>
               <TopBar
-                game={props.match.params && props.match.params.game ? props.match.params.game : "ssbu"}
+                game={props.match.params &&
+                  props.match.params.game &&
+                  !invalid.includes(props.match.params.game) &&
+                  props.match.params.game != "leagues" ? props.match.params.game : "ssbu"}
                 leagues={this.state.leagues}
                 allplayers={this.state.allplayers}
                 alltournaments={this.state.alltournaments}

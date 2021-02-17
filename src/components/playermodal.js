@@ -730,8 +730,8 @@ class PlayerModal extends Component {
                           }}>
                             {achievement.icon_middle ?
                               <div style={{
-                                width: 24, height: 24, backgroundSize: "contain",
-                                backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/ssbu/chara_2_${achievement.icon_middle}.png)`,
+                                width: 20, height: 20, backgroundSize: "contain",
+                                backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_2_${achievement.icon_middle}.png)`,
                                 filter: "grayscale(100%) brightness(80%) sepia(100%) hue-rotate(5deg) saturate(500%) contrast(.9)"
                               }}></div>
                               :

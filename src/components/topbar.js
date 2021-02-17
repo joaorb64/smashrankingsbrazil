@@ -284,29 +284,29 @@ function TopBar(props) {
           <div className={classes.toolbar} />
         </Hidden>
         <Switch>
-          <Route path="/:game?/leagues/:id?/:tab?/:player_id?" exact render={
+          <Route path="/:game/leagues/:id?/:tab?/:player_id?" exact render={
             (history) => 
               <>
                 <Contacts game={history.match.params["game"]} contacts={leagues} allplayers={allplayers} alltournaments={alltournaments} usercountry={userCountry} match={history}></Contacts>
               </>
           } />
-          <Route path="/:game?/players/:player_id?" exact render={
+          <Route path="/:game/players/:player_id?" exact render={
             (history) => 
               <>
                 <Players game={history.match.params["game"]} leagues={leagues} alltournaments={alltournaments} allplayers={allplayers} match={history.match} history={history.history} />
               </>
           } />
-          <Route path="/:game?/headtohead/:player_id?" exact render={
+          <Route path="/:game/headtohead/:player_id?" exact render={
             (history) => 
               <>
                 <HeadToHead game={game} leagues={leagues} alltournaments={alltournaments} allplayers={allplayers} match={history.match} history={history.history} />
               </>
           } />
-          <Route path="/:game?/map/" exact render={(history) => <Mapa game={game} allplayers={allplayers} leagues={leagues} />} />
-          <Route path="/:game?/matcherino/:country?" exact render={(history) => <Matcherino game={game} match={history.match} history={history.history} />} />
-          <Route path="/:game?/nexttournaments/:country?" exact render={(history) => <NextTournaments game={game} match={history.match} history={history.history} />} />
-          <Route path="/:game?/clips/:lang?" exact render={(history) => <Clips game={game} match={history.match} history={history.history} />} />
-          <Route path="/about/" exact render={(history) => <About />} />
+          <Route path="/:game/map/" exact render={(history) => <Mapa game={game} allplayers={allplayers} leagues={leagues} />} />
+          <Route path="/:game/matcherino/:country?" exact render={(history) => <Matcherino game={game} match={history.match} history={history.history} />} />
+          <Route path="/:game/nexttournaments/:country?" exact render={(history) => <NextTournaments game={game} match={history.match} history={history.history} />} />
+          <Route path="/:game/clips/:lang?" exact render={(history) => <Clips game={game} match={history.match} history={history.history} />} />
+          <Route path="/:game/about/" exact render={(history) => <About />} />
           <Redirect to={"/"+props.game+"/leagues/"} />
         </Switch>
 
