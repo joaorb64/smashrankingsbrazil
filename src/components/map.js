@@ -285,7 +285,8 @@ class Mapa extends Component {
     var mapOptions = {
       attributionControl: false,
       center: [-29.0529434318608, 152.01910972595218],
-      zoom: 10
+      zoom: 10,
+      maxZoom: 5
     };
 
     let myFilter = [
