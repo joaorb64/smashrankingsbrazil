@@ -49,10 +49,16 @@ class Clips extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    
+    if(this.props.game != prevProps.game){
+      this.loadData();
+    }
   }
 
   componentDidMount() {
+    this.loadData();
+  }
+
+  loadData(){
     fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/out/'+this.props.game+'/twitchclips.json')
     .then(res => res.json())
     .then((data) => {

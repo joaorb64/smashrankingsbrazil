@@ -52,9 +52,16 @@ class Matcherino extends Component {
   }
 
   componentDidUpdate(nextProps) {
+    if(this.props.game != nextProps.game){
+      this.loadData();
+    }
   }
 
   componentDidMount() {
+    this.loadData();
+  }
+
+  loadData(){
     fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/games/'+this.props.game+'/matcherinos.json')
     .then(res => res.json())
     .then((data) => {

@@ -52,7 +52,7 @@ class LeagueSelector extends Component {
       subleagues: {}
     };
 
-    if(this.props.leagues){
+    if(this.props.leagues && this.props.leagues != null){
       this.props.leagues.forEach(league=>{
         if(league.region){
           if(!this.state.league_tree["subleagues"][league.region]){

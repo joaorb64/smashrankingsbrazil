@@ -64,7 +64,7 @@ class App extends Component {
           </Helmet>
 
           <Router basename={process.env.PUBLIC_URL}>
-            <Route path="/:game?/" render={(props) =>
+            <Route path="/:game?/:subpage?/" render={(props) =>
               <TopBar
                 game={props.match.params &&
                   props.match.params.game &&

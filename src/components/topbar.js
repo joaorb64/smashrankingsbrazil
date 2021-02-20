@@ -5,7 +5,7 @@ import i18n from '../locales/i18n';
 import { faHome, faUsers, faMap, faCalendar, faCoins, faInfoCircle, faInfo, faChartLine, faTrophy, faExchangeAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTwitch } from '@fortawesome/free-brands-svg-icons';
-import { Drawer, makeStyles, useTheme, withStyles, SwipeableDrawer, Box, Chip } from '@material-ui/core';
+import { Drawer, makeStyles, useTheme, withStyles, SwipeableDrawer, Box, Chip, Select, MenuItem } from '@material-ui/core';
 
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
@@ -35,6 +35,12 @@ import Clips from './clips';
 import HeadToHead from './HeadToHead';
 
 const drawerWidth = 240;
+
+const games = {
+  "ssbu": "Super Smash Bros Ultimate",
+  "ssbm": "Super Smash Bros Melee",
+  "sfv": "Street Fighter V"
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -86,49 +92,59 @@ function TopBar(props) {
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
-  const[game, setGame] = React.useState(props.game);
-  const[allplayers, setAllplayers] = React.useState([]);
-  const[alltournaments, setAllTournaments] = React.useState([]);
+  const[game, setGame] = React.useState({
+    game: props.game,
+    allplayers: null,
+    leagues: null,
+    alltournaments: null
+  });
+  
   const[userCountry, setUserCountry] = React.useState(null);
 
-  const[leagues, setLeagues] = React.useState([]);
 
   useEffect(() => {
-    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/out/'+game+'/allleagues.json')
-    .then(res => res.json())
-    .then((data) => {
-      Object.keys(data).forEach(league => {
-        setLeagues(leagues => [...leagues, {
+    setGame({
+      game: props.game,
+      allplayers: null,
+      alltournaments: null,
+      leagues: null
+    });
+
+    let urls = [
+      'https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/out/'+props.game+'/allleagues.json',
+      'https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/out/'+props.game+'/allplayers.json',
+      'https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/out/'+props.game+'/alltournaments.json'
+    ]
+
+    Promise.all(urls.map(u=>fetch(u))).then(responses =>
+      Promise.all(responses.map(res => res.json()))
+    ).then(alldata => {
+      let leagues = [];
+
+      Object.keys(alldata[0]).forEach(league => {
+        leagues.push({
           id: league,
-          name: data[league].name,
-          region: data[league].region,
-          state: data[league].state,
-          city: data[league].city,
-          country: data[league].country,
-          wifi: data[league].wifi,
-          twitter: data[league].twitter,
-          twitch: data[league].twitch,
-          youtube: data[league].youtube,
-          facebook: data[league].facebook,
-          latlng: data[league].latlng
-        }]);
+          name: alldata[0][league].name,
+          region: alldata[0][league].region,
+          state: alldata[0][league].state,
+          city: alldata[0][league].city,
+          country: alldata[0][league].country,
+          wifi: alldata[0][league].wifi,
+          twitter: alldata[0][league].twitter,
+          twitch: alldata[0][league].twitch,
+          youtube: alldata[0][league].youtube,
+          facebook: alldata[0][league].facebook,
+          latlng: alldata[0][league].latlng
+        });
+      });
+
+      setGame({
+        game: props.game,
+        allplayers: alldata[1],
+        alltournaments: alldata[2],
+        leagues: leagues
       });
     })
-    .catch(console.log)
-
-    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/out/'+game+'/allplayers.json')
-    .then(res => res.json())
-    .then((data) => {
-      setAllplayers(data);
-    })
-    .catch(console.log)
-
-    fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/out/'+game+'/alltournaments.json')
-    .then(res => res.json())
-    .then((data) => {
-      setAllTournaments(data);
-    })
-    .catch(console.log)
 
     // Get user country
     fetch('http://get.geojs.io/v1/ip/country.json').then(res => res.json()).then((data) => {
@@ -136,7 +152,7 @@ function TopBar(props) {
         setUserCountry(data.country);
       }
     }).catch(console.log())
-  }, [])
+  }, [props.game])
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -162,44 +178,53 @@ function TopBar(props) {
         </Box>
       </div>
       <Divider />
+      <Box pl={1} pr={1} mb={1} mt={1}>
+        <Select fullWidth value={game.game}>
+          {Object.entries(games).map((game)=>(
+            <MenuItem value={game[0]} onClick={()=>props.match.history.push("/"+game[0]+"/"+(props.match.match.params["subpage"])+"/")}>
+              {game[1]}
+            </MenuItem>
+          ))}
+        </Select>
+      </Box>
       <List>
-        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to={"/"+game+"/leagues/"}>
+        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to={"/"+game.game+"/leagues/"}>
           <ListItemIcon className={classes.ListItemIcon}><FontAwesomeIcon icon={faTrophy}/></ListItemIcon>
           <ListItemText primary={i18n.t("leagues")} />
         </ListItem>
 
-        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to={"/"+game+"/players/"}>
+        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to={"/"+game.game+"/players/"}>
           <ListItemIcon className={classes.ListItemIcon}><FontAwesomeIcon icon={faUsers}/></ListItemIcon>
           <ListItemText primary={i18n.t("players")} />
         </ListItem>
 
-        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to={"/"+game+"/headtohead/"}>
+        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to={"/"+game.game+"/headtohead/"}>
           <ListItemIcon className={classes.ListItemIcon}><FontAwesomeIcon icon={faExchangeAlt}/></ListItemIcon>
           <ListItemText primary={i18n.t("headtohead")} />
           <Chip label="Beta!" size="small" color="secondary" />
         </ListItem>
 
-        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to={"/"+game+"/map/"}>
+        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to={"/"+game.game+"/map/"}>
           <ListItemIcon className={classes.ListItemIcon}><FontAwesomeIcon icon={faMap}/></ListItemIcon>
           <ListItemText primary={i18n.t("map")} />
         </ListItem>
 
-        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to={"/"+game+"/nexttournaments/"}>
+        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to={"/"+game.game+"/nexttournaments/"}>
           <ListItemIcon className={classes.ListItemIcon}><FontAwesomeIcon icon={faCalendar}/></ListItemIcon>
           <ListItemText primary={i18n.t("next-tournaments")} />
         </ListItem>
 
-        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to={"/"+game+"/clips/"}>
+        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to={"/"+game.game+"/clips/"}>
           <ListItemIcon className={classes.ListItemIcon}><FontAwesomeIcon icon={faTwitch}/></ListItemIcon>
           <ListItemText primary={"Top Clips"} />
         </ListItem>
 
-        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to={"/"+game+"/matcherino/"}>
+        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to={"/"+game.game+"/matcherino/"}>
           <ListItemIcon className={classes.ListItemIcon}><FontAwesomeIcon icon={faCoins}/></ListItemIcon>
           <ListItemText primary={"Matcherino"} />
         </ListItem>
         
-        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to={"/"+game+"/about/"}>
+        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to={"/"+game.game+"/about/"}>
           <ListItemIcon className={classes.ListItemIcon}><FontAwesomeIcon icon={faInfoCircle}/></ListItemIcon>
           <ListItemText primary={i18n.t("about")} />
         </ListItem>
@@ -287,25 +312,25 @@ function TopBar(props) {
           <Route path="/:game/leagues/:id?/:tab?/:player_id?" exact render={
             (history) => 
               <>
-                <Contacts game={history.match.params["game"]} contacts={leagues} allplayers={allplayers} alltournaments={alltournaments} usercountry={userCountry} match={history}></Contacts>
+                <Contacts game={game.game} contacts={game.leagues} allplayers={game.allplayers} alltournaments={game.alltournaments} usercountry={userCountry} match={history}></Contacts>
               </>
           } />
           <Route path="/:game/players/:player_id?" exact render={
             (history) => 
               <>
-                <Players game={history.match.params["game"]} leagues={leagues} alltournaments={alltournaments} allplayers={allplayers} match={history.match} history={history.history} />
+                <Players game={game.game} leagues={game.leagues} alltournaments={game.alltournaments} allplayers={game.allplayers} match={history.match} history={history.history} />
               </>
           } />
           <Route path="/:game/headtohead/:player_id?" exact render={
             (history) => 
               <>
-                <HeadToHead game={game} leagues={leagues} alltournaments={alltournaments} allplayers={allplayers} match={history.match} history={history.history} />
+                <HeadToHead game={game.game} leagues={game.leagues} alltournaments={game.alltournaments} allplayers={game.allplayers} match={history.match} history={history.history} />
               </>
           } />
-          <Route path="/:game/map/" exact render={(history) => <Mapa game={game} allplayers={allplayers} leagues={leagues} />} />
-          <Route path="/:game/matcherino/:country?" exact render={(history) => <Matcherino game={game} match={history.match} history={history.history} />} />
-          <Route path="/:game/nexttournaments/:country?" exact render={(history) => <NextTournaments game={game} match={history.match} history={history.history} />} />
-          <Route path="/:game/clips/:lang?" exact render={(history) => <Clips game={game} match={history.match} history={history.history} />} />
+          <Route path="/:game/map/" exact render={(history) => <Mapa game={game.game} allplayers={game.allplayers} leagues={game.leagues} />} />
+          <Route path="/:game/matcherino/:country?" exact render={(history) => <Matcherino game={game.game} match={history.match} history={history.history} />} />
+          <Route path="/:game/nexttournaments/:country?" exact render={(history) => <NextTournaments game={game.game} match={history.match} history={history.history} />} />
+          <Route path="/:game/clips/:lang?" exact render={(history) => <Clips game={game.game} match={history.match} history={history.history} />} />
           <Route path="/:game/about/" exact render={(history) => <About />} />
           <Redirect to={"/"+props.game+"/leagues/"} />
         </Switch>

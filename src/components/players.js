@@ -28,7 +28,13 @@ class Players extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if(prevProps != this.props && (!prevProps.allplayers || prevProps.allplayers.length == 0 || !prevProps.allplayers.players || !this.props.allplayers)){
+    if(prevProps != this.props && (prevProps.game != this.props.game || !prevProps.allplayers || prevProps.allplayers.length == 0 || !prevProps.allplayers.players || !this.props.allplayers)){
+      this.setState({
+        playerModalOpened: false,
+        players: [],
+        filtered: [],
+        search: ""
+      })
       this.fetchPlayers();
     }
   }
@@ -202,7 +208,7 @@ class Players extends Component {
             </Grid>
           </>
           :
-          null
+          <div class="loader"></div>
         }
         <PlayerModal game={this.props.game} ref={this.playerModal} open={this.state.playerModalOpened} closeModal={this.closePlayerModal.bind(this)} player={this.state.playerModalPlayer} leagues={this.props.leagues} allplayers={this.props.allplayers} alltournaments={this.props.alltournaments} history={this.props.history} />
       </Box>

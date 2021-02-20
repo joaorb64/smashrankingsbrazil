@@ -55,9 +55,16 @@ class NextTournaments extends Component {
   }
 
   componentDidUpdate(nextProps) {
+    if(this.props.game != nextProps.game){
+      this.loadData();
+    }
   }
 
   componentDidMount() {
+    this.loadData();
+  }
+
+  loadData(){
     fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/out/'+this.props.game+'/nexttournaments.json')
     .then(res => res.json())
     .then((data) => {

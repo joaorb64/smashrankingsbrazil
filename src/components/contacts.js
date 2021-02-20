@@ -41,8 +41,16 @@ class Contacts extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if(this.props != prevProps)
-      this.manageUrl(prevProps);
+    if(this.props != prevProps){
+      if(this.props.contacts != prevProps.contacts){
+        this.setState({
+          selectedLeague: -1,
+          players: [],
+          updateTime: null
+        });
+        this.manageUrl(prevProps);
+      }
+    }
   }
 
   componentDidMount() {
@@ -91,8 +99,8 @@ class Contacts extends Component {
         console.log(selectLeague)
 
         if(selectLeague != -1){
-          console.log(selectLeague)
-          console.log(this.props.contacts)
+          console.log(selectLeague);
+          console.log(this.props.contacts);
           this.selectLeague(selectLeague);
           this.props.history.push("/"+this.props.game+'/leagues/'+this.props.contacts[selectLeague].id);
           leagueId = this.props.contacts[selectLeague].id;
@@ -262,14 +270,14 @@ class Contacts extends Component {
         />
 
         <Helmet>
-          {this.state.selectedLeague == -1 ?
+          {this.props.contacts == null || this.state.selectedLeague == -1 ?
             null
             :
             <meta property="og:title" content={
               this.props.contacts[this.state.selectedLeague].name+" - PowerRankings.gg"
             } />
           }
-          {this.state.selectedLeague == -1 ?
+          {this.props.contacts == null || this.state.selectedLeague == -1 ?
             null
             :
             <meta property="og:image" content={
@@ -277,7 +285,7 @@ class Contacts extends Component {
             } />
 
           }
-          {this.state.selectedLeague == -1 ?
+          {this.props.contacts == null || this.state.selectedLeague == -1 ?
             null
             :
             <meta name="twitter:image" content={

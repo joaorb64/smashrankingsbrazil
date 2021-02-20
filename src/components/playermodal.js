@@ -112,6 +112,10 @@ class PlayerModal extends Component {
     if(this.state.open && !prevState.open){
       this.fetchPlayer();
     }
+
+    if(this.props.game != prevProps.game){
+      this.setState({playerData: null})
+    }
   }
 
   componentDidMount() {
@@ -566,7 +570,7 @@ class PlayerModal extends Component {
           </IconButton>
         </DialogTitle>
         <DialogContent style={{padding: 0}}>
-          {this.state.playerData ?
+          {this.state.playerData && this.props.leagues && this.props.game ?
               <Box>
                 <Box style={{
                   minHeight: "128px", display: "flex", alignItems: "center", position: "relative",overflow: "hidden",
@@ -755,7 +759,7 @@ class PlayerModal extends Component {
                     <Grid container style={{padding: 12, backgroundColor: theme.palette.background.default}}>
                       {Object.entries(this.state.playerData.rank).sort((a, b)=>{return a[1].rank-b[1].rank}).map((rank, i)=>(
                         <Grid item xs lg={4} md={6} style={{padding: "2px"}} id={i}>
-                          {this.props.leagues ?
+                          {this.props.leagues != null && this.props.leagues.length > 0 ?
                             <Link 
                               to={`/${this.props.game}/leagues/${rank[0]}`}
                               onClick={()=>{this.setState({open: false}); this.props.closeModal()}}

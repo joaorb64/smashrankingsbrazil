@@ -260,23 +260,23 @@ class Mapa extends Component {
     this.firstUpdate();
   }
 
-  componentDidUpdate(prevProps) {
-    this.firstUpdate();
+  componentDidUpdate(nextProps) {
+    if(nextProps.leagues != this.props.leagues){
+      this.firstUpdate();
+    }
   }
 
   firstUpdate(){
-    if(!this.state.leagues){
-      if(!this.props.leagues) return;
-      if(!this.props.allplayers) return;
-  
-      this.state.leagues = this.props.leagues;
-      this.state.allplayers = this.props.allplayers;
-  
-      this.setState(this.state);
-  
-      this.setupMap();
-      this.updateData();
-    }
+    if(!this.props.leagues) return;
+    if(!this.props.allplayers) return;
+
+    this.state.leagues = this.props.leagues;
+    this.state.allplayers = this.props.allplayers;
+
+    this.setState(this.state);
+
+    this.setupMap();
+    this.updateData(this.state.selection);
   }
 
   setupMap(){
