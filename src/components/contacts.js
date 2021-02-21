@@ -298,26 +298,20 @@ class Contacts extends Component {
 
         {
           this.state.selectedTab == "ranking" && this.state.players ?
-            <>
-              {this.state.rankingName ?
-                <Paper style={{padding: 8, margin: 2}}>
-                  <Typography variant="body2" color="textSecondary" align="center">
-                    {this.state.rankingName}
-                    {this.state.rankingType ? " ("+this.state.rankingType+")" : ""}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" align="center">
-                    {this.state.alltimes || this.state.rankingStartTime == null ?
-                      <>{"All times"}</>
-                      :
-                      <>{i18n.t("dateFrom") + " " + i18n.t("date_format", {date: moment.unix(this.state.rankingStartTime).toDate()}) + " " + i18n.t("dateFromAfter") + " " + i18n.t("dateTo") + " " + i18n.t("date_format", {date: moment.unix(this.state.rankingEndTime).toDate()}) + " " + i18n.t("dateToAfter")}</>
-                    }
-                  </Typography>
-                </Paper>
-                :
-                null
-              }
-              <PlayerRanking game={this.props.game} contacts={this.props.contacts} allplayers={this.props.allplayers} alltournaments={this.props.alltournaments} ranking={this.state.players} updateTime={this.state.updateTime} history={this.props.history} match={this.props.match} />
-            </>
+            <PlayerRanking
+              game={this.props.game}
+              contacts={this.props.contacts}
+              allplayers={this.props.allplayers}
+              alltournaments={this.props.alltournaments}
+              ranking={this.state.players}
+              updateTime={this.state.updateTime}
+              history={this.props.history}
+              match={this.props.match}
+              rankingName={this.state.rankingName}
+              rankingType={this.state.rankingType}
+              rankingStartTime={this.state.rankingStartTime}
+              rankingEndTime={this.state.rankingEndTime}
+              rankingAlltimes={this.state.alltimes} />
             :
             this.state.selectedTab == "players" ?
               <Players game={this.props.game} leagues={this.props.contacts} alltournaments={this.props.alltournaments} allplayers={this.props.allplayers} players={this.state.players} history={this.props.history} match={this.props.match} />

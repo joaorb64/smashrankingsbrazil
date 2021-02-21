@@ -12,6 +12,7 @@ import { useTheme, withStyles, withTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from "@material-ui/styles";
 import PlayerModal from './playermodal';
 import { PureComponent } from 'react';
+import i18n from '../locales/i18n';
 
 let useStyles = (props) => ({
   userNick: {
@@ -157,6 +158,23 @@ class PlayerRanking extends PureComponent {
       <div>
         {this.state.players && this.state.players.length > 0 ?
           <Container maxWidth="lg" disableGutters>
+            {this.props.rankingName ?
+              <Paper maxWidth="lg" style={{padding: 8, margin: 2}}>
+                <Typography variant="body2" color="textSecondary" align="center">
+                  {this.props.rankingName}
+                  {this.props.rankingType ? " ("+this.props.rankingType+")" : ""}
+                </Typography>
+                <Typography variant="body2" color="textSecondary" align="center">
+                  {this.props.alltimes || this.props.rankingStartTime == null ?
+                    <>{"All times"}</>
+                    :
+                    <>{i18n.t("dateFrom") + " " + i18n.t("date_format", {date: moment.unix(this.props.rankingStartTime).toDate()}) + " " + i18n.t("dateFromAfter") + " " + i18n.t("dateTo") + " " + i18n.t("date_format", {date: moment.unix(this.props.rankingEndTime).toDate()}) + " " + i18n.t("dateToAfter")}</>
+                  }
+                </Typography>
+              </Paper>
+              :
+              null
+            }
             <Grid container>
               {this.state.players.slice(0,3).map((player, i) => (
                 <Grid item lg={4} md={4} sm={4} xs={12} style={{padding: "2px", overflow: "hidden"}}>
