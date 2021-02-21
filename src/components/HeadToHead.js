@@ -354,7 +354,8 @@ class HeadToHead extends Component {
                         }}></div>
                         {option.org? option.org+" "+option.name : option.name}
                         {option.country_code ? " ("+option.country_code+")" : null}
-                      </div>}
+                      </div>
+                    }
                     renderInput={(params) => <TextField {...params} label={"Player "+(i+1)} variant="outlined"/>}
                   />
                   {player ?

@@ -5,7 +5,8 @@ import i18n from '../locales/i18n';
 import { faHome, faUsers, faMap, faCalendar, faCoins, faInfoCircle, faInfo, faChartLine, faTrophy, faExchangeAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTwitch } from '@fortawesome/free-brands-svg-icons';
-import { Drawer, makeStyles, useTheme, withStyles, SwipeableDrawer, Box, Chip, Select, MenuItem } from '@material-ui/core';
+import { Drawer, makeStyles, useTheme, withStyles, SwipeableDrawer, Box, Chip, Select, MenuItem, TextField } from '@material-ui/core';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
@@ -39,7 +40,7 @@ const drawerWidth = 240;
 const games = {
   "ssbu": "Super Smash Bros Ultimate",
   "ssbm": "Super Smash Bros Melee",
-  "sfv": "Street Fighter V"
+  //"sfv": "Street Fighter V"
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -178,14 +179,44 @@ function TopBar(props) {
         </Box>
       </div>
       <Divider />
-      <Box pl={1} pr={1} mb={1} mt={1}>
-        <Select fullWidth value={game.game}>
-          {Object.entries(games).map((game)=>(
-            <MenuItem value={game[0]} onClick={()=>props.match.history.push("/"+game[0]+"/"+(props.match.match.params["subpage"])+"/")}>
-              {game[1]}
-            </MenuItem>
-          ))}
-        </Select>
+      <Box display="flex" pl={1} pr={1} mb={1} mt={1}>
+        <div style={{
+          backgroundSize: "cover",
+          width: 24,
+          height: 24,
+          placeSelf: "center",
+          marginRight: 8,
+          flexShrink: 0,
+          backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/games/${game.game}/icon.png)`
+        }}></div>
+        <Autocomplete
+          fullWidth
+          disableClearable
+          value={game.game}
+          onChange={(event, newValue) => {
+            if(newValue != null){
+              props.match.history.push("/"+newValue+"/"+(props.match.match.params["subpage"])+"/")
+            }
+          }}
+          options={Object.keys(games)}
+          getOptionLabel={(option) => games[option]}
+          renderOption={(option) => (
+            <div>
+              <div style={{
+                backgroundSize: "cover",
+                width: 24,
+                height: 24,
+                marginRight: 8,
+                display: "inline-block",
+                marginBottom: -4,
+                flexShrink: 0,
+                backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/games/${option}/icon.png)`
+              }}></div>
+              {games[option]}
+            </div>
+          )}
+          renderInput={(params) => <TextField {...params} />}
+        />
       </Box>
       <List>
         <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to={"/"+game.game+"/leagues/"}>
