@@ -340,7 +340,7 @@ class Statistics extends Component {
 
           var $img = window.jQuery("<img/>").attr("id", lab).attr(
             "src",
-            "https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/country_flag/"+lab.toLowerCase()+".png"
+            "https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/country_flag/"+lab.toLowerCase()+".png"
           );
           window.jQuery("#pics").append($img);
         }
@@ -419,7 +419,7 @@ class Statistics extends Component {
           console.log(icon)
           var $img = window.jQuery("<img/>").attr("id", lab).attr(
             "src",
-            "https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/state_flag/"+icon+".png"
+            "https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/state_flag/"+icon+".png"
           );
           window.jQuery("#pics").append($img);
         }

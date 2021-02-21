@@ -52,7 +52,7 @@ class PlayerElement extends Component {
                                         }}>
                                         {player.country_code && player.country_code != "null" ?
                                             <div class="flag" style={{
-                                            backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/country_flag/${player.country_code.toLowerCase()}.png)`
+                                            backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/country_flag/${player.country_code.toLowerCase()}.png)`
                                             }}><span>{player.country_code}</span></div>
                                         :
                                             null
@@ -64,7 +64,7 @@ class PlayerElement extends Component {
                                         }}>
                                         {player.state && player.state != "null" ?
                                             <div class="flag" style={{
-                                            backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/sudamerica/state_flag/${player.country_code}/${player.state}.png)`
+                                            backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/state_flag/${player.country_code}/${player.state}.png)`
                                             }}><span>{player.state}</span></div>
                                         :
                                             null

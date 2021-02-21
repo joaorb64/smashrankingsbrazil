@@ -98,58 +98,66 @@ class Matcherino extends Component {
 
     let promises = [];
 
-    this.state.matcherinos[this.state.selected].forEach((accountId)=>{
-      promises.push(fetch('https://matcherino.com/__api/bounties/list?offset='+offset+'&size='+perPage+'&creatorId='+accountId+'&published=true')
-      .then(res => res.json())
-      .then((data) => {
-        console.log(data);
+    this.state.gameIds.forEach((gameId)=>{
+      this.state.matcherinos[this.state.selected].forEach((accountId)=>{
+        promises.push(fetch('https://matcherino.com/__api/bounties/list?offset='+offset+'&size='+perPage+'&creatorId='+accountId+'&gameId='+gameId+'&sort=upcoming&published=true')
+        .then(res => res.json())
+        .then((data) => {
+          console.log(data);
 
-        data.body = data.body.filter((tournament) => {
-          if(tournament.status=="ready" && this.state.gameIds.includes(tournament.gameId)){
-            return true;
-          }
-          return false;
-        });
-
-        console.log(data.body)
-
-        data.body.forEach(tournament => {
-          let used = 0;
-
-          if(tournament.transactions){
-            tournament.transactions.forEach(transaction => {
-              if(transaction.action == "coupon:use"){
-                used += 1;
+          if(data.body != null){
+            data.body = data.body.filter((tournament) => {
+              if(tournament.status=="ready" && this.state.gameIds.includes(tournament.gameId)){
+                return true;
               }
+              return false;
+            });
+  
+            console.log(data.body)
+  
+            data.body.forEach(tournament => {
+              let used = 0;
+  
+              if(tournament.transactions){
+                tournament.transactions.forEach(transaction => {
+                  if(transaction.action == "coupon:use"){
+                    used += 1;
+                  }
+                })
+              }
+  
+              tournament.usedCoupons = used;
+  
+              let coupon = tournament.description.match(/(cupom|coupon|cupon|cupón):[\s][a-zA-Z|0-9]+/gi);
+  
+              if(coupon != null){
+                coupon = coupon[0].split(":")[1].trim()
+              }
+  
+              tournament.coupon = coupon;
+            });
+  
+            data.body.forEach((tournament) => {
+              this.state.tournaments[stateSelection].push(tournament);
             })
           }
 
-          tournament.usedCoupons = used;
-
-          let coupon = tournament.description.match(/(cupom|coupon|cupon|cupón):[\s][a-zA-Z|0-9]+/gi);
-
-          if(coupon != null){
-            coupon = coupon[0].split(":")[1].trim()
-          }
-
-          tournament.coupon = coupon;
-        });
-
-        data.body.forEach((tournament) => {
-          this.state.tournaments[stateSelection].push(tournament);
+          return(data.body == null);
         })
+        .catch((err)=>{
+          console.log(err);
+        }))
       })
-      .catch((err)=>{
-        console.log(err);
-      }))
     })
 
-    Promise.all(promises).then(()=>{
+    Promise.all(promises).then((resp)=>{
       this.setState(this.state);
       
       offset+=10;
 
-      if(offset < 200){
+      let allNull = resp => resp.every(v => v === true);
+
+      if(offset < 200 && !allNull){
         this.fetchPage(stateSelection, offset, perPage);
       } else {
         this.setState({loading: false});
@@ -190,7 +198,7 @@ class Matcherino extends Component {
           <Grid container justify="flex-start" spacing={2} width="100%">
             {
               this.state.tournaments[this.state.selected] != null ?
-                this.state.tournaments[this.state.selected].map((tournament)=>(
+                this.state.tournaments[this.state.selected].sort((a,b)=>(Date.parse(b.createdAt)-Date.parse(a.createdAt))).map((tournament)=>(
                   <Grid item component={Link} lg={4} md={6} sm={6} xs={12}
                   underline="none" href={"https://matcherino.com/tournaments/"+tournament.id} target="_blank"
                   style={{display: "flex", justifyContent: "center"}}>
