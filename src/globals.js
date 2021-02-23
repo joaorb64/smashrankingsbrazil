@@ -206,7 +206,7 @@ export function GetCharacterEyeHeight(game, char, skins={}){
     if(CHARACTER_EYE_HEIGHT_PERCENTAGE[game]){
         if(CHARACTER_EYE_HEIGHT_PERCENTAGE[game][char]){
             if(CHARACTER_EYE_HEIGHT_PERCENTAGE[game][char][skins[char]]){
-                return CHARACTER_EYE_HEIGHT_PERCENTAGE[char][skins[char]];
+                return CHARACTER_EYE_HEIGHT_PERCENTAGE[game][char][skins[char]];
             }
         }
         if(CHARACTER_EYE_HEIGHT_PERCENTAGE[game][char]){
