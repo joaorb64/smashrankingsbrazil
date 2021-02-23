@@ -5,7 +5,7 @@ import LazyLoad from 'react-lazyload';
 import i18n from '../locales/i18n';
 import PlayerElement from './playerElement';
 import PlayerModal from './playermodal';
-import { Box, Grid, TextField, InputAdornment, IconButton } from '@material-ui/core';
+import { Box, Grid, TextField, InputAdornment, IconButton, Container } from '@material-ui/core';
 import SearchIcon from "@material-ui/icons/Search";
 import { PureComponent } from 'react';
 import {Helmet} from "react-helmet";
@@ -174,7 +174,7 @@ class Players extends Component {
 
   render (){
     return(
-      <Box>
+      <Container maxWidth="lg" disableGutters>
         <Helmet>
           <meta property="og:title" content="Players - PowerRankings.gg" />
           <meta property="og:image" content={process.env.PUBLIC_URL+"/favicon.svg"} />
@@ -211,7 +211,7 @@ class Players extends Component {
           <div class="loader"></div>
         }
         <PlayerModal game={this.props.game} ref={this.playerModal} open={this.state.playerModalOpened} closeModal={this.closePlayerModal.bind(this)} player={this.state.playerModalPlayer} leagues={this.props.leagues} allplayers={this.props.allplayers} alltournaments={this.props.alltournaments} history={this.props.history} />
-      </Box>
+      </Container>
     )
   }
 };

@@ -48,8 +48,8 @@ class Contacts extends Component {
           players: [],
           updateTime: null
         });
-        this.manageUrl(prevProps);
       }
+      this.manageUrl(prevProps);
     }
   }
 

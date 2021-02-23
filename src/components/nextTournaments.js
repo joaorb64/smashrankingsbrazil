@@ -14,7 +14,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import ScrollTop from './ScrollTop';
-import { Avatar, Box, CardHeader, Chip, Grid, LinearProgress, Link, MenuItem, ListSubheader, Select, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
+import { Avatar, Box, CardHeader, Chip, Grid, LinearProgress, Link, MenuItem, ListSubheader, Select, ListItem, ListItemIcon, ListItemText, Container } from '@material-ui/core';
 
 let useStyles = (props) => ({
   root: {
@@ -136,7 +136,7 @@ class NextTournaments extends Component {
     const { classes } = this.props;
 
     return(
-      <Box>
+      <Container maxWidth="xl" disableGutters>
         <ScrollTop />
         <Box>
           <h2 style={{color: "white"}}>
@@ -283,7 +283,7 @@ class NextTournaments extends Component {
               null
           }
         </Box>
-      </Box>
+      </Container>
     )
   }
 };

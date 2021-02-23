@@ -12,7 +12,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import ScrollTop from './ScrollTop';
 import countriesJson from '../locales/countries.json';
-import { Avatar, Box, CardHeader, Chip, Grid, LinearProgress, Link, MenuItem, Select } from '@material-ui/core';
+import { Avatar, Box, CardHeader, Chip, Container, Grid, LinearProgress, Link, MenuItem, Select } from '@material-ui/core';
 
 let useStyles = (props) => ({
   root: {
@@ -178,7 +178,7 @@ class Matcherino extends Component {
     const { classes } = this.props;
 
     return(
-      <Box>
+      <Container maxWidth="xl" disableGutters>
         <ScrollTop />
 
         <Box gutterBottom>
@@ -262,7 +262,7 @@ class Matcherino extends Component {
           :
           null
         }
-      </Box>
+      </Container>
     )
   }
 };

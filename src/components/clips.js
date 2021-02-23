@@ -8,7 +8,7 @@ import HelpButton from './HelpButton';
 import LazyLoad from 'react-lazyload';
 import ScrollTop from './ScrollTop';
 import { Box, Grid, MenuItem, Select, withStyles,
-  Link, Chip, Card, CardActionArea, CardMedia, CardContent, Typography, LinearProgress } from '@material-ui/core';
+  Link, Chip, Card, CardActionArea, CardMedia, CardContent, Typography, LinearProgress, Container } from '@material-ui/core';
 
 let useStyles = (props) => ({
   root: {
@@ -116,7 +116,7 @@ class Clips extends Component {
     const { classes } = this.props;
 
     return(
-      <Box>
+      <Container maxWidth="xl" disableGutters>
         <ScrollTop />
         <Box>
           <h2 style={{color: "white"}}>
@@ -173,7 +173,7 @@ class Clips extends Component {
             }
           </Grid>
         </Box>
-      </Box>
+      </Container>
     )
   }
 };
