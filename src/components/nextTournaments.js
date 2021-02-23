@@ -18,7 +18,6 @@ import { Avatar, Box, CardHeader, Chip, Grid, LinearProgress, Link, MenuItem, Li
 
 let useStyles = (props) => ({
   root: {
-    maxWidth: 345,
   },
   media: {
     height: 140,
@@ -165,14 +164,13 @@ class NextTournaments extends Component {
         <Box>
           {
             this.state.tournaments != null ?
-              <Grid container justify="flex-start" spacing={2} width="100%">
+              <Grid container justify="flex-start" spacing={2}>
                 {this.state.tournaments.filter(t=>{return t.url != null}).map((tournament)=>(
-                  <Grid item component={Link} lg={4} md={6} sm={6} xs={12}
-                  underline="none" href={tournament.url} target="_blank"
-                  style={{display: "flex", justifyContent: "center"}}>
-                    <Card fullWidth className={classes.root} style={{width: "100%"}}>
+                  <Grid item style={{display: "grid"}} component={Link} xs={12} sm={6} md={6} lg={4} xl={3}
+                  underline="none" href={tournament.url} target="_blank">
+                    <Card fullWidth style={{width: "100%"}}>
                       <CardActionArea>
-                        <CardHeader noWrap classes={{content: classes.cardHeader}}
+                        <CardHeader noWrap style={{height: 84}} classes={{content: classes.cardHeader}}
                           avatar={<Avatar src={`https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/country_flag/${tournament.country.toLowerCase()}.png`} />}
                           title={<Typography noWrap variant="h6" component="h2">
                             {tournament.tournament}

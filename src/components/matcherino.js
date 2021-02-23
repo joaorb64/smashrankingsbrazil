@@ -16,7 +16,6 @@ import { Avatar, Box, CardHeader, Chip, Grid, LinearProgress, Link, MenuItem, Se
 
 let useStyles = (props) => ({
   root: {
-    maxWidth: 345,
   },
   media: {
     height: 140,
@@ -195,14 +194,13 @@ class Matcherino extends Component {
           </Select>
         </Box>
         <Box>
-          <Grid container justify="flex-start" spacing={2} width="100%">
+          <Grid container justify="flex-start" spacing={2}>
             {
               this.state.tournaments[this.state.selected] != null ?
                 this.state.tournaments[this.state.selected].sort((a,b)=>(Date.parse(b.createdAt)-Date.parse(a.createdAt))).map((tournament)=>(
-                  <Grid item component={Link} lg={4} md={6} sm={6} xs={12}
-                  underline="none" href={"https://matcherino.com/tournaments/"+tournament.id} target="_blank"
-                  style={{display: "flex", justifyContent: "center"}}>
-                    <Card fullWidth className={classes.root} style={{width: "100%"}}>
+                  <Grid item style={{display: "grid"}} component={Link} xs={12} sm={6} md={6} lg={4} xl={3}
+                  underline="none" href={"https://matcherino.com/tournaments/"+tournament.id} target="_blank">
+                    <Card fullWidth style={{width: "100%"}}>
                       <CardActionArea>
                         <CardHeader
                           avatar={<Avatar src={tournament.creator.avatar} />}

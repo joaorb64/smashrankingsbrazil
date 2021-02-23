@@ -360,7 +360,7 @@ class HeadToHead extends Component {
                   />
                   {player ?
                     <Paper style={{marginTop: 8}}>
-                      <Box p={1} noWrap>
+                      <Box p={1} style={{height: 80}} noWrap>
                         <Box display="flex" style={{placeContent: "center"}} noWrap>
                           {player.org ?
                             <Typography align="right" className={classes.playerTag} noWrap color="secondary" variant="h6">{player.org}&nbsp;</Typography>

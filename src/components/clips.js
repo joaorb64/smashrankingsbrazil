@@ -12,7 +12,6 @@ import { Box, Grid, MenuItem, Select, withStyles,
 
 let useStyles = (props) => ({
   root: {
-    maxWidth: 345,
   },
   media: {
     height: 180,
@@ -135,14 +134,13 @@ class Clips extends Component {
           }
         </Box>
         <Box>
-          <Grid container justify="flex-start" spacing={2} width="100%">
+          <Grid container justify="flex-start" spacing={2}>
             {
               this.state.clipsFiltered != null ?
                 this.state.clipsFiltered.slice(0,50).map((clip)=>(
-                  <Grid item component={Link} lg={4} md={6} sm={6} xs={12}
-                  underline="none" href={clip.url} target="_blank"
-                  style={{display: "flex", justifyContent: "center"}}>
-                    <Card className={classes.root} style={{width: "100%"}}>
+                  <Grid item style={{display: "grid"}} component={Link} xs={12} sm={6} md={6} lg={4} xl={3}
+                  underline="none" href={clip.url} target="_blank">
+                    <Card fullWidth style={{width: "100%"}}>
                       <CardActionArea>
                         <CardMedia
                           className={classes.media}

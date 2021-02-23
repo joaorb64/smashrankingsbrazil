@@ -79,7 +79,7 @@
     "weekday-sun": "DOM",
     "select-league": "Seleccione una liga",
     "creators": "Idealizadores",
-    "about-text": "Este sitio agrupa ligas de escenas de Super Smash Bros Ultimate de todo el mundo en un solo lugar. Los datos utilizados se extraen de Braacket y SmashGG, de tiempo en tiempo, todos los días. La interfaz de este El sitio se basa principalmente en el modo <i>Tourney</i> de Super Smash Bros. Ultimate.",
+    "about-text": "Este sitio agrupa ligas de varios juegos, y de todo el mundo, en un solo lugar. Los datos utilizados se extraen de Braacket y SmashGG, de tiempo en tiempo, todos los días.",
     "faq-old-data": "¡Mis datos están vacíos o desactualizados!",
     "faq-old-data-desc": "Asegúrate de que tu perfil de SmashGG esté actualizado. Si tus personajes están equivocados, puede ser culpa de una de las ligas en Braacket con personajes definidos incorrectamente o desactualizados. En ese caso, hable con el administrador de la liga en Braacket.",
     "faq-duplicated": "¡Mi perfil está duplicado!",
