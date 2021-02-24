@@ -67,6 +67,10 @@ class Contacts extends Component {
 
     let leagueId = this.props.match.params["id"];
 
+    if(this.props.match.params["game"] != this.props.game){
+      return;
+    }
+
     if(this.props.contacts && this.props.contacts.length > 0) {
       if(this.props.match.params["id"]){
         let selectedId = this.props.match.params["id"];    

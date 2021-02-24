@@ -131,7 +131,7 @@ class PlayerRanking extends PureComponent {
     this.playerModal.current.setState({open: true, player: player});
   }
 
-  closePlayerModal(){
+  closePlayerModal(historyGoBack=true){
     window.history.replaceState(null, null,
       '/'+this.props.game+'/leagues/'+this.props.match.params["id"]+'/'+
       this.props.match.params["tab"]+"/"

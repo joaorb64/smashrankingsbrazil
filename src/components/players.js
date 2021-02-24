@@ -28,7 +28,7 @@ class Players extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if(prevProps != this.props && (prevProps.game != this.props.game || !prevProps.allplayers || prevProps.allplayers.length == 0 || !prevProps.allplayers.players || !this.props.allplayers)){
+    if(prevProps != this.props && (prevProps.game != this.props.game || !prevProps.allplayers || prevProps.allplayers.length == 0 || !prevProps.allplayers.players || !this.props.allplayers || this.state.players.length == 0)){
       this.setState({
         playerModalOpened: false,
         players: [],
@@ -129,10 +129,12 @@ class Players extends Component {
     this.playerModal.current.setState({open: true, player: player});
   }
 
-  closePlayerModal(){
+  closePlayerModal(historyGoBack=true){
     this.setState({playerModalOpened: false});
 
-    this.props.history.goBack();
+    if(historyGoBack){
+      this.props.history.goBack();
+    }
   }
 
   search(e){

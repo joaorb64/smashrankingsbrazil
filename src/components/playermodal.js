@@ -762,7 +762,7 @@ class PlayerModal extends Component {
                           {this.props.leagues != null && this.props.leagues.length > 0 ?
                             <Link 
                               to={`/${this.props.game}/leagues/${rank[0]}`}
-                              onClick={()=>{this.setState({open: false}); this.props.closeModal()}}
+                              onClick={()=>{this.setState({open: false}); this.props.closeModal(false)}}
                               style={{display: "flex"}}>
                                 <div style={{width: "42px", textAlign: "center", fontSize: "1.5rem",
                                 backgroundColor: "lightgray", display: "flex", flexShrink: 0, color: "black"}}>
