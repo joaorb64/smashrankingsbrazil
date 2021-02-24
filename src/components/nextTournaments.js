@@ -14,7 +14,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import ScrollTop from './ScrollTop';
-import { Avatar, Box, CardHeader, Chip, Grid, LinearProgress, Link, MenuItem, ListSubheader, Select, ListItem, ListItemIcon, ListItemText, Container } from '@material-ui/core';
+import { Avatar, Box, CardHeader, Chip, Grid, LinearProgress, Link, MenuItem, ListSubheader, Select, ListItem, ListItemIcon, ListItemText, Container, Paper } from '@material-ui/core';
 
 let useStyles = (props) => ({
   root: {
@@ -153,10 +153,10 @@ class NextTournaments extends Component {
             ))}
           </Select>
           {this.state.selectedCountry == "br" ? 
-            <a href="https://twitter.com/smash_bot_br" class="col-12" style={{backgroundColor: "white", minHeight: "64px", display: "flex", alignItems: "center", marginTop: 8}}>
-              <img src="/images/bot.png" style={{height: 48, width: 48, borderRadius: 8}} />
-              <div style={{padding: 8, color: "black"}}>Siga o @smash_bot_br para ser notificado de próximos eventos e resultados de torneios em tempo real!</div>
-            </a>
+            <Paper style={{padding: 8, minHeight: 64, display: "flex", alignItems: "center", marginBottom: 8}} component="a" href="https://twitter.com/smash_bot_br">
+              <img src="/images/bot.png" style={{height: 48, width: 48, borderRadius: 8, marginRight: 8}} />
+              <div>Siga o @smash_bot_br para ser notificado de próximos eventos e resultados de torneios em tempo real!</div>
+            </Paper>
             :
             null
           }          

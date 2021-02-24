@@ -330,11 +330,9 @@ class PlayerRanking extends PureComponent {
           </Container>
           :
             this.state.updateTime ?
-              <div class={"col-12"} style={{paddingTop: 10}}>
-                <div class={styles.listItem} style={{padding: "10px 10px", lineHeight: "24px", height: "auto"}}>
-                  Não foi encontrado ranking para esta liga no Braacket. Para solução de problemas, entre em contato com os TOs da sua região.
-                </div>
-              </div>
+              <Paper style={{padding: 8}}>
+                No ranking was found for this league in Braacket. Please contact the league's mantainer.
+              </Paper>
             :
             <div class="loader"></div>
         }

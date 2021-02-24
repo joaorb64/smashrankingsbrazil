@@ -27,16 +27,41 @@ Math.angleRadians = function(p1, p2){return Math.atan2(p2.y - p1.y, p2.x - p1.x)
 // angle in degrees
 Math.angleDeg = function(p1, p2){return Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI;}
 
+Math.getCentroid = function (arr) { 
+  return arr.reduce(function (x,y) {
+    return [x[0] + y[0]/arr.length, x[1] + y[1]/arr.length] 
+  }, [0,0]) 
+}
+
 var myMarker = L.Marker.extend({
+  _animateZoom: function (opt) {
+		var pos = this._map._latLngToNewLayerPoint(this._latlng, opt.zoom, opt.center).round();
+    this._newPos = null;
+		this._setPos(pos);
+	},
   update: function () {
 		if (this._icon && this._map) {
+      this._newPos = null;
+
       var pos = this._map.latLngToLayerPoint(this._latlng);
+
+      let positions = []
+
+      for(let i=0; i<Object.keys(this._map._layers).length; i+=1){
+        let marker = Object.values(this._map._layers)[i];
+
+        if(marker._latlng && marker != this && marker.options.icon != null){
+          positions.push(marker._newPos ? marker._newPos : this._map.latLngToContainerPoint(marker._latlng));
+        }
+      }
+
+      let mapCenter = Math.getCentroid(positions);
       
       for(let i=0; i<Object.keys(this._map._layers).length; i+=1){
         let other = Object.values(this._map._layers)[i];
 
-        if(other._latlng && other != this && other._icon){
-          let otherPos = this._map.latLngToContainerPoint(other._latlng);
+        if(other._latlng && other != this && other.options.icon != null){
+          let otherPos = other._newPos ? other._newPos : this._map.latLngToContainerPoint(other._latlng);
           let myPos = this._map.latLngToContainerPoint(this._latlng);
 
           let distance = Math.getDistance(
@@ -48,23 +73,28 @@ var myMarker = L.Marker.extend({
 
           if(distance == 0){
             angle = Math.angleRadians(
-              {x: this._latlng.lng, y: this._latlng.lat},
-              {x: other._latlng.lng, y: other._latlng.lat}
+              {x: myPos.x, y: myPos.y},
+              {x: otherPos.x, y: otherPos.y}
             )
           }
 
-          if(distance<32){
+          let maxWidth = Math.max(this._icon.width, other._icon.width);
+          console.log(maxWidth)
+
+          if(distance < maxWidth/2){
             if(angle == undefined)
               angle = Math.angleRadians(myPos, otherPos);
             console.log(angle);
             console.log(distance);
-            pos.y -= Math.sin(angle)*((32-distance)/4);
-            pos.x -= Math.cos(angle)*((32-distance)/4);
+            pos.y -= Math.sin(angle)*((maxWidth-distance)/2);
+            pos.x -= Math.cos(angle)*((maxWidth-distance)/2);
           }
         }
       }
 
 			this._setPos(pos);
+
+      this._newPos = pos;
 		}
 
 		return this;
