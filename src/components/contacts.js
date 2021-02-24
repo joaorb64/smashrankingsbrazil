@@ -113,7 +113,7 @@ class Contacts extends Component {
 
       if(this.props.match.params["tab"]){
         this.handleTabChange(this.props.match.params["tab"]);
-      } else {
+      } else if(!prevProps || this.props.contacts != prevProps.contacts) {
         this.props.history.push(
           "/"+this.props.game+'/leagues/'+leagueId+'/ranking/'
         );

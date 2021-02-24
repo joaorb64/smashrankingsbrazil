@@ -862,7 +862,7 @@ class PlayerModal extends Component {
                         flexDirection: "column", alignItems: "center", placeContent: "center"}}
                         data-toggle="tooltip" data-placement="top">
                           <div class="" style={{
-                            backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_2_${GetCharacterCodename(this.props.game, CHARACTERS_GG_TO_BRAACKET[character[0]])+"_00"}.png)`,
+                            backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_2_${GetCharacterCodename(this.props.game, character[0])+"_00"}.png)`,
                             width: "24px", height: "24px", backgroundPosition: "center", backgroundSize: "cover",
                             flexGrow: 0, display: "flex", flexShrink: 1, margin: "0 20px 0 20px"
                           }}></div>

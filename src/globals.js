@@ -83,11 +83,14 @@ const CHARACTER_TO_CODENAME = {
         "Min Min": "tantan",
         "Steve": "pickel",
         "Sephiroth": "edge",
-        "Random": "random"
+        "Random": "random",
+        "Random Character": "random"
     }
 }
 
 export function GetCharacterCodename(game, char){
+    if(char == "Random Character") return "random";
+    
     if(CHARACTER_TO_CODENAME[game]){
         if(CHARACTER_TO_CODENAME[game][char]){
             return CHARACTER_TO_CODENAME[game][char];
