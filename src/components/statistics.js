@@ -497,8 +497,8 @@ class Statistics extends Component {
                   {i18n.t("players-per-country")}
                 </Typography>
                 <Box style={{overflowX: "scroll", backgroundColor: "#e4e4e4"}}>
-                  <Box style={{width: 32*this.state.statistics.players_per_country.length, height:300}}>
-                    <canvas style={{width: 32*this.state.statistics.players_per_country.length, height: 300}} ref={this.chartCountriesRef} id="myChartCountries" />
+                  <Box style={{width: Math.max(42*this.state.statistics.players_per_country.length, 240), height:300}}>
+                    <canvas style={{width: Math.max(42*this.state.statistics.players_per_country.length, 240), height: 300}} ref={this.chartCountriesRef} id="myChartCountries" />
                   </Box>
                 </Box>
               </Box>
@@ -512,8 +512,8 @@ class Statistics extends Component {
                   {i18n.t("players-per-state")}
                 </Typography>
                 <Box style={{overflowX: "scroll", backgroundColor: "#e4e4e4"}}>
-                  <Box style={{width: 32*this.state.statistics.players_per_state.length, height:300}}>
-                    <canvas style={{width: 32*this.state.statistics.players_per_state.length, height: 300}} ref={this.chartStatesRef} id="myChartStates" />
+                  <Box style={{width: Math.max(42*this.state.statistics.players_per_state.length, 240), height:300}}>
+                    <canvas style={{width: Math.max(42*this.state.statistics.players_per_state.length, 240), height: 300}} ref={this.chartStatesRef} id="myChartStates" />
                   </Box>
                 </Box>
               </Box>
