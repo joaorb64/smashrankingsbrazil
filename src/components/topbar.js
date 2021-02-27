@@ -172,7 +172,7 @@ function TopBar(props) {
   }
 
   const drawer = (
-    <div style={{height: "100%"}}>
+    <div style={{marginBottom: "90px"}}>
       <div className={classes.toolbar} style={{display: "flex", padding: 8}}>
         <Box style={{alignSelf: "center"}}>
           <Typography variant="h6" noWrap style={{display: "flex"}}>
@@ -268,24 +268,28 @@ function TopBar(props) {
           <ListItemText primary={i18n.t("about")} />
         </ListItem>
       </List>
+    </div>
+  );
 
-      <Box style={{position: "absolute", bottom: 0, padding: 8, display: "flex", flexWrap: "wrap"}}>
-        <div style={{flexGrow: 1, margin: 2}}>
+  const credits = (
+    <Box style={{bottom: "0", position: "fixed", width: drawerWidth}}>
+      <Box style={{position: "absolute", bottom: 0, padding: 8, display: "flex", flexWrap: "wrap", backgroundColor: "black"}}>
+        <div style={{flexGrow: 1, margin: 2, fontSize: "10px"}}>
           By João "Shino" (joaorb64@gmail.com, <a style={{color: "white"}} href="https://twitter.com/joao_shino">@joao_shino</a>) <br/>
         </div>
         <div style={{flexGrow: 0, margin: 2}}>
           <a href='https://ko-fi.com/W7W22YK26' target='_blank'>
-            <img style={{border: 0, height: 32}} src='https://cdn.ko-fi.com/cdn/kofi1.png?v=2' border='0' alt='Buy Me a Coffee at ko-fi.com'></img>
+            <img style={{border: 0, height: 24}} src='https://cdn.ko-fi.com/cdn/kofi1.png?v=2' border='0' alt='Buy Me a Coffee at ko-fi.com'></img>
           </a>
         </div>
         <div style={{flexGrow: 0, margin: 2}}>
           <a href="https://picpay.me/joaorb64">
-            <img src="/images/donate_picpay.png" style={{height: 32, borderRadius: 5}}></img>
+            <img src="/images/donate_picpay.png" style={{height: 24, borderRadius: 5}}></img>
           </a>
         </div>
       </Box>
-    </div>
-  );
+    </Box>
+  )
 
   const container = window !== undefined ? () => window().document.body : undefined;
 
@@ -329,6 +333,7 @@ function TopBar(props) {
             }}
           >
             {drawer}
+            {credits}
           </SwipeableDrawer>
         </Hidden>
         <Hidden smDown implementation="css">
@@ -340,6 +345,7 @@ function TopBar(props) {
             open
           >
             {drawer}
+            {credits}
           </Drawer>
         </Hidden>
       </nav>
