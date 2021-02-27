@@ -108,13 +108,15 @@ function TopBar(props) {
       game: props.game,
       allplayers: null,
       alltournaments: null,
+      globalstatistics: null,
       leagues: null
     });
 
     let urls = [
       'https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/out/'+props.game+'/allleagues.json',
       'https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/out/'+props.game+'/allplayers.json',
-      'https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/out/'+props.game+'/alltournaments.json'
+      'https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/out/'+props.game+'/alltournaments.json',
+      'https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/out/'+props.game+'/statistics.json',
     ]
 
     Promise.all(urls.map(u=>fetch(u))).then(responses =>
@@ -143,7 +145,8 @@ function TopBar(props) {
         game: props.game,
         allplayers: alldata[1],
         alltournaments: alldata[2],
-        leagues: leagues
+        leagues: leagues,
+        globalstatistics: alldata[3]
       });
     })
 
@@ -254,6 +257,11 @@ function TopBar(props) {
           <ListItemIcon className={classes.ListItemIcon}><FontAwesomeIcon icon={faCoins}/></ListItemIcon>
           <ListItemText primary={"Matcherino"} />
         </ListItem>
+
+        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to={"/"+game.game+"/statistics/"}>
+          <ListItemIcon className={classes.ListItemIcon}><FontAwesomeIcon icon={faChartLine}/></ListItemIcon>
+          <ListItemText primary={"Global Statistics"} />
+        </ListItem>
         
         <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to={"/"+game.game+"/about/"}>
           <ListItemIcon className={classes.ListItemIcon}><FontAwesomeIcon icon={faInfoCircle}/></ListItemIcon>
@@ -362,6 +370,7 @@ function TopBar(props) {
           <Route path="/:game/matcherino/:country?" exact render={(history) => <Matcherino game={game.game} match={history.match} history={history.history} />} />
           <Route path="/:game/nexttournaments/:country?" exact render={(history) => <NextTournaments game={game.game} match={history.match} history={history.history} />} />
           <Route path="/:game/clips/:lang?" exact render={(history) => <Clips game={game.game} match={history.match} history={history.history} />} />
+          <Route path="/:game/statistics/" exact render={(history) => <Statistics game={game.game} allplayers={game.allplayers} leagues={game.leagues} statistics={game.globalstatistics} />} />
           <Route path="/:game/about/" exact render={(history) => <About />} />
           <Redirect to={"/"+props.game+"/leagues/"} />
         </Switch>

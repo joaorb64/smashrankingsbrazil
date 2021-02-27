@@ -28,6 +28,7 @@ class TournamentList extends Component {
               <Table>
                 <TableHead>
                   <TableRow>
+                    <TableCell></TableCell>
                     <TableCell>{i18n.t("Name")}</TableCell>
                     <TableCell>{i18n.t("Date")}</TableCell>
                     <TableCell align="right">{i18n.t("Participants")}</TableCell>
@@ -36,6 +37,17 @@ class TournamentList extends Component {
                 <TableBody>
                   {Object.values(this.props.tournaments).sort((a,b)=>{return b.time - a.time}).map((tournament)=>(
                     <TableRow component="a" hover role="checkbox" style={{textDecoration: "none", color: "white"}} target="_blank" href={`https://braacket.com/tournament/${tournament.id}`}>
+                      <TableCell>{
+                        tournament.link ?
+                          <img src={
+                            tournament.link.includes("braacket") ? "https://braacket.com/favicon.ico" :
+                            tournament.link.includes("smash.gg") ? "https://smash.gg/favicon.ico" :
+                            tournament.link.includes("challonge") ? "https://assets.challonge.com/favicon-32x32.png" :
+                            null
+                          } width="16px" height="16px" />
+                        :
+                        null
+                      }</TableCell>
                       <TableCell>{tournament.name}</TableCell>
                       <TableCell>{moment.unix(tournament.time).add(1, "day").format("DD/MM/YY")}</TableCell>
                       <TableCell align="right">{tournament.player_number}</TableCell>

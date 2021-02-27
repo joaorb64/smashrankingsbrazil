@@ -51,6 +51,17 @@ class Statistics extends Component {
   }
 
   componentDidMount() {
+    this.updateData();
+  }
+
+  componentDidUpdate(nextProps){
+    if(this.props.statistics != nextProps.statistics){
+      this.state.statistics = null;
+      this.updateData();
+    }
+  }
+
+  updateData(){
     if(this.props.statistics && this.state.statistics == null){
       let data = {}
       Object.assign(data, this.props.statistics);
@@ -486,8 +497,8 @@ class Statistics extends Component {
                   {i18n.t("players-per-country")}
                 </Typography>
                 <Box style={{overflowX: "scroll", backgroundColor: "#e4e4e4"}}>
-                  <Box style={{width: 800, height:300}}>
-                    <canvas style={{width: 800, height: 300}} ref={this.chartCountriesRef} id="myChartCountries" />
+                  <Box style={{width: 32*this.state.statistics.players_per_country.length, height:300}}>
+                    <canvas style={{width: 32*this.state.statistics.players_per_country.length, height: 300}} ref={this.chartCountriesRef} id="myChartCountries" />
                   </Box>
                 </Box>
               </Box>
@@ -501,8 +512,8 @@ class Statistics extends Component {
                   {i18n.t("players-per-state")}
                 </Typography>
                 <Box style={{overflowX: "scroll", backgroundColor: "#e4e4e4"}}>
-                  <Box style={{width: 800, height:300}}>
-                    <canvas style={{width: 800, height: 300}} ref={this.chartStatesRef} id="myChartStates" />
+                  <Box style={{width: 32*this.state.statistics.players_per_state.length, height:300}}>
+                    <canvas style={{width: 32*this.state.statistics.players_per_state.length, height: 300}} ref={this.chartStatesRef} id="myChartStates" />
                   </Box>
                 </Box>
               </Box>
@@ -515,8 +526,8 @@ class Statistics extends Component {
                 {i18n.t("character-usage")}
               </Typography>
               <Box style={{overflowX: "scroll", backgroundColor: "#e4e4e4"}}>
-                <Box style={{width: 2000, height:300}}>
-                  <canvas style={{width: 2000, height: 300}} ref={this.chartRef} id="myChart" />
+                <Box style={{width: 32*this.state.statistics.char_usage.length, height:300}}>
+                  <canvas style={{width: 32*this.state.statistics.char_usage.length, height: 300}} ref={this.chartRef} id="myChart" />
                 </Box>
               </Box>
             </Box>
@@ -526,8 +537,8 @@ class Statistics extends Component {
                 {i18n.t("character-usage-secondary")}
               </Typography>
               <Box style={{overflowX: "scroll", backgroundColor: "#e4e4e4"}}>
-                <Box style={{width: 2000, height:300}}>
-                  <canvas style={{width: 2000, height: 300}} ref={this.chartSecondaryRef} id="mySecondaryChart" />
+                <Box style={{width: 32*this.state.statistics.char_usage_secondary.length, height:300}}>
+                  <canvas style={{width: 32*this.state.statistics.char_usage_secondary.length, height: 300}} ref={this.chartSecondaryRef} id="mySecondaryChart" />
                 </Box>
               </Box>
             </Box>
@@ -571,7 +582,7 @@ class Statistics extends Component {
             }
           </Box>
         :
-          <div>Loading...</div>
+          <div class="loader"></div>
         }
         <div id="pics" style={{display: "none"}}></div>
       </Paper>
