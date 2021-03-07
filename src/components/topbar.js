@@ -273,7 +273,10 @@ function TopBar(props) {
 
   const credits = (
     <Box style={{bottom: "0", position: "fixed", width: drawerWidth}}>
-      <Box style={{position: "absolute", bottom: 0, padding: 8, display: "flex", flexWrap: "wrap", backgroundColor: "black"}}>
+      <Box style={{
+        position: "absolute", bottom: 0, padding: 8, display: "flex", flexWrap: "wrap",
+        backgroundColor: theme.palette.background.default,
+        borderRight: "1px solid rgba(255, 255, 255, 0.12)"}}>
         <div style={{flexGrow: 1, margin: 2, fontSize: "10px"}}>
           By João "Shino" (joaorb64@gmail.com, <a style={{color: "white"}} href="https://twitter.com/joao_shino">@joao_shino</a>) <br/>
         </div>
