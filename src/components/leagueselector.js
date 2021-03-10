@@ -9,6 +9,7 @@ ListItem, ListItemIcon, ListItemText, TextField, Typography, Icon, AppBar,
 Toolbar, withStyles, Hidden, Tabs, Tab, Divider } from '@material-ui/core';
 import { StarBorder, ExpandLess, ExpandMore, Public, Wifi } from '@material-ui/icons'
 import HideOnScroll from './HideOnScroll';
+import countriesJson from '../locales/countries.json';
 
 const useStyles = (props) => ({
   leagueSelectorTopbar: {
@@ -73,6 +74,7 @@ class LeagueSelector extends Component {
                 leagues: [],
                 subleagues: {},
                 open: false,
+                name: countriesJson[league.country].native,
                 icon: `https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/country_flag/${league.country.toLowerCase()}.png`,
                 show_count: true
               };
@@ -275,7 +277,7 @@ class LeagueSelector extends Component {
             </Tabs>
           </Hidden>
 
-          <Dialog open={this.state.modalOpened} onClose={()=>{this.setState({modalOpened: false})}}>
+          <Dialog maxWidth="md" fullWidth open={this.state.modalOpened} onClose={()=>{this.setState({modalOpened: false})}}>
             <DialogTitle>{i18n.t("select-league")}</DialogTitle>
             <DialogContent dividers>
               <TextField autoComplete={false} fullWidth label="Search" onChange={(event)=>{this.filterLeagues(event.target.value)}} />

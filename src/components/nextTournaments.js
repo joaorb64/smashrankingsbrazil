@@ -15,6 +15,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import ScrollTop from './ScrollTop';
 import { Avatar, Box, CardHeader, Chip, Grid, LinearProgress, Link, MenuItem, ListSubheader, Select, ListItem, ListItemIcon, ListItemText, Container, Paper } from '@material-ui/core';
+import countriesJson from '../locales/countries.json';
 
 let useStyles = (props) => ({
   root: {
@@ -148,7 +149,7 @@ class NextTournaments extends Component {
               [<ListSubheader>{i18n.t("region-"+region.toLowerCase())}</ListSubheader>,
               <MenuItem value={"region_"+region.toLowerCase()}>{i18n.t("all")} ({i18n.t("region-"+region.toLowerCase())})</MenuItem>,
               this.state.selections[region].map((country) => (
-                <MenuItem value={country.toLowerCase()}>{country+" ("+this.state.alltournaments[country].events.length+")"}</MenuItem>
+                <MenuItem value={country.toLowerCase()}>{countriesJson[country].native+" ("+this.state.alltournaments[country].events.length+")"}</MenuItem>
               ))]
             ))}
           </Select>
