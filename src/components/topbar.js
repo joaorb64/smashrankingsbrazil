@@ -88,7 +88,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function TopBar(props) {
-  const { window } = props;
+  const { window_container } = props;
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -294,7 +294,7 @@ function TopBar(props) {
     </Box>
   )
 
-  const container = window !== undefined ? () => window().document.body : undefined;
+  const container = window_container !== undefined ? () => window_container().document.body : undefined;
 
   return (
     <div className={classes.root}>
