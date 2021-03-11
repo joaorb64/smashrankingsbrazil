@@ -54,23 +54,7 @@ class LeagueSelector extends Component {
     };
 
     if(this.props.leagues && this.props.leagues != null){
-
-      let sortedLeagues = this.props.leagues.sort((a,b)=>{
-        if(a.state && !b.state){
-          return 1;
-        }
-        if(b.state && !a.state){
-          return -1;
-        }
-        if(a.name > b.name){
-          return 1;
-        }
-        if(a.name <= b.name){
-          return -1;
-        }
-      });
-      
-      sortedLeagues.forEach(league=>{
+      this.props.leagues.forEach(league=>{
         if(league.region){
           if(!this.state.league_tree["subleagues"][league.region]){
             this.state.league_tree["subleagues"][league.region] = {

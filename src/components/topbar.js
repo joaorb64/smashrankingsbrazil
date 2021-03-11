@@ -141,18 +141,34 @@ function TopBar(props) {
         });
       });
 
+      let sortedLeagues = leagues.sort((a,b)=>{
+        if(a.state && !b.state){
+          return 1;
+        }
+        if(b.state && !a.state){
+          return -1;
+        }
+        if(a.name > b.name){
+          return 1;
+        }
+        if(a.name <= b.name){
+          return -1;
+        }
+      });
+
       setGame({
         game: props.game,
         allplayers: alldata[1],
         alltournaments: alldata[2],
-        leagues: leagues,
+        leagues: sortedLeagues,
         globalstatistics: alldata[3]
       });
     })
 
     // Get user country
-    fetch('http://get.geojs.io/v1/ip/country.json').then(res => res.json()).then((data) => {
+    fetch('https://get.geojs.io/v1/ip/country.json').then(res => res.json()).then((data) => {
       if(data && data.country){
+        console.log(data.country);
         setUserCountry(data.country);
       }
     }).catch(console.log())
