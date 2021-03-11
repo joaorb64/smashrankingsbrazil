@@ -38,7 +38,7 @@ class HeadToHead extends Component {
     playerModalPlayer: null,
     league: null,
     players: [],
-    filtered: [],
+    filtered: [[], []],
     search: "",
     ts: null,
     playerSlots: [null, null],
@@ -89,8 +89,11 @@ class HeadToHead extends Component {
     return [p1prob/total, p2prob/total];
   }
 
-  selectPlayer(slotIndex, player){
-    if(!player) return;
+  selectPlayer(slotIndex, selectedPlayer){
+    if(!selectedPlayer) return;
+
+    let player = {};
+    Object.assign(player, selectedPlayer);
 
     let tournamentsWent = [];
     let matchesPlayed = [];
@@ -287,13 +290,11 @@ class HeadToHead extends Component {
     return name.normalize("NFKD").replace(/ /g, '_').replace(/@/g, "_At_").replace(/~/g, "_Tilde_").replace(RegExp('[^0-9a-zA-Z_-]'), '').replace("|", "")
   }
 
-  search(e){
-    this.state.search = e;
-
-    if(this.state.search.length == 0){
-      this.state.filtered = this.state.players;
+  search(i, text){
+    if(text.length == 0){
+      this.state.filtered[i] = [];
     } else {
-      let result = fuzzysort.go(this.state.search, Object.values(this.state.players), {
+      let result = fuzzysort.go(text, this.props.allplayers.players, {
         keys: [
           'name',
           'full_name',
@@ -314,14 +315,15 @@ class HeadToHead extends Component {
             a[5]?a[5].score-10:-1000,
           )}
       })
-      this.state.filtered = []
+      this.state.filtered[i] = []
       Object.values(result).forEach((val)=>{
-        if (val["obj"] != null)
-          this.state.filtered.push(val["obj"]);
+        if (val["obj"] != null){
+          this.state.filtered[i].push(val["obj"]);
+        }
       })
     }
 
-    this.setState(this.state);
+    this.setState({filtered: this.state.filtered});
   }
 
   render (){
@@ -336,12 +338,15 @@ class HeadToHead extends Component {
               {this.state.playerSlots.map((player, i) => (
                 <Grid item xs={6} sm={5} md={4} lg={3} xl={2} className={classes.playerContainer}>
                   <Autocomplete
-                    value={player}
+                    filterOptions={(x) => x}
                     onChange={(event, newValue) => {
                       this.selectPlayer(i, newValue);
                     }}
                     fullWidth
-                    options={this.props.allplayers.players}
+                    onInputChange={(event, newInputValue) => {
+                      this.search(i, newInputValue);
+                    }}
+                    options={this.state.filtered[i]}
                     getOptionLabel={(option) => option.org? option.org+" "+option.name : option.name}
                     renderOption={(option) =>
                       <div style={{"contentVisibility": "auto", "containIntrinsicSize": "24px", display: "flex"}}>
