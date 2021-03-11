@@ -580,9 +580,13 @@ class PlayerModal extends Component {
                   position: "absolute", width: "100%", height: "100%", backgroundSize: "6px 6px", opacity: ".6"}}></div>
 
                   {
-                    this.state.playerData.avatars && this.state.playerData.avatars.length > 0 ?
+                    this.state.playerData.avatar ?
                       <div style={{zIndex: 1}}>
-                        <div className={styles.avatar} style={{backgroundImage: "url("+this.state.playerData.avatars.join("), url(")+")"}}>
+                        <div
+                          className={styles.avatar}
+                          style={{
+                            backgroundColor: "white",
+                            backgroundImage: "url("+this.state.playerData.avatar+")"}}>
                         </div>
                       </div>
                   :
@@ -758,7 +762,7 @@ class PlayerModal extends Component {
                     </Typography>
                     <Grid container style={{padding: 12, backgroundColor: theme.palette.background.default}}>
                       {Object.entries(this.state.playerData.rank).sort((a, b)=>{return a[1].rank-b[1].rank}).map((rank, i)=>(
-                        <Grid item xs lg={4} md={6} style={{padding: "2px"}} id={i}>
+                        <Grid item xs={12} sm={12} md={6} lg={4} style={{padding: "2px"}} id={i}>
                           {this.props.leagues != null && this.props.leagues.length > 0 ?
                             <Link 
                               to={`/${this.props.game}/leagues/${rank[0]}`}

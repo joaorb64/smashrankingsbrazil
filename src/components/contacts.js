@@ -148,14 +148,10 @@ class Contacts extends Component {
                 let p = {}
                 p = Object.assign(p, this.props.allplayers["players"][this.props.allplayers["mapping"][league+":"+id[0]]]);
       
-                p.avatars = [];
+                p.avatar = "/icons/avatar_generic.png";
 
-                if(p.twitter) {
-                  p.avatars.push(`http://unavatar.now.sh/twitter/${this.getTwitterHandle(p.twitter)}?fallback=false`);
-                  p.avatars.push(`https://api.microlink.io/?url=https://twitter.com/${this.getTwitterHandle(p.twitter)}&embed=image.url`);
-                }
                 if(p.smashgg_image) {
-                  p.avatars.push(p.smashgg_image);
+                  p.avatar = p.smashgg_image;
                 }
       
                 if(p.mains == null || p.mains.length == 0 || p.mains[0] == ""){

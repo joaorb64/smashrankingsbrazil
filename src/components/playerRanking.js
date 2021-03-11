@@ -298,12 +298,12 @@ class PlayerRanking extends PureComponent {
                         </div>
                       </div>
 
-                      {player.avatars && player.avatars.length > 0 ?
+                      {player.avatar ?
                         <div style={{
-                          backgroundImage: "url("+player.avatars.join("), url(")+")",
+                          backgroundImage: "url("+player.avatar+")",
                           width: "80px", height: "80px", backgroundSize: "cover", backgroundPosition: "center",
                           borderRadius: "100%", position: "absolute", right: 10, top: 10, border: "2px #f0f0f0 solid",
-                          backgroundColor: "gray"
+                          backgroundColor: "white"
                         }}>
                         </div>
                       :

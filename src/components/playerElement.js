@@ -34,11 +34,11 @@ class PlayerElement extends Component {
                                     null
                                 }
                                 <Grid item style={{alignSelf: "stretch", maxHeight: "100%", width: "64px"}}>
-                                    {player.avatars && player.avatars.length > 0 ?
+                                    {player.avatar ?
                                         <div class="player-avatar" style={{
-                                            backgroundImage: "url("+player.avatars.join("), url(")+")",
+                                            backgroundImage: "url("+player.avatar+")",
                                             width: "64px", height: "100%", display: "inline-block", backgroundSize: "cover", backgroundRepeat: "no-repeat",
-                                            backgroundPosition: "center", backgroundColor: "gray",
+                                            backgroundPosition: "center", backgroundColor: "white",
                                         }}>
                                         </div>
                                         :
