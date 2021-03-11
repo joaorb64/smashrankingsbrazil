@@ -62,7 +62,18 @@ var myMarker = L.Marker.extend({
 
         if(other._latlng && other != this && other.options.icon != null){
           let otherPos = other._newPos ? other._newPos : this._map.latLngToContainerPoint(other._latlng);
+          
+          if(other.pushPos){
+            otherPos.y += other.pushPos.y;
+            otherPos.x += other.pushPos.x;
+          }
+
           let myPos = this._map.latLngToContainerPoint(this._latlng);
+
+          if(this.pushPos){
+            myPos.y += this.pushPos.y;
+            myPos.x += this.pushPos.x;
+          }
 
           let distance = Math.getDistance(
             otherPos.x, otherPos.y,
@@ -81,18 +92,39 @@ var myMarker = L.Marker.extend({
           let maxWidth = Math.max(this._icon.width, other._icon.width);
           console.log(maxWidth)
 
-          if(distance < maxWidth/2){
+          if(distance < maxWidth){
             if(angle == undefined)
               angle = Math.angleRadians(myPos, otherPos);
             console.log(angle);
             console.log(distance);
-            pos.y -= Math.sin(angle)*((maxWidth-distance)/2);
-            pos.x -= Math.cos(angle)*((maxWidth-distance)/2);
+
+            if(!this.pushPos){
+              this.pushPos = {x: 0, y: 0};
+            }
+
+            if(this.pushPos){
+              this.pushPos.y -= Math.sin(angle)*((maxWidth-distance)/2)/2;
+              this.pushPos.x -= Math.cos(angle)*((maxWidth-distance)/2)/2;
+            }
+
+            if(!other.pushPos){
+              other.pushPos = {x:0, y:0};
+            }
+            
+            other.pushPos.y += Math.sin(angle)*((maxWidth-distance)/2)/2;
+            other.pushPos.x += Math.cos(angle)*((maxWidth-distance)/2)/2;
           }
         }
       }
 
+      if(this.pushPos){
+        pos.x += this.pushPos.x;
+        pos.y += this.pushPos.y;
+      }
+
 			this._setPos(pos);
+
+      this.pushPos = null;
 
       this._newPos = pos;
 		}
@@ -316,7 +348,8 @@ class Mapa extends Component {
       attributionControl: false,
       center: [-29.0529434318608, 152.01910972595218],
       zoom: 10,
-      maxZoom: 5
+      maxZoom: 10,
+      minZoom: 0
     };
 
     let myFilter = [
