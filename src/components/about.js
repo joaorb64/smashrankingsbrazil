@@ -93,6 +93,13 @@ class About extends Component {
           Option 1: fill the form in https://forms.gle/sJStnuBZwtvPf6bS9 <br/>
           Option 2: contact @joao_shino on twitter
         </p>
+        <h2>
+          Streamers and TOs, you might also be interested in this
+        </h2>
+        <p>
+          (this will eventually have its own page) <br/>
+          Check out SmashStreamHelper! It can help automate your stream using data from PowerRankings and SmashGG! For TOs, it means easier and even automatic player data entry. For streamers/competitors, you can have the score and opponent name automatically updated! Check it out: https://github.com/joaorb64/SmashStreamHelper.
+        </p>
       </div>
     )
   }
