@@ -55,7 +55,7 @@ class About extends Component {
         <p>
           <ul>
             <li>
-              Shino (João Ribeiro) <a href="https://twitter.com/joao_shino">@joao_shino</a> - Criador e desenvolvedor do site, manutenção dos dados
+              Shino (João Ribeiro) <a href="https://twitter.com/joao_shino">@joao_shino</a> - Creator & developer
             </li>
             <li>
               frodO (Andrey Brouwenstyn) <a href="https://twitter.com/andreyfrodo">@andreyfrodo</a> - Divulgação nas redes sociais, manutenção dos dados
@@ -77,11 +77,21 @@ class About extends Component {
         <p>
           {i18n.t("faq-old-data-desc")}
         </p>
+        <p>
+          Data from a league is first gathered from Braacket, with twitter accounts and characters as defined there. Then, the site tries to get smashgg user IDs from tournaments in the league. If found, it gets richer data from smashgg and overwrites braacket's data. Players are matched between leagues by using Smashgg ID (if found) and twitter handle (if found).
+        </p>
         <h2>
           {i18n.t("faq-duplicated")}
         </h2>
         <p>
           {i18n.t("faq-duplicated-desc")}
+        </p>
+        <h2>
+          I want to have my league displayed on PowerRankings!
+        </h2>
+        <p>
+          Option 1: fill the form in https://forms.gle/sJStnuBZwtvPf6bS9 <br/>
+          Option 2: contact @joao_shino on twitter
         </p>
       </div>
     )

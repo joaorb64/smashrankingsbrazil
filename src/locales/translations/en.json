@@ -84,7 +84,7 @@
     "weekday-sun": "SUN",
     "select-league": "Select a league",
     "creators": "Creators",
-    "about-text": "This site aggregates leagues of multiple games, and from all over the world, in one place. The data is extracted from Braacket and SmashGG, from time to time, every day.",
+    "about-text": "This site aggregates leagues of multiple games, and from all over the world, in one place. The data is extracted from Braacket and SmashGG, every few hours, every day.",
     "faq-old-data": "My data is empty or out of date!",
     "faq-old-data-desc": "Make sure your SmashGG profile is up to date. If your characters are wrong, it may be the fault of one of the leagues in Braacket with characters defined wrong or outdated. In that case, talk to the Braacket league administrator.",
     "faq-duplicated": "My profile is duplicated!",

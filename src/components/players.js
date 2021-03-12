@@ -65,14 +65,16 @@ class Players extends Component {
 
         if(this.props.match){
           if(this.props.match.params["id"]){
-            p.braacket_links.forEach(link => {
-              let linkLeague = link.split(":")[0];
-              let linkId = link.split(":")[1];
-    
-              if(linkLeague == this.props.match.params["id"]){
-                p.league_id = linkId;
-              }
-            })
+            if(p.braacket_links){
+              p.braacket_links.forEach(link => {
+                let linkLeague = link.split(":")[0];
+                let linkId = link.split(":")[1];
+      
+                if(linkLeague == this.props.match.params["id"]){
+                  p.league_id = linkId;
+                }
+              })
+            }
           } else {
             if(p.braacket_links.length > 0){
               p.league_id = p.braacket_links[0];
