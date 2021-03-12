@@ -189,7 +189,7 @@ class Matcherino extends Component {
           </div>
           <Select className={classes.select} fullWidth value={this.state.selected} onChange={(e)=>this.selectCountry(e)}>
             {Object.keys(this.state.matcherinos).map((country) => (
-              <MenuItem value={country}>{countriesJson[country].native}</MenuItem>
+              <MenuItem value={country}>{countriesJson[country].native + " ("+countriesJson[country].name+")"}</MenuItem>
             ))}
           </Select>
         </Box>

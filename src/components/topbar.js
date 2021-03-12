@@ -35,6 +35,8 @@ import Matcherino from './matcherino';
 import Clips from './clips';
 import HeadToHead from './HeadToHead';
 
+import * as wanakana from 'wanakana';
+
 const drawerWidth = 240;
 
 const games = {
@@ -155,6 +157,16 @@ function TopBar(props) {
           return -1;
         }
       });
+
+      alldata[1].players.forEach((p)=>{
+        if(wanakana.isJapanese(p.name)){
+          let romanized = wanakana.toRomaji(p.name);
+
+          if(romanized != p.name){
+            p.name += " ("+romanized+")";
+          }
+        }
+      })
 
       setGame({
         game: props.game,

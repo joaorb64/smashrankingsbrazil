@@ -264,19 +264,6 @@ class HeadToHead extends Component {
     }
   }
 
-  getCharCodename(playerData, id){
-    let skin = 0;
-
-    if(playerData.hasOwnProperty("skins")){
-      skin = playerData["skins"][playerData["mains"][id]];
-      if(skin == undefined){
-        skin = 0;
-      }
-    }
-    
-    return GetCharacterCodename(this.props.game, playerData["mains"][id])+"_0"+skin;
-  }
-
   getCharName(name){
     return name.toLowerCase().replace(/ /g, "");
   }
@@ -358,7 +345,10 @@ class HeadToHead extends Component {
                           backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_2_${this.getCharCodename(option, 0)}.png)`
                         }}></div>
                         {option.org? option.org+" "+option.name : option.name}
-                        {option.country_code ? " ("+option.country_code+")" : null}
+                        {option.country_code && option.country_code != null && option.country_code != "null" ?
+                          <img style={{placeSelf: "center", marginLeft: "4px"}} width="24px" height="16px" src={`https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/country_flag/${option.country_code.toLowerCase()}.png`} />
+                          :
+                          null}
                       </div>
                     }
                     renderInput={(params) => <TextField {...params} label={"Player "+(i+1)} variant="outlined"/>}

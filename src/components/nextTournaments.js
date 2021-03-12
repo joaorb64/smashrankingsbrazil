@@ -149,7 +149,7 @@ class NextTournaments extends Component {
               [<ListSubheader>{i18n.t("region-"+region.toLowerCase())}</ListSubheader>,
               <MenuItem value={"region_"+region.toLowerCase()}>{i18n.t("all")} ({i18n.t("region-"+region.toLowerCase())})</MenuItem>,
               this.state.selections[region].map((country) => (
-                <MenuItem value={country.toLowerCase()}>{countriesJson[country].native+" ("+this.state.alltournaments[country].events.length+")"}</MenuItem>
+                <MenuItem value={country.toLowerCase()}>{countriesJson[country].native+" ("+countriesJson[country].name+")"+" ["+this.state.alltournaments[country].events.length+"]"}</MenuItem>
               ))]
             ))}
           </Select>

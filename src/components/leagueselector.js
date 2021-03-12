@@ -74,7 +74,7 @@ class LeagueSelector extends Component {
                 leagues: [],
                 subleagues: {},
                 open: false,
-                name: countriesJson[league.country].native,
+                name: countriesJson[league.country].native + " ("+countriesJson[league.country].name+")",
                 icon: `https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/country_flag/${league.country.toLowerCase()}.png`,
                 show_count: true
               };
