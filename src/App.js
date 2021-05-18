@@ -21,6 +21,28 @@ const theme = createMuiTheme({
       paper: '#424242',
     },
   },
+  overrides: {
+    MuiCssBaseline: {
+      '@global': {
+        '*': {
+          'scrollbar-width': 'thin',
+        },
+        '*::-webkit-scrollbar': {
+          width: '8px',
+          height: '8px',
+        },
+        '::-webkit-scrollbar-track': {
+          background: '#f1f1f1'
+        },
+        '::-webkit-scrollbar-thumb': {
+          background: '#888'
+        },
+        '::-webkit-scrollbar-thumb:hover': {
+          background: '#555'
+        },
+      }
+    }
+  }
 });
 
 const invalid = [
@@ -53,7 +75,7 @@ class App extends Component {
   render () {
     return (
       <ThemeProvider theme={theme}>
-        <div>
+        <React.Fragment>
           <CssBaseline />
 
           <Helmet>
@@ -93,7 +115,7 @@ class App extends Component {
               By João "Shino" (joaorb64@gmail.com, <a style={{color: "white"}} href="https://twitter.com/joao_shino">@joao_shino</a>) <br/>
             </div>
           </nav> */}
-        </div>
+        </React.Fragment>
       </ThemeProvider>
     );
   }

@@ -42,7 +42,7 @@ const drawerWidth = 240;
 const games = {
   "ssbu": "Super Smash Bros Ultimate",
   "ssbm": "Super Smash Bros Melee",
-  //"sfv": "Street Fighter V"
+  "sfv": "Street Fighter V"
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -199,12 +199,22 @@ function TopBar(props) {
     document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
   }
 
+  const credits = (<>
+    <a href="https://communitycup.gg" target="_blank"
+    style={{width: "100%", display: "flex", padding: 8, alignItems: "center", color: "white"}}>
+      <img src="/icons/communitycup.png" style={{height: "32px", borderRadius: "100%", marginRight: "8px"}}></img>
+        <div style={{flexGrow: 1, margin: 2, fontSize: "12px"}}>
+          Sponsored by CommunityCup
+        </div>
+    </a>
+  </>)
+
   const drawer = (
-    <div style={{marginBottom: "90px"}}>
+    <div style={{}}>
       <div className={classes.toolbar} style={{display: "flex", padding: 8}}>
         <Box style={{alignSelf: "center"}}>
           <Typography variant="h6" noWrap style={{display: "flex"}}>
-            <img src="/favicon.svg" style={{height: "26px", marginRight: "8px"}}></img>
+            <img src="/favicon.svg" style={{height: "32px", marginRight: "8px"}}></img>
             PowerRankings
           </Typography>
         </Box>
@@ -296,31 +306,31 @@ function TopBar(props) {
           <ListItemText primary={i18n.t("about")} />
         </ListItem>
       </List>
+      <Divider/>
+      {credits}
+      <Divider/>
+      <Box style={{width: "100%", display: "flex"}}>
+        <Box style={{
+          bottom: 0, padding: 8, display: "flex", flexWrap: "wrap",
+          borderRight: "1px solid rgba(255, 255, 255, 0.12)"}}>
+          <div style={{flexGrow: 1, margin: 2, fontSize: "10px"}}>
+            By João "Shino" (joaorb64@gmail.com, <a style={{color: "white"}} href="https://twitter.com/joao_shino">@joao_shino</a>) <br/>
+          </div>
+          
+          <div style={{flexGrow: 0, margin: 2}}>
+            <a href='https://ko-fi.com/W7W22YK26' target='_blank'>
+              <img style={{border: 0, height: 24}} src='https://cdn.ko-fi.com/cdn/kofi1.png?v=2' border='0' alt='Buy Me a Coffee at ko-fi.com'></img>
+            </a>
+          </div>
+          <div style={{flexGrow: 0, margin: 2}}>
+            <a href="https://picpay.me/joaorb64">
+              <img src="/images/donate_picpay.png" style={{height: 24, borderRadius: 5}}></img>
+            </a>
+          </div>
+        </Box>
+      </Box>
     </div>
   );
-
-  const credits = (
-    <Box style={{bottom: "0", position: "fixed", width: drawerWidth}}>
-      <Box style={{
-        position: "absolute", bottom: 0, padding: 8, display: "flex", flexWrap: "wrap",
-        backgroundColor: theme.palette.background.default,
-        borderRight: "1px solid rgba(255, 255, 255, 0.12)"}}>
-        <div style={{flexGrow: 1, margin: 2, fontSize: "10px"}}>
-          By João "Shino" (joaorb64@gmail.com, <a style={{color: "white"}} href="https://twitter.com/joao_shino">@joao_shino</a>) <br/>
-        </div>
-        <div style={{flexGrow: 0, margin: 2}}>
-          <a href='https://ko-fi.com/W7W22YK26' target='_blank'>
-            <img style={{border: 0, height: 24}} src='https://cdn.ko-fi.com/cdn/kofi1.png?v=2' border='0' alt='Buy Me a Coffee at ko-fi.com'></img>
-          </a>
-        </div>
-        <div style={{flexGrow: 0, margin: 2}}>
-          <a href="https://picpay.me/joaorb64">
-            <img src="/images/donate_picpay.png" style={{height: 24, borderRadius: 5}}></img>
-          </a>
-        </div>
-      </Box>
-    </Box>
-  )
 
   const container = window_container !== undefined ? () => window_container().document.body : undefined;
 
@@ -364,7 +374,6 @@ function TopBar(props) {
             }}
           >
             {drawer}
-            {credits}
           </SwipeableDrawer>
         </Hidden>
         <Hidden smDown implementation="css">
@@ -376,7 +385,6 @@ function TopBar(props) {
             open
           >
             {drawer}
-            {credits}
           </Drawer>
         </Hidden>
       </nav>
