@@ -315,6 +315,29 @@ class PlayerModal extends Component {
 
     // Achievements
 
+    //TO
+    let to = 0;
+
+    if(this.props.alltournaments != null && this.player.smashgg_id){
+      Object.values(this.props.alltournaments).forEach(liga => {
+        Object.values(liga).forEach(torneio => {
+          if(torneio.to && torneio.to == this.player.smashgg_id){
+            to += 1;
+          }
+        })
+      })
+    }
+
+    if(to > 0){
+      achievements.push({
+        "name": i18n.t("achievement-to"),
+        "description": i18n.t("achievement-to-desc") + " ("+to+")",
+        "icon": "to.svg"
+      });
+    }
+
+    console.log("IS TO: "+to)
+
     //No of tournaments went
     if(tournamentsWent.length >= 75){
       achievements.push({
@@ -722,7 +745,7 @@ class PlayerModal extends Component {
                     </Typography>
                     <Box
                       style={{
-                        padding: "12px", margin: 0, display: "flex", flexWrap: "wrap",
+                        padding: "12px", margin: 0, display: "flex", flexWrap: "wrap", alignItems: "flex-start",
                         justifyContent: "center", backgroundColor: theme.palette.background.default
                       }}
                     >

@@ -220,6 +220,8 @@ function TopBar(props) {
         </Box>
       </div>
       <Divider />
+      {credits}
+      <Divider/>
       <Box display="flex" pl={1} pr={1} mb={1} mt={1}>
         <div style={{
           backgroundSize: "cover",
@@ -306,8 +308,6 @@ function TopBar(props) {
           <ListItemText primary={i18n.t("about")} />
         </ListItem>
       </List>
-      <Divider/>
-      {credits}
       <Divider/>
       <Box style={{width: "100%", display: "flex"}}>
         <Box style={{
