@@ -10,7 +10,7 @@ import { browserHistory } from 'react-router';
 import { withRouter } from 'react-router-dom'
 import numeral from 'numeral';
 import { Dialog, DialogTitle, DialogContent, IconButton, withStyles,
-  Box, Typography, Grid, makeStyles, useTheme, TableFooter, Icon } from '@material-ui/core';
+  Box, Typography, Grid, makeStyles, useTheme, TableFooter, Icon, Chip, Avatar, Tooltip } from '@material-ui/core';
 import { CloseIcon } from '@material-ui/icons/Close';
 import { ArrowBack } from '@material-ui/icons/ArrowBack'
 import Table from '@material-ui/core/Table';
@@ -92,6 +92,20 @@ const useStyles = (theme) => ({
       width: "100%"
     }
   },
+  ChipLeague: {
+    height: "32px",
+    borderRadius: "100px",
+    width: "100%",
+    justifyContent: "left"
+  },
+  ChipLeagueAvatar: {
+    display: "flex",
+    alignItems: "center",
+    width: "unset !important"
+  },
+  ChipLabelGrow: {
+    width: "100%"
+  }
 });
 
 class PlayerModal extends Component {
@@ -258,7 +272,7 @@ class PlayerModal extends Component {
     let stats = []
     
     if(this.player.ts){
-      stats.push({text: "Global PowerRankings Power", value: Math.round(this.player.ts * 160000000).toLocaleString(i18n.language)})
+      stats.push({text: "PowerRankings Power", value: Math.round(this.player.ts * 160000000).toLocaleString(i18n.language)})
     }
     stats.push({text: "Tournaments played", value: tournamentsWent.length})
     stats.push({text: "Sets played", value: matchesPlayed.length})
@@ -617,34 +631,40 @@ class PlayerModal extends Component {
                   }
 
                   <div style={{zIndex: 1, flexGrow: 1, marginLeft: "10px"}}>
-                    <h3 className={styles.playerTag} style={{color: "white"}}>
-                      <b style={{color: theme.palette.secondary.main}}>{this.state.playerData.org} </b>
+                    <Typography className={styles.playerTag} variant="h6" component="h2"
+                    style={{color: "white", display: "flex", flexWrap: "wrap"}}>
+                      <div style={{display: "flex"}}>
+                        <b style={{color: theme.palette.secondary.main}}>{this.state.playerData.org} </b>
+                        {this.state.playerData.name}
+                      </div>
 
-                      {this.state.playerData.name}
+                      <div style={{display: "flex"}}>
+                        {this.state.playerData.country_code && this.state.playerData.country_code != "null" ?
+                          <div className={styles.stateFlag + " state-flag"} style={{
+                            backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/country_flag/${this.state.playerData.country_code.toLowerCase()}.png)`,
+                            width: "32px", height: "32px", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
+                            backgroundPosition: "center", paddingTop: "22px", marginLeft: "10px", textAlign: "center", verticalAlign: "bottom"
+                          }}></div>
+                        :
+                          null
+                        }
 
-                      {this.state.playerData.country_code && this.state.playerData.country_code != "null" ?
-                        <div className={styles.stateFlag + " state-flag"} style={{
-                          backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/country_flag/${this.state.playerData.country_code.toLowerCase()}.png)`,
-                          width: "32px", height: "32px", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
-                          backgroundPosition: "center", paddingTop: "22px", marginLeft: "10px", textAlign: "center", verticalAlign: "bottom"
-                        }}></div>
-                      :
-                        null
-                      }
-
-                      {this.state.playerData.state && this.state.playerData.state != "null" ?
-                        <div className={styles.stateFlag + " state-flag"} style={{
-                          backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/state_flag/${this.state.playerData.country_code}/${this.state.playerData.state}.png)`,
-                          width: "32px", height: "32px", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
-                          backgroundPosition: "center", paddingTop: "22px", marginLeft: "10px", textAlign: "center", verticalAlign: "bottom"
-                        }}></div>
-                      :
-                        null
-                      }
-                    </h3>
+                        {this.state.playerData.state && this.state.playerData.state != "null" ?
+                          <div className={styles.stateFlag + " state-flag"} style={{
+                            backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/state_flag/${this.state.playerData.country_code}/${this.state.playerData.state}.png)`,
+                            width: "32px", height: "32px", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
+                            backgroundPosition: "center", paddingTop: "22px", marginLeft: "10px", textAlign: "center", verticalAlign: "bottom"
+                          }}></div>
+                        :
+                          null
+                        }
+                      </div>
+                    </Typography>
 
                     {this.state.playerData.full_name?
-                      <div className={styles.fullName}>{this.state.playerData.full_name}</div>
+                      <Typography variant="subtitle1" component="h2" className={styles.fullName}>
+                        {this.state.playerData.full_name}
+                      </Typography>
                     :
                       null
                     }
@@ -750,27 +770,28 @@ class PlayerModal extends Component {
                       }}
                     >
                       {this.state.achievements.map((achievement, i)=>(
-                        <a key={this.state.playerData.name+i} style={{width: 72, textAlign: "center", display: "flex",
-                        flexDirection: "column", alignItems: "center", placeContent: "center"}}
-                        data-toggle="tooltip" data-placement="top" title={achievement.description}>
-                          <div style={{
-                            width: 42, height: 42, backgroundSize: "cover", backgroundRepeat: "none",
-                            marginLeft: 6, marginRight: 6,
-                            backgroundImage: `url(${process.env.PUBLIC_URL}/icons/achievements/${achievement.icon})`,
-                            display: "flex", alignItems: "center", justifyContent: "center"
-                          }}>
-                            {achievement.icon_middle ?
-                              <div style={{
-                                width: 20, height: 20, backgroundSize: "contain",
-                                backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_2_${achievement.icon_middle}.png)`,
-                                filter: "grayscale(100%) brightness(80%) sepia(100%) hue-rotate(5deg) saturate(500%) contrast(.9)"
-                              }}></div>
-                              :
-                              null
-                            }
-                          </div>
-                          <small style={{textAlign: "center"}}>{achievement.name}</small>
-                        </a>
+                        <Tooltip title={achievement.description} placement="top" arrow>
+                          <a key={this.state.playerData.name+i} style={{width: 72, textAlign: "center", display: "flex",
+                          flexDirection: "column", alignItems: "center", placeContent: "center"}}>
+                            <div style={{
+                              width: 42, height: 42, backgroundSize: "cover", backgroundRepeat: "none",
+                              marginLeft: 6, marginRight: 6,
+                              backgroundImage: `url(${process.env.PUBLIC_URL}/icons/achievements/${achievement.icon})`,
+                              display: "flex", alignItems: "center", justifyContent: "center"
+                            }}>
+                              {achievement.icon_middle ?
+                                <div style={{
+                                  width: 20, height: 20, backgroundSize: "contain",
+                                  backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_2_${achievement.icon_middle}.png)`,
+                                  filter: "grayscale(100%) brightness(80%) sepia(100%) hue-rotate(5deg) saturate(500%) contrast(.9)"
+                                }}></div>
+                                :
+                                null
+                              }
+                            </div>
+                            <small style={{textAlign: "center"}}>{achievement.name}</small>
+                          </a>
+                        </Tooltip>
                       ))}
                     </Box>
                   </Box>
@@ -787,29 +808,20 @@ class PlayerModal extends Component {
                       {Object.entries(this.state.playerData.rank).sort((a, b)=>{return a[1].rank-b[1].rank}).map((rank, i)=>(
                         <Grid item xs={12} sm={12} md={6} lg={4} style={{padding: "2px"}} id={i}>
                           {this.props.leagues != null && this.props.leagues.length > 0 ?
-                            <Link 
-                              to={`/${this.props.game}/leagues/${rank[0]}`}
-                              onClick={()=>{this.setState({open: false}); this.props.closeModal(false)}}
-                              style={{display: "flex"}}>
-                                <div style={{width: "42px", textAlign: "center", fontSize: "1.5rem",
-                                backgroundColor: "lightgray", display: "flex", flexShrink: 0, color: "black"}}>
-                                  <div style={{alignSelf: "center", width: "100%"}}>
-                                    {rank[1].rank}
-                                  </div>
-                                </div>
-                                <div style={{
-                                  width: "48px", height: "48px", display: "inline-block", backgroundSize: "cover", backgroundPosition: "center",
-                                  flexShrink: 0,
-                                  backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/games/${this.props.game}/league_icon/${rank[0]}.png)`}}></div>
-                                <div style={{display: "flex", flexDirection: "column", overflow: "hidden", width: "100%", backgroundColor: "lightgray"}}>
-                                  <div style={{paddingLeft: "5px", textOverflow: "ellipsis", fontSize: "0.8rem", 
-                                  whiteSpace: "nowrap", overflow: "hidden", backgroundColor: "gray", color: "white"}}>
-                                    {this.props.leagues.find(element => element.id == rank[0]).name}
-                                  </div>
-                                  <div style={{paddingLeft: "5px", color: "black", flexGrow: 1, fontSize: "1.2rem"}}>
-                                    {rank[1].score} pts.
-                                  </div>
-                                </div>
+                            <Link to={`/${this.props.game}/leagues/${rank[0]}`}>
+                              <Chip
+                                fullWidth
+                                classes={{root: classes.ChipLeague, avatar: classes.ChipLeagueAvatar}}
+                                onClick={()=>{this.setState({open: false}); this.props.closeModal(false)}}
+                                avatar={
+                                  <div>
+                                    <div style={{fontSize: 14, fontWeight: "bold", minWidth: "32px", textAlign: "center"}}>
+                                      {rank[1].rank}
+                                    </div>
+                                    <Avatar style={{width: 28, height: 28}} src={`https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/games/${this.props.game}/league_icon/${rank[0]}.png`} />
+                                  </div>}
+                                label={this.props.leagues.find(element => element.id == rank[0]).name}
+                              />
                             </Link>
                           :
                             <div>{Object.keys(this.state.playerData.rank)[i]}</div>
@@ -827,45 +839,35 @@ class PlayerModal extends Component {
                     <Typography style={{padding: 12}} variant="h6" component="h3">
                       Stats
                     </Typography>
-                    <Box
+                    <Grid
+                      container
                       style={{
                         padding: "12px", margin: 0, justifyContent: "center",
-                        backgroundColor: theme.palette.background.default
+                        backgroundColor: theme.palette.background.default,
+                        width: "100%", placeContent: "flex-start"
                       }}
                     >
                       {this.state.stats.map(stat => (
-                        <Box style={{
-                          display: "flex", backgroundColor: "white", borderRadius: "20px",
-                          padding: 0, overflow: "hidden", marginTop: "3px", marginBottom: "3px",
-                          height: "40px", whiteSpace: "nowrap"
-                        }}>
-                          <div style={{
-                            flexGrow: 1, padding: "8px 16px", color: "white", textOverflow: "ellipsis",
-                            backgroundColor: "gray", flexShrink: 1, overflow: "hidden", display: "flex"
-                          }}>
-                            <div class={styles["stats-text"]} style={{overflow: "hidden", textOverflow: "ellipsis", alignSelf: "center"}}>
-                              {stat.text}
-                            </div>
-                          </div>
-                          <div style={{
-                            width: "16px", backgroundColor: "gray",
-                            clipPath: "polygon(0 0, 100% 0, 0% 100%, 0% 100%)",
-                            flexShrink: 0,
-                            marginLeft: -1, marginTop: -1
-                          }}></div>
-                          <div class={styles["stats-text"]} style={{
-                            padding: "8px 16px", backgroundColor: "white",
-                            color: "black", textAlign: "right", width: "40%",
-                            overflow: "hidden", textOverflow: "ellipsis", display: "flex",
-                            justifyContent: "flex-end"
-                          }}>
-                            <div class={styles["stats-text"]} style={{overflow: "hidden", textOverflow: "ellipsis", alignSelf: "center"}}>
-                              {stat.value}
-                            </div>
-                          </div>
-                        </Box>
+                        <Grid item style={{padding: "2px"}} xs={12} sm={12} md={6} lg={6}>
+                          <Chip
+                            classes={{label: classes.ChipLabelGrow}}
+                            style={{
+                              width: "100%"
+                            }}
+                            label={
+                              <div style={{display: "flex"}}>
+                                <div style={{flexGrow: 1, flexShrink: 1, overflow: "hidden", textOverflow: "ellipsis"}}>
+                                  {stat.text}
+                                </div>
+                                <div style={{flexGrow: 1, textAlign: "right"}}>
+                                  {stat.value}
+                                </div>
+                              </div>
+                            }
+                          />
+                        </Grid>
                       ))}
-                    </Box>
+                    </Grid>
                   </Box>
                   :
                   null
@@ -885,16 +887,17 @@ class PlayerModal extends Component {
                       }}
                     >
                       {this.state.playerData.character_usage_percent.map((character, i)=>(
-                        <a key={this.state.playerData.name+i} style={{textAlign: "center", display: "flex",
-                        flexDirection: "column", alignItems: "center", placeContent: "center"}}
-                        data-toggle="tooltip" data-placement="top">
-                          <div class="" style={{
-                            backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_2_${GetCharacterCodename(this.props.game, character[0])+"_00"}.png)`,
-                            width: "24px", height: "24px", backgroundPosition: "center", backgroundSize: "cover",
-                            flexGrow: 0, display: "flex", flexShrink: 1, margin: "0 20px 0 20px"
-                          }}></div>
-                          <small>{(100*character[1]).toFixed(2)}%</small>
-                        </a>
+                        <Tooltip title={character[0]} placement="top" arrow>
+                          <a key={this.state.playerData.name+i} style={{textAlign: "center", display: "flex",
+                          flexDirection: "column", alignItems: "center", placeContent: "center"}}>
+                            <div class="" style={{
+                              backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_2_${GetCharacterCodename(this.props.game, character[0])+"_00"}.png)`,
+                              width: "24px", height: "24px", backgroundPosition: "center", backgroundSize: "cover",
+                              flexGrow: 0, display: "flex", flexShrink: 1, margin: "0 20px 0 20px"
+                            }}></div>
+                            <small>{(100*character[1]).toFixed(2)}%</small>
+                          </a>
+                        </Tooltip>
                       ))}
                     </Box>
                   </Box>
