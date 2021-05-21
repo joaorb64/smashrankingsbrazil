@@ -791,7 +791,7 @@ class PlayerModal extends Component {
                       }}
                     >
                       {this.state.achievements.map((achievement, i)=>(
-                        <Tooltip title={achievement.description} placement="top" arrow>
+                        <Tooltip title={achievement.description} placement="top" arrow enterDelay={1} enterTouchDelay={1}>
                           <a key={this.state.playerData.name+i} style={{width: 72, textAlign: "center", display: "flex",
                           flexDirection: "column", alignItems: "center", placeContent: "center"}}>
                             <div style={{
@@ -908,7 +908,7 @@ class PlayerModal extends Component {
                       }}
                     >
                       {this.state.playerData.character_usage_percent.map((character, i)=>(
-                        <Tooltip title={character[0]} placement="top" arrow>
+                        <Tooltip title={character[0]} placement="top" arrow enterDelay={1} enterTouchDelay={1}>
                           <a key={this.state.playerData.name+i} style={{textAlign: "center", display: "flex",
                           flexDirection: "column", alignItems: "center", placeContent: "center"}}>
                             <div class="" style={{
