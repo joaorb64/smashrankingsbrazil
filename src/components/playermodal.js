@@ -10,7 +10,7 @@ import { browserHistory } from 'react-router';
 import { withRouter } from 'react-router-dom'
 import numeral from 'numeral';
 import { Dialog, DialogTitle, DialogContent, IconButton, withStyles,
-  Box, Typography, Grid, makeStyles, useTheme, TableFooter, Icon, Chip, Avatar, Tooltip } from '@material-ui/core';
+  Box, Typography, Grid, makeStyles, useTheme, TableFooter, Icon, Chip, Avatar, Tooltip, Hidden } from '@material-ui/core';
 import { CloseIcon } from '@material-ui/icons/Close';
 import { ArrowBack } from '@material-ui/icons/ArrowBack'
 import Table from '@material-ui/core/Table';
@@ -616,25 +616,46 @@ class PlayerModal extends Component {
                   <div style={{backgroundImage: `url(${process.env.PUBLIC_URL}/images/bg_diagonal.webp)`, overflow: "hidden",
                   position: "absolute", width: "100%", height: "100%", backgroundSize: "6px 6px", opacity: ".6"}}></div>
 
-                  {
-                    this.state.playerData.avatar ?
-                      <div style={{zIndex: 1}}>
-                        <div
-                          className={styles.avatar}
-                          style={{
-                            backgroundColor: "white",
-                            backgroundImage: "url("+this.state.playerData.avatar+")"}}>
+                  <Hidden xsDown>
+                    {
+                      this.state.playerData.avatar ?
+                        <div style={{zIndex: 1}}>
+                          <div
+                            className={styles.avatar}
+                            style={{
+                              backgroundColor: "white",
+                              backgroundImage: "url("+this.state.playerData.avatar+")"}}>
+                          </div>
                         </div>
-                      </div>
-                  :
-                    null
-                  }
+                    :
+                      null
+                    }
+                  </Hidden>
 
                   <div style={{zIndex: 1, flexGrow: 1, marginLeft: "10px"}}>
+                    <Hidden smUp>
+                      {
+                        this.state.playerData.avatar ?
+                          <div style={{zIndex: 1}}>
+                            <div
+                              className={styles.avatar}
+                              style={{
+                                backgroundColor: "white",
+                                backgroundImage: "url("+this.state.playerData.avatar+")"}}>
+                            </div>
+                          </div>
+                      :
+                        null
+                      }
+                    </Hidden>
                     <Typography className={styles.playerTag} variant="h6" component="h2"
                     style={{color: "white", display: "flex", flexWrap: "wrap"}}>
-                      <div style={{display: "flex"}}>
-                        <b style={{color: theme.palette.secondary.main}}>{this.state.playerData.org} </b>
+                      <div style={{display: "flex", flexWrap: "wrap"}}>
+                        {this.state.playerData.org ?
+                          <b style={{color: theme.palette.secondary.main}}>{this.state.playerData.org}<span>&nbsp;</span></b>
+                        :
+                          null
+                        }
                         {this.state.playerData.name}
                       </div>
 
