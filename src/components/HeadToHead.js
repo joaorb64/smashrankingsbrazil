@@ -9,6 +9,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import { PureComponent } from 'react';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { GetCharacterCodename, CHARACTERS_GG_TO_BRAACKET } from "../globals";
+const queryString = require("query-string");
 
 const fuzzysort = require('fuzzysort')
 
@@ -317,8 +318,17 @@ class HeadToHead extends Component {
     const { theme } = this.props;
     const { classes } = this.props;
 
+    let fullscreenStyle = {
+      position: "fixed",
+      zIndex: 999,
+      top: 0, left: 0, right: 0, bottom: 0,
+      backgroundColor: theme.palette.background.default
+    }
+
+    let searchParams = queryString.parse(this.props.history.location.search);
+
     return(
-      <Box>
+      <Box style={searchParams.fullscreen ? fullscreenStyle : null}>
         {this.props.allplayers && this.state.ts ?
           <>
             <Grid container justify="space-evenly" >

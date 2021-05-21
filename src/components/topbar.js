@@ -405,7 +405,7 @@ function TopBar(props) {
                 <Players game={game.game} leagues={game.leagues} alltournaments={game.alltournaments} allplayers={game.allplayers} match={history.match} history={history.history} />
               </>
           } />
-          <Route path="/:game/headtohead/:player_id?" exact render={
+          <Route path="/:game/headtohead/" exact render={
             (history) => 
               <>
                 <HeadToHead game={game.game} leagues={game.leagues} alltournaments={game.alltournaments} allplayers={game.allplayers} match={history.match} history={history.history} />

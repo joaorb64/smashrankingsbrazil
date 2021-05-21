@@ -101,7 +101,7 @@ body {
   width: 64px;
 }
 
-@media (max-width: 992px) {
+@media (max-width: 768px) {
   .player-score {
     width: 40px !important;
     padding: 2px !important;

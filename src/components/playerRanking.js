@@ -13,6 +13,7 @@ import { ThemeProvider } from "@material-ui/styles";
 import PlayerModal from './playermodal';
 import { PureComponent } from 'react';
 import i18n from '../locales/i18n';
+const queryString = require("query-string");
 
 let useStyles = (props) => ({
   userNick: {
@@ -154,11 +155,23 @@ class PlayerRanking extends PureComponent {
       }.bind(this), 1000);
     }
 
+    let fullscreenStyle = {
+      position: "absolute",
+      zIndex: 99999,
+      top: 0, left: 0, right: 0, bottom: 0,
+      backgroundColor: theme.palette.background.default,
+      margin: "0",
+      maxWidth: "unset"
+    }
+
+    let searchParams = queryString.parse(this.props.history.location.search);
+
     return(
       <div>
         {this.state.players && this.state.players.length > 0 ?
-          <Container maxWidth="lg" disableGutters>
-            {this.props.rankingName ?
+          <Container maxWidth="lg" disableGutters
+          style={ searchParams.fullscreen ? fullscreenStyle : null}>
+            {this.props.rankingName && !searchParams.fullscreen ?
               <Paper maxWidth="lg" style={{padding: 8, margin: 2}}>
                 <Typography variant="body2" color="textSecondary" align="center">
                   {this.props.rankingName}
@@ -176,7 +189,7 @@ class PlayerRanking extends PureComponent {
               null
             }
             <Grid container>
-              {this.state.players.slice(0,3).map((player, i) => (
+              {this.state.players.slice(0, searchParams.regular ? 0 : 3).map((player, i) => (
                 <Grid item lg={4} md={4} sm={4} xs={12} style={{padding: "2px", overflow: "hidden"}}>
                   <Card style={{
                     position: "relative", overflow: "hidden", backgroundColor: this.state.top3Colors[i]
@@ -316,9 +329,9 @@ class PlayerRanking extends PureComponent {
             </Grid>
 
             <Grid container>
-                {this.state.players.slice(3, (this.state.pagination+1) * 50).map((player, i)=>(
-                  <PlayerElement game={this.props.game} player={player} onClick={()=>this.openPlayerModal(player)} />
-                ))}
+              {this.state.players.slice(searchParams.regular ? 0 : 3, searchParams.player_limit ? parseInt(searchParams.player_limit) : (this.state.pagination+1) * 50).map((player, i)=>(
+                <PlayerElement game={this.props.game} player={player} onClick={()=>this.openPlayerModal(player)} />
+              ))}
             </Grid>
             {console.log("rerender")}
 
