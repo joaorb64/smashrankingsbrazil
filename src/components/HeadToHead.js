@@ -260,6 +260,28 @@ class HeadToHead extends Component {
       .then(res => res.json())
       .then((data) => {
         this.setState({ts: data});
+
+        let searchParams = queryString.parse(this.props.history.location.search);
+        if(searchParams.p1){
+          if(searchParams.p1.includes(":")){
+            let p = this.props.allplayers.mapping[searchParams.p1];
+            this.selectPlayer(0, this.props.allplayers.players[p]);
+          } else {
+            let sggid = parseInt(searchParams.p1);
+            let p = this.props.allplayers.players.find(player => player.smashgg_id == sggid);
+            this.selectPlayer(0, p);
+          }
+        }
+        if(searchParams.p2){
+          if(searchParams.p2.includes(":")){
+            let p = this.props.allplayers.mapping[searchParams.p2];
+            this.selectPlayer(1, this.props.allplayers.players[p]);
+          } else {
+            let sggid = parseInt(searchParams.p2);
+            let p = this.props.allplayers.players.find(player => player.smashgg_id == sggid);
+            this.selectPlayer(1, p);
+          }
+        }
       })
       .catch(console.log)
     }
