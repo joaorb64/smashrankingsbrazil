@@ -84,6 +84,7 @@ const CHARACTER_TO_CODENAME = {
         "Steve": "pickel",
         "Sephiroth": "edge",
         "Pyra & Mythra": "eflame",
+        "Kazuya": "demon",
         "Random": "random",
         "Random Character": "random"
     }
@@ -187,6 +188,7 @@ const CHARACTER_EYE_HEIGHT_PERCENTAGE = {
         "Steve": {0: 42},
         "Sephiroth": {0: 56},
         "Pyra & Mythra": {0: 64},
+        "Kazuya": {0: 65},
         "Random": {0: 50}
     },
     "sfv": {
@@ -308,5 +310,6 @@ export const CHARACTERS_GG_TO_BRAACKET = {
 	"Min Min": "Min Min",
     "Steve": "Steve",
     "Sephiroth": "Sephiroth",
-    "Pyra & Mythra": "Pyra & Mythra"
+    "Pyra & Mythra": "Pyra & Mythra",
+    "Kazuya": "Kazuya"
 }

@@ -166,7 +166,7 @@ class NextTournaments extends Component {
           {
             this.state.tournaments != null ?
               <Grid container justify="flex-start" spacing={2}>
-                {this.state.tournaments.filter(t=>{return t.url != null}).map((tournament)=>(
+                {this.state.tournaments.filter(t=>{return t.url != null && t.startAt < moment()}).map((tournament)=>(
                   <Grid item style={{display: "grid"}} component={Link} xs={12} sm={6} md={6} lg={4} xl={3}
                   underline="none" href={tournament.url} target="_blank">
                     <Card fullWidth style={{width: "100%"}}>
