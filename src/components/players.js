@@ -9,6 +9,8 @@ import { Box, Grid, TextField, InputAdornment, IconButton, Container } from '@ma
 import SearchIcon from "@material-ui/icons/Search";
 import { PureComponent } from 'react';
 import {Helmet} from "react-helmet";
+import countriesJson from '../locales/countries.json';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 const fuzzysort = require('fuzzysort')
 
@@ -36,11 +38,13 @@ class Players extends Component {
         search: ""
       })
       this.fetchPlayers();
+      this.fetchCharacters();
     }
   }
 
   componentDidMount() {
     this.fetchPlayers();
+    this.fetchCharacters();
   }
   
   fetchPlayers() {
@@ -93,6 +97,13 @@ class Players extends Component {
     }
   }
 
+  fetchCharacters(){
+    fetch(`https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/games/${this.props.game}/charnames_smashgg_to_braacket.json`).then(res => res.json()).then((data) => {
+      this.state.characters = data;
+      this.setState(this.state);
+    }).catch(console.log())
+  }
+
   getCharCodename(playerData, id){
     let skin = 0;
 
@@ -136,12 +147,20 @@ class Players extends Component {
   }
 
   search(e){
-    this.state.search = e;
+    if(e != null) this.state.search = e;
 
-    if(this.state.search.length == 0){
-      this.state.filtered = this.state.players;
-    } else {
-      let result = fuzzysort.go(this.state.search, Object.values(this.state.players), {
+    this.state.filtered = this.state.players;
+
+    if(this.state.filterCountry){
+      this.state.filtered = this.state.filtered.filter((p)=>{return p.country_code == this.state.filterCountry[0]});
+    }
+
+    if(this.state.filterCharacter){
+      this.state.filtered = this.state.filtered.filter((p)=>{return (p.mains[0] || "Random") == this.state.filterCharacter[1]});
+    }
+    
+    if(this.state.search.length > 0){
+      let result = fuzzysort.go(this.state.search, Object.values(this.state.filtered), {
         keys: [
           'name',
           'full_name',
@@ -199,6 +218,38 @@ class Players extends Component {
                   </InputAdornment>
                 )
               }}
+            />
+
+            <Autocomplete
+              options={Object.entries(countriesJson)}
+              getOptionLabel={(option) => option[1].name + " ("+option[1].native+")"}
+              renderOption={(option) =>
+                <div style={{"contentVisibility": "auto", "containIntrinsicSize": "24px", display: "flex"}}>
+                  <img style={{placeSelf: "center", marginRight: "6px"}} width="24px" height="16px" src={`https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/country_flag/${option[0].toLowerCase()}.png`} />
+                  {option[1].name + " ("+option[1].native+")"}
+                </div>
+              }
+              onChange={(event, newValue)=>{
+                this.state.filterCountry = newValue;
+                this.search()
+              }}
+              renderInput={(params) => <TextField {...params} label={"Filter by country"} variant="outlined"/>}
+            />
+
+            <Autocomplete
+              options={Object.entries(this.state.characters ? this.state.characters : {})}
+              getOptionLabel={(option) => option[0]}
+              renderOption={(option) =>
+                <div style={{"contentVisibility": "auto", "containIntrinsicSize": "24px", display: "flex"}}>
+                  <img style={{placeSelf: "center", marginRight: "6px"}} width="24px" height="24px" src={`${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_2_${GetCharacterCodename(this.props.game, option[1])}_00.png`} />
+                  {option[0]}
+                </div>
+              }
+              onChange={(event, newValue)=>{
+                this.state.filterCharacter = newValue;
+                this.search()
+              }}
+              renderInput={(params) => <TextField {...params} label={"Filter by character"} variant="outlined"/>}
             />
 
             <Grid container>
