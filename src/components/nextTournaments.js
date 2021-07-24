@@ -14,8 +14,9 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import ScrollTop from './ScrollTop';
-import { Avatar, Box, CardHeader, Chip, Grid, LinearProgress, Link, MenuItem, ListSubheader, Select, ListItem, ListItemIcon, ListItemText, Container, Paper } from '@material-ui/core';
+import { FormControlLabel, Checkbox, Avatar, Box, CardHeader, TextField, Chip, Grid, LinearProgress, Link, MenuItem, ListSubheader, Select, ListItem, ListItemIcon, ListItemText, Container, Paper } from '@material-ui/core';
 import countriesJson from '../locales/countries.json';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 let useStyles = (props) => ({
   root: {
@@ -37,10 +38,6 @@ let useStyles = (props) => ({
   couponChip: {
     margin: 6
   },
-  select: {
-    fontSize: '1.4rem',
-    marginBottom: '1rem'
-  },
   cardHeader: {
     overflow: "hidden"
   }
@@ -49,9 +46,11 @@ let useStyles = (props) => ({
 class NextTournaments extends Component {
   state = {
     tournaments: [],
-    selectedCountry: "all",
+    selectedCountry: null,
+    selectedOnline: "both",
+    selectedIncludeRegion: true,
     selections: {},
-    alltournaments: null
+    alltournaments: null,
   }
 
   componentDidUpdate(nextProps) {
@@ -61,6 +60,7 @@ class NextTournaments extends Component {
   }
 
   componentDidMount() {
+    this.state.countries = Object.entries(countriesJson);
     this.loadData();
   }
 
@@ -70,32 +70,20 @@ class NextTournaments extends Component {
     .then((data) => {
       console.log(data);
 
-      Object.entries(data).forEach(country => {
-        country[1].events.forEach((event)=>{
-          event.country = country[0];
-        })
-      })
-
-      this.state.alltournaments = data;
-
-      let selections = {}
-
-      Object.entries(data).forEach(country => {
-        if(!selections.hasOwnProperty(country[1].region)){
-          selections[country[1].region] = []
+      data.events.forEach((event)=>{
+        if(!event.country_code){
+          event.country_code = "NULL"
         }
-        selections[country[1].region].push(country[0])
-      });
-
-      this.state.selections = selections;
+      })
+      this.state.alltournaments = data.events;
 
       this.setState(this.state);
       
       if(this.props.match && this.props.match.params && this.props.match.params.country){
-        this.state.selectedCountry = this.props.match.params.country.toLowerCase();
+        this.state.selectedCountry = this.state.countries.find((e)=>e[0].toLowerCase() == this.props.match.params.country);
       }
 
-      this.filterTournaments(this.state.selectedCountry);
+      this.filterTournaments();
     })
     .catch(console.log)
   }
@@ -106,21 +94,26 @@ class NextTournaments extends Component {
   }
 
   filterTournaments(value){
+    if(!this.state.selectedCountry) return;
+    if(!value) value = this.state.selectedCountry[0];
+
+    console.log(value)
     value = value.toLowerCase();
 
     let selectedTournaments = [];
 
-    if(value.startsWith("region_")){
-      Object.entries(this.state.alltournaments).forEach((country)=>{
-        if(country[1].region.toLowerCase() == value.split("region_")[1]){
-          selectedTournaments = selectedTournaments.concat(country[1].events)
-        }
-      })
-    } else if(Object.keys(this.state.alltournaments).includes(value.toUpperCase())) {
-      selectedTournaments = this.state.alltournaments[value.toUpperCase()].events;
-    } else {
-      Object.entries(this.state.alltournaments).forEach((country)=>{
-        selectedTournaments = selectedTournaments.concat(country[1].events)
+    this.state.alltournaments.forEach((tournament)=>{
+      if(tournament.country_code == value.toUpperCase() ||
+      (tournament.region_lock && this.state.selectedIncludeRegion && tournament.region_lock.includes(value.toUpperCase()))) {
+        selectedTournaments.push(tournament);
+      }
+    })
+
+    if(this.state.selectedOnline != "both"){
+      selectedTournaments = selectedTournaments.filter((t)=>{
+        if(this.state.selectedOnline == "online" && t.isOnline) return true;
+        if(this.state.selectedOnline == "offline" && !t.isOnline) return true;
+        return false
       })
     }
     
@@ -130,7 +123,9 @@ class NextTournaments extends Component {
 
     this.setState(this.state);
 
-    this.props.history.push('/'+this.props.game+'/nexttournaments/'+this.state.selectedCountry.toLowerCase());
+    console.log(this.state.tournaments);
+
+    this.props.history.push('/'+this.props.game+'/nexttournaments/'+this.state.selectedCountry[0].toLowerCase());
   }
 
   render (){
@@ -139,20 +134,46 @@ class NextTournaments extends Component {
     return(
       <Container maxWidth="xl" disableGutters>
         <ScrollTop />
-        <Box>
+        <Box marginBottom={1}>
           <h2 style={{color: "white"}}>
             {i18n.t("next-tournaments")} <HelpButton content="To have your tournaments listed on this page, set their location to your country, even for online tournaments." />
           </h2>
-          <Select className={classes.select} fullWidth value={this.state.selectedCountry} onChange={(e)=>this.selectCountry(e)}>
-            <MenuItem value="all">{i18n.t("all")}</MenuItem>
-            {Object.keys(this.state.selections).map((region) => (
-              [<ListSubheader>{i18n.t("region-"+region.toLowerCase())}</ListSubheader>,
-              <MenuItem value={"region_"+region.toLowerCase()}>{i18n.t("all")} ({i18n.t("region-"+region.toLowerCase())})</MenuItem>,
-              this.state.selections[region].map((country) => (
-                <MenuItem value={country.toLowerCase()}>{countriesJson[country].native+" ("+countriesJson[country].name+")"+" ["+this.state.alltournaments[country].events.length+"]"}</MenuItem>
-              ))]
-            ))}
+          <Autocomplete
+            options={this.state.countries ? this.state.countries : []}
+            value={this.state.selectedCountry}
+            getOptionLabel={(option) => option[1].name + " ("+option[1].native+")"}
+            renderOption={(option) =>
+              option ?
+                <div style={{"contentVisibility": "auto", "containIntrinsicSize": "24px", display: "flex"}}>
+                  <img style={{placeSelf: "center", marginRight: "6px"}} width="24px" height="16px" src={`https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/country_flag/${option[0].toLowerCase()}.png`} />
+                  {option[1].name + " ("+option[1].native+")"}
+                </div>
+                :
+                ""
+            }
+            onChange={(event, newValue)=>{
+              this.state.selectedCountry = newValue;
+              this.filterTournaments()
+            }}
+            renderInput={(params) => <TextField {...params} label={"Filter by country"} variant="outlined"/>}
+          />
+
+          <Select variant="outlined" className={classes.select} fullWidth value={this.state.selectedOnline}
+          onChange={(e)=>{this.state.selectedOnline = e.target.value; this.filterTournaments()}}>
+            <MenuItem value={"both"}>Online and Offline</MenuItem>
+            <MenuItem value={"online"}>Online</MenuItem>
+            <MenuItem value={"offline"}>Offline</MenuItem>
           </Select>
+
+          <FormControlLabel
+            control={<Checkbox
+              fullWidth
+              checked={this.state.selectedIncludeRegion}
+              onChange={(e)=>{this.state.selectedIncludeRegion = e.target.checked; this.filterTournaments();}}
+            />}
+            label="Include region locked events"
+          />
+
           {this.state.selectedCountry == "br" ? 
             <Paper style={{padding: 8, minHeight: 64, display: "flex", alignItems: "center", marginBottom: 8}} component="a" href="https://twitter.com/smash_bot_br">
               <img src="/images/bot.png" style={{height: 48, width: 48, borderRadius: 8, marginRight: 8}} />
@@ -160,7 +181,13 @@ class NextTournaments extends Component {
             </Paper>
             :
             null
-          }          
+          }
+
+          {this.state.tournaments ?
+            <h3 style={{color: "white"}}>Total: {this.state.tournaments.length}</h3>
+            :
+            null
+          }       
         </Box>
         <Box>
           {
@@ -172,7 +199,7 @@ class NextTournaments extends Component {
                     <Card fullWidth style={{width: "100%"}}>
                       <CardActionArea>
                         <CardHeader noWrap style={{height: 84}} classes={{content: classes.cardHeader}}
-                          avatar={<Avatar src={`https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/country_flag/${tournament.country.toLowerCase()}.png`} />}
+                          avatar={<Avatar src={`https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/country_flag/${tournament.country_code.toLowerCase()}.png`} />}
                           title={<Typography noWrap variant="h6" component="h2">
                             {tournament.tournament}
                           </Typography>}
