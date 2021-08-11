@@ -414,7 +414,7 @@ function TopBar(props) {
           } />
           <Route path="/:game/map/" exact render={(history) => <Mapa game={game.game} allplayers={game.allplayers} leagues={game.leagues} />} />
           <Route path="/:game/matcherino/:country?" exact render={(history) => <Matcherino game={game.game} match={history.match} history={history.history} />} />
-          <Route path="/:game/nexttournaments/:country?" exact render={(history) => <NextTournaments game={game.game} match={history.match} history={history.history} usercountry={userCountry} />} />
+          <Route path="/:game/nexttournaments/:country?" exact render={(history) => <NextTournaments game={game.game} match={history.match} history={history.history} userCountry={userCountry} />} />
           <Route path="/:game/clips/:lang?" exact render={(history) => <Clips game={game.game} match={history.match} history={history.history} />} />
           <Route path="/:game/statistics/" exact render={(history) => <Statistics game={game.game} allplayers={game.allplayers} leagues={game.leagues} statistics={game.globalstatistics} />} />
           <Route path="/:game/about/" exact render={(history) => <About />} />
