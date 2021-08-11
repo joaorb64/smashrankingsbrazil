@@ -58,7 +58,7 @@ class NextTournaments extends Component {
       this.loadData();
     }
 
-    if(this.props.userCountry != nextProps.userCountry){
+    if(this.props.userCountry != nextProps.userCountry && nextProps.userCountry != null){
       this.state.selectedCountry = this.state.countries.find((e)=>e[0].toLowerCase() == nextProps.userCountry.toLowerCase());
       this.filterTournaments();
     }
