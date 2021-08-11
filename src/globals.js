@@ -83,7 +83,7 @@ const CHARACTER_TO_CODENAME = {
         "Min Min": "tantan",
         "Steve": "pickel",
         "Sephiroth": "edge",
-        "Pyra & Mythra": "eflame",
+        "Pyra / Mythra": "eflame",
         "Kazuya": "demon",
         "Random": "random",
         "Random Character": "random"
@@ -187,7 +187,7 @@ const CHARACTER_EYE_HEIGHT_PERCENTAGE = {
         "Min Min": {0: 74},
         "Steve": {0: 42},
         "Sephiroth": {0: 56},
-        "Pyra & Mythra": {0: 64},
+        "Pyra / Mythra": {0: 64},
         "Kazuya": {0: 65},
         "Random": {0: 50}
     },

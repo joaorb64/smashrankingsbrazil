@@ -57,6 +57,11 @@ class NextTournaments extends Component {
     if(this.props.game != nextProps.game){
       this.loadData();
     }
+
+    if(this.props.userCountry != nextProps.userCountry){
+      this.state.selectedCountry = this.state.countries.find((e)=>e[0].toLowerCase() == nextProps.userCountry.toLowerCase());
+      this.filterTournaments();
+    }
   }
 
   componentDidMount() {
@@ -81,6 +86,10 @@ class NextTournaments extends Component {
       
       if(this.props.match && this.props.match.params && this.props.match.params.country){
         this.state.selectedCountry = this.state.countries.find((e)=>e[0].toLowerCase() == this.props.match.params.country);
+      } else {
+        if(this.props.userCountry){
+          this.state.selectedCountry = this.state.countries.find((e)=>e[0].toLowerCase() == this.props.userCountry.toLowerCase());
+        }
       }
 
       this.filterTournaments();
