@@ -160,7 +160,7 @@ class WeekResults extends Component {
     }
   }
 
-  updateData(online=false) {
+  updateData(region="both") {
     if(this.updating) return;
     this.updating = true;
     this.setState({loading: true});
@@ -183,6 +183,9 @@ class WeekResults extends Component {
 
     fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/out/'+this.props.game+'/week_tournament_results.json').then(res => res.json()).then((tournaments)=>{
         tournaments.forEach((tournament)=>{
+          if(region == "online" && !tournament.isOnline) return;
+          if(region == "offline" && tournament.isOnline) return;
+
           if(tournament.numEntrants >= 0){
 
             let character = "random";
@@ -196,6 +199,8 @@ class WeekResults extends Component {
             let iconSize = 16;
             
             iconSize += tournament.numEntrants/8;
+
+            iconSize = Math.min(42, iconSize)
         
             let charIcon = L.icon({
                 iconUrl: iconUrl,
@@ -216,12 +221,23 @@ class WeekResults extends Component {
             })
         
             let marker = new myMarker([lat, lng], {icon: charIcon}).addTo(this.mymap);
-            marker.bindPopup('\
-                <div style="display: flex; align-items: center">\
-                <div style="display: flex; align-items: left; flex-direction: column; padding-left: 10px">'+
-                tournament.winner+'</div>\
-                </div>\
-            ');
+            marker.bindPopup(`
+                <div style="display: flex; align-items: center">
+                <div style="display: flex; align-items: left; flex-direction: column; padding-left: 10px">
+                    <div>
+                      <b>${tournament.tournament} - ${tournament.name}</b>
+                    </div>
+                    <div>
+                      Winner: ${tournament.winner}
+                    </div>
+                    <div>
+                      Participants: ${tournament.numEntrants}
+                    </div>
+                    <div>
+                      Country: ${tournament.country_code}
+                    </div>
+                </div>
+            `);
         
             this.markers.push(marker);
           }
@@ -325,10 +341,13 @@ class WeekResults extends Component {
             value={this.state.selection}
             onChange={(e)=>{this.setState({selection: e.target.value})}}
           >
-            <MenuItem value={0} onClick={(e)=>{this.updateData()}}>
+            <MenuItem value={0} onClick={(e)=>{this.updateData("both")}}>
+              Offline+Online
+            </MenuItem>
+            <MenuItem value={1} onClick={(e)=>{this.updateData("offline")}}>
               Offline
             </MenuItem>
-            <MenuItem value={1} onClick={(e)=>{this.updateData(true)}}>
+            <MenuItem value={2} onClick={(e)=>{this.updateData("online")}}>
               Online
             </MenuItem>
           </Select>

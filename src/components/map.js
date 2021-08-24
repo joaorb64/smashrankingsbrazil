@@ -228,10 +228,10 @@ class Mapa extends Component {
 
             let iconUrl = process.env.PUBLIC_URL+"/portraits/"+this.props.game+"/chara_2_"+(GetCharacterCodename(this.props.game, player.mains[0]) || "random")+"_00.png"
 
-            let iconSize = 36;
+            let iconSize = 28;
 
-            if(!online && this.props.leagues[league].state != null) iconSize = 24;
-            else if(online && this.props.leagues[league].country != null) iconSize = 24;
+            if(!online && this.props.leagues[league].state != null) iconSize = 18;
+            else if(online && this.props.leagues[league].country != null) iconSize = 18;
 
             let charIcon = L.icon({
               iconUrl: iconUrl,

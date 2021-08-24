@@ -284,6 +284,11 @@ function TopBar(props) {
           <ListItemText primary={i18n.t("map")} />
         </ListItem>
 
+        <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to={"/"+game.game+"/weekresults/"}>
+          <ListItemIcon className={classes.ListItemIcon}><FontAwesomeIcon icon={faMap}/></ListItemIcon>
+          <ListItemText primary={i18n.t("weekresults")} />
+        </ListItem>
+
         <ListItem onClick={()=>{scrollToTop(); closeDrawer();}} className={classes.navLinkItem} button component={NavLink} activeClassName="Mui-selected" to={"/"+game.game+"/nexttournaments/"}>
           <ListItemIcon className={classes.ListItemIcon}><FontAwesomeIcon icon={faCalendar}/></ListItemIcon>
           <ListItemText primary={i18n.t("next-tournaments")} />
