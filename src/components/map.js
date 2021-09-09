@@ -13,6 +13,7 @@ import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import { GetCharacterCodename } from '../globals'
 import { parse } from '@fortawesome/fontawesome-svg-core';
 import { Box, withTheme, withStyles, ButtonGroup, Button, Select, MenuItem } from '@material-ui/core';
+import { ThumbDownSharp } from '@material-ui/icons';
 
 Math.getDistance = function( x1, y1, x2, y2 ) {
 	var xs = x2 - x1, ys = y2 - y1;		
@@ -89,14 +90,11 @@ var myMarker = L.Marker.extend({
             )
           }
 
-          let maxWidth = Math.max(this._icon.width, other._icon.width);
-          console.log(maxWidth)
+          let maxWidth = 32*(this._map._zoom-4)+Math.max(this.options.icon.options.iconSize[0], other.options.icon.options.iconSize[0])/2;
 
           if(distance < maxWidth){
             if(angle == undefined)
               angle = Math.angleRadians(myPos, otherPos);
-            console.log(angle);
-            console.log(distance);
 
             if(!this.pushPos){
               this.pushPos = {x: 0, y: 0};
@@ -118,16 +116,57 @@ var myMarker = L.Marker.extend({
       }
 
       if(this.pushPos){
-        pos.x += this.pushPos.x;
-        pos.y += this.pushPos.y;
+        pos.x += parseInt(this.pushPos.x);
+        pos.y += parseInt(this.pushPos.y);
       }
 
 			this._setPos(pos);
 
-      this.pushPos = null;
-
       this._newPos = pos;
+
+      if(this.line){
+        this.line.remove(this._map)
+      }
+
+      if(this.circle){
+        this.circle.remove(this._map)
+      }
+
+      if(this.pushPos){
+        let point1 = this._map.containerPointToLatLng(
+          this._map.layerPointToContainerPoint(this._newPos)
+        )
+        let point2 = this._latlng
+        
+        this.line = L.polyline(
+          [
+            point1,
+            point2
+          ],
+          {
+            weight: 2,
+            lineCap: "round"
+          }
+        ).addTo(this._map);
+
+        this.circle = L.circle(
+          point2,
+          {
+            radius: 1,
+            weight: 6,
+            fillOpacity: 1
+          }
+        ).addTo(this._map);
+      }
+
+      this.pushPos = null;
 		}
+
+    if(this._map._zoom > 4){
+      this._icon.classList.remove(styles["hide-text"]);
+    } else {
+      this._icon.classList.add(styles["hide-text"]);
+    }
 
 		return this;
 	}
@@ -233,8 +272,31 @@ class Mapa extends Component {
             if(!online && this.props.leagues[league].state != null) iconSize = 18;
             else if(online && this.props.leagues[league].country != null) iconSize = 18;
 
-            let charIcon = L.icon({
-              iconUrl: iconUrl,
+            let charIcon = new L.DivIcon({
+              html: `
+                <div>
+                  <div style="
+                    width: ${iconSize}px; height: ${iconSize}px; background-image: url(${iconUrl});
+                    background-size: cover; background-repeat: no-repeat;
+                    ">
+                  </div>
+                  <div class="${styles["icon-text"]}" style="
+                    white-space: nowrap;
+                    font-weight: bold;
+                    width: 100px;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    left: 0;
+                    margin-left: 50%;
+                    transform: translateX(-50%);
+                    text-align: center;
+                    direction: rtl;
+                    background-color: rgba(0,0,0,0.5);
+                  ">
+                    ${player.org? player.org+" | " : ""}${player.name}
+                  </div>
+                </div>
+              `,
               iconSize: [iconSize, iconSize],
               popupAnchor: [0, -8],
               className: styles.mapCharIcon
@@ -361,7 +423,7 @@ class Mapa extends Component {
       "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       {
         minZoom: 2,
-        maxZoom: 19,
+        maxZoom: 20,
         id: "osm.streets",
         filter: myFilter
       }

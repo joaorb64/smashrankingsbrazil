@@ -33,7 +33,7 @@ Math.getCentroid = function (arr) {
   }, [0,0]) 
 }
 
-var myMarker = L.Marker.extend({
+var myMarkerText = L.Marker.extend({
   _animateZoom: function (opt) {
 		var pos = this._map._latLngToNewLayerPoint(this._latlng, opt.zoom, opt.center).round();
     this._newPos = null;
@@ -89,14 +89,11 @@ var myMarker = L.Marker.extend({
             )
           }
 
-          let maxWidth = Math.max(this._icon.width, other._icon.width);
-          console.log(maxWidth)
+          let maxWidth = 32*(this._map._zoom-4)+Math.max(this.options.icon.options.iconSize[0], other.options.icon.options.iconSize[0])/2;
 
           if(distance < maxWidth){
             if(angle == undefined)
               angle = Math.angleRadians(myPos, otherPos);
-            console.log(angle);
-            console.log(distance);
 
             if(!this.pushPos){
               this.pushPos = {x: 0, y: 0};
@@ -118,22 +115,61 @@ var myMarker = L.Marker.extend({
       }
 
       if(this.pushPos){
-        pos.x += this.pushPos.x;
-        pos.y += this.pushPos.y;
+        pos.x += parseInt(this.pushPos.x);
+        pos.y += parseInt(this.pushPos.y);
       }
 
 			this._setPos(pos);
 
-      this.pushPos = null;
-
       this._newPos = pos;
+
+      if(this.line){
+        this.line.remove(this._map)
+      }
+
+      if(this.circle){
+        this.circle.remove(this._map)
+      }
+
+      if(this.pushPos){
+        let point1 = this._map.containerPointToLatLng(
+          this._map.layerPointToContainerPoint(this._newPos)
+        )
+        let point2 = this._latlng
+        
+        this.line = L.polyline(
+          [
+            point1,
+            point2
+          ],
+          {
+            weight: 2,
+            lineCap: "round"
+          }
+        ).addTo(this._map);
+
+        this.circle = L.circle(
+          point2,
+          {
+            radius: 1,
+            weight: 6,
+            fillOpacity: 1
+          }
+        ).addTo(this._map);
+      }
+
+      this.pushPos = null;
 		}
+
+    if(this._map._zoom > 4){
+      this._icon.classList.remove(styles["hide-text"]);
+    } else {
+      this._icon.classList.add(styles["hide-text"]);
+    }
 
 		return this;
 	}
 })
-
-console.log(myMarker.update)
 
 class WeekResults extends Component {
   state = {
@@ -198,12 +234,35 @@ class WeekResults extends Component {
         
             let iconSize = 16;
             
-            iconSize += tournament.numEntrants/8;
+            iconSize += tournament.numEntrants/6;
 
             iconSize = Math.min(42, iconSize)
         
-            let charIcon = L.icon({
-                iconUrl: iconUrl,
+            let charIcon = new L.DivIcon({
+                html: `
+                  <div>
+                    <div style="
+                      width: ${iconSize}px; height: ${iconSize}px; background-image: url(${iconUrl});
+                      background-size: cover; background-repeat: no-repeat;
+                      ">
+                    </div>
+                    <div class="${styles["icon-text"]}" style="
+                      white-space: nowrap;
+                      font-weight: bold;
+                      width: 100px;
+                      text-overflow: ellipsis;
+                      overflow: hidden;
+                      left: 0;
+                      margin-left: 50%;
+                      transform: translateX(-50%);
+                      text-align: center;
+                      direction: rtl;
+                      background-color: rgba(0,0,0,0.5);
+                    ">
+                      ${tournament.winner}
+                    </div>
+                  </div>
+                `,
                 iconSize: [iconSize, iconSize],
                 popupAnchor: [0, -8],
                 className: styles.mapCharIcon
@@ -213,14 +272,9 @@ class WeekResults extends Component {
 
             let lat = parseFloat(tournament.lat);
             let lng = parseFloat(tournament.lng);
-            
-            this.markers.forEach(marker=>{
-                if(marker._latlng.lat == lat && marker._latlng.lng == lng){
-                    lng+=0.005;
-                }
-            })
         
-            let marker = new myMarker([lat, lng], {icon: charIcon}).addTo(this.mymap);
+            let marker = new myMarkerText([lat, lng], {icon: charIcon}).addTo(this.mymap);
+            
             marker.bindPopup(`
                 <div style="display: flex; align-items: center">
                 <div style="display: flex; align-items: left; flex-direction: column; padding-left: 10px">

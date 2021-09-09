@@ -221,8 +221,8 @@ function TopBar(props) {
         </Box>
       </div>
       <Divider />
-      {credits}
-      <Divider/>
+      {/* {credits}
+      <Divider/> */}
       <Box display="flex" pl={1} pr={1} mb={1} mt={1}>
         <div style={{
           backgroundSize: "cover",

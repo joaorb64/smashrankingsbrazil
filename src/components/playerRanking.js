@@ -152,7 +152,7 @@ class PlayerRanking extends PureComponent {
           this.setState({pagination: this.state.pagination+1});
           this.timeout = null;
         }
-      }.bind(this), 1000);
+      }.bind(this), 5000);
     }
 
     let fullscreenStyle = {
