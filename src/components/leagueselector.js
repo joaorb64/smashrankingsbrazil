@@ -91,6 +91,7 @@ class LeagueSelector extends Component {
 
   filterLeagues(text){
     this.state.searchText = text;
+    if(!this.state.searchText) this.state.searchText = "";
     this.setState({searchText: text});
   }
 
@@ -106,7 +107,7 @@ class LeagueSelector extends Component {
     return(
       Object.values(this.props.leagues).filter((a)=>{
         return(
-          a.name.toLowerCase().includes(this.state.searchText.toLowerCase()) ||
+          (a.name != null && a.name.toLowerCase().includes(this.state.searchText.toLowerCase())) ||
           (a.state != null && a.state.toLowerCase().includes(this.state.searchText.toLowerCase())) ||
           (a.country != null && a.country.toLowerCase().includes(this.state.searchText.toLowerCase()))
         )
