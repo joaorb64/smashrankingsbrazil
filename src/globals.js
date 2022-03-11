@@ -85,6 +85,7 @@ const CHARACTER_TO_CODENAME = {
         "Sephiroth": "edge",
         "Pyra / Mythra": "eflame",
         "Kazuya": "demon",
+        "Sora": "trail",
         "Random": "random",
         "Random Character": "random"
     }
@@ -189,6 +190,7 @@ const CHARACTER_EYE_HEIGHT_PERCENTAGE = {
         "Sephiroth": {0: 56},
         "Pyra / Mythra": {0: 64},
         "Kazuya": {0: 65},
+        "Sora": {0: 60, 1: 62, 2: 63, 3: 63, 4: 60, 5: 62, 6: 63, 7: 63},
         "Random": {0: 50}
     },
     "sfv": {

@@ -9,6 +9,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import { PureComponent } from 'react';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { GetCharacterCodename, CHARACTERS_GG_TO_BRAACKET } from "../globals";
+import { rating, rate, ordinal, predictWin } from 'openskill'
 const queryString = require("query-string");
 
 const fuzzysort = require('fuzzysort')
@@ -54,40 +55,6 @@ class HeadToHead extends Component {
 
   componentDidMount() {
     this.fetchTs();
-  }
-
-  ncdf(x, mean, std) {
-    var x = (x - mean) / std
-    var t = 1 / (1 + .2315419 * Math.abs(x))
-    var d =.3989423 * Math.exp( -x * x / 2)
-    var prob = d * t * (.3193815 + t * ( -.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274))))
-    if( x > 0 ) prob = 1 - prob
-    return prob
-  }
-
-  winProbability(p1, p2, beta, mu, sigma){
-    let delta_mu = p1.ts - p2.ts;
-    let sum_sigma = p1.sigma ** 2 + p2.sigma ** 2;
-    let size = 2;
-    let denom = Math.sqrt(size * (beta * beta) + sum_sigma);
-    return this.ncdf(delta_mu / denom, mu, sigma);
-  }
-
-  winProbabilityPercent(p1, p2, beta, mu, sigma){
-    let p1prob = this.winProbability(p1, p2, beta, mu, sigma);
-    let p2prob = this.winProbability(p2, p1, beta, mu, sigma);
-
-    let total = p1prob+p2prob;
-    
-    if(total == 0){
-      total = 1;
-    }
-
-    console.log(p1prob)
-    console.log(p2prob)
-    console.log(total)
-
-    return [p1prob/total, p2prob/total];
   }
 
   selectPlayer(slotIndex, selectedPlayer){
@@ -224,13 +191,13 @@ class HeadToHead extends Component {
         }
       })
 
-      this.state.winProbability = this.winProbabilityPercent(
-        this.state.playerSlots[0],
-        this.state.playerSlots[1],
-        this.state.ts.beta,
-        this.state.ts.mu,
-        this.state.ts.sigma
-      )
+      let winProb = predictWin([
+        [rating({mu: this.state.playerSlots[0].mu, sigma: this.state.playerSlots[0].sigma})],
+        [rating({mu: this.state.playerSlots[1].mu, sigma: this.state.playerSlots[1].sigma})]
+      ])
+      console.log("sigmas", this.state.playerSlots[0].sigma, this.state.playerSlots[1].sigma)
+      console.log(winProb)
+      this.state.winProbability = winProb
     } else {
       this.state.winProbability = [null, null];
     }
@@ -256,34 +223,27 @@ class HeadToHead extends Component {
   
   fetchTs() {
     if(this.props.allplayers && this.props.allplayers.players && Object.keys(this.props.allplayers.players).length > 0){
-      fetch('https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/out/'+this.props.game+'/ts_env.json')
-      .then(res => res.json())
-      .then((data) => {
-        this.setState({ts: data});
-
-        let searchParams = queryString.parse(this.props.history.location.search);
-        if(searchParams.p1){
-          if(searchParams.p1.includes(":")){
-            let p = this.props.allplayers.mapping[searchParams.p1];
-            this.selectPlayer(0, this.props.allplayers.players[p]);
-          } else {
-            let sggid = parseInt(searchParams.p1);
-            let p = this.props.allplayers.players.find(player => player.smashgg_id == sggid);
-            this.selectPlayer(0, p);
-          }
+      let searchParams = queryString.parse(this.props.history.location.search);
+      if(searchParams.p1){
+        if(searchParams.p1.includes(":")){
+          let p = this.props.allplayers.mapping[searchParams.p1];
+          this.selectPlayer(0, this.props.allplayers.players[p]);
+        } else {
+          let sggid = parseInt(searchParams.p1);
+          let p = this.props.allplayers.players.find(player => player.smashgg_id == sggid);
+          this.selectPlayer(0, p);
         }
-        if(searchParams.p2){
-          if(searchParams.p2.includes(":")){
-            let p = this.props.allplayers.mapping[searchParams.p2];
-            this.selectPlayer(1, this.props.allplayers.players[p]);
-          } else {
-            let sggid = parseInt(searchParams.p2);
-            let p = this.props.allplayers.players.find(player => player.smashgg_id == sggid);
-            this.selectPlayer(1, p);
-          }
+      }
+      if(searchParams.p2){
+        if(searchParams.p2.includes(":")){
+          let p = this.props.allplayers.mapping[searchParams.p2];
+          this.selectPlayer(1, this.props.allplayers.players[p]);
+        } else {
+          let sggid = parseInt(searchParams.p2);
+          let p = this.props.allplayers.players.find(player => player.smashgg_id == sggid);
+          this.selectPlayer(1, p);
         }
-      })
-      .catch(console.log)
+      }
     }
   }
 
@@ -351,7 +311,7 @@ class HeadToHead extends Component {
 
     return(
       <Box style={searchParams.fullscreen ? fullscreenStyle : null}>
-        {this.props.allplayers && this.state.ts ?
+        {this.props.allplayers ?
           <>
             <Grid container justify="space-evenly" >
               {this.state.playerSlots.map((player, i) => (
