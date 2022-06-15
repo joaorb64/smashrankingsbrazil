@@ -8,7 +8,7 @@ import { Box, Grid, TextField, InputAdornment, IconButton, Select, Typography, P
 import SearchIcon from "@material-ui/icons/Search";
 import { PureComponent } from 'react';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { GetCharacterCodename, CHARACTERS_GG_TO_BRAACKET } from "../globals";
+import { GetCharacterCodename, CHARACTERS_GG_TO_BRAACKET, GetCharacterAsset } from "../globals";
 import { rating, rate, ordinal, predictWin } from 'openskill'
 const queryString = require("query-string");
 
@@ -207,19 +207,6 @@ class HeadToHead extends Component {
       winProbability: this.state.winProbability
     });
   }
-
-  getCharCodename(playerData, id){
-    let skin = 0;
-
-    if(playerData.hasOwnProperty("skins")){
-      skin = playerData["skins"][playerData["mains"][id]];
-      if(skin == undefined){
-        skin = 0;
-      }
-    }
-    
-    return GetCharacterCodename(this.props.game, playerData["mains"][id])+"_0"+skin;
-  }
   
   fetchTs() {
     if(this.props.allplayers && this.props.allplayers.players && Object.keys(this.props.allplayers.players).length > 0){
@@ -334,7 +321,7 @@ class HeadToHead extends Component {
                           width: 24,
                           height: 24,
                           marginRight: 8,
-                          backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_2_${this.getCharCodename(option, 0)}.png)`
+                          backgroundImage: `url(${GetCharacterAsset(this.props.game, option.mains[0] || "random", 0, "icon")})`
                         }}></div>
                         {option.org? option.org+" "+option.name : option.name}
                         {option.country_code && option.country_code != null && option.country_code != "null" ?
@@ -364,7 +351,7 @@ class HeadToHead extends Component {
                         width: "100%",
                         backgroundPosition: "center", backgroundSize: "cover",
                         backgroundColor: theme.palette.action.disabledBackground,
-                        backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_1_${this.getCharCodename(player, 0)}.png)`
+                        backgroundImage: `url(${GetCharacterAsset(this.props.game, player.mains[0] || "random", 0, "full")})`
                       }} className={classes.charPortrait}>
                       </Box>
                       <Box p={1}>

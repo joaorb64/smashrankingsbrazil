@@ -10,7 +10,7 @@ import { withRouter } from 'react-router-dom'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 
-import { GetCharacterCodename } from '../globals'
+import { GetCharacterAsset, GetCharacterCodename } from '../globals'
 import { parse } from '@fortawesome/fontawesome-svg-core';
 import { Box, withTheme, withStyles, ButtonGroup, Button, Select, MenuItem } from '@material-ui/core';
 import { ThumbDownSharp } from '@material-ui/icons';
@@ -265,7 +265,7 @@ class Mapa extends Component {
               player.mains.push("Random");
             }
 
-            let iconUrl = process.env.PUBLIC_URL+"/portraits/"+this.props.game+"/chara_2_"+(GetCharacterCodename(this.props.game, player.mains[0]) || "random")+"_00.png"
+            let iconUrl = `url(${GetCharacterAsset(this.props.game, player.mains[0], 0, "icon")})`
 
             let iconSize = 28;
 
@@ -276,7 +276,7 @@ class Mapa extends Component {
               html: `
                 <div>
                   <div style="
-                    width: ${iconSize}px; height: ${iconSize}px; background-image: url(${iconUrl});
+                    width: ${iconSize}px; height: ${iconSize}px; background-image: ${iconUrl};
                     background-size: cover; background-repeat: no-repeat;
                     ">
                   </div>
@@ -410,8 +410,8 @@ class Mapa extends Component {
       attributionControl: false,
       center: [-29.0529434318608, 152.01910972595218],
       zoom: 10,
-      maxZoom: 10,
-      minZoom: 0
+      minZoom: 0,
+      maxZoom: 20,
     };
 
     let myFilter = [
@@ -422,7 +422,7 @@ class Mapa extends Component {
     var baseMap = L.tileLayer.colorFilter(
       "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       {
-        minZoom: 2,
+        minZoom: 0,
         maxZoom: 20,
         id: "osm.streets",
         filter: myFilter

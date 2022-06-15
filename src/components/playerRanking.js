@@ -3,7 +3,7 @@ import styles from './contacts.module.css'
 import { Link, useParams, useLocation } from 'react-router-dom';
 import LeagueSelector from './leagueselector';
 import moment from "../../node_modules/moment-timezone/moment-timezone";
-import {GetCharacterCodename, GetCharacterEyeHeight} from "../globals";
+import {GetCharacterCodename, GetCharacterEyeHeight, GetPlayerSkin} from "../globals";
 import LazyLoad from 'react-lazyload';
 import { Grid, Paper, Box, Card, CardActionArea, Typography, BottomNavigation,
   BottomNavigationAction, Container } from '@material-ui/core';
@@ -13,6 +13,7 @@ import { ThemeProvider } from "@material-ui/styles";
 import PlayerModal from './playermodal';
 import { PureComponent } from 'react';
 import i18n from '../locales/i18n';
+import GameAsset from './GameAsset';
 const queryString = require("query-string");
 
 let useStyles = (props) => ({
@@ -33,9 +34,6 @@ let useStyles = (props) => ({
       height: 220
     },
     [props.breakpoints.up("lg")]: {
-      height: 260
-    },
-    [props.breakpoints.up("xl")]: {
       height: 340
     }
   }
@@ -214,11 +212,9 @@ class PlayerRanking extends PureComponent {
                         top: 0, bottom: 0, left: 0, right: 0,
                         clipPath: "polygon(0 60%, 0% 100%, 100% 100%)"
                       }}></div>
-                      <div style={{
-                        backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_1_${this.getCharCodename(player, 0)}.png)`, display: "flex",
-                        width: "calc(100% + 10px)", height: "calc(100% + 10px)", backgroundPosition: "center", backgroundSize: "cover",
-                        filter: "drop-shadow(10px 10px 0px #000000AF)", marginLeft: "-10px", marginTop: "-10px"
-                      }}></div>
+                      <div style={{position: "absolute", height: "calc(100% - 60px)", width: "100%", top: 0}}>
+                        <GameAsset game={this.props.game} character={player["mains"][0]} skin={GetPlayerSkin(player, 0)} asset={"full"}></GameAsset>
+                      </div>
                     
                       <div style={{
                         backgroundColor: theme.palette.background.paper,
@@ -295,7 +291,7 @@ class PlayerRanking extends PureComponent {
                               width: "48px", display: "flex", justifyContent: "center", alignItems: "center", padding: "8px", alignSelf: "flex-end"
                             }}>
                               <div class="flag" style={{
-                                backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/state_flag/${player.country_code}/${player.state}.png)`
+                                backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/world-state-flags/main/out/${player.country_code}/${player.state}.png)`
                               }}><span>{player.state}</span></div>
                             </div>
                             :

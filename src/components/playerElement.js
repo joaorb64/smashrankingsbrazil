@@ -1,23 +1,12 @@
 import React, { Component } from 'react'
 import styles from './playerElement.module.css'
-import {GetCharacterCodename, GetCharacterEyeHeight} from "../globals";
+import {GetCharacterAsset, GetCharacterCodename, GetCharacterEyeHeight, GetCharacterEyesight, GetPlayerSkin} from "../globals";
 import LazyLoad from 'react-lazyload';
 import i18n from '../locales/i18n';
+import GameAsset from './GameAsset';
 import { Box, Paper, Typography, withStyles, Avatar, Grid, Card, CardActionArea } from '@material-ui/core';
 
 class PlayerElement extends Component {
-    getCharCodename(playerData, id){
-        let skin = 0;
-    
-        if(playerData.hasOwnProperty("skins")){
-            skin = playerData["skins"][playerData["mains"][id]];
-            if(skin == undefined){
-                skin = 0;
-            }
-        }
-        
-        return GetCharacterCodename(this.props.game, playerData["mains"][id])+"_0"+skin;
-    }
 
     render(){
         const player = this.props.player;
@@ -64,7 +53,7 @@ class PlayerElement extends Component {
                                         }}>
                                         {player.state && player.state != "null" ?
                                             <div class="flag" style={{
-                                            backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/state_flag/${player.country_code}/${player.state}.png)`
+                                            backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/world-state-flags/main/out/${player.country_code.toUpperCase()}/${player.state}.png)`
                                             }}><span>{player.state}</span></div>
                                         :
                                             null
@@ -101,30 +90,26 @@ class PlayerElement extends Component {
                                 <Grid item style={{alignSelf: "stretch", maxHeight: "100%"}}>
                                     {player.mains.length > 0 ?
                                         <div class="player-main" style={{
-                                            backgroundImage: 
-                                                this.props.big ?
-                                                    `url(${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_1_${this.getCharCodename(player, 0)}.png)`
-                                                :
-                                                    `url(${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_0_${this.getCharCodename(player, 0)}.png)`
-                                            ,
-                                            width: "128px", height: "100%", backgroundPositionX: "center", backgroundSize: "cover", backgroundColor: "#ababab", overflow: "hidden",
-                                            backgroundPositionY: (GetCharacterEyeHeight(this.props.game, player.mains[0], player.skins)+"%" || "center")
+                                            width: "128px", height: "100%", backgroundSize: "cover", backgroundColor: "#ababab", overflow: "hidden", position: "relative"
                                         }}>
-                                            <div style={{overflow: "hidden", display: "flex", height: "100%", alignItems: "flex-end", justifyContent: "flex-end"}}>
-                                            {player.mains.slice(1).map((main, i)=>(
-                                                <div class="player-main-mini" style={{
-                                                backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_2_${this.getCharCodename(player, i+1)}.png)`,
-                                                width: "24px", height: "24px", backgroundPosition: "center", backgroundSize: "cover",
-                                                flexGrow: 0, display: "flex", flexShrink: 1
-                                                }}></div>
-                                            ))}
+                                            <GameAsset game={this.props.game} character={player["mains"][0]} skin={GetPlayerSkin(player, 0)} asset={this.props.big ? "full" : "portrait"}></GameAsset>
+                                            <div style={{overflow: "hidden", display: "flex", height: "100%", alignItems: "flex-end", justifyContent: "flex-end", position: "absolute", top: 0, right: 0}}>
+                                                {player.mains.slice(1).map((main, i)=>(
+                                                    <div class="player-main-mini" style={{
+                                                    width: "24px", height: "24px", backgroundPosition: "center", backgroundSize: "cover",
+                                                    flexGrow: 0, display: "flex", flexShrink: 1
+                                                    }}>
+                                                        <GameAsset game={this.props.game} character={player["mains"][i+1]} skin={GetPlayerSkin(player, i+1)} asset={"icon"}></GameAsset>
+                                                    </div>
+                                                ))}
                                             </div>
                                         </div>
                                         :
                                         <div style={{
-                                            backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_0_random.png)`,
-                                            width: "128px", backgroundPosition: "center", backgroundSize: "cover", backgroundColor: "#ababab"
-                                        }}></div>
+                                            width: "128px", backgroundColor: "#ababab"
+                                        }}>
+                                            <GameAsset game={this.props.game} character={"random"} skin={0} asset={this.props.big ? "full" : "portrait"}></GameAsset>
+                                        </div>
                                     }
                                 </Grid>
                             </Grid>

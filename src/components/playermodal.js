@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
 import styles from './playermodal.module.css';
-import { GetCharacterCodename, CHARACTERS_GG_TO_BRAACKET } from "../globals";
+import { GetCharacterCodename, CHARACTERS_GG_TO_BRAACKET, GetPlayerSkin, GetCharacterName } from "../globals";
 import moment from "../../node_modules/moment-timezone/moment-timezone";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWifi, faWindowClose } from '@fortawesome/free-solid-svg-icons';
@@ -25,6 +25,7 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
+import GameAsset from './GameAsset';
 
 const useStyles1 = makeStyles((theme) => ({
   root: {
@@ -672,7 +673,7 @@ class PlayerModal extends Component {
 
                         {this.state.playerData.state && this.state.playerData.state != "null" ?
                           <div className={styles.stateFlag + " state-flag"} style={{
-                            backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/state_flag/${this.state.playerData.country_code}/${this.state.playerData.state}.png)`,
+                            backgroundImage: `url(https://raw.githubusercontent.com/joaorb64/world-state-flags/main/out/${this.state.playerData.country_code}/${this.state.playerData.state}.png)`,
                             width: "32px", height: "32px", display: "inline-block", backgroundSize: "contain", backgroundRepeat: "no-repeat",
                             backgroundPosition: "center", paddingTop: "22px", marginLeft: "10px", textAlign: "center", verticalAlign: "bottom"
                           }}></div>
@@ -760,10 +761,10 @@ class PlayerModal extends Component {
 
                   <div className={styles.characterMain} style={{
                     marginRight: "12px", marginTop: "-10px", marginBottom: "-10px",
-                    backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_1_${this.getCharCodename(this.state.playerData, 0)}.png)`,
                     right: 0, flexGrow: 0, flexShrink: 0, height: "auto", alignSelf: "normal",
                     backgroundColor: theme.palette.background.default
                   }}>
+                    <GameAsset game={this.props.game} character={this.state.playerData["mains"][0]} skin={GetPlayerSkin(this.state.playerData, 0)} asset={"full"}></GameAsset>
                   </div>
                   <div style={{
                     position: "absolute", right: "14px", zIndex: 9, bottom: "2px",
@@ -908,14 +909,15 @@ class PlayerModal extends Component {
                       }}
                     >
                       {this.state.playerData.character_usage_percent.map((character, i)=>(
-                        <Tooltip title={character[0]} placement="top" arrow enterDelay={1} enterTouchDelay={1}>
+                        <Tooltip title={GetCharacterName(this.props.game, character[0])} placement="top" arrow enterDelay={1} enterTouchDelay={1}>
                           <a key={this.state.playerData.name+i} style={{textAlign: "center", display: "flex",
                           flexDirection: "column", alignItems: "center", placeContent: "center"}}>
                             <div class="" style={{
-                              backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_2_${GetCharacterCodename(this.props.game, character[0])+"_00"}.png)`,
                               width: "24px", height: "24px", backgroundPosition: "center", backgroundSize: "cover",
                               flexGrow: 0, display: "flex", flexShrink: 1, margin: "0 20px 0 20px"
-                            }}></div>
+                            }}>
+                              <GameAsset game={this.props.game} character={character[0]} skin={0} asset={"icon"} />
+                            </div>
                             <small>{(100*character[1]).toFixed(2)}%</small>
                           </a>
                         </Tooltip>

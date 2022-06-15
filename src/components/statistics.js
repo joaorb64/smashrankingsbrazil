@@ -8,7 +8,7 @@ import Chart from '../../node_modules/chart.js/dist/Chart'
 
 import i18n from '../locales/i18n';
 
-import { GetCharacterCodename } from '../globals'
+import { GetCharacterAsset, GetCharacterCodename, GetCharacterName } from '../globals'
 
 import { Paper, Box, Typography, withStyles, Divider, makeStyles, Icon } from '@material-ui/core'
 import Table from '@material-ui/core/Table';
@@ -74,15 +74,15 @@ class Statistics extends Component {
 
       Object.keys(data["char_usage"]).forEach(char => {
         let obj = {
-          name: char,
+          name: GetCharacterName(this.props.game, char),
           usage: data["char_usage"][char]["usage"],
-          icon: data["char_usage"][char]["name"]
+          icon: char
         }
         chars.push(obj);
         let obj2 = {
-          name: char,
+          name: GetCharacterName(this.props.game, char),
           usage_secondary: data["char_usage"][char]["secondary"],
-          icon: data["char_usage"][char]["name"]
+          icon: char
         }
         chars_secondary.push(obj2);
       });
@@ -194,7 +194,7 @@ class Statistics extends Component {
         let icon = chartData.icons[i];
         var $img = window.jQuery("<img/>").attr("id", lab).attr(
           "src",
-          `${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_2_${GetCharacterCodename(this.props.game, icon)}_00.png`
+          GetCharacterAsset(this.props.game, icon, 0, "icon")
         );
         $img.onload = function(){
           this.draw();
@@ -269,7 +269,7 @@ class Statistics extends Component {
         let icon = chartData.icons[i];
         var $img = window.jQuery("<img/>").attr("id", lab).attr(
           "src",
-          `${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_2_${GetCharacterCodename(this.props.game, icon)}_00.png`
+          GetCharacterAsset(this.props.game, icon, 0, "icon")
         );
         $img.onload = function(){
           this.draw();
@@ -430,7 +430,7 @@ class Statistics extends Component {
           console.log(icon)
           var $img = window.jQuery("<img/>").attr("id", lab).attr(
             "src",
-            "https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/state_flag/"+icon+".png"
+            "https://raw.githubusercontent.com/joaorb64/world-state-flags/main/out/"+icon+".png"
           );
           window.jQuery("#pics").append($img);
         }
@@ -563,9 +563,9 @@ class Statistics extends Component {
                           <TableRow>
                             <TableCell>
                               <div style={{display: "flex", alignItems: "center"}}>
-                                <Box xs mr={1}><img src={`${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_2_${GetCharacterCodename(this.props.game, line[1].mains[0])}_00.png`}
+                                <Box xs mr={1}><img src={`${GetCharacterAsset(this.props.game, line[1].mains[0], 0, "icon")}`}
                                 style={{width: "24px", height: "24px"}} /></Box>
-                                <Box xs>{line[0]}</Box>
+                                <Box xs>{GetCharacterName(this.props.game, line[0])}</Box>
                               </div>
                             </TableCell>
                             <TableCell>{line[1].org} {line[1].name}</TableCell>

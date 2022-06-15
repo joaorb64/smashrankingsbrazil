@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styles from './contacts.module.css'
-import {GetCharacterCodename, GetCharacterEyeHeight} from "../globals";
+import {GAME_ASSETS, GetCharacterAsset, GetCharacterCodename, GetCharacterEyeHeight} from "../globals";
 import LazyLoad from 'react-lazyload';
 import i18n from '../locales/i18n';
 import PlayerElement from './playerElement';
@@ -38,13 +38,11 @@ class Players extends Component {
         search: ""
       })
       this.fetchPlayers();
-      this.fetchCharacters();
     }
   }
 
   componentDidMount() {
     this.fetchPlayers();
-    this.fetchCharacters();
   }
   
   fetchPlayers() {
@@ -95,13 +93,6 @@ class Players extends Component {
 
       this.setState({players: players, filtered: players})
     }
-  }
-
-  fetchCharacters(){
-    fetch(`https://raw.githubusercontent.com/joaorb64/tournament_api/multigames/games/${this.props.game}/charnames_smashgg_to_braacket.json`).then(res => res.json()).then((data) => {
-      this.state.characters = data;
-      this.setState(this.state);
-    }).catch(console.log())
   }
 
   getCharCodename(playerData, id){
@@ -237,11 +228,11 @@ class Players extends Component {
             />
 
             <Autocomplete
-              options={Object.entries(this.state.characters ? this.state.characters : {})}
+              options={Object.entries(GAME_ASSETS[this.props.game].config.character_to_codename)}
               getOptionLabel={(option) => option[0]}
               renderOption={(option) =>
                 <div style={{"contentVisibility": "auto", "containIntrinsicSize": "24px", display: "flex"}}>
-                  <img style={{placeSelf: "center", marginRight: "6px"}} width="24px" height="24px" src={`${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_2_${GetCharacterCodename(this.props.game, option[1])}_00.png`} />
+                  <img style={{placeSelf: "center", marginRight: "6px"}} width="24px" height="24px" src={GetCharacterAsset(this.props.game, option[1].codename, 0, "icon")} />
                   {option[0]}
                 </div>
               }
