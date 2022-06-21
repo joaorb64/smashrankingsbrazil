@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styles from './contacts.module.css'
-import {GAME_ASSETS, GetCharacterAsset, GetCharacterCodename, GetCharacterEyeHeight} from "../globals";
+import {GAME_ASSETS, GetCharacterAsset, GetCharacterCodename, GetCharacterEyeHeight, GetCharacterName} from "../globals";
 import LazyLoad from 'react-lazyload';
 import i18n from '../locales/i18n';
 import PlayerElement from './playerElement';
@@ -147,7 +147,7 @@ class Players extends Component {
     }
 
     if(this.state.filterCharacter){
-      this.state.filtered = this.state.filtered.filter((p)=>{return (p.mains[0] || "Random") == this.state.filterCharacter[1]});
+      this.state.filtered = this.state.filtered.filter((p)=>{return GetCharacterName(this.props.game, p.mains[0] || "Random") == this.state.filterCharacter[0]});
     }
     
     if(this.state.search.length > 0){

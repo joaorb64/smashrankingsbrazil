@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
 import styles from './playermodal.module.css';
-import { GetCharacterCodename, CHARACTERS_GG_TO_BRAACKET, GetPlayerSkin, GetCharacterName } from "../globals";
+import { GetCharacterCodename, CHARACTERS_GG_TO_BRAACKET, GetPlayerSkin, GetCharacterName, GetCharacterAsset } from "../globals";
 import moment from "../../node_modules/moment-timezone/moment-timezone";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWifi, faWindowClose } from '@fortawesome/free-solid-svg-icons';
@@ -523,9 +523,9 @@ class PlayerModal extends Component {
       if(leagues_best.length > 0){
         achievements.push({
           "name": i18n.t("achievement-specialist"),
-          "description": i18n.t("achievement-specialist-desc")+" "+character[1][0]+" ("+leagues_best.join(", ")+")",
+          "description": i18n.t("achievement-specialist-desc")+" "+GetCharacterName(this.props.game, character[1])+" ("+leagues_best.join(", ")+")",
           "icon": "bestplayercharacter.svg",
-          "icon_middle": GetCharacterCodename(this.props.game, character[1][1])+"_00"
+          "icon_middle": GetCharacterAsset(this.props.game, character[1], 0, "icon")
         });
       }
     }
@@ -804,7 +804,7 @@ class PlayerModal extends Component {
                               {achievement.icon_middle ?
                                 <div style={{
                                   width: 20, height: 20, backgroundSize: "contain",
-                                  backgroundImage: `url(${process.env.PUBLIC_URL}/portraits/${this.props.game}/chara_2_${achievement.icon_middle}.png)`,
+                                  backgroundImage: `url(${achievement.icon_middle})`,
                                   filter: "grayscale(100%) brightness(80%) sepia(100%) hue-rotate(5deg) saturate(500%) contrast(.9)"
                                 }}></div>
                                 :
