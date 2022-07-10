@@ -33,6 +33,8 @@ Math.getCentroid = function (arr) {
   }, [0,0]) 
 }
 
+var myRenderer = L.canvas({ padding: 0.5 });
+
 var myMarkerText = L.Marker.extend({
   _animateZoom: function (opt) {
 		var pos = this._map._latLngToNewLayerPoint(this._latlng, opt.zoom, opt.center).round();
@@ -45,73 +47,75 @@ var myMarkerText = L.Marker.extend({
 
       var pos = this._map.latLngToLayerPoint(this._latlng);
 
-      let positions = []
+      if(this._map._zoom > 4){
+        let foundItself = false;
 
-      for(let i=0; i<Object.keys(this._map._layers).length; i+=1){
-        let marker = Object.values(this._map._layers)[i];
-
-        if(marker._latlng && marker != this && marker.options.icon != null){
-          positions.push(marker._newPos ? marker._newPos : this._map.latLngToContainerPoint(marker._latlng));
-        }
-      }
-
-      let mapCenter = Math.getCentroid(positions);
-      
-      for(let i=0; i<Object.keys(this._map._layers).length; i+=1){
-        let other = Object.values(this._map._layers)[i];
-
-        if(other._latlng && other != this && other.options.icon != null){
-          let otherPos = other._newPos ? other._newPos : this._map.latLngToContainerPoint(other._latlng);
-          
-          if(other.pushPos){
-            otherPos.y += other.pushPos.y;
-            otherPos.x += other.pushPos.x;
+        for(let i=0; i<Object.keys(this._map._layers).length; i+=1){
+          let other = Object.values(this._map._layers)[i];
+          if(other == this){
+            foundItself = true;
+            continue;
           }
 
-          let myPos = this._map.latLngToContainerPoint(this._latlng);
-
-          if(this.pushPos){
-            myPos.y += this.pushPos.y;
-            myPos.x += this.pushPos.x;
+          if(!foundItself){
+            continue;
           }
 
-          let distance = Math.getDistance(
-            otherPos.x, otherPos.y,
-            myPos.x, myPos.y
-          );
-
-          let angle;
-
-          if(distance == 0){
-            angle = Math.angleRadians(
-              {x: myPos.x, y: myPos.y},
-              {x: otherPos.x, y: otherPos.y}
-            )
-          }
-
-          let maxWidth = 32*(this._map._zoom-4)+Math.max(this.options.icon.options.iconSize[0], other.options.icon.options.iconSize[0])/2;
-
-          if(distance < maxWidth){
-            if(angle == undefined)
-              angle = Math.angleRadians(myPos, otherPos);
-
-            if(!this.pushPos){
-              this.pushPos = {x: 0, y: 0};
+          if(other._latlng && other != this && other.options.icon != null){
+            let otherPos = other._newPos ? other._newPos : this._map.latLngToContainerPoint(other._latlng);
+            
+            if(other.pushPos){
+              otherPos.y += other.pushPos.y;
+              otherPos.x += other.pushPos.x;
             }
+
+            let myPos = this._map.latLngToContainerPoint(this._latlng);
 
             if(this.pushPos){
-              this.pushPos.y -= Math.sin(angle)*((maxWidth-distance)/2)/2;
-              this.pushPos.x -= Math.cos(angle)*((maxWidth-distance)/2)/2;
+              myPos.y += this.pushPos.y;
+              myPos.x += this.pushPos.x;
             }
 
-            if(!other.pushPos){
-              other.pushPos = {x:0, y:0};
+            let distance = Math.getDistance(
+              otherPos.x, otherPos.y,
+              myPos.x, myPos.y
+            );
+
+            let angle;
+
+            if(distance == 0){
+              angle = Math.angleRadians(
+                {x: myPos.x, y: myPos.y},
+                {x: otherPos.x, y: otherPos.y}
+              )
             }
-            
-            other.pushPos.y += Math.sin(angle)*((maxWidth-distance)/2)/2;
-            other.pushPos.x += Math.cos(angle)*((maxWidth-distance)/2)/2;
+
+            let maxWidth = 32*(this._map._zoom-4)+Math.max(this.options.icon.options.iconSize[0], other.options.icon.options.iconSize[0])/2;
+
+            if(distance < maxWidth){
+              if(angle == undefined)
+                angle = Math.angleRadians(myPos, otherPos);
+
+              if(!this.pushPos){
+                this.pushPos = {x: 0, y: 0};
+              }
+
+              if(this.pushPos){
+                this.pushPos.y -= Math.sin(angle)*((maxWidth-distance)/2)/2;
+                this.pushPos.x -= Math.cos(angle)*((maxWidth-distance)/2)/2;
+              }
+
+              if(!other.pushPos){
+                other.pushPos = {x:0, y:0};
+              }
+              
+              other.pushPos.y += Math.sin(angle)*((maxWidth-distance)/2)/2;
+              other.pushPos.x += Math.cos(angle)*((maxWidth-distance)/2)/2;
+            }
           }
         }
+      } else {
+        this.pushPos = {x: 0, y: 0}
       }
 
       if(this.pushPos){
@@ -131,31 +135,31 @@ var myMarkerText = L.Marker.extend({
         this.circle.remove(this._map)
       }
 
-      if(this.pushPos){
+      if(this.pushPos && (this.pushPos.x != 0 || this.pushPos.y != 0)){
         let point1 = this._map.containerPointToLatLng(
           this._map.layerPointToContainerPoint(this._newPos)
         )
         let point2 = this._latlng
         
-        this.line = L.polyline(
-          [
-            point1,
-            point2
-          ],
-          {
-            weight: 2,
-            lineCap: "round"
-          }
-        ).addTo(this._map);
+        // this.line = L.polyline(
+        //   [
+        //     point1,
+        //     point2
+        //   ],
+        //   {
+        //     weight: 2,
+        //     renderer: myRenderer,
+        //   }
+        // ).addTo(this._map);
 
-        this.circle = L.circle(
-          point2,
-          {
-            radius: 1,
-            weight: 6,
-            fillOpacity: 1
-          }
-        ).addTo(this._map);
+        // this.circle = L.circle(
+        //   point2,
+        //   {
+        //     radius: 1,
+        //     weight: 6,
+        //     fillOpacity: 1
+        //   }
+        // ).addTo(this._map);
       }
 
       this.pushPos = null;
@@ -222,7 +226,7 @@ class WeekResults extends Component {
           if(region == "online" && !tournament.isOnline) return;
           if(region == "offline" && tournament.isOnline) return;
 
-          if(tournament.numEntrants >= 0){
+          if(tournament.numEntrants >= 8){
 
             let character = "random";
 
@@ -257,7 +261,7 @@ class WeekResults extends Component {
                       transform: translateX(-50%);
                       text-align: center;
                       direction: rtl;
-                      background-color: rgba(0,0,0,0.5);
+                      background-color: rgba(0,0,0,1);
                     ">
                       ${tournament.winner}
                     </div>
@@ -265,7 +269,8 @@ class WeekResults extends Component {
                 `,
                 iconSize: [iconSize, iconSize],
                 popupAnchor: [0, -8],
-                className: styles.mapCharIcon
+                className: styles.mapCharIcon,
+                zIndexOffset: 1-iconSize
             });
         
             window.routerHistory = this.props.history;
@@ -339,10 +344,11 @@ class WeekResults extends Component {
     if(this.mymap != null) return;
 
     var mapOptions = {
+      preferCanvas: true,
       attributionControl: false,
       center: [-29.0529434318608, 152.01910972595218],
       zoom: 10,
-      minZoom: 0,
+      minZoom: -10,
       maxZoom: 20,
     };
 
@@ -354,7 +360,7 @@ class WeekResults extends Component {
     var baseMap = L.tileLayer.colorFilter(
       "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       {
-        minZoom: 0,
+        minZoom: -10,
         maxZoom: 20,
         id: "osm.streets",
         filter: myFilter

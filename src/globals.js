@@ -41,7 +41,7 @@ export const GAME_ASSETS = {
     icon: {
       config: require("./games/sfv/base_files/icon/config.json"),
       path: "/games/sfv/base_files/icon",
-      skin_numbers: 1,
+      skin_numbers: 2,
     },
     portrait: {
       config: require("./games/sfv/full/config.json"),
