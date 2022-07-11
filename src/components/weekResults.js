@@ -12,7 +12,7 @@ import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 
 import { GetCharacterAsset, GetCharacterCodename } from '../globals'
 import { icon, parse } from '@fortawesome/fontawesome-svg-core';
-import { Box, withTheme, withStyles, ButtonGroup, Button, Select, MenuItem } from '@material-ui/core';
+import { Box, withTheme, withStyles, ButtonGroup, Button, Select, MenuItem, TextField } from '@material-ui/core';
 
 Math.getDistance = function( x1, y1, x2, y2 ) {
 	var xs = x2 - x1, ys = y2 - y1;		
@@ -64,18 +64,18 @@ var myMarkerText = L.Marker.extend({
           if(other._latlng && other != this && other.options.icon != null){
             let otherPos = other._newPos ? other._newPos : this._map.latLngToContainerPoint(other._latlng);
             
-            if(other.pushPos){
+            if(other.pushPos && !other._newPos){
               otherPos.y += other.pushPos.y;
               otherPos.x += other.pushPos.x;
             }
 
             let myPos = this._map.latLngToContainerPoint(this._latlng);
-
+            
             if(this.pushPos){
               myPos.y += this.pushPos.y;
               myPos.x += this.pushPos.x;
             }
-
+            
             let distance = Math.getDistance(
               otherPos.x, otherPos.y,
               myPos.x, myPos.y
@@ -141,25 +141,25 @@ var myMarkerText = L.Marker.extend({
         )
         let point2 = this._latlng
         
-        // this.line = L.polyline(
-        //   [
-        //     point1,
-        //     point2
-        //   ],
-        //   {
-        //     weight: 2,
-        //     renderer: myRenderer,
-        //   }
-        // ).addTo(this._map);
+        this.line = L.polyline(
+          [
+            point1,
+            point2
+          ],
+          {
+            weight: 2,
+            renderer: myRenderer,
+          }
+        ).addTo(this._map);
 
-        // this.circle = L.circle(
-        //   point2,
-        //   {
-        //     radius: 1,
-        //     weight: 6,
-        //     fillOpacity: 1
-        //   }
-        // ).addTo(this._map);
+        this.circle = L.circle(
+          point2,
+          {
+            radius: 1,
+            weight: 6,
+            fillOpacity: 1
+          }
+        ).addTo(this._map);
       }
 
       this.pushPos = null;
@@ -180,7 +180,8 @@ class WeekResults extends Component {
     leagues: null,
     allplayers : null,
     loading: false,
-    selection: 0
+    selection: 0,
+    minSize: 16
   }
 
   mymap = null;
@@ -209,6 +210,13 @@ class WeekResults extends Component {
 
     if(this.markers){
       this.markers.forEach((marker)=>{
+        if(marker.line){
+          marker.line.remove(marker._map)
+        }
+    
+        if(marker.circle){
+          marker.circle.remove(marker._map)
+        }
         marker.remove();
       })
       this.markers = [];
@@ -226,7 +234,7 @@ class WeekResults extends Component {
           if(region == "online" && !tournament.isOnline) return;
           if(region == "offline" && tournament.isOnline) return;
 
-          if(tournament.numEntrants >= 8){
+          if(tournament.numEntrants >= this.state.minSize){
 
             let character = "random";
 
@@ -270,7 +278,7 @@ class WeekResults extends Component {
                 iconSize: [iconSize, iconSize],
                 popupAnchor: [0, -8],
                 className: styles.mapCharIcon,
-                zIndexOffset: 1-iconSize
+                zIndexOffset: 1000-iconSize
             });
         
             window.routerHistory = this.props.history;
@@ -396,21 +404,28 @@ class WeekResults extends Component {
     return(
       <Box>
         <Box id="mapid" style={{height: "calc(100vh - "+this.topbarSize+"px)", margin: "-8px"}} xs>
-          <Select
-            style={{zIndex: 999, position: "absolute", right: 10, top: 10}}
-            value={this.state.selection}
-            onChange={(e)=>{this.setState({selection: e.target.value})}}
-          >
-            <MenuItem value={0} onClick={(e)=>{this.updateData("both")}}>
-              Offline+Online
-            </MenuItem>
-            <MenuItem value={1} onClick={(e)=>{this.updateData("offline")}}>
-              Offline
-            </MenuItem>
-            <MenuItem value={2} onClick={(e)=>{this.updateData("online")}}>
-              Online
-            </MenuItem>
-          </Select>
+          <Box style={{zIndex: 999, position: "absolute", right: 10, top: 10, gap: 16}} display={"flex"} flexDirection={"column"}>
+            <Select
+              value={this.state.selection}
+              onChange={(e)=>{this.setState({selection: e.target.value})}}
+            >
+              <MenuItem value={0} onClick={(e)=>{this.updateData("both")}}>
+                Offline+Online
+              </MenuItem>
+              <MenuItem value={1} onClick={(e)=>{this.updateData("offline")}}>
+                Offline
+              </MenuItem>
+              <MenuItem value={2} onClick={(e)=>{this.updateData("online")}}>
+                Online
+              </MenuItem>
+            </Select>
+            <TextField
+              inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+              defaultValue={this.state.minSize}
+              onChange={(e)=>{this.setState({minSize: e.target.value}); this.updateData(this.state.selection);}}
+              label={"Min participants"}
+            />
+          </Box>
           {this.state.loading ?
             <div style={{
               zIndex: 999, position: "absolute", left: 0, right: 0, top:0, bottom: 0,
