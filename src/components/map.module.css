@@ -1,5 +1,5 @@
 .mapCharIcon {
-  //filter: drop-shadow(1px 1px 0px black);
+  filter: drop-shadow(0px 0px 1px black);
 }
 
 .hide-text div .icon-text {
@@ -7,5 +7,5 @@
 }
 
 .icon-text {
-  /* transition: opacity 1s ease; */
+  transition: opacity 1s ease;
 }

@@ -14,6 +14,8 @@ import { GetCharacterAsset, GetCharacterCodename } from '../globals'
 import { icon, parse } from '@fortawesome/fontawesome-svg-core';
 import { Box, withTheme, withStyles, ButtonGroup, Button, Select, MenuItem, TextField } from '@material-ui/core';
 
+import kmeans from 'kmeansjs'
+
 Math.getDistance = function( x1, y1, x2, y2 ) {
 	var xs = x2 - x1, ys = y2 - y1;		
 	xs *= xs;
@@ -47,11 +49,11 @@ var myMarkerText = L.Marker.extend({
 
       var pos = this._map.latLngToLayerPoint(this._latlng);
 
-      if(this._map._zoom > 4){
+      if(this._map._zoom > 3){
         let foundItself = false;
 
-        for(let i=0; i<Object.keys(this._map._layers).length; i+=1){
-          let other = Object.values(this._map._layers)[i];
+        for(let i=0; i<this._cluster.length; i+=1){
+          let other = this._cluster[i];
           if(other == this){
             foundItself = true;
             continue;
@@ -165,7 +167,15 @@ var myMarkerText = L.Marker.extend({
       this.pushPos = null;
 		}
 
-    if(this._map._zoom > 4){
+    let minZoom = 4;
+
+    if(this._entrants && this._entrants >= 64){
+      minZoom = 2;
+    } else if(this._entrants && this._entrants >= 32){
+      minZoom = 3;
+    }
+
+    if(this._map._zoom > minZoom){
       this._icon.classList.remove(styles["hide-text"]);
     } else {
       this._icon.classList.add(styles["hide-text"]);
@@ -181,12 +191,13 @@ class WeekResults extends Component {
     allplayers : null,
     loading: false,
     selection: 0,
-    minSize: 16
+    minSize: 8
   }
 
   mymap = null;
   estados = null;
   markers = [];
+  markerClusters = [];
   circles = [];
 
   topbarSize = 0;
@@ -220,6 +231,7 @@ class WeekResults extends Component {
         marker.remove();
       })
       this.markers = [];
+      this.markerClusters = [];
     }
 
     if(this.circles){
@@ -287,6 +299,8 @@ class WeekResults extends Component {
             let lng = parseFloat(tournament.lng);
         
             let marker = new myMarkerText([lat, lng], {icon: charIcon}).addTo(this.mymap);
+
+            marker._entrants = tournament.numEntrants;
             
             marker.bindPopup(`
                 <div style="display: flex; align-items: center">
@@ -310,9 +324,26 @@ class WeekResults extends Component {
           }
         })
 
-        this.zoomFitMarkers();
-        this.updating = false;
-        this.setState({loading: false});
+        let markersForKmeans = this.markers.map((marker)=> [marker._latlng.lat, marker._latlng.lng])
+
+        kmeans(markersForKmeans, 10, (err, res, centroids)=>{
+          res.forEach((cluster)=>{
+            let markerCluster = []
+
+            markersForKmeans.forEach((marker, index)=>{
+              if(cluster.find((m)=>m[0]==marker[0] && m[1]==marker[1])){
+                markerCluster.push(this.markers[index])
+                this.markers[index]._cluster = markerCluster
+              }
+            })
+
+            this.markerClusters.push(markerCluster)
+          })
+
+          this.zoomFitMarkers();
+          this.updating = false;
+          this.setState({loading: false});
+        })
     })
   }
 
