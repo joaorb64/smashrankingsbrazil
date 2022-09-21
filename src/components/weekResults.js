@@ -167,18 +167,26 @@ var myMarkerText = L.Marker.extend({
       this.pushPos = null;
 		}
 
-    let minZoom = 4;
+    let minZoom = 5;
 
     if(this._entrants && this._entrants >= 64){
-      minZoom = 2;
-    } else if(this._entrants && this._entrants >= 32){
       minZoom = 3;
+    } else if(this._entrants && this._entrants >= 32){
+      minZoom = 4;
     }
 
     if(this._map._zoom > minZoom){
       this._icon.classList.remove(styles["hide-text"]);
     } else {
       this._icon.classList.add(styles["hide-text"]);
+    }
+
+    if(this._map._zoom < 4){
+      this._icon.children[0].style["transform"] = "scale(0.6)"
+    } else if(this._map._zoom < 6){
+      this._icon.children[0].style["transform"] = "scale(0.8)"
+    } else {
+      this._icon.children[0].style["transform"] = "scale(1)"
     }
 
 		return this;
@@ -258,14 +266,16 @@ class WeekResults extends Component {
         
             let iconSize = 16;
             
-            iconSize += tournament.numEntrants/6;
+            iconSize += tournament.numEntrants/8;
 
             iconSize = Math.min(42, iconSize)
         
             let charIcon = new L.DivIcon({
                 html: `
-                  <div>
-                    <div style="
+                  <div style="transition: transform .2s;">
+                    <div
+                      class="${styles["icon-img"]}"
+                      style="
                       width: ${iconSize}px; height: ${iconSize}px; background-image: ${iconUrl};
                       background-size: cover; background-repeat: no-repeat;
                       ">
@@ -273,7 +283,8 @@ class WeekResults extends Component {
                     <div class="${styles["icon-text"]}" style="
                       white-space: nowrap;
                       font-weight: bold;
-                      width: 100px;
+                      max-width: 100px;
+                      width: fit-content;
                       text-overflow: ellipsis;
                       overflow: hidden;
                       left: 0;
@@ -281,7 +292,12 @@ class WeekResults extends Component {
                       transform: translateX(-50%);
                       text-align: center;
                       direction: rtl;
-                      background-color: rgba(0,0,0,1);
+                      background-color: rgba(0,0,0,.8);
+                      font-size: 10px;
+                      padding-left: 4px;
+                      padding-right: 4px;
+                      border: 1px solid #ffffff64;
+                      border-radius: 4px;
                     ">
                       ${tournament.winner}
                     </div>
@@ -392,12 +408,10 @@ class WeekResults extends Component {
     };
 
     let myFilter = [
-      'hue:180deg',
-      'invert:100%',
     ]
 
     var baseMap = L.tileLayer.colorFilter(
-      "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
       {
         minZoom: -10,
         maxZoom: 20,
